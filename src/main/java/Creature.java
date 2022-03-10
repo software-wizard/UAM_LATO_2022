@@ -28,7 +28,10 @@ public class Creature
 
     void attack( final Creature aDefender )
     {
-        aDefender.currentHp = aDefender.currentHp - attack + aDefender.defence;
+        if( attack > aDefender.defence )
+        {
+            aDefender.currentHp = aDefender.currentHp - attack + aDefender.defence;
+        }
     }
 
     int getCurrentHp()
