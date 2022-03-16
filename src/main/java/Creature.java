@@ -13,25 +13,50 @@ import lombok.Getter;
 @Getter
 public class Creature
 {
-    private final int hp;
-    private final int attack;
-    private final int defence;
+    private final CreatureStatistic stats;
     private int currentHp;
+    private final int counterAttackCounter = 1;
+    private final DamageCalculatorIf calculator;
 
-    private Creature( final int aHp, final int aAttack, final int aDefence )
+    private Creature( final CreatureStatistic aStats, final DamageCalculatorIf aCalculator )
     {
-        hp = aHp;
-        currentHp = aHp;
-        attack = aAttack;
-        defence = aDefence;
+        stats = aStats;
+        currentHp = stats.getMaxHp();
+        calculator = aCalculator;
     }
 
     void attack( final Creature aDefender )
     {
-        if( attack > aDefender.defence )
+        if( stats.getAttack() > aDefender.getStats()
+            .getDefence() && currentHp > 0 )
         {
-            aDefender.currentHp = aDefender.currentHp - attack + aDefender.defence;
+            final int damage = calculator.calculateDamage( stats.getAttack(), aDefender.getStats()
+                .getDefence() );
+            applyDamage( aDefender, damage );
+            if( canCounterAttack( aDefender ) )
+            {
+                counterAttack( aDefender );
+            }
         }
+    }
+
+    private void applyDamage( final Creature aDefender, final int aDamage )
+    {
+        aDefender.currentHp = aDefender.currentHp - aDamage;
+    }
+
+    private boolean canCounterAttack( final Creature aDefender )
+    {
+        return aDefender.counterAttackCounter > 0 && aDefender.getCurrentHp() > 0;
+    }
+
+    private void counterAttack( final Creature aAttacker )
+    {
+        final int damage = calculator.calculateDamage( aAttacker.getStats()
+            .getAttack(),
+            this.getStats()
+                .getDefence() );
+        applyDamage( this, damage );
     }
 
     int getCurrentHp()
@@ -39,33 +64,40 @@ public class Creature
         return currentHp;
     }
 
-    static class Bulider
+    static class Builder
     {
         private int hp;
         private int attack;
         private int defence;
+        private DamageCalculatorIf calculator;
 
-        Bulider hp( final int hp )
+        Builder hp( final int hp )
         {
             this.hp = hp;
             return this;
         }
 
-        Bulider attack( final int attack )
+        Builder attack( final int attack )
         {
             this.attack = attack;
             return this;
         }
 
-        Bulider defence( final int defence )
+        Builder defence( final int defence )
         {
             this.defence = defence;
             return this;
         }
 
+        Builder calculator( final DamageCalculatorIf aCalc )
+        {
+            calculator = aCalc;
+            return this;
+        }
+
         Creature bulid()
         {
-            return new Creature( hp, attack, defence );
+            return new Creature( new CreatureStatistic( hp, attack, defence ), calculator );
         }
 
     }
