@@ -17,11 +17,11 @@ public class CreatureTest
         final Creature angel = new Creature.Builder().hp( NOT_IMPORTANT )
             .attack( 50 )
             .defence( NOT_IMPORTANT )
-            .bulid();
+            .build();
         final Creature dragon = new Creature.Builder().hp( 100 )
             .attack( NOT_IMPORTANT )
             .defence( 10 )
-            .bulid();
+            .build();
         // when
         angel.attack( dragon );
         // then
@@ -34,11 +34,11 @@ public class CreatureTest
         final Creature angel = new Creature.Builder().hp( NOT_IMPORTANT )
             .attack( 1 )
             .defence( NOT_IMPORTANT )
-            .bulid();
+            .build();
         final Creature dragon = new Creature.Builder().hp( 100 )
             .attack( NOT_IMPORTANT )
             .defence( 10 )
-            .bulid();
+            .build();
         // when
         angel.attack( dragon );
         // then
@@ -51,11 +51,11 @@ public class CreatureTest
         final Creature attacker = new Creature.Builder().hp( 100 )
             .attack( NOT_IMPORTANT )
             .defence( 10 )
-            .bulid();
+            .build();
         final Creature defender = new Creature.Builder().hp( NOT_IMPORTANT )
             .attack( 20 )
             .defence( 5 )
-            .bulid();
+            .build();
         // when
         attacker.attack( defender );
         // then
@@ -68,11 +68,11 @@ public class CreatureTest
         final Creature attacker = new Creature.Builder().hp( 100 )
             .attack( 1000 )
             .defence( 10 )
-            .bulid();
+            .build();
         final Creature defender = new Creature.Builder().hp( NOT_IMPORTANT )
             .attack( 20 )
             .defence( 5 )
-            .bulid();
+            .build();
         // when
         attacker.attack( defender );
         // then
@@ -85,11 +85,11 @@ public class CreatureTest
         final Creature attacker = new Creature.Builder().hp( 100 )
             .attack( NOT_IMPORTANT )
             .defence( 10 )
-            .bulid();
+            .build();
         final Creature defender = new Creature.Builder().hp( NOT_IMPORTANT )
             .attack( 20 )
             .defence( 5 )
-            .bulid();
+            .build();
         // when
         attacker.attack( defender );
         attacker.attack( defender );
@@ -103,11 +103,11 @@ public class CreatureTest
         final Creature attacker = new Creature.Builder().hp( 100 )
             .attack( 10 )
             .defence( 10 )
-            .bulid();
+            .build();
         final Creature defender = new Creature.Builder().hp( NOT_IMPORTANT )
             .attack( 20 )
             .defence( 5 )
-            .bulid();
+            .build();
         // when
         attacker.attack( defender );
         // then

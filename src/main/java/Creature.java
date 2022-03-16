@@ -95,10 +95,9 @@ public class Creature
             return this;
         }
 
-        Creature bulid()
+        Creature build()
         {
             return new Creature( new CreatureStatistic( hp, attack, defence ), calculator );
         }
-
     }
 }
