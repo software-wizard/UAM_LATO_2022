@@ -1,4 +1,4 @@
 public interface DamageCalculatorIf
 {
-    int calculateDamage( final int aAttackerAttack, final int aDefenderDefence );
+    int calculateDamage( Creature aAttacker, Creature aDefender );
 }

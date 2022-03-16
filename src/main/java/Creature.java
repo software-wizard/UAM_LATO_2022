@@ -7,6 +7,8 @@
 
 import lombok.Getter;
 
+import com.google.common.collect.Range;
+
 /**
  * TODO: Describe this class (The first line - until the first dot - will interpret as the brief description).
  */
@@ -14,6 +16,7 @@ import lombok.Getter;
 public class Creature
 {
     private final CreatureStatistic stats;
+    private int amount;
     private int currentHp;
     private final int counterAttackCounter = 1;
     private final DamageCalculatorIf calculator;
@@ -30,8 +33,7 @@ public class Creature
         if( stats.getAttack() > aDefender.getStats()
             .getDefence() && currentHp > 0 )
         {
-            final int damage = calculator.calculateDamage( stats.getAttack(), aDefender.getStats()
-                .getDefence() );
+            final int damage = calculator.calculateDamage( this, aDefender );
             applyDamage( aDefender, damage );
             if( canCounterAttack( aDefender ) )
             {
@@ -52,10 +54,7 @@ public class Creature
 
     private void counterAttack( final Creature aAttacker )
     {
-        final int damage = calculator.calculateDamage( aAttacker.getStats()
-            .getAttack(),
-            this.getStats()
-                .getDefence() );
+        final int damage = calculator.calculateDamage( aAttacker, this );
         applyDamage( this, damage );
     }
 
@@ -64,12 +63,39 @@ public class Creature
         return currentHp;
     }
 
+    Range< Integer > getDamage()
+    {
+        return stats.getDamage();
+    }
+
+    int getAttack()
+    {
+        return stats.getAttack();
+    }
+
+    int getArmor()
+    {
+        return stats.getDefence();
+    }
+
     static class Builder
     {
+        private String name;
         private int hp;
         private int attack;
+        private Range< Integer > damage = Range.closed( 0, 0 );
         private int defence;
-        private DamageCalculatorIf calculator;
+        private DamageCalculatorIf calculator = new DefaultDamageCalculator();
+        private int moveRange;
+        private int tier;
+        private boolean isUpgraded;
+        private String description;
+
+        Builder name( final String name )
+        {
+            this.name = name;
+            return this;
+        }
 
         Builder hp( final int hp )
         {
@@ -83,9 +109,33 @@ public class Creature
             return this;
         }
 
+        Builder damage( final Range< Integer > damage )
+        {
+            this.damage = damage;
+            return this;
+        }
+
         Builder defence( final int defence )
         {
             this.defence = defence;
+            return this;
+        }
+
+        Builder tier( final int tier )
+        {
+            this.tier = tier;
+            return this;
+        }
+
+        Builder moveRange( final int moveRange )
+        {
+            this.moveRange = moveRange;
+            return this;
+        }
+
+        Builder isUpgraded( final boolean isUpgraded )
+        {
+            this.isUpgraded = isUpgraded;
             return this;
         }
 
@@ -95,9 +145,16 @@ public class Creature
             return this;
         }
 
+        Builder description( final String description )
+        {
+            this.description = description;
+            return this;
+        }
+
         Creature build()
         {
-            return new Creature( new CreatureStatistic( hp, attack, defence ), calculator );
+            return new Creature( new CreatureStatistic( name, hp, damage, attack, defence, moveRange, tier,
+                isUpgraded, description ), calculator );
         }
     }
 }
