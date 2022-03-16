@@ -16,22 +16,23 @@ import com.google.common.collect.Range;
 public class Creature
 {
     private final CreatureStatistic stats;
-    private int amount;
+    private final int amount;
     private int currentHp;
-    private final int counterAttackCounter = 1;
+    private int counterAttackCounter = 1;
     private final DamageCalculatorIf calculator;
 
-    private Creature( final CreatureStatistic aStats, final DamageCalculatorIf aCalculator )
+    private Creature( final CreatureStatistic aStats, final DamageCalculatorIf aCalculator,
+        final int aAmount )
     {
         stats = aStats;
+        amount = aAmount;
         currentHp = stats.getMaxHp();
         calculator = aCalculator;
     }
 
     void attack( final Creature aDefender )
     {
-        if( stats.getAttack() > aDefender.getStats()
-            .getDefence() && currentHp > 0 )
+        if( isAlive() )
         {
             final int damage = calculator.calculateDamage( this, aDefender );
             applyDamage( aDefender, damage );
@@ -40,6 +41,11 @@ public class Creature
                 counterAttack( aDefender );
             }
         }
+    }
+
+    public boolean isAlive()
+    {
+        return amount > 0;
     }
 
     private void applyDamage( final Creature aDefender, final int aDamage )
@@ -56,6 +62,7 @@ public class Creature
     {
         final int damage = calculator.calculateDamage( aAttacker, this );
         applyDamage( this, damage );
+        aAttacker.counterAttackCounter--;
     }
 
     int getCurrentHp()
@@ -81,6 +88,7 @@ public class Creature
     static class Builder
     {
         private String name;
+        private int amount = 1;
         private int hp;
         private int attack;
         private Range< Integer > damage = Range.closed( 0, 0 );
@@ -94,6 +102,12 @@ public class Creature
         Builder name( final String name )
         {
             this.name = name;
+            return this;
+        }
+
+        Builder amount( final int amount )
+        {
+            this.amount = amount;
             return this;
         }
 
@@ -154,7 +168,7 @@ public class Creature
         Creature build()
         {
             return new Creature( new CreatureStatistic( name, hp, damage, attack, defence, moveRange, tier,
-                isUpgraded, description ), calculator );
+                isUpgraded, description ), calculator, amount );
         }
     }
 }
