@@ -1,6 +1,13 @@
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import java.util.Random;
 
 import org.junit.jupiter.api.Test;
+
+import com.google.common.collect.Range;
 
 /**
  * TODO: Describe this class (The first line - until the first dot - will interpret as the brief description).
@@ -100,18 +107,24 @@ public class CreatureTest
     @Test
     void attackerShouldNotCounterAttack()
     {
+        final Random randomMock = mock( Random.class );
+        when( randomMock.nextInt( anyInt() ) ).thenReturn( 3 );
+
         final Creature attacker = new Creature.Builder().hp( 100 )
-            .attack( 10 )
-            .defence( 10 )
+            .damage( Range.closed( 5, 5 ) )
+            .attack( NOT_IMPORTANT )
+            .defence( NOT_IMPORTANT )
             .build();
         final Creature defender = new Creature.Builder().hp( NOT_IMPORTANT )
-            .attack( 20 )
-            .defence( 5 )
+            .damage( Range.closed( 1, 10 ) )
+            .calculator( new DefaultDamageCalculator( randomMock ) )
+            .attack( NOT_IMPORTANT )
+            .defence( NOT_IMPORTANT )
             .build();
         // when
         attacker.attack( defender );
         // then
-        assertThat( attacker.getCurrentHp() ).isEqualTo( 90 );
         assertThat( defender.getCurrentHp() ).isEqualTo( 95 );
+        assertThat( attacker.getCurrentHp() ).isEqualTo( 96 );
     }
 }

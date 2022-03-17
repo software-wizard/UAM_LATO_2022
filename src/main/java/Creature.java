@@ -5,6 +5,8 @@
 //
 //  ******************************************************************
 
+import java.util.Random;
+
 import lombok.Getter;
 
 import com.google.common.collect.Range;
@@ -60,7 +62,7 @@ public class Creature
 
     private void counterAttack( final Creature aAttacker )
     {
-        final int damage = calculator.calculateDamage( aAttacker, this );
+        final int damage = aAttacker.calculator.calculateDamage( aAttacker, this );
         applyDamage( this, damage );
         aAttacker.counterAttackCounter--;
     }
@@ -93,7 +95,7 @@ public class Creature
         private int attack;
         private Range< Integer > damage = Range.closed( 0, 0 );
         private int defence;
-        private DamageCalculatorIf calculator = new DefaultDamageCalculator();
+        private DamageCalculatorIf calculator = new DefaultDamageCalculator( new Random() );
         private int moveRange;
         private int tier;
         private boolean isUpgraded;

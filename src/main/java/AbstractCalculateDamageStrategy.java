@@ -7,7 +7,12 @@ abstract class AbstractCalculateDamageStrategy implements DamageCalculatorIf
     public static final int MAX_DEFENCE_DIFF = 12;
     public static final double DEFENCE_BONUS = 0.025;
     public static final double ATTACK_BONUS = 0.05;
-    private final Random rand = new Random();
+    private final Random rand;
+
+    protected AbstractCalculateDamageStrategy( final Random aRand )
+    {
+        rand = aRand;
+    }
 
     @Override
     public int calculateDamage( final Creature aAttacker, final Creature aDefender )
