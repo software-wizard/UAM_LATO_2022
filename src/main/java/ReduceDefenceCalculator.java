@@ -5,9 +5,18 @@ import java.util.Random;
  */
 public class ReduceDefenceCalculator extends AbstractCalculateDamageStrategy
 {
+
+    private final double factor;
+
     public ReduceDefenceCalculator()
     {
         super( new Random() );
+        factor = 0.2;
     }
 
+    @Override
+    protected int getArmor( final Creature aDefender )
+    {
+        return (int)(aDefender.getArmor() * factor);
+    }
 }
