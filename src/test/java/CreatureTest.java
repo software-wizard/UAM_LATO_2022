@@ -3,6 +3,7 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.List;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
@@ -126,5 +127,44 @@ public class CreatureTest
         // then
         assertThat( defender.getCurrentHp() ).isEqualTo( 95 );
         assertThat( attacker.getCurrentHp() ).isEqualTo( 96 );
+    }
+
+    @Test
+    void counterAttackCounterShouldResetAfterEndOfTurn()
+    {
+        final Creature creature1 = new Creature.Builder().hp( 100 )
+            .build();
+        final Creature creature2 = new Creature.Builder().hp( 100 )
+            .damage( Range.closed( 10, 10 ) )
+            .build();
+        final TurnQueue turnQueue = new TurnQueue( List.of( creature1 ), List.of( creature2 ) );
+
+        creature1.attack( creature2 );
+        creature1.attack( creature2 );
+        assertThat( creature1.getCurrentHp() ).isEqualTo( 90 );
+        turnQueue.next();
+        turnQueue.next();
+        creature1.attack( creature2 );
+        assertThat( creature1.getCurrentHp() ).isEqualTo( 80 );
+        // end of turn
+    }
+
+    @Test
+    void creatureShouldHealAfterEndOfTurn()
+    {
+        final Creature creature1 = new Creature.Builder().hp( 100 )
+            .damage( Range.closed( 10, 10 ) )
+            .build();
+        final Creature selfHealAfterEndOfTurnCreature =
+            new SelfHealAfterTurnCreature( new Creature.Builder().hp( 100 )
+                .build() );
+        final TurnQueue turnQueue =
+            new TurnQueue( List.of( creature1 ), List.of( selfHealAfterEndOfTurnCreature ) );
+
+        creature1.attack( selfHealAfterEndOfTurnCreature );
+        assertThat( selfHealAfterEndOfTurnCreature.getCurrentHp() ).isEqualTo( 90 );
+        turnQueue.next();
+        turnQueue.next();
+        assertThat( selfHealAfterEndOfTurnCreature.getCurrentHp() ).isEqualTo( 100 );
     }
 }

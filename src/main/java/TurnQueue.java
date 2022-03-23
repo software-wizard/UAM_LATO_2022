@@ -1,3 +1,4 @@
+import java.beans.PropertyChangeSupport;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -10,30 +11,47 @@ import java.util.stream.Stream;
 public class TurnQueue
 {
 
-    private final Collection<Creature> creatures;
-    private final Queue<Creature> creaturesQueue;
+    public static final String END_OF_TURN = "END_OF_TURN";
+    private final Collection< Creature > creatures;
+    private final Queue< Creature > creaturesQueue;
     private Creature currentCreature;
+    private final PropertyChangeSupport observerSupport = new PropertyChangeSupport( this );
+    private int roundNumber;
 
-    public TurnQueue( final Collection<Creature> aCreatureList, final Collection<Creature> aCreatureList2) {
-        creatures = Stream.concat(aCreatureList.stream(), aCreatureList2.stream())
-                .collect(Collectors.toList());
+    public TurnQueue( final Collection< Creature > aCreatureList,
+        final Collection< Creature > aCreatureList2 )
+    {
+        creatures = Stream.concat( aCreatureList.stream(), aCreatureList2.stream() )
+            .collect( Collectors.toList() );
         creaturesQueue = new LinkedList<>();
         initQueue();
+        creatures.forEach( c -> observerSupport.addPropertyChangeListener( END_OF_TURN, c ) );
         next();
     }
 
-    private void initQueue() {
-        creaturesQueue.addAll(creatures);
+    private void initQueue()
+    {
+        creaturesQueue.addAll( creatures );
     }
 
-    Creature getCurrentCreature() {
+    Creature getCurrentCreature()
+    {
         return currentCreature;
     }
 
-    void next() {
-        if (creaturesQueue.isEmpty()) {
-            initQueue();
+    void next()
+    {
+        if( creaturesQueue.isEmpty() )
+        {
+            endOfTurn();
         }
         currentCreature = creaturesQueue.poll();
+    }
+
+    private void endOfTurn()
+    {
+        roundNumber++;
+        initQueue();
+        observerSupport.firePropertyChange( END_OF_TURN, roundNumber - 1, roundNumber );
     }
 }

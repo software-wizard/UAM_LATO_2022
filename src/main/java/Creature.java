@@ -5,6 +5,8 @@
 //
 //  ******************************************************************
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Random;
 
 import lombok.Getter;
@@ -15,13 +17,17 @@ import com.google.common.collect.Range;
  * TODO: Describe this class (The first line - until the first dot - will interpret as the brief description).
  */
 @Getter
-public class Creature
+public class Creature implements PropertyChangeListener
 {
-    private final CreatureStatistic stats;
-    private final int amount;
+    private CreatureStatistic stats;
+    private int amount;
     private int currentHp;
     private int counterAttackCounter = 1;
-    private final DamageCalculatorIf calculator;
+    private DamageCalculatorIf calculator;
+
+    Creature()
+    {
+    }
 
     private Creature( final CreatureStatistic aStats, final DamageCalculatorIf aCalculator,
         final int aAmount )
@@ -36,7 +42,7 @@ public class Creature
     {
         if( isAlive() )
         {
-            final int damage = calculator.calculateDamage( this, aDefender );
+            final int damage = getCalculator().calculateDamage( this, aDefender );
             applyDamage( aDefender, damage );
             if( canCounterAttack( aDefender ) )
             {
@@ -47,29 +53,30 @@ public class Creature
 
     public boolean isAlive()
     {
-        return amount > 0;
+        return getAmount() > 0;
     }
 
     private void applyDamage( final Creature aDefender, final int aDamage )
     {
-        aDefender.currentHp = aDefender.currentHp - aDamage;
+        aDefender.setCurrentHp( aDefender.getCurrentHp() - aDamage );
+    }
+
+    protected void setCurrentHp( final int aCurrentHp )
+    {
+        currentHp = aCurrentHp;
     }
 
     private boolean canCounterAttack( final Creature aDefender )
     {
-        return aDefender.counterAttackCounter > 0 && aDefender.getCurrentHp() > 0;
+        return aDefender.getCounterAttackCounter() > 0 && aDefender.getCurrentHp() > 0;
     }
 
     private void counterAttack( final Creature aAttacker )
     {
-        final int damage = aAttacker.calculator.calculateDamage( aAttacker, this );
+        final int damage = aAttacker.getCalculator()
+            .calculateDamage( aAttacker, this );
         applyDamage( this, damage );
         aAttacker.counterAttackCounter--;
-    }
-
-    int getCurrentHp()
-    {
-        return currentHp;
     }
 
     Range< Integer > getDamage()
@@ -85,6 +92,20 @@ public class Creature
     int getArmor()
     {
         return stats.getDefence();
+    }
+
+    @Override
+    public void propertyChange( final PropertyChangeEvent evt )
+    {
+        if( TurnQueue.END_OF_TURN.equals( evt.getPropertyName() ) )
+        {
+            counterAttackCounter = 1;
+        }
+    }
+
+    protected void restoreCurrentHpToMax()
+    {
+        currentHp = stats.getMaxHp();
     }
 
     static class Builder
