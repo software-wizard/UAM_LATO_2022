@@ -1,3 +1,5 @@
+package pl.psi.creatures;
+
 import lombok.Value;
 
 import com.google.common.collect.Range;
@@ -6,7 +8,7 @@ import com.google.common.collect.Range;
  * TODO: Describe this class (The first line - until the first dot - will interpret as the brief description).
  */
 @Value
-public class CreatureStatistic
+class CreatureStatistic
 {
     private final String name;
     private final int maxHp;

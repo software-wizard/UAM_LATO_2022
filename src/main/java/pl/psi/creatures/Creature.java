@@ -1,4 +1,4 @@
-//  ******************************************************************
+package pl.psi.creatures;//  ******************************************************************
 //
 //  Copyright 2022 PSI Software AG. All rights reserved.
 //  PSI PROPRIETARY/CONFIDENTIAL. Use is subject to license terms
@@ -10,6 +10,8 @@ import java.beans.PropertyChangeListener;
 import java.util.Random;
 
 import lombok.Getter;
+
+import pl.psi.TurnQueue;
 
 import com.google.common.collect.Range;
 
@@ -38,7 +40,7 @@ public class Creature implements PropertyChangeListener
         calculator = aCalculator;
     }
 
-    void attack( final Creature aDefender )
+    public void attack( final Creature aDefender )
     {
         if( isAlive() )
         {

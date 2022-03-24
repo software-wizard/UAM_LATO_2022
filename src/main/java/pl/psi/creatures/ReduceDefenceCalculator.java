@@ -1,9 +1,11 @@
+package pl.psi.creatures;
+
 import java.util.Random;
 
 /**
  * TODO: Describe this class (The first line - until the first dot - will interpret as the brief description).
  */
-public class ReduceDefenceCalculator extends AbstractCalculateDamageStrategy
+class ReduceDefenceCalculator extends AbstractCalculateDamageStrategy
 {
 
     private final double factor;

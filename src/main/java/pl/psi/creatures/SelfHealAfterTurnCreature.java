@@ -1,3 +1,5 @@
+package pl.psi.creatures;
+
 import java.beans.PropertyChangeEvent;
 
 import com.google.common.collect.Range;
@@ -5,7 +7,7 @@ import com.google.common.collect.Range;
 /**
  * TODO: Describe this class (The first line - until the first dot - will interpret as the brief description).
  */
-public class SelfHealAfterTurnCreature extends Creature
+class SelfHealAfterTurnCreature extends Creature
 {
     private final Creature decorated;
 

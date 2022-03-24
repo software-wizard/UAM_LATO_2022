@@ -1,3 +1,5 @@
+package pl.psi.creatures;
+
 import java.util.Random;
 
 abstract class AbstractCalculateDamageStrategy implements DamageCalculatorIf
