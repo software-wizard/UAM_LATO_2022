@@ -17,7 +17,7 @@ class SelfHealAfterTurnCreature extends Creature
     }
 
     @Override
-    public CreatureStatistic getStats()
+    public CreatureStatisticIf getStats()
     {
         return decorated.getStats();
     }

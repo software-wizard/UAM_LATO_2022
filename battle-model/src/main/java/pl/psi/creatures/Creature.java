@@ -22,7 +22,7 @@ import lombok.Getter;
 @Getter
 public class Creature implements PropertyChangeListener
 {
-    private CreatureStatistic stats;
+    private CreatureStatisticIf stats;
     private int amount;
     private int currentHp;
     private int counterAttackCounter = 1;
@@ -32,7 +32,7 @@ public class Creature implements PropertyChangeListener
     {
     }
 
-    private Creature( final CreatureStatistic aStats, final DamageCalculatorIf aCalculator,
+    private Creature( final CreatureStatisticIf aStats, final DamageCalculatorIf aCalculator,
         final int aAmount )
     {
         stats = aStats;
@@ -125,9 +125,9 @@ public class Creature implements PropertyChangeListener
     {
         private int amount = 1;
         private DamageCalculatorIf calculator = new DefaultDamageCalculator( new Random() );
-        private CreatureStatistic statistic;
+        private CreatureStatisticIf statistic;
 
-        public Builder statistic( final CreatureStatistic aStatistic )
+        public Builder statistic( final CreatureStatisticIf aStatistic )
         {
             statistic = aStatistic;
             return this;
@@ -142,36 +142,6 @@ public class Creature implements PropertyChangeListener
         Builder calculator( final DamageCalculatorIf aCalc )
         {
             calculator = aCalc;
-            return this;
-        }
-
-        Builder hp( final int aNotImportant )
-        {
-            return this;
-        }
-
-        Builder attack( final int aI )
-        {
-            return this;
-        }
-
-        Builder defence( final int aNotImportant )
-        {
-            return this;
-        }
-
-        Builder damage( final Range< Integer > aClosed )
-        {
-            return this;
-        }
-
-        public Builder moveRange( final int aI )
-        {
-            return this;
-        }
-
-        public Builder name( final String aHero1 )
-        {
             return this;
         }
 

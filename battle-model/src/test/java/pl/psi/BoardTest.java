@@ -7,13 +7,16 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import pl.psi.creatures.Creature;
+import pl.psi.creatures.CreatureStats;
 
 class BoardTest
 {
     @Test
     void unitsMoveProperly()
     {
-        final Creature creature = new Creature.Builder().moveRange( 5 )
+        final Creature creature = new Creature.Builder().statistic( CreatureStats.builder()
+            .moveRange( 5 )
+            .build() )
             .build();
         final List< Creature > c1 = List.of( creature );
         final List< Creature > c2 = List.of();

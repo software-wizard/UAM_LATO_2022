@@ -1,7 +1,5 @@
 package pl.psi.creatures;
 
-import com.google.common.collect.Range;
-
 /**
  * TODO: Describe this class (The first line - until the first dot - will interpret as the brief description).
  */
@@ -14,11 +12,7 @@ public class CastleCreatureFactory
             switch( aTier )
             {
                 case 1:
-                    return new Creature.Builder().hp( 10 )
-                        .attack( 4 )
-                        .defence( 5 )
-                        .damage( Range.closed( 1, 3 ) )
-                        .moveRange( 4 )
+                    return new Creature.Builder().statistic( CreatureStatistic.BLACK_KNIGHT )
                         .amount( aAmount )
                         .build();
             }
@@ -28,11 +22,7 @@ public class CastleCreatureFactory
             switch( aTier )
             {
                 case 1:
-                    return new Creature.Builder().hp( 10 )
-                        .attack( 4 )
-                        .defence( 5 )
-                        .damage( Range.closed( 1, 3 ) )
-                        .moveRange( 4 )
+                    return new Creature.Builder().statistic( CreatureStatistic.BLACK_KNIGHT )
                         .amount( aAmount )
                         .build();
             }

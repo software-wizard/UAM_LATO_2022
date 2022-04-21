@@ -21,35 +21,48 @@ public class CreatureTest
 {
 
     private static final int NOT_IMPORTANT = 100;
+    private static final Range< Integer > NOT_IMPORTANT_DMG = Range.closed( 0, 0 );
 
     @Test
     void creatureShouldAttackProperly()
     {
         // given
-        final Creature angel = new Creature.Builder().hp( NOT_IMPORTANT )
+        final Creature angel = new Creature.Builder().statistic( CreatureStats.builder()
+            .maxHp( NOT_IMPORTANT )
+            .damage( Range.closed( 10, 10 ) )
             .attack( 50 )
-            .defence( NOT_IMPORTANT )
+            .armor( NOT_IMPORTANT )
+            .build() )
             .build();
-        final Creature dragon = new Creature.Builder().hp( 100 )
+        final Creature dragon = new Creature.Builder().statistic( CreatureStats.builder()
+            .maxHp( 100 )
+            .damage( NOT_IMPORTANT_DMG )
             .attack( NOT_IMPORTANT )
-            .defence( 10 )
+            .armor( 10 )
+            .build() )
             .build();
         // when
         angel.attack( dragon );
         // then
-        assertThat( dragon.getCurrentHp() ).isEqualTo( 60 );
+        assertThat( dragon.getCurrentHp() ).isEqualTo( 70 );
     }
 
     @Test
     void creatureShouldNotHealCreatureEvenHasLowerAttackThanDefenderArmor()
     {
-        final Creature angel = new Creature.Builder().hp( NOT_IMPORTANT )
+        final Creature angel = new Creature.Builder().statistic( CreatureStats.builder()
+            .maxHp( NOT_IMPORTANT )
+            .damage( NOT_IMPORTANT_DMG )
             .attack( 1 )
-            .defence( NOT_IMPORTANT )
+            .armor( NOT_IMPORTANT )
+            .build() )
             .build();
-        final Creature dragon = new Creature.Builder().hp( 100 )
+        final Creature dragon = new Creature.Builder().statistic( CreatureStats.builder()
+            .maxHp( 100 )
+            .damage( NOT_IMPORTANT_DMG )
             .attack( NOT_IMPORTANT )
-            .defence( 10 )
+            .armor( 10 )
+            .build() )
             .build();
         // when
         angel.attack( dragon );
@@ -60,13 +73,18 @@ public class CreatureTest
     @Test
     void defenderShouldCounterAttack()
     {
-        final Creature attacker = new Creature.Builder().hp( 100 )
+        final Creature attacker = new Creature.Builder().statistic( CreatureStats.builder()
+            .maxHp( 100 )
+            .damage( NOT_IMPORTANT_DMG )
             .attack( NOT_IMPORTANT )
-            .defence( 10 )
+            .armor( 10 )
+            .build() )
             .build();
-        final Creature defender = new Creature.Builder().hp( NOT_IMPORTANT )
-            .attack( 20 )
-            .defence( 5 )
+        final Creature defender = new Creature.Builder().statistic( CreatureStats.builder()
+            .maxHp( NOT_IMPORTANT )
+            .damage( Range.closed( 10, 10 ) )
+            .attack( 10 )
+            .build() )
             .build();
         // when
         attacker.attack( defender );
@@ -77,13 +95,19 @@ public class CreatureTest
     @Test
     void defenderShouldNotCounterAttackWhenIsDie()
     {
-        final Creature attacker = new Creature.Builder().hp( 100 )
+        final Creature attacker = new Creature.Builder().statistic( CreatureStats.builder()
+            .maxHp( 100 )
+            .damage( NOT_IMPORTANT_DMG )
             .attack( 1000 )
-            .defence( 10 )
+            .armor( 10 )
+            .build() )
             .build();
-        final Creature defender = new Creature.Builder().hp( NOT_IMPORTANT )
+        final Creature defender = new Creature.Builder().statistic( CreatureStats.builder()
+            .maxHp( NOT_IMPORTANT )
+            .damage( NOT_IMPORTANT_DMG )
             .attack( 20 )
-            .defence( 5 )
+            .armor( 5 )
+            .build() )
             .build();
         // when
         attacker.attack( defender );
@@ -94,14 +118,21 @@ public class CreatureTest
     @Test
     void defenderShouldCounterAttackOnlyOncePerTurn()
     {
-        final Creature attacker = new Creature.Builder().hp( 100 )
+        final Creature attacker = new Creature.Builder().statistic( CreatureStats.builder()
+            .maxHp( 100 )
+            .damage( NOT_IMPORTANT_DMG )
             .attack( NOT_IMPORTANT )
-            .defence( 10 )
+            .armor( 10 )
+            .build() )
             .build();
-        final Creature defender = new Creature.Builder().hp( NOT_IMPORTANT )
-            .attack( 20 )
-            .defence( 5 )
+
+        final Creature defender = new Creature.Builder().statistic( CreatureStats.builder()
+            .maxHp( NOT_IMPORTANT )
+            .damage( Range.closed( 10, 10 ) )
+            .attack( 10 )
+            .build() )
             .build();
+
         // when
         attacker.attack( defender );
         attacker.attack( defender );
@@ -115,17 +146,23 @@ public class CreatureTest
         final Random randomMock = mock( Random.class );
         when( randomMock.nextInt( anyInt() ) ).thenReturn( 3 );
 
-        final Creature attacker = new Creature.Builder().hp( 100 )
+        final Creature attacker = new Creature.Builder().statistic( CreatureStats.builder()
+            .maxHp( 100 )
             .damage( Range.closed( 5, 5 ) )
             .attack( NOT_IMPORTANT )
-            .defence( NOT_IMPORTANT )
+            .armor( NOT_IMPORTANT )
+            .build() )
             .build();
-        final Creature defender = new Creature.Builder().hp( NOT_IMPORTANT )
+
+        final Creature defender = new Creature.Builder().statistic( CreatureStats.builder()
+            .maxHp( NOT_IMPORTANT )
             .damage( Range.closed( 1, 10 ) )
-            .calculator( new DefaultDamageCalculator( randomMock ) )
             .attack( NOT_IMPORTANT )
-            .defence( NOT_IMPORTANT )
+            .armor( NOT_IMPORTANT )
+            .build() )
+            .calculator( new DefaultDamageCalculator( randomMock ) )
             .build();
+
         // when
         attacker.attack( defender );
         // then
@@ -136,36 +173,50 @@ public class CreatureTest
     @Test
     void counterAttackCounterShouldResetAfterEndOfTurn()
     {
-        final Creature creature1 = new Creature.Builder().hp( 100 )
+        final Creature attacker = new Creature.Builder().statistic( CreatureStats.builder()
+            .maxHp( 100 )
+            .damage( NOT_IMPORTANT_DMG )
+            .build() )
             .build();
-        final Creature creature2 = new Creature.Builder().hp( 100 )
-            .damage( Range.closed( 10, 10 ) )
-            .build();
-        final TurnQueue turnQueue = new TurnQueue( List.of( creature1 ), List.of( creature2 ) );
 
-        creature1.attack( creature2 );
-        creature1.attack( creature2 );
-        assertThat( creature1.getCurrentHp() ).isEqualTo( 90 );
+        final Creature defender = new Creature.Builder().statistic( CreatureStats.builder()
+            .maxHp( 100 )
+            .damage( Range.closed( 10, 10 ) )
+            .build() )
+            .build();
+
+        final TurnQueue turnQueue = new TurnQueue( List.of( attacker ), List.of( defender ) );
+
+        attacker.attack( defender );
+        attacker.attack( defender );
+        assertThat( attacker.getCurrentHp() ).isEqualTo( 90 );
         turnQueue.next();
         turnQueue.next();
-        creature1.attack( creature2 );
-        assertThat( creature1.getCurrentHp() ).isEqualTo( 80 );
+        attacker.attack( defender );
+        assertThat( attacker.getCurrentHp() ).isEqualTo( 80 );
         // end of turn
     }
 
     @Test
     void creatureShouldHealAfterEndOfTurn()
     {
-        final Creature creature1 = new Creature.Builder().hp( 100 )
+        final Creature attacker = new Creature.Builder().statistic( CreatureStats.builder()
+            .maxHp( 100 )
             .damage( Range.closed( 10, 10 ) )
+            .build() )
             .build();
-        final Creature selfHealAfterEndOfTurnCreature =
-            new SelfHealAfterTurnCreature( new Creature.Builder().hp( 100 )
-                .build() );
-        final TurnQueue turnQueue =
-            new TurnQueue( List.of( creature1 ), List.of( selfHealAfterEndOfTurnCreature ) );
 
-        creature1.attack( selfHealAfterEndOfTurnCreature );
+        final Creature selfHealAfterEndOfTurnCreature = new SelfHealAfterTurnCreature( new Creature.Builder()
+            .statistic( CreatureStats.builder()
+                .maxHp( 100 )
+                .damage( NOT_IMPORTANT_DMG )
+                .build() )
+            .build() );
+
+        final TurnQueue turnQueue =
+            new TurnQueue( List.of( attacker ), List.of( selfHealAfterEndOfTurnCreature ) );
+
+        attacker.attack( selfHealAfterEndOfTurnCreature );
         assertThat( selfHealAfterEndOfTurnCreature.getCurrentHp() ).isEqualTo( 90 );
         turnQueue.next();
         turnQueue.next();
