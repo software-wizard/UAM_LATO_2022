@@ -12,4 +12,7 @@ public interface CreatureStatisticIf {
     int getTier();
     String getDescription();
     boolean isUpgraded();
+    CreatureStatistic.CreatureType getType();
+    int getSize();
+    boolean isGround();
 }

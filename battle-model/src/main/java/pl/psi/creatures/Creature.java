@@ -1,5 +1,5 @@
-package pl.psi.creatures;//  ******************************************************************
-
+package pl.psi.creatures;
+//  ******************************************************************
 //
 //  Copyright 2022 PSI Software AG. All rights reserved.
 //  PSI PROPRIETARY/CONFIDENTIAL. Use is subject to license terms
@@ -27,18 +27,20 @@ public class Creature implements PropertyChangeListener
     private int currentHp;
     private int counterAttackCounter = 1;
     private DamageCalculatorIf calculator;
+    private int shots; /** -1 shots means unit is melee */
 
-    Creature()
-    {
-    }
+Creature()
+{
+}
 
     private Creature( final CreatureStatisticIf aStats, final DamageCalculatorIf aCalculator,
-        final int aAmount )
+                      final int aAmount, final int aShots )
     {
         stats = aStats;
         amount = aAmount;
         currentHp = stats.getMaxHp();
         calculator = aCalculator;
+        shots = aShots;
     }
 
     public void attack( final Creature aDefender )
@@ -69,6 +71,15 @@ public class Creature implements PropertyChangeListener
         currentHp = aCurrentHp;
     }
 
+    protected void addUnits (final int aAmount) {
+        if (aAmount > 1){
+            amount += aAmount - 1;
+        }
+        else{
+            amount += aAmount;
+        }
+    }
+
     private boolean canCounterAttack( final Creature aDefender )
     {
         return aDefender.getCounterAttackCounter() > 0 && aDefender.getCurrentHp() > 0;
@@ -77,9 +88,14 @@ public class Creature implements PropertyChangeListener
     private void counterAttack( final Creature aAttacker )
     {
         final int damage = aAttacker.getCalculator()
-            .calculateDamage( aAttacker, this );
+                .calculateDamage( aAttacker, this );
         applyDamage( this, damage );
         aAttacker.counterAttackCounter--;
+    }
+
+    void setCounterAttackCounter(int amount)
+    {
+        this.counterAttackCounter = amount;
     }
 
     Range< Integer > getDamage()
@@ -126,6 +142,7 @@ public class Creature implements PropertyChangeListener
         private int amount = 1;
         private DamageCalculatorIf calculator = new DefaultDamageCalculator( new Random() );
         private CreatureStatisticIf statistic;
+        private int shots = -1;
 
         public Builder statistic( final CreatureStatisticIf aStatistic )
         {
@@ -145,9 +162,15 @@ public class Creature implements PropertyChangeListener
             return this;
         }
 
+        public Builder shots(final int aShots)
+        {
+            shots = aShots;
+            return this;
+        }
+
         public Creature build()
         {
-            return new Creature( statistic, calculator, amount );
+            return new Creature( statistic, calculator, amount, shots );
         }
     }
 }

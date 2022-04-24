@@ -20,4 +20,22 @@ public class CreatureStats implements CreatureStatisticIf{
     private final int tier;
     private final String description;
     private final boolean isUpgraded;
+    private final CreatureStatistic.CreatureType type;
+    private final boolean isGround;
+    private final int size;
+
+    @Override
+    public CreatureStatistic.CreatureType getType() {
+        return type;
+    }
+
+    public boolean isGround() {
+        return isGround;
+    }
+
+    @Override
+    public int getSize() {
+        return size;
+    }
+
 }
