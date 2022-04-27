@@ -49,13 +49,19 @@ public enum CreatureStatistic implements CreatureStatisticIf
             true,CreatureType.UNDEAD ,true, 2), //
     GHOST_DRAGON( "Ghost Dragon", 19, 17, 200, 14, Range.closed( 25, 50 ), 7,
             "When situation seems hopeless, take a chance on the best enemy stack! If you'll get lucky, half their hit points will be gone instantly!! Ageing ability makes ghost dragons as dangerous as other lvl7 creatures.\nSpecial: -1 to enemy morale ; 20% chance to age enemy (halve hit points of all stack members).\n",
-            true,CreatureType.UNDEAD,false, 2);
+            true,CreatureType.UNDEAD,false, 2),
+
+    // CASTLE FRACTION
+    PIKEMAN( "Pikeman", 4, 5, 10, 4, Range.closed( 1, 3 ), 1,
+            "\n",
+            true,CreatureType.ALIVE,true, 1),
+    CRUSADER( "Crusader", 12, 12, 35, 6, Range.closed( 7, 10 ), 4,
+            "Good upgrade, but still lacks speed. Seem undefeatable in large numbers.\n",
+            true,CreatureType.ALIVE,true, 1);
 
     public enum CreatureType {
         ALIVE, UNDEAD, NON_LIVING
     }
-
-
 
     private final String name;
     private final int attack;
