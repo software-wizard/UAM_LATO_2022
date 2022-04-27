@@ -222,4 +222,36 @@ public class CreatureTest
         turnQueue.next();
         assertThat( selfHealAfterEndOfTurnCreature.getCurrentHp() ).isEqualTo( 100 );
     }
+
+    @Test
+    void creatureShouldNotBeCounterAttacked()
+    {
+        final Creature decorated = new Creature.Builder().statistic( CreatureStats.builder()
+                .maxHp( 100 )
+                .damage( NOT_IMPORTANT_DMG )
+                .build() )
+                .build();
+
+        final NoCounterCreature noCounterCreature = new NoCounterCreature( decorated );
+
+
+        final Creature attacker = new Creature.Builder().statistic( CreatureStats.builder()
+                .maxHp( 100 )
+                .damage( NOT_IMPORTANT_DMG )
+                .build() )
+                .build();
+
+        final Creature defender = new Creature.Builder()
+                .statistic( CreatureStats.builder()
+                        .maxHp( NOT_IMPORTANT )
+                        .damage( Range.closed(10,10) )
+                        .build() )
+                .build();
+
+        noCounterCreature.attack( defender );
+        attacker.attack( defender );
+
+        assertThat( noCounterCreature.getCurrentHp() ).isEqualTo( 100 );
+        assertThat( attacker.getCurrentHp() ).isEqualTo( 90 );
+    }
 }
