@@ -254,4 +254,28 @@ public class CreatureTest
         assertThat( noCounterCreature.getCurrentHp() ).isEqualTo( 100 );
         assertThat( attacker.getCurrentHp() ).isEqualTo( 90 );
     }
+
+    @Test
+    void attackerCanAttackTwicePerTurn()
+    {
+        final Creature attacker = new Creature.Builder().statistic( CreatureStats.builder()
+                        .maxHp( NOT_IMPORTANT )
+                        .damage( Range.closed( 10, 10 ) )
+                        .armor( 10 )
+                        .build() )
+                .build();
+
+        final Creature defender = new Creature.Builder().statistic( CreatureStats.builder()
+                        .maxHp( 100 )
+                        .damage( NOT_IMPORTANT_DMG )
+                        .attack( NOT_IMPORTANT )
+                        .build() )
+                .build();
+
+        attacker.attack( defender );
+        attacker.attack( defender );
+
+        assertThat( defender.getCurrentHp() ).isEqualTo( 80 );
+    }
+
 }
