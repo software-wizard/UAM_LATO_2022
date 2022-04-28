@@ -27,12 +27,6 @@ public class NoCounterCreature extends Creature
     }
 
     @Override
-    public int getCounterAttackCounter()
-    {
-        return decorated.getCounterAttackCounter();
-    }
-
-    @Override
     public DamageCalculatorIf getCalculator()
     {
         return decorated.getCalculator();

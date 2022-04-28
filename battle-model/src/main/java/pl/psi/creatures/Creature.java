@@ -25,7 +25,7 @@ public class Creature implements PropertyChangeListener
     private CreatureStatisticIf stats;
     private int amount;
     private int currentHp;
-    private int counterAttackCounter = 1;
+    private boolean canCounterAttack = true;
     private DamageCalculatorIf calculator;
 
 Creature()
@@ -80,7 +80,7 @@ Creature()
 
     protected boolean canCounterAttack( final Creature aDefender )
     {
-        return aDefender.getCounterAttackCounter() > 0 && aDefender.getCurrentHp() > 0;
+        return aDefender.canCounterAttack && aDefender.getCurrentHp() > 0;
     }
 
     private void counterAttack( final Creature aAttacker )
@@ -88,7 +88,7 @@ Creature()
         final int damage = aAttacker.getCalculator()
                 .calculateDamage( aAttacker, this );
         applyDamage( this, damage );
-        aAttacker.counterAttackCounter--;
+        aAttacker.canCounterAttack = false;
     }
 
     Range< Integer > getDamage()
@@ -111,7 +111,7 @@ Creature()
     {
         if( TurnQueue.END_OF_TURN.equals( evt.getPropertyName() ) )
         {
-            counterAttackCounter = 1;
+            canCounterAttack = true;
         }
     }
 
