@@ -27,20 +27,18 @@ public class Creature implements PropertyChangeListener
     private int currentHp;
     private int counterAttackCounter = 1;
     private DamageCalculatorIf calculator;
-    private int shots; /** -1 shots means unit is melee */
 
 Creature()
 {
 }
 
     private Creature( final CreatureStatisticIf aStats, final DamageCalculatorIf aCalculator,
-                      final int aAmount, final int aShots )
+                      final int aAmount )
     {
         stats = aStats;
         amount = aAmount;
         currentHp = stats.getMaxHp();
         calculator = aCalculator;
-        shots = aShots;
     }
 
     public void attack( final Creature aDefender )
@@ -162,15 +160,10 @@ Creature()
             return this;
         }
 
-        public Builder shots(final int aShots)
-        {
-            shots = aShots;
-            return this;
-        }
 
         public Creature build()
         {
-            return new Creature( statistic, calculator, amount, shots );
+            return new Creature( statistic, calculator, amount );
         }
     }
 }
