@@ -1,6 +1,7 @@
 package pl.psi.creatures;
 
 import com.google.common.collect.Range;
+import lombok.Builder;
 
 import java.beans.PropertyChangeEvent;
 
@@ -40,10 +41,11 @@ public class NoCounterCreature extends Creature
     @Override
     public void attack( final Creature aDefender )
     {
-        final int oldCounterAttackCounter = aDefender.getCounterAttackCounter();
-        aDefender.setCounterAttackCounter(0);
-        decorated.attack( aDefender );
-        aDefender.setCounterAttackCounter(oldCounterAttackCounter);
+        if( isAlive() )
+        {
+            final int damage = getCalculator().calculateDamage( decorated, aDefender );
+            decorated.applyDamage( aDefender, damage );
+        }
     }
 
     @Override

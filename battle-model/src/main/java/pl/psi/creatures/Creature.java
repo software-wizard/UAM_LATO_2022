@@ -59,7 +59,7 @@ Creature()
         return getAmount() > 0;
     }
 
-    private void applyDamage( final Creature aDefender, final int aDamage )
+    protected void applyDamage( final Creature aDefender, final int aDamage )
     {
         aDefender.setCurrentHp( aDefender.getCurrentHp() - aDamage );
     }
@@ -78,7 +78,7 @@ Creature()
         }
     }
 
-    private boolean canCounterAttack( final Creature aDefender )
+    protected boolean canCounterAttack( final Creature aDefender )
     {
         return aDefender.getCounterAttackCounter() > 0 && aDefender.getCurrentHp() > 0;
     }
@@ -89,11 +89,6 @@ Creature()
                 .calculateDamage( aAttacker, this );
         applyDamage( this, damage );
         aAttacker.counterAttackCounter--;
-    }
-
-    void setCounterAttackCounter(int amount)
-    {
-        this.counterAttackCounter = amount;
     }
 
     Range< Integer > getDamage()

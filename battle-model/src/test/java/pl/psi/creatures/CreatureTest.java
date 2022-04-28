@@ -143,8 +143,6 @@ public class CreatureTest
     @Test
     void attackerShouldNotCounterAttack()
     {
-        final Random randomMock = mock( Random.class );
-        when( randomMock.nextInt( anyInt() ) ).thenReturn( 3 );
 
         final Creature attacker = new Creature.Builder().statistic( CreatureStats.builder()
             .maxHp( 100 )
@@ -156,18 +154,17 @@ public class CreatureTest
 
         final Creature defender = new Creature.Builder().statistic( CreatureStats.builder()
             .maxHp( NOT_IMPORTANT )
-            .damage( Range.closed( 1, 10 ) )
+            .damage( Range.closed( 5, 5 ) )
             .attack( NOT_IMPORTANT )
             .armor( NOT_IMPORTANT )
             .build() )
-            .calculator( new DefaultDamageCalculator( randomMock ) )
             .build();
 
         // when
         attacker.attack( defender );
         // then
         assertThat( defender.getCurrentHp() ).isEqualTo( 95 );
-        assertThat( attacker.getCurrentHp() ).isEqualTo( 96 );
+        assertThat( attacker.getCurrentHp() ).isEqualTo( 95 );
     }
 
     @Test
@@ -251,6 +248,7 @@ public class CreatureTest
         noCounterCreature.attack( defender );
         attacker.attack( defender );
 
+        assertThat( noCounterCreature.getClass() ).isEqualTo( NoCounterCreature.class );
         assertThat( noCounterCreature.getCurrentHp() ).isEqualTo( 100 );
         assertThat( attacker.getCurrentHp() ).isEqualTo( 90 );
     }
