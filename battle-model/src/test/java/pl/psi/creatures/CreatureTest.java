@@ -254,4 +254,28 @@ public class CreatureTest
         assertThat( noCounterCreature.getCurrentHp() ).isEqualTo( 100 );
         assertThat( attacker.getCurrentHp() ).isEqualTo( 90 );
     }
+
+    @Test
+    void creatureShouldShootWhenEnoughShots()
+    {
+        final Creature decorated = new Creature.Builder().statistic( CreatureStats.builder()
+                .maxHp( 100 )
+                .damage( Range.closed(10,10) )
+                .build() )
+                .build();
+
+        final ShooterCreature shooterCreature = new ShooterCreature( decorated, 1 );
+
+        final Creature defender = new Creature.Builder()
+                .statistic( CreatureStats.builder()
+                        .maxHp( 100 )
+                        .damage( NOT_IMPORTANT_DMG )
+                        .build() )
+                .build();
+
+        shooterCreature.attack( defender );
+        shooterCreature.attack( defender );
+
+        assertThat( defender.getCurrentHp() ).isEqualTo( 90 );
+    }
 }
