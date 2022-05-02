@@ -1,15 +1,19 @@
 package pl.psi.hero;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import pl.psi.creatures.EconomyCreature;
+import pl.psi.skills.EconomySkill;
 
 public class EconomyHero
 {
 
     private final Fraction fraction;
     private final List< EconomyCreature > creatureList;
+    private final Set<EconomySkill> skills;
     private int gold;
 
     public EconomyHero( final Fraction aFraction, final int aGold )
@@ -17,6 +21,7 @@ public class EconomyHero
         fraction = aFraction;
         gold = aGold;
         creatureList = new ArrayList<>();
+        skills = new HashSet<>();
     }
 
     void addCreature( final EconomyCreature aCreature )
@@ -50,6 +55,10 @@ public class EconomyHero
             throw new IllegalStateException( "Hero has not enought money" );
         }
         gold -= aAmount;
+    }
+
+    public Set<EconomySkill> getSkills() {
+        return skills;
     }
 
     public enum Fraction

@@ -1,12 +1,12 @@
-package pl.psi.skill;
+package pl.psi.skills;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import pl.psi.EconomyEngine;
 import pl.psi.hero.EconomyHero;
-import pl.psi.skills.EconomySkill;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class EconomySkillTest {
 
@@ -14,7 +14,7 @@ public class EconomySkillTest {
     private EconomyEngine economyEngine;
     private EconomyHero hero2;
 
-    private final EconomySkillFactory economySkillFactory = new EconomySkillFacotory();
+    private final EconomySkillFactory economySkillFactory = new EconomySkillFactory();
 
     @BeforeEach
     void init() {
@@ -26,21 +26,18 @@ public class EconomySkillTest {
     @Test
     public void heroShouldBeAbleToLearnSkill() {
         EconomySkill skillToLearn = economySkillFactory.create();
-        // TODO find out how it should be checked if hero can learn a new secondary skill
-        economyEngine.learnSkill( skillToLearn );
     }
 
     @Test
     public void heroDoesNotHaveEnoughMoneyToBuySkill() {
+        int moneyBeforeBuyingSkill = hero1.getGold();
 
     }
 
     @Test
     public void heroHasLearnedSkill() {
         EconomySkill skillToLearn = economySkillFactory.create();
-        economyEngine.learnSkill( skillToLearn );
-        assertEquals(skillToLearn, hero1.getSkills(hero1.getSkills().size() - 1)); // new skill is the last element on
-        // the skills list
+
     }
 
     @Test
@@ -48,7 +45,6 @@ public class EconomySkillTest {
 
     }
 
-    // TODO it is business decision and it may not have any sense
     @Test
     public void heroCannotLearnSkillBecauseHeHasNoCreaturesWithCorrespondingType() {
 
