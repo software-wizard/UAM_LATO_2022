@@ -276,4 +276,29 @@ public class CreatureTest
 
         assertThat( defender.getCurrentHp() ).isEqualTo( 90 );
     }
+
+    @Test
+    void creatureShouldResurrectUnitsIfHpHighEnough()
+    {
+        final Creature decorated = new Creature.Builder().statistic( CreatureStats.builder()
+                .maxHp( 40 )
+                .damage( Range.closed( 5, 5 ) )
+                .build() )
+                .amount(10)
+                .build();
+
+        final HealFromAttackCreature healFromAttackCreature = new HealFromAttackCreature( decorated );
+
+        final Creature defender = new Creature.Builder().statistic( CreatureStats.builder()
+                .maxHp( NOT_IMPORTANT )
+                .damage( NOT_IMPORTANT_DMG )
+                .type( CreatureStatistic.CreatureType.ALIVE )
+                .build() )
+                .build();
+
+        healFromAttackCreature.attack( defender );
+        assertThat( healFromAttackCreature.getAmount() ).isEqualTo( 12 );
+        assertThat( healFromAttackCreature.getCurrentHp() ).isEqualTo( 10 );
+
+    }
 }

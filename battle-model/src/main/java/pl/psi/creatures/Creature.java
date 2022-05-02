@@ -69,12 +69,40 @@ Creature()
         currentHp = aCurrentHp;
     }
 
-    protected void addUnits (final int aAmount) {
-        if (aAmount > 1){
-            amount += aAmount - 1;
+    void calculateUnits(final int aAmountToAdd){
+        if (aAmountToAdd > 1){
+            amount += aAmountToAdd - 1;
         }
         else{
-            amount += aAmount;
+            amount += aAmountToAdd;
+        }
+    }
+
+    protected void heal( int healAmount )
+    {
+        setCurrentHp( getCurrentHp() + healAmount );
+        calculateUnits( calculateAmount() );
+        setCurrentHp( calculateCurrentHp() );
+    }
+
+    private int calculateAmount(){
+        if ( getCurrentHp() / getStats().getMaxHp() == 1 ){
+            return 1;
+        }
+        else if ( getCurrentHp() % getStats().getMaxHp() == 0 ){
+            return ( getCurrentHp() / getStats().getMaxHp() );
+        }
+        else{
+            return ( (getCurrentHp() / getStats().getMaxHp()) + 1 );
+        }
+    }
+
+    private int calculateCurrentHp(){
+        if( getCurrentHp() - ( getAmount() * getStats().getMaxHp() ) == 0 ){
+            return ( getStats().getMaxHp() );
+        }
+        else{ // ( a % b + b ) % b == a % b   when a is negative % operator behaves funky
+            return ( ( ( getCurrentHp() - ( getAmount() * getStats().getMaxHp() ) ) % ( getStats().getMaxHp() ) + ( getStats().getMaxHp() ) ) % getStats().getMaxHp() );
         }
     }
 
