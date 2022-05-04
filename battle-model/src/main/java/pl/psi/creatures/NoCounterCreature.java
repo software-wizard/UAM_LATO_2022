@@ -48,6 +48,13 @@ public class NoCounterCreature extends Creature
         return decorated.isAlive();
     }
 
+
+    @Override
+    public void heal( final int healAmount)
+    {
+         decorated.heal( healAmount ) ;
+    }
+
     @Override
     public int getCurrentHp()
     {

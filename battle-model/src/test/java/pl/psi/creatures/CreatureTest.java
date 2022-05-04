@@ -299,6 +299,31 @@ public class CreatureTest
         healFromAttackCreature.attack( defender );
         assertThat( healFromAttackCreature.getAmount() ).isEqualTo( 12 );
         assertThat( healFromAttackCreature.getCurrentHp() ).isEqualTo( 10 );
+    }
 
+    @Test
+    void vampireCreatureTest()
+    {
+        final Creature vampireToDecorate = new Creature.Builder().statistic( CreatureStats.builder()
+                .maxHp( CreatureStatistic.VAMPIRE_LORD.getMaxHp() )
+                .damage( CreatureStatistic.VAMPIRE_LORD.getDamage() )
+                .build() )
+                .amount( 1 )
+                .build();
+
+        final NoCounterCreature noCounterVampire = new NoCounterCreature( vampireToDecorate );
+        final HealFromAttackCreature vampireLord = new HealFromAttackCreature( noCounterVampire );
+
+        final Creature defender = new Creature.Builder().statistic( CreatureStats.builder()
+                .maxHp(100)
+                .damage( Range.closed(100,100) )
+                .type( CreatureStatistic.CreatureType.ALIVE )
+                .build() )
+                .build();
+
+        vampireLord.attack( defender );
+        assertThat( defender.getCurrentHp() ).isLessThanOrEqualTo( 95 );
+        assertThat( vampireLord.getAmount() ).isEqualTo( 2 );
+        assertThat( vampireLord.getCurrentHp() ).isGreaterThanOrEqualTo( 5 );
     }
 }
