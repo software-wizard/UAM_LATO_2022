@@ -7,8 +7,8 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import pl.psi.converter.EcoBattleConverter;
-import pl.psi.creatures.Creature;
-import pl.psi.creatures.EconomyNecropolisFactory;
+import pl.psi.products.creatures.Creature;
+import pl.psi.products.creatures.EconomyNecropolisFactory;
 
 class EcoBattleConverterTest
 {
@@ -16,7 +16,7 @@ class EcoBattleConverterTest
     @Test
     void shouldConvertCreaturesCorrectly()
     {
-        final EconomyHero ecoHero = new EconomyHero( EconomyHero.Fraction.NECROPOLIS, 1000 );
+        final EconomyHero ecoHero = new EconomyHero( EconomyHero.Fraction.NECROPOLIS);
         final EconomyNecropolisFactory factory = new EconomyNecropolisFactory();
         ecoHero.addCreature( factory.create( false, 1, 1 ) );
         ecoHero.addCreature( factory.create( false, 2, 2 ) );

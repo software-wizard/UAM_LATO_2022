@@ -2,7 +2,7 @@ package pl.psi;
 
 import java.util.List;
 
-import pl.psi.creatures.Creature;
+import pl.psi.products.creatures.Creature;
 
 import lombok.Getter;
 

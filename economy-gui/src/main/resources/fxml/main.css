@@ -1,11 +1,23 @@
 .button{
     -fx-background-color:
-        linear-gradient(#f2f2f2, #d6d6d6),
-        linear-gradient(#fcfcfc 0%, #d9d9d9 20%, #d6d6d6 100%),
-        linear-gradient(#dddddd 0%, #f6f6f6 50%);
+            linear-gradient(#f2f2f2, #d6d6d6),
+            linear-gradient(#fcfcfc 0%, #d9d9d9 20%, #d6d6d6 100%),
+            linear-gradient(#dddddd 0%, #f6f6f6 50%);
     -fx-text-fill: black;
+    -fx-alignment: LEFT;
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
-    -fx-font: bold 15pt "Arial";
+    -fx-font: bold 12pt "Arial";
+}
+
+.ReadyButton{
+    -fx-background-color:
+            linear-gradient(#f2f2f2, #d6d6d6),
+            linear-gradient(#fcfcfc 0%, #d9d9d9 20%, #d6d6d6 100%),
+            linear-gradient(#dddddd 0%, #f6f6f6 50%);
+    -fx-text-fill: black;
+    -fx-alignment: CENTER;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+    -fx-font: bold 10pt "Arial";
 }
 
 .creatureButton {
@@ -14,14 +26,20 @@
 }
 
 .label {
-   -fx-font: bold 15pt "Arial";
-   -fx-padding: 5px
+    -fx-font: bold 15pt "Arial";
+    -fx-padding: 5px
 }
 
-.centerHBox {
+.centerHBoxLeft {
     -fx-border-color: black;
     -fx-border-width: 1;
-    -fx-pref-width: 800;
+    -fx-pref-width: 300;
+}
+
+.centerHBoxRight {
+    -fx-border-color: black;
+    -fx-border-width: 1;
+    -fx-pref-width: 700;
 }
 
 .slider {

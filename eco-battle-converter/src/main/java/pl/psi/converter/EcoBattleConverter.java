@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pl.psi.Hero;
-import pl.psi.creatures.Creature;
+import pl.psi.products.creatures.Creature;
 import pl.psi.gui.MainBattleController;
 import pl.psi.gui.NecropolisFactory;
 import pl.psi.hero.EconomyHero;

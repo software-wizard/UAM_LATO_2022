@@ -1,4 +1,4 @@
-package pl.psi.creatures;
+package pl.psi.products.creatures;
 
 import java.util.Random;
 

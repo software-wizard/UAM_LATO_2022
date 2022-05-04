@@ -7,7 +7,7 @@ import java.util.Queue;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import pl.psi.creatures.Creature;
+import pl.psi.products.creatures.Creature;
 
 /**
  * TODO: Describe this class (The first line - until the first dot - will interpret as the brief description).

@@ -1,10 +1,14 @@
-package pl.psi.creatures;
+package pl.psi.products.creatures;
 
-public class EconomyCreature
+//import pl.psi.creatures.CreatureStatistic;
+
+import pl.psi.products.BuyProductInterface;
+
+public class EconomyCreature implements BuyProductInterface
 {
 
     private final CreatureStatistic stats;
-    private final int amount;
+    private int amount;
     private final int goldCost;
 
     EconomyCreature( final CreatureStatistic aStats, final int aAmount, final int aGoldCost )
@@ -17,6 +21,10 @@ public class EconomyCreature
     public int getAmount()
     {
         return amount;
+    }
+
+    public void increaseAmount(int aAmount){
+        amount = amount + aAmount;
     }
 
     public int getGoldCost()
@@ -38,4 +46,6 @@ public class EconomyCreature
     {
         return stats.getTier();
     }
+
+
 }
