@@ -2,6 +2,8 @@ package pl.psi.gui;
 
 import pl.psi.creatures.Creature;
 import pl.psi.creatures.CreatureStatistic;
+import pl.psi.creatures.HealFromAttackCreature;
+import pl.psi.creatures.NoCounterCreature;
 
 public class NecropolisFactory
 {
@@ -27,9 +29,10 @@ public class NecropolisFactory
                         .amount( aAmount )
                         .build();
                 case 4:
-                    return new Creature.Builder().statistic( CreatureStatistic.VAMPIRE )
-                        .amount( aAmount )
-                        .build();
+                    Creature decorated = new Creature.Builder().statistic( CreatureStatistic.VAMPIRE )
+                            .amount( aAmount )
+                            .build();
+                    return new NoCounterCreature( decorated );
                 case 5:
                     return new Creature.Builder().statistic( CreatureStatistic.LICH )
                         .amount( aAmount )
@@ -63,9 +66,11 @@ public class NecropolisFactory
                         .amount( aAmount )
                         .build();
                 case 4:
-                    return new Creature.Builder().statistic( CreatureStatistic.VAMPIRE_LORD )
+                    Creature decorated = new Creature.Builder().statistic( CreatureStatistic.VAMPIRE_LORD )
                         .amount( aAmount )
                         .build();
+                    Creature decoratedNoCounter = new NoCounterCreature( decorated );
+                    return new HealFromAttackCreature( decoratedNoCounter );
                 case 5:
                     return new Creature.Builder().statistic( CreatureStatistic.POWER_LICH )
                         .amount( aAmount )
