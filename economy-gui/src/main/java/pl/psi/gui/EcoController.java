@@ -91,8 +91,7 @@ public class EcoController implements PropertyChangeListener
         {
             CreatureButton button = new CreatureButton( this, factory, false, i );
             String name = i + "0";
-            // commit - Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/creatures/"+name+".png")));
-            Image image = new Image(new FileInputStream("D:\\4 semestr informatyka\\Zaawansowane programowanie w Javie\\Projekt\\UAM_LATO_2022-develop — kopia1\\economy-gui\\src\\main\\resources\\creatures\\"+name+".png"));
+            Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/creatures/"+name+".png")));
             ImageView imageView = new ImageView(image);
             imageView.setFitHeight(40);
             imageView.setFitWidth(40);
@@ -102,8 +101,7 @@ public class EcoController implements PropertyChangeListener
 
             CreatureButton button2 = new CreatureButton( this, factory, true, i );
             String name2 = i + "1";
-            // commit - Image image2 = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/creatures/"+name2+".png")));
-            Image image2 = new Image(new FileInputStream("D:\\4 semestr informatyka\\Zaawansowane programowanie w Javie\\Projekt\\UAM_LATO_2022-develop — kopia1\\economy-gui\\src\\main\\resources\\creatures\\"+name2+".png"));
+            Image image2 = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/creatures/"+name2+".png")));
             ImageView imageView2 = new ImageView(image2);
             imageView2.setFitHeight(40);
             imageView2.setFitWidth(40);
