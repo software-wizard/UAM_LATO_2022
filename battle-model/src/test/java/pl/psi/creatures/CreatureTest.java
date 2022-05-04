@@ -258,24 +258,27 @@ public class CreatureTest
     @Test
     void attackerCanAttackTwicePerTurn()
     {
-        final Creature attacker = new Creature.Builder().statistic( CreatureStats.builder()
-                        .maxHp( NOT_IMPORTANT )
-                        .damage( Range.closed( 10, 10 ) )
-                        .armor( 10 )
-                        .build() )
-                .build();
-
-        final Creature defender = new Creature.Builder().statistic( CreatureStats.builder()
+        final Creature AttackTwiceCreature = new AttackTwiceCreature.Builder()
+                .statistic( CreatureStats.builder()
                         .maxHp( 100 )
-                        .damage( NOT_IMPORTANT_DMG )
-                        .attack( NOT_IMPORTANT )
+                        .damage( Range.closed( 10, 10 ) )
                         .build() )
                 .build();
 
-        attacker.attack( defender );
-        attacker.attack( defender );
+        final Creature defender = new Creature.Builder()
+                .statistic( CreatureStats.builder()
+                        .maxHp( 100 )
+                        .damage( Range.closed(10,10) )
+                        .build() )
+                .build();
 
+        final TurnQueue turnQueue =
+                new TurnQueue( List.of( AttackTwiceCreature ), List.of( defender ) );
+
+        AttackTwiceCreature.attack( defender );
+        turnQueue.next();
         assertThat( defender.getCurrentHp() ).isEqualTo( 80 );
+        assertThat( AttackTwiceCreature.getCurrentHp() ).isEqualTo( 90 );
     }
 
 }
