@@ -2,10 +2,15 @@ package pl.psi;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.Set;
 
 import pl.psi.creatures.EconomyCreature;
 import pl.psi.hero.CreatureShop;
 import pl.psi.hero.EconomyHero;
+import pl.psi.spells.AirSpellFactory;
+import pl.psi.spells.EconomySpell;
+
+import static pl.psi.spells.AirSpells.HASTE;
 
 public class EconomyEngine
 {
@@ -18,6 +23,7 @@ public class EconomyEngine
     private final PropertyChangeSupport observerSupport;
     private EconomyHero activeHero;
     private int roundNumber;
+    private Set<EconomySpell> spellSet;
 
     public EconomyEngine( final EconomyHero aHero1, final EconomyHero aHero2 )
     {
@@ -82,5 +88,10 @@ public class EconomyEngine
     {
         // TODO make copy
         return hero2;
+    }
+
+    public void learnSpell(){
+        AirSpellFactory airSpellFactory = new AirSpellFactory();
+        spellSet.add(airSpellFactory.create(HASTE));
     }
 }

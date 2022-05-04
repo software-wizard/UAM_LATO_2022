@@ -6,6 +6,8 @@ import java.util.List;
 
 import pl.psi.Hero;
 import pl.psi.creatures.Creature;
+import pl.psi.spells.AirSpellFactory;
+import pl.psi.spells.Spell;
 import pl.psi.gui.MainBattleController;
 import pl.psi.gui.NecropolisFactory;
 import pl.psi.hero.EconomyHero;
@@ -13,6 +15,8 @@ import pl.psi.hero.EconomyHero;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
+import static pl.psi.spells.AirSpells.HASTE;
 
 public class EcoBattleConverter
 {
@@ -46,6 +50,16 @@ public class EcoBattleConverter
         aPlayer1.getCreatures()
             .forEach( ecoCreature -> creatures.add( factory.create( ecoCreature.isUpgraded(),
                 ecoCreature.getTier(), ecoCreature.getAmount() ) ) );
+
+        // Creating battle spells
+        // Get spell rang from eco-hero
+
+        List<Spell> spells = new ArrayList<>();
+        AirSpellFactory spellFactory = new AirSpellFactory();
+
+        spellFactory.create(HASTE); // and spell rang
+
+
         return new Hero( creatures );
     }
 }
