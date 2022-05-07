@@ -5,12 +5,13 @@ import lombok.Builder;
 
 import java.beans.PropertyChangeEvent;
 
-public class NoCounterCreature extends Creature
+public class NoCounterCreature extends AbstractCreature
 {
     private final Creature decorated;
 
     public NoCounterCreature( final Creature aDecorated )
     {
+        super( aDecorated );
         decorated = aDecorated;
     }
 

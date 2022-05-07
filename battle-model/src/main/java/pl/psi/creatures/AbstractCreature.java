@@ -4,23 +4,27 @@ import com.google.common.collect.Range;
 
 import java.beans.PropertyChangeEvent;
 
-public class HealFromAttackCreature extends AbstractCreature
+import com.google.common.collect.Range;
+import lombok.Builder;
+
+import java.beans.PropertyChangeEvent;
+
+public class AbstractCreature extends Creature
 {
     private final Creature decorated;
 
-    public HealFromAttackCreature( final Creature aDecorated )
+    public AbstractCreature( final Creature aDecorated )
     {
-        super( aDecorated );
         decorated = aDecorated;
     }
 
-    /*@Override
+    @Override
     public CreatureStatisticIf getStats()
     {
         return decorated.getStats();
-    }*/
+    }
 
-   /* @Override
+    @Override
     public int getAmount()
     {
         return decorated.getAmount();
@@ -30,23 +34,25 @@ public class HealFromAttackCreature extends AbstractCreature
     public DamageCalculatorIf getCalculator()
     {
         return decorated.getCalculator();
-    }*/
+    }
 
     @Override
     public void attack( final Creature aDefender )
     {
-        final int initialDefenderHp = aDefender.getCurrentHp();
         decorated.attack( aDefender );
-        if( aDefender.getStats().getType().equals(CreatureStatistic.CreatureType.ALIVE) ){
-            decorated.heal( initialDefenderHp - aDefender.getCurrentHp() );
-        }
-
     }
 
-    /*@Override
+    @Override
     public boolean isAlive()
     {
         return decorated.isAlive();
+    }
+
+
+    @Override
+    public void heal( final int healAmount)
+    {
+        decorated.heal( healAmount ) ;
     }
 
     @Override
@@ -89,5 +95,6 @@ public class HealFromAttackCreature extends AbstractCreature
     public void propertyChange( final PropertyChangeEvent evt )
     {
         decorated.propertyChange( evt );
-    }*/
+    }
+
 }

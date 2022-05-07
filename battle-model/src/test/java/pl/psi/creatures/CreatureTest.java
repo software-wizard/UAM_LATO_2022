@@ -271,10 +271,32 @@ public class CreatureTest
                         .build() )
                 .build();
 
-        shooterCreature.attack( defender );
-        shooterCreature.attack( defender );
+        shooterCreature.attackRange( defender );
 
         assertThat( defender.getCurrentHp() ).isEqualTo( 90 );
+    }
+
+    @Test
+    void creatureShouldDoHalfDamageWhenInMelee()
+    {
+        final Creature decorated = new Creature.Builder().statistic( CreatureStats.builder()
+                .maxHp( NOT_IMPORTANT )
+                .damage( Range.closed(10,10) )
+                .build() )
+                .build();
+
+        final ShooterCreature shooterCreature = new ShooterCreature( decorated, 1 );
+
+        final Creature defender = new Creature.Builder()
+                .statistic( CreatureStats.builder()
+                        .maxHp( 100 )
+                        .damage( NOT_IMPORTANT_DMG )
+                        .build() )
+                .build();
+
+        shooterCreature.attackMelee( defender );
+
+        assertThat( defender.getCurrentHp() ).isEqualTo( 95 );
     }
 
     @Test
@@ -325,5 +347,38 @@ public class CreatureTest
         assertThat( defender.getCurrentHp() ).isLessThanOrEqualTo( 95 );
         assertThat( vampireLord.getAmount() ).isEqualTo( 2 );
         assertThat( vampireLord.getCurrentHp() ).isGreaterThanOrEqualTo( 5 );
+    }
+
+    @Test
+    void creatureShouldChangeCreatureStatsFor3TurnsOnHit()
+    {
+        final Creature decorated = new Creature.Builder().statistic( CreatureStats.builder()
+                .maxHp( NOT_IMPORTANT )
+                .damage( NOT_IMPORTANT_DMG )
+                .build() )
+                .build();
+
+        final DiseaseOnHitCreature diseaseOnHitCreature = new DiseaseOnHitCreature( decorated );
+
+        final Creature defender = new Creature.Builder().statistic( CreatureStats.builder()
+                .maxHp(100)
+                .damage( NOT_IMPORTANT_DMG )
+                .attack( 5 )
+                .type( CreatureStatistic.CreatureType.ALIVE )
+                .build() )
+                .build();
+
+        final TurnQueue turnQueue =
+                new TurnQueue( List.of( diseaseOnHitCreature ), List.of( defender ) );
+
+        diseaseOnHitCreature.attack( defender );
+        assertThat( defender.getAttack() ).isEqualTo( 3 );
+        turnQueue.next();
+        turnQueue.next();
+        turnQueue.next();
+        turnQueue.next();
+        turnQueue.next();
+        turnQueue.next();
+        assertThat( defender.getAttack() ).isEqualTo( 5 );
     }
 }

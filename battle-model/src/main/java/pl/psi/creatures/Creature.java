@@ -8,7 +8,7 @@ package pl.psi.creatures;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.Random;
+import java.util.*;
 
 import pl.psi.TurnQueue;
 
@@ -27,6 +27,8 @@ public class Creature implements PropertyChangeListener
     private int currentHp;
     private boolean canCounterAttack = true;
     private DamageCalculatorIf calculator;
+    private int attack;
+    private Queue<Integer> attackEffectQueue = new LinkedList<>();
 
 Creature()
 {
@@ -39,6 +41,11 @@ Creature()
         amount = aAmount;
         currentHp = stats.getMaxHp();
         calculator = aCalculator;
+        attack = stats.getAttack();
+    }
+
+    public void appendAttackEffectList( int value ){
+        attackEffectQueue.add( value );
     }
 
     public void attack( final Creature aDefender )
@@ -69,7 +76,7 @@ Creature()
         currentHp = aCurrentHp;
     }
 
-    void calculateUnits(final int aAmountToAdd){
+    private void calculateUnits(final int aAmountToAdd){
         if (aAmountToAdd > 1){
             amount += aAmountToAdd - 1;
         }
@@ -126,12 +133,16 @@ Creature()
 
     int getAttack()
     {
-        return stats.getAttack();
+        return attack;
     }
 
     int getArmor()
     {
         return stats.getArmor();
+    }
+
+    public void changeAttack(int amount){
+        attack += amount;
     }
 
     @Override
@@ -140,6 +151,9 @@ Creature()
         if( TurnQueue.END_OF_TURN.equals( evt.getPropertyName() ) )
         {
             canCounterAttack = true;
+            if(!attackEffectQueue.isEmpty()){
+                changeAttack( attackEffectQueue.poll() );
+            }
         }
     }
 
@@ -163,7 +177,6 @@ Creature()
         private int amount = 1;
         private DamageCalculatorIf calculator = new DefaultDamageCalculator( new Random() );
         private CreatureStatisticIf statistic;
-        private int shots = -1;
 
         public Builder statistic( final CreatureStatisticIf aStatistic )
         {
