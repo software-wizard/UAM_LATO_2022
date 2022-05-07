@@ -1,17 +1,48 @@
 package pl.psi.skills;
 
 import lombok.Getter;
+import pl.psi.creatures.Creature;
+import pl.psi.creatures.CreatureStatistic;
+
+import java.util.List;
+
+/**
+ * Class that represents hero skills.
+ */
 
 @Getter
-// TODO find out if this class should be abstract and other classes should inherit from it or should every statistic be
-// TODO in valueObject without inheritance like creatures
 public class EconomySkill {
 
-    // TODO put this field in value object with other statistics like creature statistics
-    private final int cost;
+    private final SkillName skillName;
+    private final int skillCost;
+    private final double skillEffect;
 
-    public EconomySkill(int cost)
+    private final CalculateBuffStrategy calculateBuffStrategy;
+
+    public EconomySkill( SkillName aName, int aCost, double aEffect )
     {
-        this.cost = cost;
+        this.skillName = aName;
+        this.skillCost = aCost;
+        this.skillEffect = aEffect;
+        this.calculateBuffStrategy = new CalculateBuffStrategy(this.skillName, this.skillEffect);
+    }
+
+    // TODO find out proper way to edit creature skills
+    public void apply( List<Creature> aCreatures )
+    {
+        for ( Creature aCreature: aCreatures )
+        {
+            CreatureStatistic statsToApply = this.calculateBuffStrategy.calculateBuff(aCreature);
+            if (statsToApply != null)
+            {
+                aCreature.setStats(statsToApply);
+            }
+        }
+    }
+
+    // method that will take spell as an argument
+    public void apply(  )
+    {
+        throw new UnsupportedOperationException("Method not implemented");
     }
 }

@@ -69,6 +69,11 @@ public class Creature implements PropertyChangeListener
         currentHp = aCurrentHp;
     }
 
+    public void setStats( CreatureStatistic stats )
+    {
+        this.stats = stats;
+    }
+
     private boolean canCounterAttack( final Creature aDefender )
     {
         return aDefender.getCounterAttackCounter() > 0 && aDefender.getCurrentHp() > 0;
