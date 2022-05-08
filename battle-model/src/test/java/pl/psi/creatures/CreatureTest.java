@@ -1,12 +1,9 @@
 package pl.psi.creatures;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import java.util.List;
-import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
@@ -285,7 +282,7 @@ public class CreatureTest
                 .build() )
                 .build();
 
-        final ShooterCreature shooterCreature = new ShooterCreature( decorated, 1 );
+        final ShooterCreature shooterCreature = new ShooterCreature( decorated, 0 );
 
         final Creature defender = new Creature.Builder()
                 .statistic( CreatureStats.builder()
@@ -380,5 +377,26 @@ public class CreatureTest
         turnQueue.next();
         turnQueue.next();
         assertThat( defender.getAttack() ).isEqualTo( 5 );
+    }
+
+    @Test
+    void creatureShouldAttackWithDoubleDamage()
+    {
+        final Creature decorated = new Creature.Builder().statistic( CreatureStats.builder()
+                .maxHp( NOT_IMPORTANT )
+                .damage( Range.closed(10,10) )
+                .build() )
+                .build();
+
+        final DoubleDamageOnHitCreature doubleDamageOnHitCreature = new DoubleDamageOnHitCreature( decorated );
+
+        final Creature defender = new Creature.Builder().statistic( CreatureStats.builder()
+                .maxHp(100)
+                .damage( NOT_IMPORTANT_DMG )
+                .build() )
+                .build();
+
+        doubleDamageOnHitCreature.attackWithDoubleDamage( defender );
+        assertThat( defender.getCurrentHp() ).isEqualTo( 80 );
     }
 }
