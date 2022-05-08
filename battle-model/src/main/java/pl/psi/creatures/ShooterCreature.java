@@ -12,6 +12,7 @@ public class ShooterCreature extends AbstractCreature
     private final Creature decorated;
     private int shots;
     private boolean isInMelee = false;
+    private final double MELEE_PENALTY = 0.5;
 
     public ShooterCreature( final Creature aDecorated, final int aShots )
     {
@@ -21,96 +22,32 @@ public class ShooterCreature extends AbstractCreature
     }
 
     @Override
-    public CreatureStatisticIf getStats()
-    {
-        return decorated.getStats();
-    }
-
-    @Override
-    public int getAmount()
-    {
-        return decorated.getAmount();
-    }
-
-    @Override
-    public DamageCalculatorIf getCalculator()
-    {
-        return decorated.getCalculator();
-    }
-
-    @Override
     public void attack( final Creature aDefender )
     {
-        decorated.attack( aDefender );
+        if( canShoot() && !isInMelee ){
+            attackRange( aDefender );
+        }
+        else{
+            attackMelee( aDefender );
+        }
     }
 
     public void attackRange( final Creature aDefender ){
-        if( canShoot() ){
-            final int damage = getCalculator().calculateDamage( decorated, aDefender );
-            decorated.applyDamage( aDefender, damage );
-            shots -= 1;
-        }
-        else{
-            throw new RuntimeException( "Not enough shots or creature in melee range" );
-        }
+        final int damage = getCalculator().calculateDamage( decorated, aDefender );
+        decorated.applyDamage( aDefender, damage );
+        shots -= 1;
     }
 
     public void attackMelee( final Creature aDefender ){
-        final int hp = aDefender.getCurrentHp();
-        decorated.attack( aDefender );
-        aDefender.heal( ( hp - aDefender.getCurrentHp() ) / 2 );
+        decorated.attackWithReducedDamage( aDefender, getMELEE_PENALTY() );
     }
 
     public boolean canShoot(){
-        return shots > 0 && !isInMelee;
+        if( shots > 0 ){
+            return true;
+        }
+        else{
+            throw new RuntimeException( "No more shots" );
+        }
     }
-
-    @Override
-    public boolean isAlive()
-    {
-        return decorated.isAlive();
-    }
-
-    @Override
-    public int getCurrentHp()
-    {
-        return decorated.getCurrentHp();
-    }
-
-    @Override
-    protected void setCurrentHp( final int aCurrentHp )
-    {
-        decorated.setCurrentHp( aCurrentHp );
-    }
-
-    @Override
-    Range< Integer > getDamage()
-    {
-        return decorated.getDamage();
-    }
-
-    @Override
-    int getAttack()
-    {
-        return decorated.getAttack();
-    }
-
-    @Override
-    int getArmor()
-    {
-        return decorated.getArmor();
-    }
-
-    @Override
-    protected void restoreCurrentHpToMax()
-    {
-        decorated.restoreCurrentHpToMax();
-    }
-
-    @Override
-    public void propertyChange( final PropertyChangeEvent evt )
-    {
-        decorated.propertyChange( evt );
-    }
-
 }

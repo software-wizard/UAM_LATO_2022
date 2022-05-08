@@ -4,6 +4,9 @@ import com.google.common.collect.Range;
 import lombok.Builder;
 
 import java.beans.PropertyChangeEvent;
+/**
+ * This class should always decorate first
+ */
 
 public class NoCounterCreature extends AbstractCreature
 {
