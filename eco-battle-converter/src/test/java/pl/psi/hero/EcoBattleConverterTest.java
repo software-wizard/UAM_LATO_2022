@@ -2,6 +2,7 @@ package pl.psi.hero;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -16,7 +17,7 @@ class EcoBattleConverterTest
     @Test
     void shouldConvertCreaturesCorrectly()
     {
-        final EconomyHero ecoHero = new EconomyHero( EconomyHero.Fraction.NECROPOLIS, 1000 );
+        final EconomyHero ecoHero = new EconomyHero( EconomyHero.Fraction.NECROPOLIS, Collections.emptyList(), 1000 );
         final EconomyNecropolisFactory factory = new EconomyNecropolisFactory();
         ecoHero.addCreature( factory.create( false, 1, 1 ) );
         ecoHero.addCreature( factory.create( false, 2, 2 ) );

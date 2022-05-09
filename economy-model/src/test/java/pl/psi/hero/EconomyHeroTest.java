@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 
 import pl.psi.creatures.EconomyNecropolisFactory;
 
+import java.util.Collections;
+
 class EconomyHeroTest
 {
 
@@ -15,7 +17,7 @@ class EconomyHeroTest
     @BeforeEach
     void init()
     {
-        hero = new EconomyHero( EconomyHero.Fraction.NECROPOLIS, 3000 );
+        hero = new EconomyHero( EconomyHero.Fraction.NECROPOLIS, Collections.emptyList(), 3000 );
     }
 
     @Test

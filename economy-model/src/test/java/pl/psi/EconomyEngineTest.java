@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import pl.psi.creatures.EconomyNecropolisFactory;
 import pl.psi.hero.EconomyHero;
 
+import java.util.Collections;
+
 class EconomyEngineTest
 {
 
@@ -19,8 +21,8 @@ class EconomyEngineTest
     @BeforeEach
     void init()
     {
-        h1 = new EconomyHero( EconomyHero.Fraction.NECROPOLIS, 1000 );
-        h2 = new EconomyHero( EconomyHero.Fraction.NECROPOLIS, 1000 );
+        h1 = new EconomyHero( EconomyHero.Fraction.NECROPOLIS, Collections.emptyList(), 1000 );
+        h2 = new EconomyHero( EconomyHero.Fraction.NECROPOLIS, Collections.emptyList(), 1000 );
         economyEngine = new EconomyEngine( h1, h2 );
         creatureFactory = new EconomyNecropolisFactory();
     }

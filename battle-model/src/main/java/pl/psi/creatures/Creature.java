@@ -6,148 +6,157 @@ package pl.psi.creatures;//  ***************************************************
 //
 //  ******************************************************************
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.Random;
-
+import com.google.common.collect.Range;
+import lombok.Getter;
+import lombok.ToString;
 import pl.psi.TurnQueue;
 
-import com.google.common.collect.Range;
-
-import lombok.Getter;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.lang.reflect.Field;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 /**
  * TODO: Describe this class (The first line - until the first dot - will interpret as the brief description).
  */
 @Getter
-public class Creature implements PropertyChangeListener
-{
+@ToString
+public class Creature implements PropertyChangeListener {
     private CreatureStatisticIf stats;
     private int amount;
     private int currentHp;
     private int counterAttackCounter = 1;
     private DamageCalculatorIf calculator;
 
-    Creature()
-    {
+    Creature() {
     }
 
-    private Creature( final CreatureStatisticIf aStats, final DamageCalculatorIf aCalculator,
-        final int aAmount )
-    {
+    private Creature(final CreatureStatisticIf aStats, final DamageCalculatorIf aCalculator,
+                     final int aAmount) {
         stats = aStats;
         amount = aAmount;
         currentHp = stats.getMaxHp();
         calculator = aCalculator;
     }
 
-    public void attack( final Creature aDefender )
-    {
-        if( isAlive() )
-        {
-            final int damage = getCalculator().calculateDamage( this, aDefender );
-            applyDamage( aDefender, damage );
-            if( canCounterAttack( aDefender ) )
-            {
-                counterAttack( aDefender );
+    public void attack(final Creature aDefender) {
+        if (isAlive()) {
+            final int damage = getCalculator().calculateDamage(this, aDefender);
+            applyDamage(aDefender, damage);
+            if (canCounterAttack(aDefender)) {
+                counterAttack(aDefender);
             }
         }
     }
 
-    public boolean isAlive()
-    {
+    public void castSpell(final Creature aDefender, int damage) {
+        if (isAlive()) {
+            applyDamage(aDefender, damage);
+        }
+    }
+
+
+    public void castSpell(final Creature aDefender, String statName, int value) throws NoSuchFieldException, IllegalAccessException {
+        if (isAlive()) {
+            Field filedToChange = aDefender.getStats().getClass().getDeclaredField(statName);
+            filedToChange.setAccessible(true);
+
+            int actualValue = (Integer) filedToChange.get(aDefender.getStats());
+            filedToChange.set(aDefender.getStats(), actualValue + value);
+        }
+    }
+
+    public void castSpell(final List<Optional<Creature>> aDefender, int damage) {
+        if (isAlive()) {
+            List<Creature> creaturesInSpellRange = aDefender.stream()
+                    .flatMap(Optional::stream)
+                    .collect(Collectors.toList());
+
+            for (Creature creature : creaturesInSpellRange) {
+                applyDamage(creature, damage);
+            }
+        }
+    }
+
+    public boolean isAlive() {
         return getAmount() > 0;
     }
 
-    private void applyDamage( final Creature aDefender, final int aDamage )
-    {
-        aDefender.setCurrentHp( aDefender.getCurrentHp() - aDamage );
+    private void applyDamage(final Creature aDefender, final int aDamage) {
+        aDefender.setCurrentHp(aDefender.getCurrentHp() - aDamage);
     }
 
-    protected void setCurrentHp( final int aCurrentHp )
-    {
+    protected void setCurrentHp(final int aCurrentHp) {
         currentHp = aCurrentHp;
     }
 
-    private boolean canCounterAttack( final Creature aDefender )
-    {
+    private boolean canCounterAttack(final Creature aDefender) {
         return aDefender.getCounterAttackCounter() > 0 && aDefender.getCurrentHp() > 0;
     }
 
-    private void counterAttack( final Creature aAttacker )
-    {
+    private void counterAttack(final Creature aAttacker) {
         final int damage = aAttacker.getCalculator()
-            .calculateDamage( aAttacker, this );
-        applyDamage( this, damage );
+                .calculateDamage(aAttacker, this);
+        applyDamage(this, damage);
         aAttacker.counterAttackCounter--;
     }
 
-    Range< Integer > getDamage()
-    {
+    Range<Integer> getDamage() {
         return stats.getDamage();
     }
 
-    int getAttack()
-    {
+    int getAttack() {
         return stats.getAttack();
     }
 
-    int getArmor()
-    {
+    int getArmor() {
         return stats.getArmor();
     }
 
     @Override
-    public void propertyChange( final PropertyChangeEvent evt )
-    {
-        if( TurnQueue.END_OF_TURN.equals( evt.getPropertyName() ) )
-        {
+    public void propertyChange(final PropertyChangeEvent evt) {
+        if (TurnQueue.END_OF_TURN.equals(evt.getPropertyName())) {
             counterAttackCounter = 1;
         }
     }
 
-    protected void restoreCurrentHpToMax()
-    {
+    protected void restoreCurrentHpToMax() {
         currentHp = stats.getMaxHp();
     }
 
-    public String getName()
-    {
+    public String getName() {
         return stats.getName();
     }
 
-    public int getMoveRange()
-    {
+    public int getMoveRange() {
         return stats.getMoveRange();
     }
 
-    public static class Builder
-    {
+    public static class Builder {
         private int amount = 1;
-        private DamageCalculatorIf calculator = new DefaultDamageCalculator( new Random() );
+        private DamageCalculatorIf calculator = new DefaultDamageCalculator(new Random());
         private CreatureStatisticIf statistic;
 
-        public Builder statistic( final CreatureStatisticIf aStatistic )
-        {
+        public Builder statistic(final CreatureStatisticIf aStatistic) {
             statistic = aStatistic;
             return this;
         }
 
-        public Builder amount( final int aAmount )
-        {
+        public Builder amount(final int aAmount) {
             amount = aAmount;
             return this;
         }
 
-        Builder calculator( final DamageCalculatorIf aCalc )
-        {
+        Builder calculator(final DamageCalculatorIf aCalc) {
             calculator = aCalc;
             return this;
         }
 
-        public Creature build()
-        {
-            return new Creature( statistic, calculator, amount );
+        public Creature build() {
+            return new Creature(statistic, calculator, amount);
         }
     }
 }

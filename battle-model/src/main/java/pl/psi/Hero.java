@@ -1,9 +1,7 @@
 package pl.psi;
 
 import java.util.List;
-import java.util.Set;
 
-import lombok.Setter;
 import pl.psi.creatures.Creature;
 
 import lombok.Getter;
@@ -17,10 +15,11 @@ public class Hero
     @Getter
     private final List< Creature > creatures;
 
-    private Set<Spell> spells; // final
+    private final List<Spell> spells; // final
 
-    public Hero( final List< Creature > aCreatures )
+    public Hero(final List<Creature> aCreatures, List<Spell> spells)
     {
         creatures = aCreatures;
+        this.spells = spells;
     }
 }

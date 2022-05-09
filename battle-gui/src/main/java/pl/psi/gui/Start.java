@@ -1,6 +1,7 @@
 package pl.psi.gui;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 import pl.psi.Hero;
@@ -47,13 +48,13 @@ public class Start extends Application
 
     private Hero createP2()
     {
-        final Hero ret = new Hero( List.of( new NecropolisFactory().create( true, 1, 5 ) ) );
+        final Hero ret = new Hero( List.of( new NecropolisFactory().create( true, 1, 5 ) ), Collections.emptyList());
         return ret;
     }
 
     private Hero createP1()
     {
-        final Hero ret = new Hero( List.of( new NecropolisFactory().create( false, 1, 5 ) ) );
+        final Hero ret = new Hero( List.of( new NecropolisFactory().create( false, 1, 5 ) ), Collections.emptyList());
         return ret;
     }
 

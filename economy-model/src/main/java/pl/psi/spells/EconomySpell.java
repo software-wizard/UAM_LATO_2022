@@ -9,7 +9,10 @@ import lombok.Setter;
 @Setter
 public class EconomySpell {
 
-    private final SpellStats stats;
+    private final String name;
+    private final String magicGuild;
+    private final String description;
+    private final int level;
     private final int goldCost;
 
 }

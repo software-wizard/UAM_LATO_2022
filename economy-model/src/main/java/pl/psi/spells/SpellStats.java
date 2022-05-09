@@ -1,4 +1,4 @@
 package pl.psi.spells;
 
-public interface SpellStats {
+public enum SpellStats {
 }
