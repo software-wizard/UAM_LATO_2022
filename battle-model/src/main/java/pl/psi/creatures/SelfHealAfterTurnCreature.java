@@ -7,17 +7,18 @@ import com.google.common.collect.Range;
 /**
  * TODO: Describe this class (The first line - until the first dot - will interpret as the brief description).
  */
-class SelfHealAfterTurnCreature extends Creature
+class SelfHealAfterTurnCreature extends AbstractCreature
 {
     private final Creature decorated;
 
     public SelfHealAfterTurnCreature( final Creature aDecorated )
     {
+        super( aDecorated );
         decorated = aDecorated;
     }
 
     @Override
-    public CreatureStatistic getStats()
+    public CreatureStatisticIf getStats()
     {
         return decorated.getStats();
     }
@@ -26,12 +27,6 @@ class SelfHealAfterTurnCreature extends Creature
     public int getAmount()
     {
         return decorated.getAmount();
-    }
-
-    @Override
-    public int getCounterAttackCounter()
-    {
-        return decorated.getCounterAttackCounter();
     }
 
     @Override

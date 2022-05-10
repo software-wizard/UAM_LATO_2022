@@ -1,5 +1,5 @@
-package pl.psi.creatures;//  ******************************************************************
-
+package pl.psi.creatures;
+//  ******************************************************************
 //
 //  Copyright 2022 PSI Software AG. All rights reserved.
 //  PSI PROPRIETARY/CONFIDENTIAL. Use is subject to license terms
@@ -8,8 +8,9 @@ package pl.psi.creatures;//  ***************************************************
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.Random;
+import java.util.*;
 
+import lombok.Setter;
 import pl.psi.TurnQueue;
 
 import com.google.common.collect.Range;
@@ -20,25 +21,39 @@ import lombok.Getter;
  * TODO: Describe this class (The first line - until the first dot - will interpret as the brief description).
  */
 @Getter
+@Setter
 public class Creature implements PropertyChangeListener
 {
-    private CreatureStatistic stats;
+    private CreatureStatisticIf stats;
     private int amount;
     private int currentHp;
-    private int counterAttackCounter = 1;
+    private boolean canCounterAttack = true;
     private DamageCalculatorIf calculator;
+    private int attack;
+    private int armor;
+    private int moveRange;
+    private Range< Integer > damage;
+    private Queue<Integer> attackEffectQueue = new LinkedList<>();
 
-    Creature()
-    {
-    }
+Creature()
+{
+}
 
-    private Creature( final CreatureStatistic aStats, final DamageCalculatorIf aCalculator,
-        final int aAmount )
+    private Creature( final CreatureStatisticIf aStats, final DamageCalculatorIf aCalculator,
+                      final int aAmount )
     {
         stats = aStats;
         amount = aAmount;
         currentHp = stats.getMaxHp();
         calculator = aCalculator;
+        attack = stats.getAttack();
+        armor = stats.getArmor();
+        moveRange = stats.getMoveRange();
+        damage = stats.getDamage();
+    }
+
+    public void appendAttackEffectList( int value ){
+        attackEffectQueue.add( value );
     }
 
     public void attack( final Creature aDefender )
@@ -54,12 +69,36 @@ public class Creature implements PropertyChangeListener
         }
     }
 
+    public void attackWithReducedDamage( final Creature aDefender, final double reduceBy ){
+        if( isAlive() )
+        {
+            final int damage = getCalculator().calculateReducedDamage( this, aDefender, reduceBy );
+            applyDamage( aDefender, damage );
+            if( canCounterAttack( aDefender ) )
+            {
+                counterAttack( aDefender );
+            }
+        }
+    }
+
+    public void attackWithMinimumDamage( final Creature aDefender ){
+        if( isAlive() )
+        {
+            final int damage = getCalculator().calculateMinimumDamage(this, aDefender);
+            applyDamage(aDefender, damage);
+            if (canCounterAttack(aDefender))
+            {
+                counterAttack(aDefender);
+            }
+        }
+    }
+
     public boolean isAlive()
     {
         return getAmount() > 0;
     }
 
-    private void applyDamage( final Creature aDefender, final int aDamage )
+    protected void applyDamage( final Creature aDefender, final int aDamage )
     {
         aDefender.setCurrentHp( aDefender.getCurrentHp() - aDamage );
     }
@@ -69,37 +108,81 @@ public class Creature implements PropertyChangeListener
         currentHp = aCurrentHp;
     }
 
-    public void setStats( CreatureStatistic stats )
-    {
-        this.stats = stats;
+    private void calculateUnits(final int aAmountToAdd){
+        if (aAmountToAdd > 1){
+            amount += aAmountToAdd - 1;
+        }
+        else{
+            amount += aAmountToAdd;
+        }
     }
 
-    private boolean canCounterAttack( final Creature aDefender )
+    protected void heal( int healAmount )
     {
-        return aDefender.getCounterAttackCounter() > 0 && aDefender.getCurrentHp() > 0;
+        setCurrentHp( getCurrentHp() + healAmount );
+        calculateUnits( calculateAmount() );
+        setCurrentHp( calculateCurrentHp() );
+    }
+
+    private int calculateAmount(){
+        if ( getCurrentHp() / getStats().getMaxHp() == 1 ){
+            return 1;
+        }
+        else if ( getCurrentHp() % getStats().getMaxHp() == 0 ){
+            return ( getCurrentHp() / getStats().getMaxHp() );
+        }
+        else{
+            return ( (getCurrentHp() / getStats().getMaxHp()) + 1 );
+        }
+    }
+
+    private int calculateCurrentHp(){
+        if( getCurrentHp() - ( getAmount() * getStats().getMaxHp() ) == 0 ){
+            return ( getStats().getMaxHp() );
+        }
+        else{ // ( a % b + b ) % b == a % b   when a is negative % operator behaves funky
+            return ( ( ( getCurrentHp() - ( getAmount() * getStats().getMaxHp() ) ) % ( getStats().getMaxHp() ) + ( getStats().getMaxHp() ) ) % getStats().getMaxHp() );
+        }
+    }
+
+    protected boolean canCounterAttack( final Creature aDefender )
+    {
+        return aDefender.canCounterAttack && aDefender.getCurrentHp() > 0;
     }
 
     private void counterAttack( final Creature aAttacker )
     {
         final int damage = aAttacker.getCalculator()
-            .calculateDamage( aAttacker, this );
+                .calculateDamage( aAttacker, this );
         applyDamage( this, damage );
-        aAttacker.counterAttackCounter--;
+        aAttacker.canCounterAttack = false;
     }
 
     Range< Integer > getDamage()
     {
-        return stats.getDamage();
+        return damage;
     }
 
     int getAttack()
     {
-        return stats.getAttack();
+        return attack;
     }
 
     int getArmor()
     {
-        return stats.getArmor();
+        return armor;
+    }
+
+    public void setAttack( final int aAttack ){
+        attack = aAttack;
+    }
+
+    public void setArmor( final int aArmor ){
+        armor = aArmor;
+    }
+
+    public void setMoveRange( final int aMoveRange ){
+        moveRange = aMoveRange;
     }
 
     @Override
@@ -107,7 +190,10 @@ public class Creature implements PropertyChangeListener
     {
         if( TurnQueue.END_OF_TURN.equals( evt.getPropertyName() ) )
         {
-            counterAttackCounter = 1;
+            canCounterAttack = true;
+            if(!attackEffectQueue.isEmpty()){
+                setAttack( attack + attackEffectQueue.poll() );
+            }
         }
     }
 
@@ -123,16 +209,16 @@ public class Creature implements PropertyChangeListener
 
     public int getMoveRange()
     {
-        return stats.getMoveRange();
+        return moveRange;
     }
 
     public static class Builder
     {
         private int amount = 1;
         private DamageCalculatorIf calculator = new DefaultDamageCalculator( new Random() );
-        private CreatureStatistic statistic;
+        private CreatureStatisticIf statistic;
 
-        public Builder statistic( final CreatureStatistic aStatistic )
+        public Builder statistic( final CreatureStatisticIf aStatistic )
         {
             statistic = aStatistic;
             return this;
@@ -150,35 +236,6 @@ public class Creature implements PropertyChangeListener
             return this;
         }
 
-        Builder hp( final int aNotImportant )
-        {
-            return this;
-        }
-
-        Builder attack( final int aI )
-        {
-            return this;
-        }
-
-        Builder defence( final int aNotImportant )
-        {
-            return this;
-        }
-
-        Builder damage( final Range< Integer > aClosed )
-        {
-            return this;
-        }
-
-        public Builder moveRange( final int aI )
-        {
-            return this;
-        }
-
-        public Builder name( final String aHero1 )
-        {
-            return this;
-        }
 
         public Creature build()
         {
