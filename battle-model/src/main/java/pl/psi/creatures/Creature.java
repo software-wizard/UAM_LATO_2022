@@ -28,6 +28,9 @@ public class Creature implements PropertyChangeListener
     private boolean canCounterAttack = true;
     private DamageCalculatorIf calculator;
     private int attack;
+    private int armor;
+    private int moveRange;
+    private Range< Integer > damage;
     private Queue<Integer> attackEffectQueue = new LinkedList<>();
 
 Creature()
@@ -42,6 +45,9 @@ Creature()
         currentHp = stats.getMaxHp();
         calculator = aCalculator;
         attack = stats.getAttack();
+        armor = stats.getArmor();
+        moveRange = stats.getMoveRange();
+        damage = stats.getDamage();
     }
 
     public void appendAttackEffectList( int value ){
@@ -152,7 +158,7 @@ Creature()
 
     Range< Integer > getDamage()
     {
-        return stats.getDamage();
+        return damage;
     }
 
     int getAttack()
@@ -162,11 +168,19 @@ Creature()
 
     int getArmor()
     {
-        return stats.getArmor();
+        return armor;
     }
 
     public void changeAttack(int amount){
         attack += amount;
+    }
+
+    public void changeArmor( int amount ){
+        armor += amount;
+    }
+
+    public void changeMoveRange( int amount ){
+        moveRange += amount;
     }
 
     @Override
@@ -193,7 +207,7 @@ Creature()
 
     public int getMoveRange()
     {
-        return stats.getMoveRange();
+        return moveRange;
     }
 
     public static class Builder

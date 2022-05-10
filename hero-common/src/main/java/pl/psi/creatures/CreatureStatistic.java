@@ -58,7 +58,7 @@ public enum CreatureStatistic implements CreatureStatisticIf
 
 
     private final String name;
-    private int attack;
+    private final int attack;
     private final int armor;
     private final int maxHp;
     private final int moveRange;
