@@ -17,7 +17,7 @@ public class DiseaseOnHitCreature extends AbstractCreature{
     }
 
     private void disease( final Creature aDefender ){
-        aDefender.changeAttack( -2 );
+        aDefender.setAttack( aDefender.getAttack() - 2 );
         aDefender.appendAttackEffectList( 2 );
         aDefender.appendAttackEffectList( 0 );
         aDefender.appendAttackEffectList( 0 );

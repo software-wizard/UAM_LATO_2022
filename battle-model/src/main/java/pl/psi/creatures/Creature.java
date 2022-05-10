@@ -10,6 +10,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.*;
 
+import lombok.Setter;
 import pl.psi.TurnQueue;
 
 import com.google.common.collect.Range;
@@ -20,6 +21,7 @@ import lombok.Getter;
  * TODO: Describe this class (The first line - until the first dot - will interpret as the brief description).
  */
 @Getter
+@Setter
 public class Creature implements PropertyChangeListener
 {
     private CreatureStatisticIf stats;
@@ -171,16 +173,16 @@ Creature()
         return armor;
     }
 
-    public void changeAttack(int amount){
-        attack += amount;
+    public void setAttack( final int aAttack ){
+        attack = aAttack;
     }
 
-    public void changeArmor( int amount ){
-        armor += amount;
+    public void setArmor( final int aArmor ){
+        armor = aArmor;
     }
 
-    public void changeMoveRange( int amount ){
-        moveRange += amount;
+    public void setMoveRange( final int aMoveRange ){
+        moveRange = aMoveRange;
     }
 
     @Override
@@ -190,7 +192,7 @@ Creature()
         {
             canCounterAttack = true;
             if(!attackEffectQueue.isEmpty()){
-                changeAttack( attackEffectQueue.poll() );
+                setAttack( attack + attackEffectQueue.poll() );
             }
         }
     }
