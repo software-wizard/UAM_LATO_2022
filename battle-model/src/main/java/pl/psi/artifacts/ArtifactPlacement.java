@@ -1,31 +1,18 @@
 package pl.psi.artifacts;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+enum ArtifactPlacement {
 
-@AllArgsConstructor
-@Getter
-enum ArtifactPlacement
-{
-    HEAD( "HEAD" ),
+    HEAD,
 
-    NECK( "NECK" ),
+    NECK,
 
-    TORSO( "TORSO" ),
+    TORSO,
 
-    SHOULDERS( "SHOULDERS" ),
+    SHOULDERS,
 
-    RIGHT_HAND( "RIGHT HAND" ),
+    RIGHT_HAND,
 
-    LEFT_HAND( "LEFT HAND" ),
+    LEFT_HAND,
 
-    FEET( "FEET" );
-
-    private final String placement;
-
-    @Override
-    public String toString()
-    {
-        return placement;
-    }
+    FEET;
 }

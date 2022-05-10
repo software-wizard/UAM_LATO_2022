@@ -1,45 +1,35 @@
 package pl.psi.artifacts;
 
-import lombok.AllArgsConstructor;
+import java.util.Objects;
+import lombok.Builder;
 import lombok.Getter;
 
-import java.util.Objects;
-
 @Getter
-@AllArgsConstructor
-class ArtifactEffect
-{
-    private ArtifactEffectType effectType;
+@Builder
+public class ArtifactEffect {
 
-    private double effectValue;
+    private final double effectValue;
 
-    private ArtifactEffect.ApplyingMode effectApplyingMode;
+    private final ArtifactApplyingMode effectApplyingMode;
 
-    /**
-     * As ArtifactEffect should only be compared within Artifact's set of effects, we consider
-     * ArtifactEffects to be equal when they have the same effectType.
-     */
+    private final ArtifactApplierTarget applierTarget;
+
     @Override
-    public boolean equals( Object aObj )
-    {
-        if( Objects.isNull( aObj ) || !aObj.getClass().equals( ArtifactEffect.class ) )
-        {
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof ArtifactEffect)) {
             return false;
         }
-        ArtifactEffect comparedEffect = (ArtifactEffect) aObj;
-        return this.getEffectType() == comparedEffect.getEffectType();
+        final ArtifactEffect that = (ArtifactEffect) o;
+        return Double.compare(that.getEffectValue(), getEffectValue()) == 0
+            && getEffectApplyingMode() == that.getEffectApplyingMode()
+            && getApplierTarget() == that.getApplierTarget();
     }
 
     @Override
-    public int hashCode()
-    {
-        return Objects.hashCode( effectType );
-    }
-
-    enum ApplyingMode
-    {
-        MULTIPLY,
-
-        ADD
+    public int hashCode() {
+        return Objects.hash(getEffectValue(), getEffectApplyingMode(), getApplierTarget());
     }
 }

@@ -2,8 +2,8 @@ package pl.psi.artifacts;
 
 import java.util.Set;
 
-public interface ArtifactIf
-{
+public interface ArtifactIf {
+
     ArtifactRank getRank();
 
     ArtifactPlacement getPlacement();
@@ -14,5 +14,5 @@ public interface ArtifactIf
 
     double getPrice();
 
-    Set< ArtifactEffect > getEffects();
+    Set<ArtifactEffect> getEffects();
 }
