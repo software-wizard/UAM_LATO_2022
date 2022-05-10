@@ -2,6 +2,7 @@ package pl.psi.skills;
 
 import pl.psi.creatures.Creature;
 import pl.psi.creatures.CreatureStatistic;
+import pl.psi.creatures.ShooterCreature;
 
 /**
  * Class that represents changing creature stats based on current skill
@@ -18,22 +19,29 @@ public class CalculateBuffStrategy {
         this.skillEffect = aEffect;
     }
 
-    public CreatureStatistic calculateBuff(Creature aCreature )
+    public void applyBuff( Creature aCreature )
     {
-        CreatureStatistic statisticToReturn;
+        double changedStat;
         switch (this.skillName)
         {
             case ARCHERY:
+                if (aCreature instanceof ShooterCreature)
+                {
+                    changedStat = (1 + this.skillEffect) * aCreature.getStats().getAttack();
+                    aCreature.setAttack((int) Math.round(changedStat));
+                }
                 break;
             case OFFENCE:
-                // TODO find out what type should skillEffect be
-                double changedStat = (1 + this.skillEffect) * aCreature.getStats().getAttack();
+                changedStat = (1 + this.skillEffect) * aCreature.getStats().getAttack();
+                // TODO discuss is it possible right now to change stats type
+                aCreature.setAttack((int) Math.round(changedStat));
                 break;
             case ARMOURER:
+                changedStat = (1 + this.skillEffect) * aCreature.getStats().getArmor();
+                aCreature.setArmor((int) Math.round(changedStat));
                 break;
             case RESISTANCE:
                 break;
         }
-        return statisticToReturn;
     }
 }

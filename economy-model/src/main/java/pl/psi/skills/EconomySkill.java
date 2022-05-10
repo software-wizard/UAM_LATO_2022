@@ -2,7 +2,6 @@ package pl.psi.skills;
 
 import lombok.Getter;
 import pl.psi.creatures.Creature;
-import pl.psi.creatures.CreatureStatistic;
 
 import java.util.List;
 
@@ -32,11 +31,7 @@ public class EconomySkill {
     {
         for ( Creature aCreature: aCreatures )
         {
-            CreatureStatistic statsToApply = this.calculateBuffStrategy.calculateBuff(aCreature);
-            if (statsToApply != null)
-            {
-                aCreature.setStats(statsToApply);
-            }
+            this.calculateBuffStrategy.applyBuff(aCreature);
         }
     }
 
