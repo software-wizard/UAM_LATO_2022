@@ -12,30 +12,30 @@ class ArtifactEffectTest {
 
     @Test
     void testEquals() {
-        ArtifactEffect aArtifactEffect = new ArtifactEffect( ArtifactEffectType.HEALTH,
-                2, ArtifactEffect.ApplyingMode.MULTIPLY );
-        ArtifactEffect sameTypeArtifactEffect = new ArtifactEffect( ArtifactEffectType.HEALTH,
-                4, ArtifactEffect.ApplyingMode.ADD );
-        ArtifactEffect differentTypeArtifactEffect = new ArtifactEffect( ArtifactEffectType.ATTACK,
-                2, ArtifactEffect.ApplyingMode.MULTIPLY );
+        ArtifactEffect aArtifactEffect = new ArtifactEffect(2,
+                ArtifactApplyingMode.MULTIPLY, ArtifactApplierTarget.HEALTH);
+        ArtifactEffect sameArtifactEffect = new ArtifactEffect(2,
+                ArtifactApplyingMode.MULTIPLY, ArtifactApplierTarget.HEALTH);
+        ArtifactEffect differentArtifactEffect = new ArtifactEffect(4,
+                ArtifactApplyingMode.MULTIPLY, ArtifactApplierTarget.ATTACK);
 
-        assertEquals(aArtifactEffect, sameTypeArtifactEffect);
-        assertNotEquals(aArtifactEffect, differentTypeArtifactEffect);
+        assertEquals(aArtifactEffect, sameArtifactEffect);
+        assertNotEquals(aArtifactEffect, differentArtifactEffect);
     }
 
     @Test
     void testHashCode() {
-        ArtifactEffect aArtifactEffect = new ArtifactEffect( ArtifactEffectType.HEALTH,
-                2, ArtifactEffect.ApplyingMode.MULTIPLY );
-        ArtifactEffect sameTypeArtifactEffect = new ArtifactEffect( ArtifactEffectType.HEALTH,
-                4, ArtifactEffect.ApplyingMode.ADD );
-        ArtifactEffect differentTypeArtifactEffect = new ArtifactEffect( ArtifactEffectType.ATTACK,
-                2, ArtifactEffect.ApplyingMode.MULTIPLY );
+        ArtifactEffect aArtifactEffect = new ArtifactEffect(2,
+                ArtifactApplyingMode.MULTIPLY, ArtifactApplierTarget.HEALTH);
+        ArtifactEffect sameArtifactEffect = new ArtifactEffect(2,
+                ArtifactApplyingMode.MULTIPLY, ArtifactApplierTarget.HEALTH);
+        ArtifactEffect differentArtifactEffect = new ArtifactEffect(4,
+                ArtifactApplyingMode.MULTIPLY, ArtifactApplierTarget.ATTACK);
 
         Set<ArtifactEffect> aSet = new HashSet<>();
         aSet.add( aArtifactEffect );
 
-        assertFalse( aSet.add( sameTypeArtifactEffect ) );
-        assertTrue( aSet.add( differentTypeArtifactEffect ) );
+        assertFalse( aSet.add( sameArtifactEffect ) );
+        assertTrue( aSet.add( differentArtifactEffect ) );
     }
 }
