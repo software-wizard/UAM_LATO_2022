@@ -1,6 +1,8 @@
 package pl.psi;
 
+import lombok.Getter;
 import pl.psi.creatures.Creature;
+import pl.psi.spells.CalculateSpellDamage;
 import pl.psi.spells.Spell;
 
 import java.beans.PropertyChangeListener;
@@ -18,8 +20,14 @@ public class GameEngine {
     private final TurnQueue turnQueue;
     private final Board board;
     private final PropertyChangeSupport observerSupport = new PropertyChangeSupport(this);
+    @Getter
+    private final Hero hero1;
+    @Getter
+    private final Hero hero2;
 
     public GameEngine(final Hero aHero1, final Hero aHero2) {
+        this.hero1 = aHero1;
+        this.hero2 = aHero2;
         turnQueue = new TurnQueue(aHero1.getCreatures(), aHero2.getCreatures());
         board = new Board(aHero1.getCreatures(), aHero2.getCreatures());
     }
@@ -55,12 +63,13 @@ public class GameEngine {
         return false;
     }
 
-    public void castSpell(final Point point, Spell spell) {
+    public void castSpell(final Point point, Spell spell, int spellPower) {
         switch (spell.getCategory()) {
             case 1:
+                Creature creature =  turnQueue.getCurrentCreature();
+                final int spellDamage = new CalculateSpellDamage().calculate(creature, spell.getMultiplier(), spellPower, spell.getValue());
                 board.getCreature(point)
-                        .ifPresent(defender -> turnQueue.getCurrentCreature()
-                                .castSpell(defender, spell.getValue()));
+                        .ifPresent(defender ->creature.castSpell(defender, spellDamage));
                 break;
             case 2:
                 board.getCreature(point)

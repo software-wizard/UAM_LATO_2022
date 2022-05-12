@@ -17,13 +17,15 @@ public class Spell {
     private final int manaCost;
     private String fieldToChange;
     private int value;
+    private final int multiplier;
 
-    public Spell(int category, String name, int rang, int manaCost, int value) {
+    public Spell(int category, String name, int rang, int manaCost, int value, int multiplier) {
         this.category = category;
         this.name = name;
         this.rang = rang;
         this.manaCost = manaCost;
         this.value = value;
+        this.multiplier = multiplier;
     }
 
 }

@@ -13,7 +13,9 @@ import java.util.List;
 
 public class SpellTest {
 
-    private static final Spell LIGHTING_BOLT = new SpellFactory().create("LightingBolt", 1, 10);
+    private static final Spell LIGHTING_BOLT_RANG_1 = new SpellFactory().create("LightingBolt", 1, 10);
+    private static final Spell LIGHTING_BOLT_RANG_2 = new SpellFactory().create("LightingBolt", 2, 10);
+
     private static final Spell HASTE = new SpellFactory().create("Haste", 1, 10);
     private static final Spell FIREBALL = new SpellFactory().create("FireBall", 1, 10);
 
@@ -31,11 +33,11 @@ public class SpellTest {
         List<Creature> creatures = List.of(EXAMPLE_CREATURE);
 
         final GameEngine gameEngine =
-                new GameEngine(new Hero(Collections.emptyList(), List.of(LIGHTING_BOLT)),
+                new GameEngine(new Hero(Collections.emptyList(), List.of(LIGHTING_BOLT_RANG_1)),
                         new Hero(creatures, Collections.emptyList()));
 
         //when
-        gameEngine.castSpell(new Point(14, 1), LIGHTING_BOLT);
+        gameEngine.castSpell(new Point(14, 1), LIGHTING_BOLT_RANG_1, gameEngine.getHero1().getSpellPower());
 
 
         //then
@@ -57,7 +59,7 @@ public class SpellTest {
 
 
         //when
-        gameEngine.castSpell(new Point(14, 1), HASTE);
+        gameEngine.castSpell(new Point(14, 1), HASTE, gameEngine.getHero1().getSpellPower());
 
 
         //then
@@ -88,7 +90,7 @@ public class SpellTest {
 
 
         //when
-        gameEngine.castSpell(new Point(14, 2), FIREBALL);
+        gameEngine.castSpell(new Point(14, 2), FIREBALL, gameEngine.getHero1().getSpellPower());
 
 
         //then
@@ -100,5 +102,40 @@ public class SpellTest {
 
         Assertions.assertThat(gameEngine.getCreature(new Point(14, 3)).get().getCurrentHp()).isEqualTo(90);
         Assertions.assertThat(gameEngine.getCreature(new Point(14, 2)).get().getCurrentHp()).isEqualTo(90);
+    }
+
+
+    @Test
+    void shouldTakeAppropriateDamageDependedOnRang() {
+        //given
+        Creature secondCreature = new Creature.Builder()
+                .statistic(
+                        CreatureStats.builder()
+                                .moveRange(10)
+                                .maxHp(100)
+                                .build())
+                .build();
+        List<Creature> creatures = List.of(EXAMPLE_CREATURE, secondCreature);
+
+        final GameEngine gameEngine =
+                new GameEngine(new Hero(Collections.emptyList(), List.of(LIGHTING_BOLT_RANG_1, LIGHTING_BOLT_RANG_2), 1),
+                        new Hero(creatures, Collections.emptyList()));
+        gameEngine.move(new Point(14, 2));
+
+
+        //when
+        gameEngine.castSpell(new Point(14, 2), LIGHTING_BOLT_RANG_1, gameEngine.getHero1().getSpellPower());
+        gameEngine.castSpell(new Point(14, 3), LIGHTING_BOLT_RANG_2, gameEngine.getHero1().getSpellPower());
+
+
+        //then
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 2))
+                .isPresent()).isTrue();
+
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 3))
+                .isPresent()).isTrue();
+
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 2)).get().getCurrentHp()).isEqualTo(65);
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 3)).get().getCurrentHp()).isEqualTo(55);
     }
 }

@@ -10,6 +10,8 @@ import com.google.common.collect.Range;
 import lombok.Getter;
 import lombok.ToString;
 import pl.psi.TurnQueue;
+import pl.psi.spells.CalculateSpellDamage;
+import pl.psi.spells.SpellDamageCalculatorIf;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -61,7 +63,7 @@ public class Creature implements PropertyChangeListener {
 
     public void castSpell(final Creature aDefender, String statName, int value) throws NoSuchFieldException, IllegalAccessException {
         if (isAlive()) {
-            Field filedToChange = aDefender.getStats().getClass().getDeclaredField(statName);
+            Field filedToChange = aDefender.getStats().getClass().getDeclaredField(statName); // ToDo: Think about finding setter / method
             filedToChange.setAccessible(true);
 
             int actualValue = (Integer) filedToChange.get(aDefender.getStats());
