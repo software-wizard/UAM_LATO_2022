@@ -1,174 +1,279 @@
 package pl.psi.creatures;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import com.google.common.collect.Range;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-
+import java.util.Set;
 import org.junit.jupiter.api.Test;
-
 import pl.psi.TurnQueue;
-
-import com.google.common.collect.Range;
+import pl.psi.artifacts.Artifact;
+import pl.psi.artifacts.ArtifactApplierTarget;
+import pl.psi.artifacts.ArtifactApplyingMode;
+import pl.psi.artifacts.ArtifactEffect;
+import pl.psi.artifacts.ArtifactInvalidException;
+import pl.psi.artifacts.ArtifactType;
 
 /**
  * TODO: Describe this class (The first line - until the first dot - will interpret as the brief description).
  */
-public class CreatureTest
-{
+public class CreatureTest {
 
     private static final int NOT_IMPORTANT = 100;
 
     @Test
-    void creatureShouldAttackProperly()
-    {
+    void creatureShouldAttackProperly() {
         // given
-        final Creature angel = new Creature.Builder().hp( NOT_IMPORTANT )
-            .attack( 50 )
-            .defence( NOT_IMPORTANT )
+        final Creature angel = new Creature.Builder().hp(NOT_IMPORTANT)
+            .attack(50)
+            .defence(NOT_IMPORTANT)
             .build();
-        final Creature dragon = new Creature.Builder().hp( 100 )
-            .attack( NOT_IMPORTANT )
-            .defence( 10 )
+        final Creature dragon = new Creature.Builder().hp(100)
+            .attack(NOT_IMPORTANT)
+            .defence(10)
             .build();
         // when
-        angel.attack( dragon );
+        angel.attack(dragon);
         // then
-        assertThat( dragon.getCurrentHp() ).isEqualTo( 60 );
+        assertThat(dragon.getCurrentHp()).isEqualTo(60);
     }
 
     @Test
-    void creatureShouldNotHealCreatureEvenHasLowerAttackThanDefenderArmor()
-    {
-        final Creature angel = new Creature.Builder().hp( NOT_IMPORTANT )
-            .attack( 1 )
-            .defence( NOT_IMPORTANT )
+    void creatureShouldNotHealCreatureEvenHasLowerAttackThanDefenderArmor() {
+        final Creature angel = new Creature.Builder().hp(NOT_IMPORTANT)
+            .attack(1)
+            .defence(NOT_IMPORTANT)
             .build();
-        final Creature dragon = new Creature.Builder().hp( 100 )
-            .attack( NOT_IMPORTANT )
-            .defence( 10 )
+        final Creature dragon = new Creature.Builder().hp(100)
+            .attack(NOT_IMPORTANT)
+            .defence(10)
             .build();
         // when
-        angel.attack( dragon );
+        angel.attack(dragon);
         // then
-        assertThat( dragon.getCurrentHp() ).isEqualTo( 100 );
+        assertThat(dragon.getCurrentHp()).isEqualTo(100);
     }
 
     @Test
-    void defenderShouldCounterAttack()
-    {
-        final Creature attacker = new Creature.Builder().hp( 100 )
-            .attack( NOT_IMPORTANT )
-            .defence( 10 )
+    void defenderShouldCounterAttack() {
+        final Creature attacker = new Creature.Builder().hp(100)
+            .attack(NOT_IMPORTANT)
+            .defence(10)
             .build();
-        final Creature defender = new Creature.Builder().hp( NOT_IMPORTANT )
-            .attack( 20 )
-            .defence( 5 )
+        final Creature defender = new Creature.Builder().hp(NOT_IMPORTANT)
+            .attack(20)
+            .defence(5)
             .build();
         // when
-        attacker.attack( defender );
+        attacker.attack(defender);
         // then
-        assertThat( attacker.getCurrentHp() ).isEqualTo( 90 );
+        assertThat(attacker.getCurrentHp()).isEqualTo(90);
     }
 
     @Test
-    void defenderShouldNotCounterAttackWhenIsDie()
-    {
-        final Creature attacker = new Creature.Builder().hp( 100 )
-            .attack( 1000 )
-            .defence( 10 )
+    void defenderShouldNotCounterAttackWhenIsDie() {
+        final Creature attacker = new Creature.Builder().hp(100)
+            .attack(1000)
+            .defence(10)
             .build();
-        final Creature defender = new Creature.Builder().hp( NOT_IMPORTANT )
-            .attack( 20 )
-            .defence( 5 )
+        final Creature defender = new Creature.Builder().hp(NOT_IMPORTANT)
+            .attack(20)
+            .defence(5)
             .build();
         // when
-        attacker.attack( defender );
+        attacker.attack(defender);
         // then
-        assertThat( attacker.getCurrentHp() ).isEqualTo( 100 );
+        assertThat(attacker.getCurrentHp()).isEqualTo(100);
     }
 
     @Test
-    void defenderShouldCounterAttackOnlyOncePerTurn()
-    {
-        final Creature attacker = new Creature.Builder().hp( 100 )
-            .attack( NOT_IMPORTANT )
-            .defence( 10 )
+    void defenderShouldCounterAttackOnlyOncePerTurn() {
+        final Creature attacker = new Creature.Builder().hp(100)
+            .attack(NOT_IMPORTANT)
+            .defence(10)
             .build();
-        final Creature defender = new Creature.Builder().hp( NOT_IMPORTANT )
-            .attack( 20 )
-            .defence( 5 )
+        final Creature defender = new Creature.Builder().hp(NOT_IMPORTANT)
+            .attack(20)
+            .defence(5)
             .build();
         // when
-        attacker.attack( defender );
-        attacker.attack( defender );
+        attacker.attack(defender);
+        attacker.attack(defender);
         // then
-        assertThat( attacker.getCurrentHp() ).isEqualTo( 90 );
+        assertThat(attacker.getCurrentHp()).isEqualTo(90);
     }
 
     @Test
-    void attackerShouldNotCounterAttack()
-    {
-        final Random randomMock = mock( Random.class );
-        when( randomMock.nextInt( anyInt() ) ).thenReturn( 3 );
+    void attackerShouldNotCounterAttack() {
+        final Random randomMock = mock(Random.class);
+        when(randomMock.nextInt(anyInt())).thenReturn(3);
 
-        final Creature attacker = new Creature.Builder().hp( 100 )
-            .damage( Range.closed( 5, 5 ) )
-            .attack( NOT_IMPORTANT )
-            .defence( NOT_IMPORTANT )
+        final Creature attacker = new Creature.Builder().hp(100)
+            .damage(Range.closed(5, 5))
+            .attack(NOT_IMPORTANT)
+            .defence(NOT_IMPORTANT)
             .build();
-        final Creature defender = new Creature.Builder().hp( NOT_IMPORTANT )
-            .damage( Range.closed( 1, 10 ) )
-            .calculator( new DefaultDamageCalculator( randomMock ) )
-            .attack( NOT_IMPORTANT )
-            .defence( NOT_IMPORTANT )
+        final Creature defender = new Creature.Builder().hp(NOT_IMPORTANT)
+            .damage(Range.closed(1, 10))
+            .calculator(new DefaultDamageCalculator(randomMock))
+            .attack(NOT_IMPORTANT)
+            .defence(NOT_IMPORTANT)
             .build();
         // when
-        attacker.attack( defender );
+        attacker.attack(defender);
         // then
-        assertThat( defender.getCurrentHp() ).isEqualTo( 95 );
-        assertThat( attacker.getCurrentHp() ).isEqualTo( 96 );
+        assertThat(defender.getCurrentHp()).isEqualTo(95);
+        assertThat(attacker.getCurrentHp()).isEqualTo(96);
     }
 
     @Test
-    void counterAttackCounterShouldResetAfterEndOfTurn()
-    {
-        final Creature creature1 = new Creature.Builder().hp( 100 )
+    void counterAttackCounterShouldResetAfterEndOfTurn() {
+        final Creature creature1 = new Creature.Builder().hp(100)
             .build();
-        final Creature creature2 = new Creature.Builder().hp( 100 )
-            .damage( Range.closed( 10, 10 ) )
+        final Creature creature2 = new Creature.Builder().hp(100)
+            .damage(Range.closed(10, 10))
             .build();
-        final TurnQueue turnQueue = new TurnQueue( List.of( creature1 ), List.of( creature2 ) );
+        final TurnQueue turnQueue = new TurnQueue(List.of(creature1), List.of(creature2));
 
-        creature1.attack( creature2 );
-        creature1.attack( creature2 );
-        assertThat( creature1.getCurrentHp() ).isEqualTo( 90 );
+        creature1.attack(creature2);
+        creature1.attack(creature2);
+        assertThat(creature1.getCurrentHp()).isEqualTo(90);
         turnQueue.next();
         turnQueue.next();
-        creature1.attack( creature2 );
-        assertThat( creature1.getCurrentHp() ).isEqualTo( 80 );
+        creature1.attack(creature2);
+        assertThat(creature1.getCurrentHp()).isEqualTo(80);
         // end of turn
     }
 
     @Test
-    void creatureShouldHealAfterEndOfTurn()
-    {
-        final Creature creature1 = new Creature.Builder().hp( 100 )
-            .damage( Range.closed( 10, 10 ) )
+    void creatureShouldHealAfterEndOfTurn() {
+        final Creature creature1 = new Creature.Builder().hp(100)
+            .damage(Range.closed(10, 10))
             .build();
         final Creature selfHealAfterEndOfTurnCreature =
-            new SelfHealAfterTurnCreature( new Creature.Builder().hp( 100 )
-                .build() );
+            new SelfHealAfterTurnCreature(new Creature.Builder().hp(100)
+                .build());
         final TurnQueue turnQueue =
-            new TurnQueue( List.of( creature1 ), List.of( selfHealAfterEndOfTurnCreature ) );
+            new TurnQueue(List.of(creature1), List.of(selfHealAfterEndOfTurnCreature));
 
-        creature1.attack( selfHealAfterEndOfTurnCreature );
-        assertThat( selfHealAfterEndOfTurnCreature.getCurrentHp() ).isEqualTo( 90 );
+        creature1.attack(selfHealAfterEndOfTurnCreature);
+        assertThat(selfHealAfterEndOfTurnCreature.getCurrentHp()).isEqualTo(90);
         turnQueue.next();
         turnQueue.next();
-        assertThat( selfHealAfterEndOfTurnCreature.getCurrentHp() ).isEqualTo( 100 );
+        assertThat(selfHealAfterEndOfTurnCreature.getCurrentHp()).isEqualTo(100);
+    }
+
+    @Test
+    void creatureShouldApplyArtifactWithTwoAddEffects() {
+        final ArtifactEffect artifactEffect1 =
+            ArtifactEffect.builder()
+                .effectValue(2)
+                .effectApplyingMode(ArtifactApplyingMode.ADD)
+                .applierTarget(ArtifactApplierTarget.ATTACK)
+                .build();
+
+        final ArtifactEffect artifactEffect2 =
+            ArtifactEffect.builder()
+                .effectValue(-3)
+                .effectApplyingMode(ArtifactApplyingMode.ADD)
+                .applierTarget(ArtifactApplierTarget.ATTACK)
+                .build();
+
+        final Artifact artifact = Artifact.builder()
+            .type(ArtifactType.PRIMARY)
+            .effects(Set.of(artifactEffect1, artifactEffect2)).build();
+
+        final CreatureStatistic creatureStatistic = CreatureStatistic.BLACK_KNIGHT;
+        creatureStatistic.setAttack(16);
+
+        final Creature creature = new Creature(creatureStatistic, null, NOT_IMPORTANT);
+
+        creature.applyArtifact(artifact);
+
+        assertThat(creature.getStats().getAttack()).isEqualTo(15);
+    }
+
+    @Test
+    void creatureShouldApplyArtifactWithTwoEffects() {
+        final ArtifactEffect artifactEffect1 =
+            ArtifactEffect.builder()
+                .effectValue(1.5)
+                .effectApplyingMode(ArtifactApplyingMode.MULTIPLY)
+                .applierTarget(ArtifactApplierTarget.ATTACK)
+                .build();
+
+        final ArtifactEffect artifactEffect2 =
+            ArtifactEffect.builder()
+                .effectValue(-3)
+                .effectApplyingMode(ArtifactApplyingMode.ADD)
+                .applierTarget(ArtifactApplierTarget.ATTACK)
+                .build();
+
+        final Artifact artifact = Artifact.builder()
+            .type(ArtifactType.PRIMARY)
+            .effects(Set.of(artifactEffect1, artifactEffect2)).build();
+
+        final CreatureStatistic creatureStatistic = CreatureStatistic.BLACK_KNIGHT;
+        creatureStatistic.setAttack(16);
+
+        final Creature creature = new Creature(creatureStatistic, null, NOT_IMPORTANT);
+
+        creature.applyArtifact(artifact);
+
+        assertThat(creature.getStats().getAttack()).isEqualTo(21);
+    }
+
+
+    @Test
+    void creatureShouldApplyArtifactWithMultiplyAndAddEffect() {
+        final ArtifactEffect artifactEffect1 =
+            ArtifactEffect.builder()
+                .effectValue(2)
+                .effectApplyingMode(ArtifactApplyingMode.ADD)
+                .applierTarget(ArtifactApplierTarget.HEALTH)
+                .build();
+
+        final ArtifactEffect artifactEffect2 =
+            ArtifactEffect.builder()
+                .effectValue(-3)
+                .effectApplyingMode(ArtifactApplyingMode.ADD)
+                .applierTarget(ArtifactApplierTarget.ATTACK)
+                .build();
+
+        final Artifact artifact = Artifact.builder()
+            .type(ArtifactType.PRIMARY)
+            .effects(Set.of(artifactEffect1, artifactEffect2)).build();
+
+        final CreatureStatistic creatureStatistic = CreatureStatistic.BLACK_KNIGHT;
+        creatureStatistic.setAttack(16);
+        creatureStatistic.setMaxHp(10);
+
+        final Creature creature = new Creature(creatureStatistic, null, NOT_IMPORTANT);
+
+        creature.applyArtifact(artifact);
+
+        assertThat(creature.getStats().getAttack()).isEqualTo(13);
+        assertThat(creature.getStats().getMaxHp()).isEqualTo(12);
+    }
+
+    @Test
+    void creatureShouldThrowArtifactInvalidExceptionWhenNotPrimaryArtifact() {
+        final Artifact artifact = Artifact.builder()
+            .type(ArtifactType.SPELL)
+            .effects(Collections.emptySet()).build();
+
+        final CreatureStatistic creatureStatistic = CreatureStatistic.BLACK_KNIGHT;
+
+        final Creature creature = new Creature(creatureStatistic, null, NOT_IMPORTANT);
+
+        final Throwable throwable = catchThrowable(() -> creature.applyArtifact(artifact));
+
+        assertThat(throwable).isInstanceOf(ArtifactInvalidException.class);
     }
 }
