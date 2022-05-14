@@ -19,6 +19,12 @@ public class AbstractCreature extends Creature
     }
 
     @Override
+    public CreatureStatisticIf getBasicStats()
+    {
+        return decorated.getBasicStats();
+    }
+
+    @Override
     public CreatureStatisticIf getStats()
     {
         return decorated.getStats();

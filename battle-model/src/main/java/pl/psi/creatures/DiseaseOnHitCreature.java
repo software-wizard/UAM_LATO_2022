@@ -10,17 +10,18 @@ public class DiseaseOnHitCreature extends AbstractCreature{
     }
 
     @Override
-    public void attack( final Creature aDefender )
-    {
+    public void attack( final Creature aDefender ){
         decorated.attack( aDefender );
         disease( aDefender );
     }
 
-    private void disease( final Creature aDefender ){
-        aDefender.setAttack( aDefender.getAttack() - 2 );
-        aDefender.appendAttackEffectList( 2 );
-        aDefender.appendAttackEffectList( 0 );
-        aDefender.appendAttackEffectList( 0 );
-    }
+    private void disease(final Creature aDefender){
+        CreatureStats statsChange = new CreatureStats
+                .CreatureStatsBuilder()
+                    .armor( -2 )
+                    .attack( -2 )
+                .build();
+        aDefender.updateStats( statsChange );
 
+    }
 }

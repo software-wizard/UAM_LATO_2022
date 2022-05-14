@@ -12,9 +12,9 @@ import lombok.Getter;
 @Builder
 public class CreatureStats implements CreatureStatisticIf{
     private final String name;
-    private final int attack;
-    private final int armor;
-    private final int maxHp;
+    private int attack;
+    private int armor;
+    private int maxHp;
     private final int moveRange;
     private final Range< Integer > damage;
     private final int tier;
@@ -36,6 +36,12 @@ public class CreatureStats implements CreatureStatisticIf{
     @Override
     public int getSize() {
         return size;
+    }
+
+    public void addStats( CreatureStatisticIf statsToAdd ){
+        attack += statsToAdd.getAttack();
+        armor += statsToAdd.getArmor();
+        maxHp += statsToAdd.getMaxHp();
     }
 
 }
