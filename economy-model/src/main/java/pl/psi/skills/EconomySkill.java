@@ -30,10 +30,10 @@ public class EconomySkill {
 
     public void apply( List<Creature> aCreatures )
     {
-        for ( Creature aCreature: aCreatures )
-        {
+        aCreatures.forEach( aCreature -> {
             CreatureStats statsToApply = this.calculateBuffStrategy.getBuffedStats(aCreature);
-        }
+            aCreature.buff(statsToApply);
+        });
     }
 
     public void apply( Hero aHero )

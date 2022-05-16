@@ -54,7 +54,7 @@ public class CalculateBuffStrategy {
         return statsToApply;
     }
 
-    public void getBuffedStats(Hero aHero )
+    public void getBuffedStats( Hero aHero )
     {
         double changedStat;
         switch ( this.skillName )
