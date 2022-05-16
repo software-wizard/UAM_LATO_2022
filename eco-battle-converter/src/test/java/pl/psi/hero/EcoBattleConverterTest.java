@@ -2,6 +2,7 @@ package pl.psi.hero;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -101,19 +102,19 @@ class EcoBattleConverterTest {
     // given
     final EconomyNecropolisFactory factory = new EconomyNecropolisFactory();
     final ArtifactEffect<ArtifactEffectApplicable> effect1 = ArtifactEffect.builder()
-        .effectValue(2)
+        .effectValue(BigDecimal.valueOf(2))
         .effectApplyingMode(ArtifactApplyingMode.ADD)
         .applierTarget(ArtifactApplierTarget.ATTACK)
         .build();
 
     final ArtifactEffect<ArtifactEffectApplicable> effect2 = ArtifactEffect.builder()
-        .effectValue(-2)
+        .effectValue(BigDecimal.valueOf(-2))
         .effectApplyingMode(ArtifactApplyingMode.ADD)
         .applierTarget(ArtifactApplierTarget.HEALTH)
         .build();
 
     final ArtifactEffect<ArtifactEffectApplicable> effect3 = ArtifactEffect.builder()
-        .effectValue(-3)
+        .effectValue(BigDecimal.valueOf(-3))
         .effectApplyingMode(ArtifactApplyingMode.ADD)
         .applierTarget(ArtifactApplierTarget.DEFENCE)
         .build();
@@ -141,8 +142,8 @@ class EcoBattleConverterTest {
     // given
     final EconomyNecropolisFactory factory = new EconomyNecropolisFactory();
     final ArtifactEffect<ArtifactEffectApplicable> effect1 = ArtifactEffect.builder()
-        .effectValue(1.1)
-        .effectApplyingMode(ArtifactApplyingMode.ADD)
+        .effectValue(BigDecimal.valueOf(0.2))
+        .effectApplyingMode(ArtifactApplyingMode.MULTIPLY)
         .applierTarget(ArtifactApplierTarget.ATTACK)
         .build();
 
@@ -159,6 +160,7 @@ class EcoBattleConverterTest {
     final CreatureStatisticIf upgradedStats = economyCreature.getUpgradedStats();
     final CreatureStatistic baseStats = economyCreature.getBaseStats();
 
-    assertEquals(Math.ceil(baseStats.getAttack() * 1.1), upgradedStats.getAttack());
+    assertEquals( (int) (baseStats.getAttack() + baseStats.getAttack() * 0.2),
+        upgradedStats.getAttack());
   }
 }

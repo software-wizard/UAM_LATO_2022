@@ -1,5 +1,7 @@
 package pl.psi.creatures;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import lombok.Getter;
 import lombok.Setter;
 import pl.psi.artifacts.ArtifactApplierTarget;
@@ -44,9 +46,10 @@ public class EconomyCreature implements ArtifactEffectApplicable {
     }
 
     @Override
-    public void applyArtifactEffect(final ArtifactEffect<? extends ArtifactEffectApplicable> artifactEffect) {
+    public void applyArtifactEffect(
+        final ArtifactEffect<? extends ArtifactEffectApplicable> artifactEffect) {
 
-        final double effectValue = artifactEffect.getEffectValue();
+        final BigDecimal effectValue = artifactEffect.getEffectValue();
         final ArtifactApplyingMode applyingMode = artifactEffect.getEffectApplyingMode();
         final ArtifactApplierTarget applierTarget = artifactEffect.getApplierTarget();
 
@@ -56,13 +59,22 @@ public class EconomyCreature implements ArtifactEffectApplicable {
 
         switch (applierTarget) {
             case HEALTH:
-                upgradedMaxHp = calculateNewValue(applyingMode, upgradedMaxHp, effectValue);
+                upgradedMaxHp = calculateNewValue(applyingMode,
+                    upgradedMaxHp,
+                    effectValue,
+                    baseStats.getMaxHp());
                 break;
             case ATTACK:
-                upgradedAttack = calculateNewValue(applyingMode, upgradedAttack, effectValue);
+                upgradedAttack = calculateNewValue(applyingMode,
+                    upgradedAttack,
+                    effectValue,
+                    baseStats.getAttack());
                 break;
             case DEFENCE:
-                upgradedArmor = calculateNewValue(applyingMode, upgradedArmor, effectValue);
+                upgradedArmor = calculateNewValue(applyingMode,
+                    upgradedArmor,
+                    effectValue,
+                    baseStats.getArmor());
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + applierTarget);
@@ -72,18 +84,21 @@ public class EconomyCreature implements ArtifactEffectApplicable {
             upgradedMaxHp);
     }
 
-    private int calculateNewValue(final ArtifactApplyingMode applyingMode, final int currentValue,
-        final double effectValue) {
-
-        int result;
+    private int calculateNewValue(final ArtifactApplyingMode applyingMode,
+        final int currentValue,
+        final BigDecimal effectValue,
+        final int baseValue) {
+        BigDecimal result;
 
         if (ArtifactApplyingMode.ADD.equals(applyingMode)) {
-            result = currentValue + (int) effectValue;
+           result = effectValue.add(BigDecimal.valueOf(currentValue));
+
         } else {
-            result = currentValue + (int) effectValue * baseStats.getArmor();
+            result = effectValue.multiply(BigDecimal.valueOf(baseValue)).add(
+                BigDecimal.valueOf(currentValue));
         }
 
-        return result;
+        return result.setScale(0, RoundingMode.FLOOR).intValueExact();
     }
 
 }

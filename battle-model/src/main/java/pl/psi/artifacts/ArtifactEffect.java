@@ -1,5 +1,6 @@
 package pl.psi.artifacts;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,7 +9,7 @@ import lombok.Getter;
 @Builder
 public class ArtifactEffect<T extends ArtifactEffectApplicable> {
 
-    private final double effectValue;
+    private final BigDecimal effectValue;
 
     private final ArtifactApplyingMode effectApplyingMode;
 
@@ -27,7 +28,7 @@ public class ArtifactEffect<T extends ArtifactEffectApplicable> {
             return false;
         }
         final ArtifactEffect<?> that = (ArtifactEffect<?>) o;
-        return Double.compare(that.getEffectValue(), getEffectValue()) == 0
+        return Objects.equals(getEffectValue(), that.getEffectValue())
             && getEffectApplyingMode() == that.getEffectApplyingMode()
             && getApplierTarget() == that.getApplierTarget();
     }
