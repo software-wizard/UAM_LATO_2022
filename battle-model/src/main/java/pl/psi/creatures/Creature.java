@@ -46,6 +46,10 @@ Creature()
         calculator = aCalculator;
     }
 
+    public void buff( CreatureStatisticIf aBuffedStats ){
+        buffedStats.addStats( aBuffedStats );
+        externalStats.addStats( buffedStats );
+    }
 
     public void attack( final Creature aDefender )
     {
