@@ -14,80 +14,14 @@ public class HealFromAttackCreature extends AbstractCreature
         decorated = aDecorated;
     }
 
-    /*@Override
-    public CreatureStatisticIf getStats()
-    {
-        return decorated.getStats();
-    }*/
-
-   /* @Override
-    public int getAmount()
-    {
-        return decorated.getAmount();
-    }
-
-    @Override
-    public DamageCalculatorIf getCalculator()
-    {
-        return decorated.getCalculator();
-    }*/
-
     @Override
     public void attack( final Creature aDefender )
     {
-        final int initialDefenderHp = aDefender.getCurrentHp();
+        final double initialDefenderHp = aDefender.getCurrentHp();
         decorated.attack( aDefender );
-        if( aDefender.getStats().getType().equals(CreatureStatistic.CreatureType.ALIVE) ){
+        if( aDefender.getBasicStats().getType().equals(CreatureStatistic.CreatureType.ALIVE) ){
             decorated.heal( initialDefenderHp - aDefender.getCurrentHp() );
         }
 
     }
-
-    /*@Override
-    public boolean isAlive()
-    {
-        return decorated.isAlive();
-    }
-
-    @Override
-    public int getCurrentHp()
-    {
-        return decorated.getCurrentHp();
-    }
-
-    @Override
-    protected void setCurrentHp( final int aCurrentHp )
-    {
-        decorated.setCurrentHp( aCurrentHp );
-    }
-
-    @Override
-    Range< Integer > getDamage()
-    {
-        return decorated.getDamage();
-    }
-
-    @Override
-    int getAttack()
-    {
-        return decorated.getAttack();
-    }
-
-    @Override
-    int getArmor()
-    {
-        return decorated.getArmor();
-    }
-
-    @Override
-    protected void restoreCurrentHpToMax()
-    {
-        decorated.restoreCurrentHpToMax();
-    }
-
-    @Override
-    public void propertyChange( final PropertyChangeEvent evt )
-    {
-        decorated.propertyChange( evt );
-    }*/
 }

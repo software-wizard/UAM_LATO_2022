@@ -19,6 +19,12 @@ public class AbstractCreature extends Creature
     }
 
     @Override
+    public CreatureStatisticIf getBasicStats()
+    {
+        return decorated.getBasicStats();
+    }
+
+    @Override
     public CreatureStatisticIf getStats()
     {
         return decorated.getStats();
@@ -50,19 +56,19 @@ public class AbstractCreature extends Creature
 
 
     @Override
-    public void heal( final int healAmount)
+    public void heal( final double healAmount)
     {
         decorated.heal( healAmount ) ;
     }
 
     @Override
-    public int getCurrentHp()
+    public double getCurrentHp()
     {
         return decorated.getCurrentHp();
     }
 
     @Override
-    protected void setCurrentHp( final int aCurrentHp )
+    protected void setCurrentHp( final double aCurrentHp )
     {
         decorated.setCurrentHp( aCurrentHp );
     }
@@ -74,13 +80,13 @@ public class AbstractCreature extends Creature
     }
 
     @Override
-    int getAttack()
+    double getAttack()
     {
         return decorated.getAttack();
     }
 
     @Override
-    int getArmor()
+    double getArmor()
     {
         return decorated.getArmor();
     }

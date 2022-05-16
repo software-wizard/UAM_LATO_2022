@@ -24,16 +24,13 @@ import lombok.Getter;
 @Setter
 public class Creature implements PropertyChangeListener
 {
-    private CreatureStatisticIf stats;
+    private CreatureStatisticIf basicStats;
+    private CreatureStats externalStats = new CreatureStats.CreatureStatsBuilder().build();
+    private CreatureStats buffedStats = new CreatureStats.CreatureStatsBuilder().build();
     private int amount;
-    private int currentHp;
+    private double currentHp;
     private boolean canCounterAttack = true;
     private DamageCalculatorIf calculator;
-    private int attack;
-    private int armor;
-    private int moveRange;
-    private Range< Integer > damage;
-    private Queue<Integer> attackEffectQueue = new LinkedList<>();
 
 Creature()
 {
@@ -42,19 +39,13 @@ Creature()
     private Creature( final CreatureStatisticIf aStats, final DamageCalculatorIf aCalculator,
                       final int aAmount )
     {
-        stats = aStats;
+        basicStats = aStats;
+        externalStats.addStats( basicStats );
         amount = aAmount;
-        currentHp = stats.getMaxHp();
+        currentHp = basicStats.getMaxHp();
         calculator = aCalculator;
-        attack = stats.getAttack();
-        armor = stats.getArmor();
-        moveRange = stats.getMoveRange();
-        damage = stats.getDamage();
     }
 
-    public void appendAttackEffectList( int value ){
-        attackEffectQueue.add( value );
-    }
 
     public void attack( final Creature aDefender )
     {
@@ -81,17 +72,6 @@ Creature()
         }
     }
 
-    public void attackWithMinimumDamage( final Creature aDefender ){
-        if( isAlive() )
-        {
-            final int damage = getCalculator().calculateMinimumDamage(this, aDefender);
-            applyDamage(aDefender, damage);
-            if (canCounterAttack(aDefender))
-            {
-                counterAttack(aDefender);
-            }
-        }
-    }
 
     public boolean isAlive()
     {
@@ -100,15 +80,15 @@ Creature()
 
     protected void applyDamage( final Creature aDefender, final int aDamage )
     {
-        aDefender.setCurrentHp( aDefender.getCurrentHp() - aDamage );
+        aDefender.setCurrentHp( (aDefender.getCurrentHp() - aDamage));
     }
 
-    protected void setCurrentHp( final int aCurrentHp )
+    protected void setCurrentHp( final double aCurrentHp )
     {
         currentHp = aCurrentHp;
     }
 
-    private void calculateUnits(final int aAmountToAdd){
+    private void calculateUnits(final double aAmountToAdd){
         if (aAmountToAdd > 1){
             amount += aAmountToAdd - 1;
         }
@@ -117,31 +97,31 @@ Creature()
         }
     }
 
-    protected void heal( int healAmount )
+    protected void heal( double healAmount )
     {
-        setCurrentHp( getCurrentHp() + healAmount );
+        setCurrentHp( (getCurrentHp() + healAmount));
         calculateUnits( calculateAmount() );
         setCurrentHp( calculateCurrentHp() );
     }
 
-    private int calculateAmount(){
+    private double calculateAmount(){
         if ( getCurrentHp() / getStats().getMaxHp() == 1 ){
             return 1;
         }
         else if ( getCurrentHp() % getStats().getMaxHp() == 0 ){
-            return ( getCurrentHp() / getStats().getMaxHp() );
+            return (int)(getCurrentHp() / getStats().getMaxHp());
         }
         else{
-            return ( (getCurrentHp() / getStats().getMaxHp()) + 1 );
+            return (int)((getCurrentHp() / getStats().getMaxHp()) + 1);
         }
     }
 
-    private int calculateCurrentHp(){
+    private double calculateCurrentHp(){
         if( getCurrentHp() - ( getAmount() * getStats().getMaxHp() ) == 0 ){
-            return ( getStats().getMaxHp() );
+            return (int)getStats().getMaxHp();
         }
         else{ // ( a % b + b ) % b == a % b   when a is negative % operator behaves funky
-            return ( ( ( getCurrentHp() - ( getAmount() * getStats().getMaxHp() ) ) % ( getStats().getMaxHp() ) + ( getStats().getMaxHp() ) ) % getStats().getMaxHp() );
+            return (int)(( ( getCurrentHp() - ( getAmount() * getStats().getMaxHp() ) ) % ( getStats().getMaxHp() ) + ( getStats().getMaxHp() ) ) % getStats().getMaxHp());
         }
     }
 
@@ -150,7 +130,7 @@ Creature()
         return aDefender.canCounterAttack && aDefender.getCurrentHp() > 0;
     }
 
-    private void counterAttack( final Creature aAttacker )
+    protected void counterAttack( final Creature aAttacker )
     {
         final int damage = aAttacker.getCalculator()
                 .calculateDamage( aAttacker, this );
@@ -158,31 +138,31 @@ Creature()
         aAttacker.canCounterAttack = false;
     }
 
+    public void updateStats( CreatureStatisticIf statsToAdd ){
+        externalStats.addStats( statsToAdd );
+    }
+
+    public CreatureStatisticIf getStats(){
+        return externalStats;
+    }
+
     Range< Integer > getDamage()
     {
-        return damage;
+        return getExternalStats().getDamage();
     }
 
-    int getAttack()
+    double getMaxHp(){
+        return getExternalStats().getMaxHp();
+    }
+
+    double getAttack()
     {
-        return attack;
+        return getExternalStats().getAttack();
     }
 
-    int getArmor()
+    double getArmor()
     {
-        return armor;
-    }
-
-    public void setAttack( final int aAttack ){
-        attack = aAttack;
-    }
-
-    public void setArmor( final int aArmor ){
-        armor = aArmor;
-    }
-
-    public void setMoveRange( final int aMoveRange ){
-        moveRange = aMoveRange;
+        return getExternalStats().getArmor();
     }
 
     @Override
@@ -191,25 +171,22 @@ Creature()
         if( TurnQueue.END_OF_TURN.equals( evt.getPropertyName() ) )
         {
             canCounterAttack = true;
-            if(!attackEffectQueue.isEmpty()){
-                setAttack( attack + attackEffectQueue.poll() );
-            }
         }
     }
 
     protected void restoreCurrentHpToMax()
     {
-        currentHp = stats.getMaxHp();
+        currentHp = getExternalStats().getMaxHp();
     }
 
     public String getName()
     {
-        return stats.getName();
+        return getStats().getName();
     }
 
-    public int getMoveRange()
+    public double getMoveRange()
     {
-        return moveRange;
+        return getExternalStats().getMoveRange();
     }
 
     public static class Builder

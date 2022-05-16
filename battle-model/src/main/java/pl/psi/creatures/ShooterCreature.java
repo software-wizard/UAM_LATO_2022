@@ -13,6 +13,7 @@ public class ShooterCreature extends AbstractCreature
     private int shots;
     private boolean isInMelee = false;
     private final double MELEE_PENALTY = 0.5;
+    private int range = Integer.MAX_VALUE;
 
     public ShooterCreature( final Creature aDecorated, final int aShots )
     {
@@ -40,6 +41,17 @@ public class ShooterCreature extends AbstractCreature
 
     public void attackMelee( final Creature aDefender ){
         decorated.attackWithReducedDamage( aDefender, getMELEE_PENALTY() );
+    }
+
+    public void setInMelee( boolean value ){
+        if( value ){
+            isInMelee = true;
+            range = 1;
+        }
+        else {
+            isInMelee = false;
+            range = Integer.MAX_VALUE;
+        }
     }
 
     public boolean canShoot(){

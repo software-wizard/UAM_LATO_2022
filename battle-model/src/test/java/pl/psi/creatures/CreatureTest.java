@@ -347,7 +347,7 @@ public class CreatureTest
     }
 
     @Test
-    void creatureShouldChangeCreatureStatsFor3TurnsOnHit()
+    void creatureShouldBeAbleToChangeCreatureStats()
     {
         final Creature decorated = new Creature.Builder().statistic( CreatureStats.builder()
                 .maxHp( NOT_IMPORTANT )
@@ -370,13 +370,6 @@ public class CreatureTest
 
         diseaseOnHitCreature.attack( defender );
         assertThat( defender.getAttack() ).isEqualTo( 3 );
-        turnQueue.next();
-        turnQueue.next();
-        turnQueue.next();
-        turnQueue.next();
-        turnQueue.next();
-        turnQueue.next();
-        assertThat( defender.getAttack() ).isEqualTo( 5 );
     }
 
     @Test
@@ -399,4 +392,51 @@ public class CreatureTest
         doubleDamageOnHitCreature.attackWithDoubleDamage( defender );
         assertThat( defender.getCurrentHp() ).isEqualTo( 80 );
     }
+
+    @Test
+    void addingStatisticsWorksProperly()
+    {
+        final Creature creature = new Creature.Builder().statistic( CreatureStats.builder()
+                .maxHp( 100 )
+                .damage( Range.closed(5,5) )
+                .attack( 5 )
+                .build() )
+                .build();
+
+        final CreatureStats stats = new CreatureStats.CreatureStatsBuilder()
+                .attack(5)
+                .maxHp( -10 )
+                .damage( Range.closed( 10,10 ) )
+                .build();
+
+        creature.updateStats( stats );
+
+        assertThat( creature.getStats().getAttack() ).isEqualTo( 10 );
+        assertThat( creature.getStats().getMaxHp() ).isEqualTo( 90 );
+        assertThat( creature.getStats().getDamage() ).isEqualTo( Range.closed(10,10) );
+    }
+
+    @Test
+    void creatureShouldAgeWhenHit()
+    {
+        final Creature decorated = new Creature.Builder().statistic( CreatureStats.builder()
+                .maxHp( NOT_IMPORTANT )
+                .damage( Range.closed(10,10) )
+                .build() )
+                .build();
+
+        final AgeOnHitCreature ageOnHitCreature = new AgeOnHitCreature( decorated );
+
+        final Creature defender = new Creature.Builder().statistic( CreatureStats.builder()
+                .maxHp(100)
+                .damage( NOT_IMPORTANT_DMG )
+                .type( CreatureStatistic.CreatureType.ALIVE )
+                .build() )
+                .build();
+
+        ageOnHitCreature.attackWithAge( defender );
+        assertThat( defender.getMaxHp() ).isEqualTo( 50 );
+        assertThat( defender.getCurrentHp() ).isEqualTo( 40 );
+    }
+
 }
