@@ -12,12 +12,6 @@ import java.beans.PropertyChangeListener;
 import java.util.Random;
 import lombok.Getter;
 import pl.psi.TurnQueue;
-import pl.psi.artifacts.Artifact;
-import pl.psi.artifacts.ArtifactApplierTarget;
-import pl.psi.artifacts.ArtifactApplyingMode;
-import pl.psi.artifacts.ArtifactEffect;
-import pl.psi.artifacts.ArtifactInvalidException;
-import pl.psi.artifacts.ArtifactType;
 
 /**
  * TODO: Describe this class (The first line - until the first dot - will interpret as the brief description).

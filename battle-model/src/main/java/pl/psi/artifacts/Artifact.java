@@ -10,18 +10,19 @@ import lombok.Getter;
 @Builder
 public class Artifact implements ArtifactIf {
 
-    private final ArtifactRank rank;
+  private final ArtifactRank rank;
 
-    private final ArtifactPlacement placement;
+  private final ArtifactPlacement placement;
 
-    private final String name;
+  private final String name;
 
-    private final String description;
+  private final String description;
 
-    private final double price;
+  private final double price;
 
-    private final Set<ArtifactEffect> effects;
+  private final Set<ArtifactEffect<ArtifactEffectApplicable>> effects;
 
-    private final ArtifactType type;
-
+  public void applyTo(final ArtifactEffectApplicable aArtifactEffectApplicable) {
+    effects.forEach(aArtifactEffectApplicable::applyArtifactEffect);
+  }
 }

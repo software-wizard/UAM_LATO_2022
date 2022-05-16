@@ -4,7 +4,7 @@ import com.google.common.collect.Range;
 import lombok.Getter;
 
 @Getter
-public enum CreatureStatistic {
+public enum CreatureStatistic implements CreatureStatisticIf{
     // NECROPILIS FRACTION
     SKELETON("Skeleton", 5, 4, 6, 4, Range.closed(1, 3), 1,
         "Average lvl1 foot soldier, but always in huge numbers thanks to necromancy skill and skeleton transformer.",

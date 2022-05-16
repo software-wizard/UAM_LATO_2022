@@ -14,5 +14,5 @@ public interface ArtifactIf {
 
     double getPrice();
 
-    Set<ArtifactEffect> getEffects();
+    Set<ArtifactEffect<ArtifactEffectApplicable>> getEffects();
 }

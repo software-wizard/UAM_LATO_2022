@@ -1,24 +1,15 @@
 package pl.psi.creatures;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.google.common.collect.Range;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 import org.junit.jupiter.api.Test;
 import pl.psi.TurnQueue;
-import pl.psi.artifacts.Artifact;
-import pl.psi.artifacts.ArtifactApplierTarget;
-import pl.psi.artifacts.ArtifactApplyingMode;
-import pl.psi.artifacts.ArtifactEffect;
-import pl.psi.artifacts.ArtifactInvalidException;
-import pl.psi.artifacts.ArtifactType;
 
 /**
  * TODO: Describe this class (The first line - until the first dot - will interpret as the brief description).
