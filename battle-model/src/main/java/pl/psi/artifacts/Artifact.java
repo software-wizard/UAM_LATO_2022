@@ -1,5 +1,6 @@
 package pl.psi.artifacts;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.Set;
 import lombok.AllArgsConstructor;
@@ -19,7 +20,7 @@ public class Artifact implements ArtifactIf {
 
   private final String description;
 
-  private final double price;
+  private final BigDecimal price;
 
   private final Set<ArtifactEffect<ArtifactEffectApplicable>> effects;
 
@@ -36,11 +37,11 @@ public class Artifact implements ArtifactIf {
       return false;
     }
     final Artifact artifact = (Artifact) o;
-    return Double.compare(artifact.getPrice(), getPrice()) == 0
-        && getRank() == artifact.getRank() && getPlacement() == artifact.getPlacement()
+    return getRank() == artifact.getRank() && getPlacement() == artifact.getPlacement()
         && getName().equals(artifact.getName()) && getDescription().equals(
         artifact.getDescription())
-        && Objects.equals(getEffects(), artifact.getEffects());
+        && getPrice().equals(artifact.getPrice()) && Objects.equals(getEffects(),
+        artifact.getEffects());
   }
 
   @Override
