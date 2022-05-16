@@ -1,7 +1,9 @@
 package pl.psi.skills;
 
 import lombok.Getter;
+import pl.psi.Hero;
 import pl.psi.creatures.Creature;
+import pl.psi.creatures.CreatureStats;
 
 import java.util.List;
 
@@ -26,13 +28,17 @@ public class EconomySkill {
         this.calculateBuffStrategy = new CalculateBuffStrategy(this.skillName, this.skillEffect);
     }
 
-    // TODO find out proper way to edit creature skills
     public void apply( List<Creature> aCreatures )
     {
         for ( Creature aCreature: aCreatures )
         {
-            this.calculateBuffStrategy.applyBuff(aCreature);
+            CreatureStats statsToApply = this.calculateBuffStrategy.getBuffedStats(aCreature);
         }
+    }
+
+    public void apply( Hero aHero )
+    {
+        this.calculateBuffStrategy.getBuffedStats( aHero );
     }
 
     // method that will take spell as an argument

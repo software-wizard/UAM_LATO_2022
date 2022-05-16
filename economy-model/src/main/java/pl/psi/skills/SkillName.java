@@ -5,6 +5,8 @@ public enum SkillName {
     ARCHERY,
     OFFENCE,
     ARMOURER,
-    RESISTANCE
-
+    RESISTANCE,
+    LEADERSHIP,
+    LUCK,
+    FIRST_AID
 }
