@@ -106,43 +106,6 @@ public class Creature implements PropertyChangeListener {
         return stats.getMoveRange();
     }
 
-    public void applyArtifact(final Artifact aArtifact) {
-        if (!ArtifactType.PRIMARY.equals(aArtifact.getType())) {
-            throw new ArtifactInvalidException("Artifact must be primary.");
-        }
-
-        aArtifact.getEffects().forEach(this::applySpecificEffectToCreatureStatistic);
-    }
-
-    private void applySpecificEffectToCreatureStatistic(final ArtifactEffect aArtifactEffect) {
-        final ArtifactApplierTarget applierTarget = aArtifactEffect.getApplierTarget();
-        final double effectValue = aArtifactEffect.getEffectValue();
-
-        if (ArtifactApplyingMode.MULTIPLY.equals(aArtifactEffect.getEffectApplyingMode())) {
-
-            if (ArtifactApplierTarget.ATTACK.equals(applierTarget)) {
-                stats.setAttack((int) (stats.getAttack() * effectValue));
-            } else if (ArtifactApplierTarget.DEFENCE.equals(applierTarget)) {
-                stats.setAttack((int) (stats.getArmor() * effectValue));
-            } else if (ArtifactApplierTarget.HEALTH.equals(applierTarget)) {
-                stats.setMaxHp((int) (stats.getMaxHp() * effectValue));
-            }
-
-        } else if (ArtifactApplyingMode.ADD.equals(aArtifactEffect.getEffectApplyingMode())) {
-
-            if (ArtifactApplierTarget.ATTACK.equals(applierTarget)) {
-                stats.setAttack((int) (stats.getAttack() + effectValue));
-            } else if (ArtifactApplierTarget.DEFENCE.equals(applierTarget)) {
-                stats.setAttack((int) (stats.getArmor() + effectValue));
-            } else if (ArtifactApplierTarget.HEALTH.equals(applierTarget)) {
-                stats.setMaxHp((int) (stats.getMaxHp() + effectValue));
-            }
-
-        } else {
-            throw new UnsupportedOperationException("Use MULTIPLY OR ADD");
-        }
-    }
-
     public static class Builder {
 
         private int amount = 1;

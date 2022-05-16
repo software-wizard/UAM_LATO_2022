@@ -2,7 +2,6 @@ package pl.psi.creatures;
 
 import com.google.common.collect.Range;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 public enum CreatureStatistic {
@@ -50,12 +49,9 @@ public enum CreatureStatistic {
         "When situation seems hopeless, take a chance on the best enemy stack! If you'll get lucky, half their hit points will be gone instantly!! Ageing ability makes ghost dragons as dangerous as other lvl7 creatures.\nSpecial: -1 to enemy morale ; 20% chance to age enemy (halve hit points of all stack members).\n",
         true);//
 
-    @Setter
-    private int attack;
-    @Setter
-    private int armor;
-    @Setter
-    private int maxHp;
+    private final int attack;
+    private final int armor;
+    private final int maxHp;
     private final String name;
     private final int moveRange;
     private final Range<Integer> damage;
