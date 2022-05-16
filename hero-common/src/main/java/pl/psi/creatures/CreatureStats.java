@@ -4,6 +4,7 @@ import com.google.common.collect.Range;
 
 import lombok.Builder;
 import lombok.Getter;
+import java.util.Objects;
 
 /**
  * TODO: Describe this class (The first line - until the first dot - will interpret as the brief description).
@@ -15,8 +16,8 @@ public class CreatureStats implements CreatureStatisticIf{
     private int attack;
     private int armor;
     private int maxHp;
-    private final int moveRange;
-    private final Range< Integer > damage;
+    private int moveRange;
+    private Range<Integer> damage;
     private final int tier;
     private final String description;
     private final boolean isUpgraded;
@@ -42,6 +43,11 @@ public class CreatureStats implements CreatureStatisticIf{
         attack += statsToAdd.getAttack();
         armor += statsToAdd.getArmor();
         maxHp += statsToAdd.getMaxHp();
+        moveRange += statsToAdd.getMoveRange();
+        if( !Objects.isNull( statsToAdd.getDamage() ) ){
+            damage = statsToAdd.getDamage();
+        }
     }
+
 
 }

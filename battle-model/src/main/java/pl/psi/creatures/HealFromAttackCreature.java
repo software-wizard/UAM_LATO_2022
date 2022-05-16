@@ -14,24 +14,6 @@ public class HealFromAttackCreature extends AbstractCreature
         decorated = aDecorated;
     }
 
-    /*@Override
-    public CreatureStatisticIf getStats()
-    {
-        return decorated.getStats();
-    }*/
-
-   /* @Override
-    public int getAmount()
-    {
-        return decorated.getAmount();
-    }
-
-    @Override
-    public DamageCalculatorIf getCalculator()
-    {
-        return decorated.getCalculator();
-    }*/
-
     @Override
     public void attack( final Creature aDefender )
     {

@@ -148,7 +148,7 @@ Creature()
 
     Range< Integer > getDamage()
     {
-        return getBasicStats().getDamage();
+        return getExternalStats().getDamage();
     }
 
     int getMaxHp(){

@@ -394,6 +394,29 @@ public class CreatureTest
     }
 
     @Test
+    void addingStatisticsWorksProperly()
+    {
+        final Creature creature = new Creature.Builder().statistic( CreatureStats.builder()
+                .maxHp( 100 )
+                .damage( Range.closed(5,5) )
+                .attack( 5 )
+                .build() )
+                .build();
+
+        final CreatureStats stats = new CreatureStats.CreatureStatsBuilder()
+                .attack(5)
+                .maxHp( -10 )
+                .damage( Range.closed( 10,10 ) )
+                .build();
+
+        creature.updateStats( stats );
+
+        assertThat( creature.getStats().getAttack() ).isEqualTo( 10 );
+        assertThat( creature.getStats().getMaxHp() ).isEqualTo( 90 );
+        assertThat( creature.getStats().getDamage() ).isEqualTo( Range.closed(10,10) );
+    }
+
+    @Test
     void creatureShouldAgeWhenHit()
     {
         final Creature decorated = new Creature.Builder().statistic( CreatureStats.builder()
