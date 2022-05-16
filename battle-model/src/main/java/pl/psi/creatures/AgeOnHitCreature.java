@@ -36,7 +36,7 @@ public class AgeOnHitCreature extends AbstractCreature{
                     .maxHp( -(defender.getStats().getMaxHp() / 2) )
                 .build();
         defender.updateStats( reduceMaxHp );
-        final int currentHpAfterAge = Math.max(defender.getCurrentHp() - ( defender.getBasicStats().getMaxHp() - defender.getStats().getMaxHp() ), 1);
+        final double currentHpAfterAge = Math.max(defender.getCurrentHp() - ( defender.getBasicStats().getMaxHp() - defender.getStats().getMaxHp() ), 1);
         defender.setCurrentHp( currentHpAfterAge );
     }
 

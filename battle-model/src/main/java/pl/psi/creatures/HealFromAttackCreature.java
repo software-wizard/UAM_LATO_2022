@@ -17,7 +17,7 @@ public class HealFromAttackCreature extends AbstractCreature
     @Override
     public void attack( final Creature aDefender )
     {
-        final int initialDefenderHp = aDefender.getCurrentHp();
+        final double initialDefenderHp = aDefender.getCurrentHp();
         decorated.attack( aDefender );
         if( aDefender.getBasicStats().getType().equals(CreatureStatistic.CreatureType.ALIVE) ){
             decorated.heal( initialDefenderHp - aDefender.getCurrentHp() );

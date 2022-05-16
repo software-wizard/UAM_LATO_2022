@@ -28,7 +28,7 @@ public class Creature implements PropertyChangeListener
     private CreatureStats externalStats = new CreatureStats.CreatureStatsBuilder().build();
     private CreatureStats buffedStats = new CreatureStats.CreatureStatsBuilder().build();
     private int amount;
-    private int currentHp;
+    private double currentHp;
     private boolean canCounterAttack = true;
     private DamageCalculatorIf calculator;
 
@@ -80,15 +80,15 @@ Creature()
 
     protected void applyDamage( final Creature aDefender, final int aDamage )
     {
-        aDefender.setCurrentHp( aDefender.getCurrentHp() - aDamage );
+        aDefender.setCurrentHp( (aDefender.getCurrentHp() - aDamage));
     }
 
-    protected void setCurrentHp( final int aCurrentHp )
+    protected void setCurrentHp( final double aCurrentHp )
     {
         currentHp = aCurrentHp;
     }
 
-    private void calculateUnits(final int aAmountToAdd){
+    private void calculateUnits(final double aAmountToAdd){
         if (aAmountToAdd > 1){
             amount += aAmountToAdd - 1;
         }
@@ -97,31 +97,31 @@ Creature()
         }
     }
 
-    protected void heal( int healAmount )
+    protected void heal( double healAmount )
     {
-        setCurrentHp( getCurrentHp() + healAmount );
+        setCurrentHp( (getCurrentHp() + healAmount));
         calculateUnits( calculateAmount() );
         setCurrentHp( calculateCurrentHp() );
     }
 
-    private int calculateAmount(){
+    private double calculateAmount(){
         if ( getCurrentHp() / getStats().getMaxHp() == 1 ){
             return 1;
         }
         else if ( getCurrentHp() % getStats().getMaxHp() == 0 ){
-            return ( getCurrentHp() / getStats().getMaxHp() );
+            return (int)(getCurrentHp() / getStats().getMaxHp());
         }
         else{
-            return ( (getCurrentHp() / getStats().getMaxHp()) + 1 );
+            return (int)((getCurrentHp() / getStats().getMaxHp()) + 1);
         }
     }
 
-    private int calculateCurrentHp(){
+    private double calculateCurrentHp(){
         if( getCurrentHp() - ( getAmount() * getStats().getMaxHp() ) == 0 ){
-            return ( getStats().getMaxHp() );
+            return (int)getStats().getMaxHp();
         }
         else{ // ( a % b + b ) % b == a % b   when a is negative % operator behaves funky
-            return ( ( ( getCurrentHp() - ( getAmount() * getStats().getMaxHp() ) ) % ( getStats().getMaxHp() ) + ( getStats().getMaxHp() ) ) % getStats().getMaxHp() );
+            return (int)(( ( getCurrentHp() - ( getAmount() * getStats().getMaxHp() ) ) % ( getStats().getMaxHp() ) + ( getStats().getMaxHp() ) ) % getStats().getMaxHp());
         }
     }
 
@@ -151,16 +151,16 @@ Creature()
         return getExternalStats().getDamage();
     }
 
-    int getMaxHp(){
+    double getMaxHp(){
         return getExternalStats().getMaxHp();
     }
 
-    int getAttack()
+    double getAttack()
     {
         return getExternalStats().getAttack();
     }
 
-    int getArmor()
+    double getArmor()
     {
         return getExternalStats().getArmor();
     }
@@ -184,7 +184,7 @@ Creature()
         return getStats().getName();
     }
 
-    public int getMoveRange()
+    public double getMoveRange()
     {
         return getExternalStats().getMoveRange();
     }

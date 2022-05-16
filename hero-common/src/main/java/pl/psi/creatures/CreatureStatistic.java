@@ -8,7 +8,7 @@ import lombok.Getter;
 public enum CreatureStatistic implements CreatureStatisticIf
 {
     // NECROPILIS FRACTION
-    SKELETON( "Skeleton", 5, 4, 6, 4, Range.closed( 1, 3 ), 1,
+    SKELETON( "Skeleton", 5, 4, 6, 4, Range.closed(1, 3 ), 1,
             "Average lvl1 foot soldier, but always in huge numbers thanks to necromancy skill and skeleton transformer.",
             false, CreatureType.UNDEAD, true, 1), //
     WALKING_DEAD( "Walking Dead", 5, 5, 15, 3, Range.closed( 2, 3 ), 2,
@@ -58,10 +58,10 @@ public enum CreatureStatistic implements CreatureStatisticIf
 
 
     private final String name;
-    private final int attack;
-    private final int armor;
-    private final int maxHp;
-    private final int moveRange;
+    private final double attack;
+    private final double armor;
+    private final double maxHp;
+    private final double moveRange;
     private final Range< Integer > damage;
     private final int tier;
     private final String description;

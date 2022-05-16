@@ -13,10 +13,10 @@ import java.util.Objects;
 @Builder
 public class CreatureStats implements CreatureStatisticIf{
     private final String name;
-    private int attack;
-    private int armor;
-    private int maxHp;
-    private int moveRange;
+    private double  attack;
+    private double armor;
+    private double maxHp;
+    private double moveRange;
     private Range<Integer> damage;
     private final int tier;
     private final String description;
