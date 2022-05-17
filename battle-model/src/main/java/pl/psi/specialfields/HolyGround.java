@@ -8,10 +8,11 @@ import pl.psi.creatures.Creature;
 @Setter
 @ToString
 @EqualsAndHashCode
+@NoArgsConstructor
+@AllArgsConstructor
 public class HolyGround implements BuffCreatorIf {
 
-    public HolyGround(Point point) {
-    }
+    private Point point;
 
     @Override
     public void putBuffOnCreature(Creature creature) {

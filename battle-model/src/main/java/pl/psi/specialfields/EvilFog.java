@@ -1,9 +1,6 @@
 package pl.psi.specialfields;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import pl.psi.Point;
 import pl.psi.creatures.Creature;
 
@@ -11,10 +8,11 @@ import pl.psi.creatures.Creature;
 @Setter
 @ToString
 @EqualsAndHashCode
+@AllArgsConstructor
+@NoArgsConstructor
 public class EvilFog implements BuffCreatorIf {
 
-    public EvilFog(Point point) {
-    }
+    private Point point;
 
     @Override
     public void putBuffOnCreature(Creature creature) {
