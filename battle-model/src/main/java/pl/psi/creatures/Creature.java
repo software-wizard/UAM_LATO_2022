@@ -64,18 +64,6 @@ Creature()
         }
     }
 
-    public void attackWithReducedDamage( final Creature aDefender, final double reduceBy ){
-        if( isAlive() )
-        {
-            final int damage = getCalculator().calculateReducedDamage( this, aDefender, reduceBy );
-            applyDamage( aDefender, damage );
-            if( canCounterAttack( aDefender ) )
-            {
-                counterAttack( aDefender );
-            }
-        }
-    }
-
 
     public boolean isAlive()
     {

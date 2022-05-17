@@ -16,20 +16,16 @@ public class AgeOnHitCreature extends AbstractCreature{
     {
         if( isAlive() )
         {
-            final int damage = getCalculator().calculateDamage( decorated, aDefender );
-            applyDamage( aDefender, damage );
             Random rand = new Random();
             int chance = rand.nextInt(100);
             if( chance <= 20 && aDefender.getBasicStats().getType().equals( CreatureStatistic.CreatureType.ALIVE ) ){
-                age( aDefender );
+                attackWithAge( aDefender );
             }
-            if( canCounterAttack( aDefender ) )
-            {
-                decorated.counterAttack( aDefender );
+            else{
+                decorated.attack( aDefender );
             }
         }
     }
-
     private void age( Creature defender ){
         CreatureStats reduceMaxHp = new CreatureStats
                 .CreatureStatsBuilder()
@@ -40,12 +36,10 @@ public class AgeOnHitCreature extends AbstractCreature{
         defender.setCurrentHp( currentHpAfterAge );
     }
 
-    public void attackWithAge( Creature aDefender ){  // TEST PURPOSE ONLY
+    public void attackWithAge( Creature aDefender ){
         final int damage = getCalculator().calculateDamage( decorated, aDefender );
         applyDamage( aDefender, damage );
-        if( aDefender.getBasicStats().getType().equals( CreatureStatistic.CreatureType.ALIVE ) ){
-            age( aDefender );
-        }
+        age( aDefender );
         if( canCounterAttack( aDefender ) )
         {
             decorated.counterAttack( aDefender );

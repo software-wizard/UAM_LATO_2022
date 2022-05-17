@@ -20,13 +20,18 @@ abstract class AbstractCalculateDamageStrategy implements DamageCalculatorIf
     public int calculateDamage( final Creature aAttacker, final Creature aDefender )
     {
         final double armor = getArmor( aDefender );
-
-        final double randValue = rand.nextInt( (aAttacker.getDamage()
-                    .upperEndpoint()
-                    - aAttacker.getDamage()
-                        .lowerEndpoint()
-                    + 1)) + aAttacker.getDamage()
+        double randValue = rand.nextInt( (aAttacker.getDamage()
+                .upperEndpoint()
+                - aAttacker.getDamage()
+                .lowerEndpoint()
+                + 1)) + aAttacker.getDamage()
                 .lowerEndpoint();
+        if( minimalDamageRange() ) {
+            randValue = aAttacker.getDamage().lowerEndpoint();
+        }
+        else if( maximalDamageRange() ){
+            randValue = aAttacker.getDamage().upperEndpoint();
+        }
 
         double oneCreatureDamageToDeal;
         if( aAttacker.getAttack() >= armor )
@@ -52,81 +57,11 @@ abstract class AbstractCalculateDamageStrategy implements DamageCalculatorIf
         {
             oneCreatureDamageToDeal = 0;
         }
-        return (int)(aAttacker.getAmount() * oneCreatureDamageToDeal);
+        return (int)( aAttacker.getAmount() * oneCreatureDamageToDeal );
     }
 
-    @Override
-    public int calculateReducedDamage( final Creature aAttacker, final Creature aDefender, final double reduceBy )
-    {
-        final double armor = getArmor( aDefender );
-
-        final double randValue = rand.nextInt( (aAttacker.getDamage()
-                        .upperEndpoint()
-                        - aAttacker.getDamage()
-                        .lowerEndpoint()
-                        + 1)) + aAttacker.getDamage()
-                .lowerEndpoint();
-
-        double oneCreatureDamageToDeal;
-        if( aAttacker.getAttack() >= armor )
-        {
-            double attackPoints = aAttacker.getAttack() - armor;
-            if( attackPoints > MAX_ATTACK_DIFF )
-            {
-                attackPoints = MAX_ATTACK_DIFF;
-            }
-            oneCreatureDamageToDeal = randValue * (1 + attackPoints * ATTACK_BONUS);
-        }
-        else
-        {
-            double defencePoints = armor - aAttacker.getAttack();
-            if( defencePoints > MAX_DEFENCE_DIFF )
-            {
-                defencePoints = MAX_DEFENCE_DIFF;
-            }
-            oneCreatureDamageToDeal = randValue * (1 - defencePoints * DEFENCE_BONUS);
-        }
-
-        if( oneCreatureDamageToDeal < 0 )
-        {
-            oneCreatureDamageToDeal = 0;
-        }
-        return (int)( aAttacker.getAmount() * oneCreatureDamageToDeal * reduceBy ) ;
-    }
-
-    @Override
-    public int calculateMinimumDamage( final Creature aAttacker, final Creature aDefender )
-    {
-        final double armor = getArmor( aDefender );
-
-        final double randValue = aAttacker.getDamage().lowerEndpoint();
-
-        double oneCreatureDamageToDeal;
-        if( aAttacker.getAttack() >= armor )
-        {
-            double attackPoints = aAttacker.getAttack() - armor;
-            if( attackPoints > MAX_ATTACK_DIFF )
-            {
-                attackPoints = MAX_ATTACK_DIFF;
-            }
-            oneCreatureDamageToDeal = randValue * (1 + attackPoints * ATTACK_BONUS);
-        }
-        else
-        {
-            double defencePoints = armor - aAttacker.getAttack();
-            if( defencePoints > MAX_DEFENCE_DIFF )
-            {
-                defencePoints = MAX_DEFENCE_DIFF;
-            }
-            oneCreatureDamageToDeal = randValue * (1 - defencePoints * DEFENCE_BONUS);
-        }
-
-        if( oneCreatureDamageToDeal < 0 )
-        {
-            oneCreatureDamageToDeal = 0;
-        }
-        return (int)( aAttacker.getAmount() * oneCreatureDamageToDeal ) ;
-    }
+    boolean minimalDamageRange(){ return false; }
+    boolean maximalDamageRange(){ return false; }
 
     protected double getArmor( final Creature aDefender )
     {

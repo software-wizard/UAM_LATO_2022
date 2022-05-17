@@ -1,5 +1,7 @@
 package pl.psi.creatures;
 
+import java.util.Random;
+
 public class DiseaseOnHitCreature extends AbstractCreature{
 
     private final Creature decorated;
@@ -11,8 +13,14 @@ public class DiseaseOnHitCreature extends AbstractCreature{
 
     @Override
     public void attack( final Creature aDefender ){
-        decorated.attack( aDefender );
-        disease( aDefender );
+        Random rand = new Random();
+        int chance = rand.nextInt(100);
+        if(chance <= 20){
+            attackWithDisease( aDefender );
+        }
+        else{
+            decorated.attack( aDefender );
+        }
     }
 
     private void disease(final Creature aDefender){
@@ -22,6 +30,10 @@ public class DiseaseOnHitCreature extends AbstractCreature{
                     .attack( -2 )
                 .build();
         aDefender.updateStats( statsChange );
+    }
 
+    public void attackWithDisease( final Creature aDefender ){
+        decorated.attack( aDefender );
+        disease( aDefender );
     }
 }

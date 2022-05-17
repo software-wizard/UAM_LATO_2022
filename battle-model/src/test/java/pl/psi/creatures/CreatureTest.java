@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
 import java.util.List;
+import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
@@ -268,7 +269,7 @@ public class CreatureTest
                         .build() )
                 .build();
 
-        shooterCreature.attackRange( defender );
+        shooterCreature.attack( defender );
 
         assertThat( defender.getCurrentHp() ).isEqualTo( 90 );
     }
@@ -291,8 +292,8 @@ public class CreatureTest
                         .build() )
                 .build();
 
-        shooterCreature.attackMelee( defender );
-
+        shooterCreature.setInMelee( true );
+        shooterCreature.attack( defender );
         assertThat( defender.getCurrentHp() ).isEqualTo( 95 );
     }
 
@@ -361,15 +362,57 @@ public class CreatureTest
                 .maxHp(100)
                 .damage( NOT_IMPORTANT_DMG )
                 .attack( 5 )
+                .armor( 5 )
                 .type( CreatureStatistic.CreatureType.ALIVE )
                 .build() )
                 .build();
 
-        final TurnQueue turnQueue =
-                new TurnQueue( List.of( diseaseOnHitCreature ), List.of( defender ) );
-
-        diseaseOnHitCreature.attack( defender );
+        diseaseOnHitCreature.attackWithDisease( defender );
         assertThat( defender.getAttack() ).isEqualTo( 3 );
+        assertThat( defender.getArmor() ).isEqualTo( 3 );
+    }
+
+    @Test
+    void damageCalculatorsTest()
+    {
+        final Creature creature = new Creature.Builder().statistic( CreatureStats.builder()
+                .maxHp( NOT_IMPORTANT )
+                .damage( Range.closed( 5,10 ) )
+                .build() )
+                .build();
+
+        final Random random = new Random();
+
+        final Creature minimalDamageDefender = new Creature.Builder().statistic( CreatureStats.builder()
+                .maxHp( 100 )
+                .damage( NOT_IMPORTANT_DMG )
+                .build() )
+                .build();
+
+        final Creature maximalDamageDefender = new Creature.Builder().statistic( CreatureStats.builder()
+                .maxHp( 100 )
+                .damage( NOT_IMPORTANT_DMG )
+                .build() )
+                .build();
+
+        final Creature reducedDamageDefender = new Creature.Builder().statistic( CreatureStats.builder()
+                .maxHp( 100 )
+                .damage( NOT_IMPORTANT_DMG )
+                .build() )
+                .build();
+
+
+        creature.setCalculator( new MinimalDamageCalculator( random ) );
+        creature.attack( minimalDamageDefender );
+        assertThat( minimalDamageDefender.getCurrentHp() ).isEqualTo( 95 );
+
+        creature.setCalculator( new MaximalDamageCalculator( random ) );
+        creature.attack( maximalDamageDefender );
+        assertThat( maximalDamageDefender.getCurrentHp() ).isEqualTo( 90 );
+
+        creature.setCalculator( new ReducedDamageCalculator( random, 0.5 ) );
+        creature.attack( reducedDamageDefender );
+        assertThat( reducedDamageDefender.getCurrentHp() ).isBetween( 95.0, 97.5);
     }
 
     @Test
@@ -462,5 +505,53 @@ public class CreatureTest
         assertThat( defender.getMaxHp() ).isEqualTo( 50 );
         assertThat( defender.getCurrentHp() ).isEqualTo( 40 );
     }
+
+    @Test
+    void creatureShouldApplyCurseOnHit()
+    {
+        final Creature decorated = new Creature.Builder().statistic( CreatureStats.builder()
+                .maxHp( 1 )
+                .damage( Range.closed(10,10) )
+                .build() )
+                .build();
+
+        final CurseOnHitCreature curseOnHitCreature = new CurseOnHitCreature( decorated );
+
+        final Creature defender = new Creature.Builder().statistic( CreatureStats.builder()
+                .maxHp( NOT_IMPORTANT )
+                .damage( Range.closed( 0,100 ) )
+                .type( CreatureStatistic.CreatureType.ALIVE )
+                .build() )
+                .build();
+
+        curseOnHitCreature.attackWithCurse( defender );
+        assertThat( curseOnHitCreature.getCurrentHp() ).isEqualTo( 1 );
+    }
+
+    @Test
+    void dreadKnightCreatureTest()
+    {
+        final Creature decorated = new Creature.Builder().statistic( CreatureStats.builder()
+                .maxHp( 1 )
+                .damage( Range.closed(10,10) )
+                .build() )
+                .build();
+
+        final DoubleDamageOnHitCreature doubleDamageOnHitCreature = new DoubleDamageOnHitCreature( decorated );
+        final CurseOnHitCreature dreadKnight = new CurseOnHitCreature( doubleDamageOnHitCreature );
+
+
+        final Creature defender = new Creature.Builder().statistic( CreatureStats.builder()
+                .maxHp( 100 )
+                .damage( Range.closed( 0,100 ) )
+                .type( CreatureStatistic.CreatureType.ALIVE )
+                .build() )
+                .build();
+
+        dreadKnight.attackWithCurse( defender );
+        assertThat( dreadKnight.getCurrentHp() ).isEqualTo( 1 );
+        assertThat( defender.getCurrentHp() ).isEqualTo( 80 );
+    }
+
 
 }
