@@ -25,7 +25,7 @@ public class EconomySkillTest {
 
     @Test
     public void heroShouldBeAbleToLearnSkill() {
-        EconomySkill skillToLearn = economySkillFactory.create();
+        EconomySkill skillToLearn = economySkillFactory.create(SkillName.ARCHERY, SkillLevel.BASIC);
     }
 
     @Test
@@ -36,7 +36,7 @@ public class EconomySkillTest {
 
     @Test
     public void heroHasLearnedSkill() {
-        EconomySkill skillToLearn = economySkillFactory.create();
+        EconomySkill skillToLearn = economySkillFactory.create(SkillName.OFFENCE, SkillLevel.BASIC);
 
     }
 
