@@ -412,7 +412,7 @@ public class CreatureTest
 
         creature.setCalculator( new ReducedDamageCalculator( random, 0.5 ) );
         creature.attack( reducedDamageDefender );
-        assertThat( reducedDamageDefender.getCurrentHp() ).isBetween( 95.0, 97.5);
+        assertThat( reducedDamageDefender.getCurrentHp() ).isBetween( 95.0, 98.0);
     }
 
     @Test
