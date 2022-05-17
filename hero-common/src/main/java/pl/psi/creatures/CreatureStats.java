@@ -8,8 +8,8 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 @Builder
-public class CreatureStats implements CreatureStatisticIf {
-
+public class CreatureStats implements CreatureStatisticIf
+{
   private final String name;
   private final int attack;
   private final int armor;
@@ -20,20 +20,21 @@ public class CreatureStats implements CreatureStatisticIf {
   private final String description;
   private final boolean isUpgraded;
 
-  public CreatureStats(final CreatureStatisticIf that, final int aAttack, final int aArmor,
-      final int aMaxHp) {
-    this.maxHp = aMaxHp;
-    this.armor = aArmor;
-    this.attack = aAttack;
-    this.name = that.getName();
-    this.moveRange = that.getMoveRange();
-    this.damage = that.getDamage();
-    this.tier = that.getTier();
-    this.description = that.getDescription();
-    this.isUpgraded = that.isUpgraded();
+  public CreatureStats( final CreatureStatisticIf aCreatureStatistics, final int aAttack, final int aArmor, final int aMaxHp )
+  {
+      maxHp = aMaxHp;
+      armor = aArmor;
+      attack = aAttack;
+      name = aCreatureStatistics.getName();
+      moveRange = aCreatureStatistics.getMoveRange();
+      damage = aCreatureStatistics.getDamage();
+      tier = aCreatureStatistics.getTier();
+      description = aCreatureStatistics.getDescription();
+      isUpgraded = aCreatureStatistics.isUpgraded();
   }
 
-  public CreatureStats(final CreatureStatisticIf that) {
-    this(that, that.getAttack(), that.getArmor(), that.getMaxHp());
+  public CreatureStats( final CreatureStatisticIf aCreatureStatics )
+  {
+      this( aCreatureStatics, aCreatureStatics.getAttack(), aCreatureStatics.getArmor(), aCreatureStatics.getMaxHp() );
   }
 }

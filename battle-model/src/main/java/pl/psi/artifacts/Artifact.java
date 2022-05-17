@@ -22,31 +22,35 @@ public class Artifact implements ArtifactIf {
 
   private final BigDecimal price;
 
-  private final Set<ArtifactEffect<ArtifactEffectApplicable>> effects;
+  private final Set< ArtifactEffect< ArtifactEffectApplicable > > effects;
 
-  public void applyTo(final ArtifactEffectApplicable aArtifactEffectApplicable) {
-    effects.forEach(artifactEffect -> artifactEffect.apply(aArtifactEffectApplicable));
+  public void applyTo( final ArtifactEffectApplicable aArtifactEffectApplicable )
+  {
+      effects.forEach( effect -> effect.apply( aArtifactEffectApplicable ) );
   }
 
   @Override
-  public boolean equals(final Object o) {
-    if (this == o) {
-      return true;
+  public boolean equals( final Object aObj )
+  {
+    if ( this == aObj )
+    {
+       return true;
     }
-    if (!(o instanceof Artifact)) {
-      return false;
+
+    if ( !( aObj instanceof Artifact ) )
+    {
+       return false;
     }
-    final Artifact artifact = (Artifact) o;
-    return getRank() == artifact.getRank() && getPlacement() == artifact.getPlacement()
-        && getName().equals(artifact.getName()) && getDescription().equals(
-        artifact.getDescription())
-        && getPrice().equals(artifact.getPrice()) && Objects.equals(getEffects(),
-        artifact.getEffects());
+
+    final Artifact artifact = (Artifact) aObj;
+
+    return getRank() == artifact.getRank() && getPlacement() == artifact.getPlacement() &&
+            getPrice().equals( artifact.getPrice() ) && Objects.equals( getEffects(), artifact.getEffects() );
   }
 
   @Override
-  public int hashCode() {
-    return Objects.hash(getRank(), getPlacement(), getName(), getDescription(), getPrice(),
-        getEffects());
+  public int hashCode()
+  {
+      return Objects.hash( getRank(), getPlacement(),  getPrice(), getEffects() );
   }
 }

@@ -1,7 +1,7 @@
 package pl.psi.artifacts;
 
-public enum ArtifactApplyingMode {
-
+public enum ArtifactApplyingMode
+{
   MULTIPLY,
 
   ADD

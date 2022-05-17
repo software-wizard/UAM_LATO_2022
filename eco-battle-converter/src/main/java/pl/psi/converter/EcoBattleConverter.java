@@ -35,22 +35,21 @@ public class EcoBattleConverter {
         }
     }
 
-    public static Hero convert(final EconomyHero aPlayer1) {
-        final NecropolisFactory factory = new NecropolisFactory();
-
-        final List<Artifact> artifacts = Collections.emptyList();
+    public static Hero convert( final EconomyHero aPlayer )
+    {
+        final List< Artifact > artifacts = Collections.emptyList();
         // TODO: get all bought artifacts from economy or economy creature (?)
 
-        final List<Creature> creatures = aPlayer1.getCreatures()
+        final List< Creature > creatures = aPlayer.getCreatures()
             .stream()
-            .map(economyCreature -> {
-                artifacts.forEach(artifact -> artifact.applyTo(economyCreature));
+            .map( economyCreature -> {
+                artifacts.forEach(artifact -> artifact.applyTo( economyCreature ) );
                 return new Creature(
-                    (CreatureStatistic) economyCreature.getUpgradedStats(), null,
-                    economyCreature.getAmount());
-            })
-            .collect(Collectors.toList());
+                    ( CreatureStatistic ) economyCreature.getUpgradedStats(), null,
+                    economyCreature.getAmount() );
+            } )
+            .collect( Collectors.toList() );
 
-        return new Hero(creatures);
+        return new Hero( creatures );
     }
 }

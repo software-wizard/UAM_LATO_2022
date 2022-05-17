@@ -1,9 +1,9 @@
 package pl.psi.artifacts;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 public interface ArtifactIf {
-
     ArtifactRank getRank();
 
     ArtifactPlacement getPlacement();
@@ -12,7 +12,7 @@ public interface ArtifactIf {
 
     String getDescription();
 
-    double getPrice();
+    BigDecimal getPrice();
 
-    Set<ArtifactEffect<ArtifactEffectApplicable>> getEffects();
+    Set< ArtifactEffect< ArtifactEffectApplicable > > getEffects();
 }

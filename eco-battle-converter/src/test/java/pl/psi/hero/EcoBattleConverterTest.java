@@ -6,6 +6,8 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import pl.psi.artifacts.Artifact;
 import pl.psi.artifacts.ArtifactApplierTarget;
@@ -19,19 +21,28 @@ import pl.psi.creatures.CreatureStatisticIf;
 import pl.psi.creatures.EconomyCreature;
 import pl.psi.creatures.EconomyNecropolisFactory;
 
-class EcoBattleConverterTest {
+class EcoBattleConverterTest
+{
+  static EconomyNecropolisFactory necropolisFactory;
+
+  @BeforeAll
+  static void init()
+  {
+      necropolisFactory = new EconomyNecropolisFactory();
+  }
 
   @Test
-  void shouldConvertCreaturesCorrectly() {
-    final EconomyHero ecoHero = new EconomyHero(EconomyHero.Fraction.NECROPOLIS, 1000);
-    final EconomyNecropolisFactory factory = new EconomyNecropolisFactory();
-    ecoHero.addCreature(factory.create(false, 1, 1));
-    ecoHero.addCreature(factory.create(false, 2, 2));
-    ecoHero.addCreature(factory.create(false, 3, 3));
-    ecoHero.addCreature(factory.create(false, 4, 4));
-    ecoHero.addCreature(factory.create(false, 5, 5));
-    ecoHero.addCreature(factory.create(false, 6, 6));
-    ecoHero.addCreature(factory.create(false, 7, 7));
+  void shouldConvertCreaturesCorrectly()
+  {
+    final EconomyHero ecoHero = new EconomyHero( EconomyHero.Fraction.NECROPOLIS, 1000 );
+
+    ecoHero.addCreature(necropolisFactory.create(false, 1, 1));
+    ecoHero.addCreature(necropolisFactory.create(false, 2, 2));
+    ecoHero.addCreature(necropolisFactory.create(false, 3, 3));
+    ecoHero.addCreature(necropolisFactory.create(false, 4, 4));
+    ecoHero.addCreature(necropolisFactory.create(false, 5, 5));
+    ecoHero.addCreature(necropolisFactory.create(false, 6, 6));
+    ecoHero.addCreature(necropolisFactory.create(false, 7, 7));
 
     final List<Creature> convertedCreatures = EcoBattleConverter.convert(ecoHero)
         .getCreatures();
@@ -76,91 +87,122 @@ class EcoBattleConverterTest {
 
 
   @Test
-  void shouldNotApplyAnyEffectsWhenNoEffectsGiven() {
+  void shouldNotApplyAnyEffectsWhenNoEffectsGiven()
+  {
     // given
-    final EconomyNecropolisFactory factory = new EconomyNecropolisFactory();
     final Artifact artifact = Artifact.builder()
-        .effects(Collections.emptySet())
+        .effects( Collections.emptySet() )
         .build();
-    final EconomyCreature economyCreature = factory.create(false, 2, 2);
+    final EconomyCreature economyCreature = necropolisFactory.create( false, 2, 2 );
 
     // when
-    artifact.applyTo(economyCreature);
+    artifact.applyTo( economyCreature );
 
     // then
     final CreatureStatisticIf upgradedStats = economyCreature.getUpgradedStats();
     final CreatureStatistic baseStats = economyCreature.getBaseStats();
 
-    assertEquals(baseStats.getAttack(), upgradedStats.getAttack());
-    assertEquals(baseStats.getMaxHp(), upgradedStats.getMaxHp());
-    assertEquals(baseStats.getArmor(), upgradedStats.getArmor());
+    assertEquals( baseStats.getAttack(), upgradedStats.getAttack() );
+    assertEquals( baseStats.getMaxHp(), upgradedStats.getMaxHp() );
+    assertEquals( baseStats.getArmor(), upgradedStats.getArmor() );
 
   }
 
   @Test
-  void shouldApplyArtifactCorrectly() {
+  void shouldApplyArtifactWithAddApplyingTypeCorrectly()
+  {
     // given
-    final EconomyNecropolisFactory factory = new EconomyNecropolisFactory();
-    final ArtifactEffect<ArtifactEffectApplicable> effect1 = ArtifactEffect.builder()
-        .effectValue(BigDecimal.valueOf(2))
-        .effectApplyingMode(ArtifactApplyingMode.ADD)
-        .applierTarget(ArtifactApplierTarget.ATTACK)
+    final ArtifactEffect< ArtifactEffectApplicable > effect1 = ArtifactEffect.builder()
+        .effectValue( BigDecimal.valueOf( 2 ) )
+        .effectApplyingMode( ArtifactApplyingMode.ADD )
+        .applierTarget( ArtifactApplierTarget.ATTACK )
         .build();
 
-    final ArtifactEffect<ArtifactEffectApplicable> effect2 = ArtifactEffect.builder()
-        .effectValue(BigDecimal.valueOf(-2))
-        .effectApplyingMode(ArtifactApplyingMode.ADD)
-        .applierTarget(ArtifactApplierTarget.HEALTH)
+    final ArtifactEffect< ArtifactEffectApplicable > effect2 = ArtifactEffect.builder()
+        .effectValue( BigDecimal.valueOf( -2 ) )
+        .effectApplyingMode( ArtifactApplyingMode.ADD )
+        .applierTarget( ArtifactApplierTarget.HEALTH )
         .build();
 
-    final ArtifactEffect<ArtifactEffectApplicable> effect3 = ArtifactEffect.builder()
-        .effectValue(BigDecimal.valueOf(-3))
-        .effectApplyingMode(ArtifactApplyingMode.ADD)
-        .applierTarget(ArtifactApplierTarget.DEFENCE)
+    final ArtifactEffect< ArtifactEffectApplicable > effect3 = ArtifactEffect.builder()
+        .effectValue( BigDecimal.valueOf( -3 ) )
+        .effectApplyingMode( ArtifactApplyingMode.ADD )
+        .applierTarget( ArtifactApplierTarget.DEFENCE )
         .build();
 
     final Artifact artifact = Artifact.builder()
-        .effects(Set.of(effect1, effect2, effect3))
+        .effects( Set.of( effect1, effect2, effect3 ) )
         .build();
 
-    final EconomyCreature economyCreature = factory.create(false, 2, 2);
+    final EconomyCreature economyCreature = necropolisFactory.create( false, 2, 2 );
 
     // when
-    artifact.applyTo(economyCreature);
+    artifact.applyTo( economyCreature );
 
     // then
     final CreatureStatisticIf upgradedStats = economyCreature.getUpgradedStats();
     final CreatureStatistic baseStats = economyCreature.getBaseStats();
 
-    assertEquals(baseStats.getAttack() + 2, upgradedStats.getAttack());
-    assertEquals(baseStats.getMaxHp() - 2, upgradedStats.getMaxHp());
-    assertEquals(baseStats.getArmor() - 3, upgradedStats.getArmor());
+    assertEquals( baseStats.getAttack() + 2, upgradedStats.getAttack() );
+    assertEquals( baseStats.getMaxHp() - 2, upgradedStats.getMaxHp() );
+    assertEquals( baseStats.getArmor() - 3, upgradedStats.getArmor() );
   }
 
   @Test
-  void shouldApplyArtifactWithMultiplyEffectCorrectly() {
+  void shouldApplyArtifactWithMultiplyApplyingTypeCorrectly()
+  {
     // given
-    final EconomyNecropolisFactory factory = new EconomyNecropolisFactory();
-    final ArtifactEffect<ArtifactEffectApplicable> effect1 = ArtifactEffect.builder()
-        .effectValue(BigDecimal.valueOf(0.2))
-        .effectApplyingMode(ArtifactApplyingMode.MULTIPLY)
-        .applierTarget(ArtifactApplierTarget.ATTACK)
+    final ArtifactEffect< ArtifactEffectApplicable > effect1 = ArtifactEffect.builder()
+        .effectValue( BigDecimal.valueOf( 0.2 ) )
+        .effectApplyingMode( ArtifactApplyingMode.MULTIPLY )
+        .applierTarget( ArtifactApplierTarget.ATTACK )
         .build();
 
     final Artifact artifact = Artifact.builder()
-        .effects(Set.of(effect1))
+        .effects( Set.of( effect1 ) )
         .build();
 
-    final EconomyCreature economyCreature = factory.create(false, 2, 2);
+    final EconomyCreature economyCreature = necropolisFactory.create( false, 2, 2 );
 
     // when
-    artifact.applyTo(economyCreature);
+    artifact.applyTo( economyCreature );
 
     // then
     final CreatureStatisticIf upgradedStats = economyCreature.getUpgradedStats();
     final CreatureStatistic baseStats = economyCreature.getBaseStats();
 
-    assertEquals( (int) (baseStats.getAttack() + baseStats.getAttack() * 0.2),
-        upgradedStats.getAttack());
+    assertEquals( (int) (baseStats.getAttack() + baseStats.getAttack() * 0.2 ), upgradedStats.getAttack() );
+  }
+
+  @Test
+  void shouldApplyArtifactWithBothMultiplyAndAddApplyingTypeCorrectly()
+  {
+    // given
+    final ArtifactEffect< ArtifactEffectApplicable > effect1 = ArtifactEffect.builder()
+            .effectValue( BigDecimal.valueOf( 0.2 ) )
+            .effectApplyingMode( ArtifactApplyingMode.MULTIPLY )
+            .applierTarget( ArtifactApplierTarget.HEALTH )
+            .build();
+
+    final ArtifactEffect< ArtifactEffectApplicable > effect2 = ArtifactEffect.builder()
+            .effectValue( BigDecimal.valueOf( 3 ) )
+            .effectApplyingMode( ArtifactApplyingMode.ADD )
+            .applierTarget( ArtifactApplierTarget.HEALTH )
+            .build();
+
+    final Artifact artifact = Artifact.builder()
+            .effects( Set.of( effect1, effect2 ) )
+            .build();
+
+    final EconomyCreature economyCreature = necropolisFactory.create( false, 2, 2 );
+
+    // when
+    artifact.applyTo( economyCreature );
+
+    // then
+    final CreatureStatisticIf upgradedStats = economyCreature.getUpgradedStats();
+    final CreatureStatistic baseStats = economyCreature.getBaseStats();
+
+    assertEquals( (int) ( baseStats.getMaxHp() + ( baseStats.getMaxHp() * 0.2 ) + 3 ), upgradedStats.getMaxHp() );
   }
 }

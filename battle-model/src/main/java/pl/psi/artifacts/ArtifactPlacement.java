@@ -1,7 +1,7 @@
 package pl.psi.artifacts;
 
-enum ArtifactPlacement {
-
+enum ArtifactPlacement
+{
     HEAD,
 
     NECK,
@@ -14,5 +14,5 @@ enum ArtifactPlacement {
 
     LEFT_HAND,
 
-    FEET;
+    FEET
 }

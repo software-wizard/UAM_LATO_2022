@@ -1,10 +1,10 @@
 package pl.psi.artifacts;
 
-public enum ArtifactApplierTarget {
-
+public enum ArtifactApplierTarget
+{
   HEALTH,
 
   ATTACK,
 
-  DEFENCE;
+  DEFENCE
 }
