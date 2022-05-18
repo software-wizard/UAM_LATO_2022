@@ -13,10 +13,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import lombok.SneakyThrows;
 import pl.psi.EconomyEngine;
+import pl.psi.ProductType;
 import pl.psi.converter.EcoBattleConverter;
-import pl.psi.products.Products;
-import pl.psi.products.creatures.EconomyCreature;
-import pl.psi.products.creatures.EconomyNecropolisFactory;
+import pl.psi.creatures.EconomyCreature;
+import pl.psi.creatures.EconomyNecropolisFactory;
 import pl.psi.hero.EconomyHero;
 
 import javafx.fxml.FXML;
@@ -25,6 +25,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import pl.psi.shop.BuyProductInterface;
 
 public class EcoController implements PropertyChangeListener
 {
@@ -91,8 +92,7 @@ public class EcoController implements PropertyChangeListener
         {
             CreatureButton button = new CreatureButton( this, factory, false, i );
             String name = i + "0";
-            // commit - Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/creatures/"+name+".png")));
-            Image image = new Image(new FileInputStream("D:\\4 semestr informatyka\\Zaawansowane programowanie w Javie\\Projekt\\UAM_LATO_2022-develop — kopia1\\economy-gui\\src\\main\\resources\\creatures\\"+name+".png"));
+            Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/creatures/"+name+".png")));
             ImageView imageView = new ImageView(image);
             imageView.setFitHeight(40);
             imageView.setFitWidth(40);
@@ -102,8 +102,7 @@ public class EcoController implements PropertyChangeListener
 
             CreatureButton button2 = new CreatureButton( this, factory, true, i );
             String name2 = i + "1";
-            // commit - Image image2 = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/creatures/"+name2+".png")));
-            Image image2 = new Image(new FileInputStream("D:\\4 semestr informatyka\\Zaawansowane programowanie w Javie\\Projekt\\UAM_LATO_2022-develop — kopia1\\economy-gui\\src\\main\\resources\\creatures\\"+name2+".png"));
+            Image image2 = new Image("creatures/"+name2+".png");
             ImageView imageView2 = new ImageView(image2);
             imageView2.setFitHeight(40);
             imageView2.setFitWidth(40);
@@ -129,7 +128,7 @@ public class EcoController implements PropertyChangeListener
                 .add( creaturesBox );
     }
 
-    void buy(Products product , final EconomyCreature aCreature )
+    void buy(ProductType product , final BuyProductInterface aCreature )
     {
         economyEngine.buy( product,aCreature );
     }
