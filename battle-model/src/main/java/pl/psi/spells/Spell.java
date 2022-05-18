@@ -1,31 +1,36 @@
 package pl.psi.spells;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import pl.psi.creatures.Creature;
 
-@AllArgsConstructor
+import java.util.List;
+import java.util.Optional;
+
+
 @Getter
 @Setter
 @ToString
-public class Spell {
+public abstract class Spell<T> {
 
-    private final int category; // 1 - Damage, 2 - Buff/Debuff, 3 - obszar
+    private final SpellsCategories category;
     private final String name;
     private final int rang;
     private final int manaCost;
-    private String fieldToChange;
-    private int value;
     private final int multiplier;
+    private T value;
 
-    public Spell(int category, String name, int rang, int manaCost, int value, int multiplier) {
+    public Spell(SpellsCategories category, String name, int rang, int manaCost, int multiplier, T value) {
         this.category = category;
         this.name = name;
         this.rang = rang;
         this.manaCost = manaCost;
-        this.value = value;
         this.multiplier = multiplier;
+        this.value = value;
     }
 
+    public abstract void castSpell(final Creature aDefender);
+
+    public abstract void castSpell(final List<Optional<Creature>> aDefender);
 }

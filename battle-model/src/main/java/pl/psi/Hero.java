@@ -1,6 +1,7 @@
 package pl.psi;
 
 import java.util.List;
+import java.util.Set;
 
 import pl.psi.creatures.Creature;
 
@@ -14,20 +15,13 @@ import pl.psi.spells.Spell;
 public class Hero
 {
     private final List< Creature > creatures;
-    private final List<Spell> spells;
+    private final Set<Spell> spells;
     private int spellPower;
 
 
-    public Hero(final List<Creature> aCreatures, List<Spell> spells)
+    public Hero(final List<Creature> aCreatures, Set<Spell> spells)
     {
         creatures = aCreatures;
         this.spells = spells;
-    }
-
-    public Hero(final List<Creature> aCreatures, List<Spell> spells, int spellPower)
-    {
-        creatures = aCreatures;
-        this.spells = spells;
-        this.spellPower = spellPower;
     }
 }

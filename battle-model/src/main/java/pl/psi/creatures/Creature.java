@@ -8,18 +8,16 @@ package pl.psi.creatures;//  ***************************************************
 
 import com.google.common.collect.Range;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 import pl.psi.TurnQueue;
-import pl.psi.spells.CalculateSpellDamage;
-import pl.psi.spells.SpellDamageCalculatorIf;
+import pl.psi.spells.Spell;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 /**
  * TODO: Describe this class (The first line - until the first dot - will interpret as the brief description).
@@ -28,6 +26,8 @@ import java.util.stream.Collectors;
 @ToString
 public class Creature implements PropertyChangeListener {
     private CreatureStatisticIf stats;
+    @Setter
+    private CreatureStatisticIf statsWithSpells;
     private int amount;
     private int currentHp;
     private int counterAttackCounter = 1;
@@ -54,32 +54,14 @@ public class Creature implements PropertyChangeListener {
         }
     }
 
-    public void castSpell(final Creature aDefender, int damage) {
-        if (isAlive()) {
-            applyDamage(aDefender, damage);
-        }
+    public void castSpell(final Creature aDefender, Spell spell) {
+        if (isAlive())
+            spell.castSpell(aDefender);
     }
 
-
-    public void castSpell(final Creature aDefender, String statName, int value) throws NoSuchFieldException, IllegalAccessException {
+    public void castSpell(final List<Optional<Creature>> aDefender, Spell spell) {
         if (isAlive()) {
-            Field filedToChange = aDefender.getStats().getClass().getDeclaredField(statName); // ToDo: Think about finding setter / method
-            filedToChange.setAccessible(true);
-
-            int actualValue = (Integer) filedToChange.get(aDefender.getStats());
-            filedToChange.set(aDefender.getStats(), actualValue + value);
-        }
-    }
-
-    public void castSpell(final List<Optional<Creature>> aDefender, int damage) {
-        if (isAlive()) {
-            List<Creature> creaturesInSpellRange = aDefender.stream()
-                    .flatMap(Optional::stream)
-                    .collect(Collectors.toList());
-
-            for (Creature creature : creaturesInSpellRange) {
-                applyDamage(creature, damage);
-            }
+            spell.castSpell(aDefender);
         }
     }
 
@@ -91,7 +73,7 @@ public class Creature implements PropertyChangeListener {
         aDefender.setCurrentHp(aDefender.getCurrentHp() - aDamage);
     }
 
-    protected void setCurrentHp(final int aCurrentHp) {
+    public void setCurrentHp(final int aCurrentHp) {
         currentHp = aCurrentHp;
     }
 

@@ -48,13 +48,13 @@ public class Start extends Application
 
     private Hero createP2()
     {
-        final Hero ret = new Hero( List.of( new NecropolisFactory().create( true, 1, 5 ) ), Collections.emptyList());
+        final Hero ret = new Hero( List.of( new NecropolisFactory().create( true, 1, 5 ) ), Collections.emptySet());
         return ret;
     }
 
     private Hero createP1()
     {
-        final Hero ret = new Hero( List.of( new NecropolisFactory().create( false, 1, 5 ) ), Collections.emptyList());
+        final Hero ret = new Hero( List.of( new NecropolisFactory().create( false, 1, 5 ) ), Collections.emptySet());
         return ret;
     }
 

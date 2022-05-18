@@ -2,7 +2,6 @@ package pl.psi;
 
 import lombok.Getter;
 import pl.psi.creatures.Creature;
-import pl.psi.spells.CalculateSpellDamage;
 import pl.psi.spells.Spell;
 
 import java.beans.PropertyChangeListener;
@@ -63,33 +62,28 @@ public class GameEngine {
         return false;
     }
 
-    public void castSpell(final Point point, Spell spell, int spellPower) {
+    public void castSpell(final Point point, Spell spell) {
         switch (spell.getCategory()) {
-            case 1:
-                Creature creature =  turnQueue.getCurrentCreature();
-                final int spellDamage = new CalculateSpellDamage().calculate(creature, spell.getMultiplier(), spellPower, spell.getValue());
+            case DAMAGE:
+                Creature creature = turnQueue.getCurrentCreature();
                 board.getCreature(point)
-                        .ifPresent(defender ->creature.castSpell(defender, spellDamage));
+                        .ifPresent(defender -> creature.castSpell(defender, spell));
                 break;
-            case 2:
+            case BUFF_DEBUFF:
                 board.getCreature(point)
                         .ifPresent(defender -> {
-                            try {
-                                turnQueue.getCurrentCreature()
-                                        .castSpell(defender, spell.getFieldToChange(), spell.getValue());
-                            } catch (NoSuchFieldException | IllegalAccessException e) {
-                                e.printStackTrace();
-                            }
+                            turnQueue.getCurrentCreature()
+                                    .castSpell(defender, spell);
                         });
                 break;
-            case 3:
+            case AREA:
                 List<Optional<Creature>> creatureList = new ArrayList<>();
                 if (board.getCreature(new Point(point.getX(), point.getY() + 1)).isPresent())
                     creatureList.add(board.getCreature(new Point(point.getX(), point.getY() + 1)));
                 board.getCreature(point)
                         .ifPresent(defender -> {
                                     creatureList.add(board.getCreature(point));
-                                    turnQueue.getCurrentCreature().castSpell(creatureList, spell.getValue());
+                                    turnQueue.getCurrentCreature().castSpell(creatureList, spell);
                                 }
                         );
                 break;

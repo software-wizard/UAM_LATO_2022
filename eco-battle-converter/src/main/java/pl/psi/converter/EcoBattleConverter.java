@@ -1,8 +1,7 @@
 package pl.psi.converter;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import pl.psi.Hero;
 import pl.psi.creatures.Creature;
@@ -43,7 +42,7 @@ public class EcoBattleConverter {
                 .forEach(ecoCreature -> creatures.add(factory.create(ecoCreature.isUpgraded(),
                         ecoCreature.getTier(), ecoCreature.getAmount())));
 
-        final List<Spell> spells = new ArrayList<>();
+        final Set<Spell> spells = new HashSet<>();
         final SpellFactory spellFactory = new SpellFactory();
         aPlayer1.getSpellList()
                 .forEach(economySpell -> spells.add(spellFactory.create(economySpell.getName(), 1, 10)));
