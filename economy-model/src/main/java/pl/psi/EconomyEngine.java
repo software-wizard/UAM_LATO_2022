@@ -3,24 +3,29 @@ package pl.psi;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
-import pl.psi.products.BuyProductInterface;
-import pl.psi.products.Products;
-import pl.psi.hero.CreatureShop;
+import pl.psi.artifacts.Artifact;
+import pl.psi.creatures.EconomyCreature;
+import pl.psi.shop.ArtifactShop;
+import pl.psi.shop.BuyProductInterface;
+import pl.psi.shop.CreatureShop;
 import pl.psi.hero.EconomyHero;
 
 public class EconomyEngine
 {
     public static final String HERO_BOUGHT_CREATURE = "HERO_BOUGHT_CREATURE";
     public static final String ACTIVE_HERO_CHANGED = "ACTIVE_HERO_CHANGED";
+    public static final String HERO_BOUGHT_ARTIFACT = "HERO_BOUGHT_ARTIFACT";
     public static final String NEXT_ROUND = "NEXT_ROUND";
     public static final String END_SHOPPING = "END_SHOPPING";
     private final EconomyHero hero1;
     private final EconomyHero hero2;
     private final CreatureShop creatureShop = new CreatureShop();
+    private final ArtifactShop artifactShop = new ArtifactShop();
     private final PropertyChangeSupport observerSupport;
     private EconomyHero activeHero;
     private boolean end;
 
+    // we have 2 rounds for each Hero
     private int roundNumber;
 
     public EconomyEngine( final EconomyHero aHero1, final EconomyHero aHero2 )
@@ -32,10 +37,19 @@ public class EconomyEngine
         observerSupport = new PropertyChangeSupport( this );
     }
 
-    public void buy(Products product , final BuyProductInterface buyProduct )
+    public void buy(ProductType product , final BuyProductInterface buyProduct )
     {
-        creatureShop.buy( product ,activeHero, buyProduct );
-        observerSupport.firePropertyChange( HERO_BOUGHT_CREATURE, null, null );
+        if(product.equals(ProductType.CREATURE)){
+            EconomyCreature creature = (EconomyCreature)buyProduct;
+            creatureShop.addToHero(creature,activeHero);
+            observerSupport.firePropertyChange( HERO_BOUGHT_CREATURE, null, null );
+        }
+        else if(product.equals(ProductType.ARTIFACT)){
+            Artifact artifact = (Artifact) buyProduct;
+            artifactShop.addToHero(artifact,activeHero);
+            observerSupport.firePropertyChange( HERO_BOUGHT_ARTIFACT, null, null );
+        }
+
     }
 
     public EconomyHero getActiveHero()
@@ -43,6 +57,7 @@ public class EconomyEngine
         return activeHero;
     }
 
+    // next round , change activeHero
     public void pass()
     {
 

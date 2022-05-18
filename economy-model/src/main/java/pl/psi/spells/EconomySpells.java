@@ -1,4 +1,4 @@
-package pl.psi.products.spells;
+package pl.psi.spells;
 
 public class EconomySpells {
 }

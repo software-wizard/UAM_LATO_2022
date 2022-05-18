@@ -1,4 +1,4 @@
-package pl.psi.products.skills;
+package pl.psi.skills;
 
 public class EconomySkills {
 }

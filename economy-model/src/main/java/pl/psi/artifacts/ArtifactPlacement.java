@@ -1,4 +1,4 @@
-package pl.psi.products.artifacts;
+package pl.psi.artifacts;
 
 public enum ArtifactPlacement {
 

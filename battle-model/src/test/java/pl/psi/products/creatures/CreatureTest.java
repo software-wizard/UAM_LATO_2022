@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import pl.psi.TurnQueue;
 
 import com.google.common.collect.Range;
+import pl.psi.creatures.CreatureStats;
 
 /**
  * TODO: Describe this class (The first line - until the first dot - will interpret as the brief description).

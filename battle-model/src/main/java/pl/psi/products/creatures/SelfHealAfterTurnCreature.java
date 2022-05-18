@@ -3,6 +3,7 @@ package pl.psi.products.creatures;
 import java.beans.PropertyChangeEvent;
 
 import com.google.common.collect.Range;
+import pl.psi.creatures.CreatureStatisticIf;
 
 /**
  * TODO: Describe this class (The first line - until the first dot - will interpret as the brief description).

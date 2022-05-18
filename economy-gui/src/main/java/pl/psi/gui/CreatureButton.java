@@ -1,7 +1,11 @@
 package pl.psi.gui;
 
-import pl.psi.products.Products;
-import pl.psi.products.creatures.EconomyNecropolisFactory;
+import javafx.geometry.Orientation;
+import javafx.scene.paint.Color;
+import javafx.stage.StageStyle;
+import pl.psi.ProductType;
+import pl.psi.creatures.EconomyCreature;
+import pl.psi.creatures.EconomyNecropolisFactory;
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -20,19 +24,33 @@ public class CreatureButton extends Button
 
     private final String creatureName;
     private Stage dialog;
+    private final int cost;
+    private final String characteristics;
 
+    // create each button to each Creature from Factory ( Factory must delivery another group )
     public CreatureButton( final EcoController aEcoController, final EconomyNecropolisFactory aFactory,
                            final boolean aUpgraded, final int aTier )
     {
         super( aFactory.create( aUpgraded, aTier, 1 ).getName() );
-        creatureName = aFactory.create( aUpgraded, aTier, 1 ).getName();
+        EconomyCreature creature = aFactory.create( aUpgraded, aTier, 1 );
+        creatureName = creature.getName();
+        cost = creature.getGoldCost();
+        String upgraded = null;
+        if(aUpgraded)
+            upgraded = " upgrated";
+        else
+            upgraded = " not upgrated";
+
+        characteristics = "Tier : "+creature.getTier()+" , "+upgraded+" | Attack : "+creature.getStats().getAttack()+
+                " | Armor : "+creature.getStats().getArmor()+" | HP : "+creature.getStats().getMaxHp();
+
         getStyleClass().add( "creatureButton" );
 
         addEventHandler( MouseEvent.MOUSE_CLICKED, ( e ) -> {
             final int amount = startDialogAndGetCreatureAmount();
             if( amount != 0 )
             {
-                aEcoController.buy(Products.CREATURE, aFactory.create( aUpgraded, aTier, amount ) );
+                aEcoController.buy(ProductType.CREATURE, aFactory.create( aUpgraded, aTier, amount ) );
             }
             try {
                 aEcoController.refreshGui();
@@ -46,11 +64,11 @@ public class CreatureButton extends Button
     {
         final VBox centerPane = new VBox();
         final HBox bottomPane = new HBox();
-        final HBox topPane = new HBox();
-        final Stage dialog = prepareWindow( centerPane, bottomPane, topPane );
+        final FlowPane topPane = new FlowPane(Orientation.HORIZONTAL,0,5);
+        final Stage dialog = prepareWindow( centerPane, bottomPane, topPane);
         final Slider slider = createSlider();
         prepareConfirmAndCancelButton( bottomPane, slider );
-        prepareTop( topPane, slider );
+        prepareTop( topPane,slider);
         centerPane.getChildren()
                 .add( slider );
 
@@ -59,30 +77,50 @@ public class CreatureButton extends Button
         return (int)slider.getValue();
     }
 
-    private void prepareTop( final HBox aTopPane, final Slider aSlider )
+
+    // Top of window of buying
+    private void prepareTop( final FlowPane aTopPane,final Slider aSlider )
     {
         // TODO creature cops should be visible here
-        aTopPane.getChildren().add( new Label( "Single Cost: " + "0" ) );
-        aTopPane.getChildren().add( new Label( "Amount:" ) );
+        aTopPane.getChildren().add( new Label( "Single Cost: " + cost ) );
 
+        aTopPane.getChildren().add( new Label( "Amount:" ) );
         final Label slideValueLabel = new Label( "0" );
         aTopPane.getChildren().add( slideValueLabel );
-        aTopPane.getChildren().add( new Label( "Purchase Cost: " ) );
 
-        aSlider.valueProperty().addListener(( slider, aOld, aNew ) -> slideValueLabel.setText( String.valueOf( aNew.intValue() ) ) );
+        aTopPane.getChildren().add( new Label( "Purchase Cost: " ) );
+        final Label purchaseCost = new Label( "0" );
+        aTopPane.getChildren().add( purchaseCost );
+
+        aTopPane.getChildren().add( new Label( "             " ) );
+        aTopPane.getChildren().add(new Label(characteristics));
+
+
+        aSlider.valueProperty().addListener(( slider, aOld, aNew )
+                -> {
+            slideValueLabel.setText(String.valueOf(aNew.intValue()));
+            purchaseCost.setText(String.valueOf(aNew.intValue()*cost));
+
+        });
+
 
     }
 
-    private Stage prepareWindow( final Pane aCenter, final Pane aBottom, final Pane aTop )
+    // window of buying
+    private Stage prepareWindow( final Pane aCenter, final Pane aBottom, final Pane aTop)
     {
         dialog = new Stage();
         final BorderPane pane = new BorderPane();
-        final Scene scene = new Scene( pane, 500, 300 );
+        pane.setBorder(new Border(new BorderStroke(Color.BLACK,
+                BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+        final Scene scene = new Scene( pane, 600, 250 );
         scene.getStylesheets().add( "fxml/main.css" );
         dialog.setScene( scene );
         dialog.initOwner( this.getScene().getWindow() );
         dialog.initModality( Modality.APPLICATION_MODAL );
         dialog.setTitle( "Buying " + creatureName );
+        dialog.initStyle(StageStyle.UNDECORATED);
+
 
         pane.setTop( aTop );
         pane.setCenter( aCenter );
@@ -90,6 +128,7 @@ public class CreatureButton extends Button
         return dialog;
     }
 
+    // Close , OK button
     private void prepareConfirmAndCancelButton( final HBox aBottomPane, final Slider aSlider )
     {
         final Button okButton = new Button( "OK" );
@@ -112,13 +151,13 @@ public class CreatureButton extends Button
                 .add( cancelButton );
     }
 
-
+    // Choose amount of creatures
     private Slider createSlider()
     {
         final Slider slider = new Slider();
         slider.setMin( 0 );
         slider.setMax( 20 );
-        slider.setValue( 1 );
+        slider.setValue( 0 );
         slider.setShowTickLabels( true );
         slider.setShowTickMarks( true );
         slider.setMajorTickUnit( 10 );

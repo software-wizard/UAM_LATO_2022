@@ -1,12 +1,14 @@
 package pl.psi.hero;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import pl.psi.creatures.EconomyCreature;
+import pl.psi.creatures.EconomyNecropolisFactory;
 
-import pl.psi.products.creatures.EconomyNecropolisFactory;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class EconomyHeroTest
 {
@@ -20,7 +22,7 @@ class EconomyHeroTest
     }
 
     @Test
-    void shouldNotAddNewCreaturesWhileHeroHas7TypesOfCreatures()
+    void shouldNotAddNewCreaturesWhenHeroHas7TypesOfCreaturesAndHeroTryToBuyNewTypeOfCreature()
     {
         final EconomyNecropolisFactory factory = new EconomyNecropolisFactory();
         hero.addCreature( factory.create( true, 1, 1 ) );
@@ -34,9 +36,9 @@ class EconomyHeroTest
         assertEquals( false, hero.canAddCreature(factory.create( false, 7, 1 )));
     }
 
-    // New Test
+
     @Test
-    void canAddNewCreaturesWhileHeroHas7PiecesOfCreatureOfTheSameTypeAndListOfCreaturesHasSize1()
+    void canAddNewCreaturesWhileHeroHas7CreatureOfTheSameTypeAndListOfCreaturesHasSize1()
     {
         final EconomyNecropolisFactory factory = new EconomyNecropolisFactory();
         hero.addCreature( factory.create( true, 1, 1 ) );
@@ -72,34 +74,20 @@ class EconomyHeroTest
         assertThrows( IllegalStateException.class, () -> hero.substractGold( hero.getGold() + 1 ) );
     }
 
+
     @Test
-    void shouldAddNumbersOfCreaturesAndChangeLimitOfArtifactsOfHeroCorrectly(){
+    void getCreatureListNotReturnReference(){
         final EconomyNecropolisFactory factory = new EconomyNecropolisFactory();
         hero.addCreature( factory.create( true, 1, 1 ) );
         hero.addCreature( factory.create( true, 2, 3 ) );
         hero.addCreature( factory.create( true, 3, 5 ) );
-        hero.addCreature( factory.create( true, 1, 1 ) );
-        assertEquals(10, hero.getNumberOfCreatures());
-        assertEquals(10,hero.getStatistics().getLimitHead());
-        hero.addCreature( factory.create( true, 1, 2 ) );
-        assertEquals(12, hero.getNumberOfCreatures());
-        assertEquals(12,hero.getStatistics().getLimitHead());
 
-    }
+        List<EconomyCreature> economyCreatureList = hero.getCreatureList();
+        economyCreatureList.add(factory.create( true, 4, 1 ));
+        assertEquals(4,economyCreatureList.size());
+        assertEquals(3,hero.getCreatureList().size());
 
-    @Test
-    void shouldHeroBuyCreaturesOfTheTypeHeHasIfHeHas7TypesOfCreatures(){
-        final EconomyNecropolisFactory factory = new EconomyNecropolisFactory();
-        hero.addCreature( factory.create( true, 1, 1 ) );
-        hero.addCreature( factory.create( true, 2, 1 ) );
-        hero.addCreature( factory.create( true, 3, 1 ) );
-        hero.addCreature( factory.create( true, 4, 1 ) );
-        hero.addCreature( factory.create( true, 5, 1 ) );
-        hero.addCreature( factory.create( true, 6, 1 ) );
-        hero.addCreature( factory.create( true, 7, 1 ) );
 
-        assertEquals(7,hero.getCreatureList().size());
-        assertEquals( true, hero.canAddCreature(factory.create( true, 7, 1 )));
     }
 
 }

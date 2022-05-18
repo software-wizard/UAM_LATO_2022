@@ -1,4 +1,4 @@
-package pl.psi.products;
+package pl.psi.shop;
 
 public interface BuyProductInterface {
 

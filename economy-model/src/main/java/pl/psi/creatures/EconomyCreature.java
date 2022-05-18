@@ -1,8 +1,6 @@
-package pl.psi.products.creatures;
+package pl.psi.creatures;
 
-//import pl.psi.creatures.CreatureStatistic;
-
-import pl.psi.products.BuyProductInterface;
+import pl.psi.shop.BuyProductInterface;
 
 public class EconomyCreature implements BuyProductInterface
 {
@@ -32,6 +30,10 @@ public class EconomyCreature implements BuyProductInterface
         return goldCost;
     }
 
+    public CreatureStatistic getStats() {
+        return stats;
+    }
+
     public String getName()
     {
         return stats.getTranslatedName();
@@ -48,4 +50,8 @@ public class EconomyCreature implements BuyProductInterface
     }
 
 
+    public Object clone()  {
+        EconomyCreature aClone = new EconomyCreature(this.stats,this.amount,this.goldCost);
+        return aClone;
+    }
 }

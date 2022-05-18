@@ -6,8 +6,9 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import pl.psi.creatures.CreatureStats;
 import pl.psi.products.creatures.Creature;
-import pl.psi.products.creatures.CreatureStats;
+
 
 class BoardTest
 {

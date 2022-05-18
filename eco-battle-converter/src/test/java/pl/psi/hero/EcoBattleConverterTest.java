@@ -7,8 +7,9 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import pl.psi.converter.EcoBattleConverter;
+import pl.psi.creatures.EconomyNecropolisFactory;
 import pl.psi.products.creatures.Creature;
-import pl.psi.products.creatures.EconomyNecropolisFactory;
+
 
 class EcoBattleConverterTest
 {

@@ -1,35 +1,30 @@
 package pl.psi.hero;
 
-import pl.psi.products.artifacts.ArtifactPlacement;
-import pl.psi.products.artifacts.EconomyArtifact;
-import pl.psi.products.creatures.EconomyCreature;
-import pl.psi.products.skills.EconomySkills;
-import pl.psi.products.spells.EconomySpells;
+import pl.psi.artifacts.Artifact;
+import pl.psi.artifacts.ArtifactPlacement;
+import pl.psi.creatures.EconomyCreature;
+import pl.psi.skills.EconomySkills;
+import pl.psi.spells.EconomySpells;
 
 import java.util.ArrayList;
 import java.util.List;
-
-
 
 public class EconomyHero
 {
 
     private final Fraction fraction;
-    private final List<EconomyCreature> creatureList;
-    private final List<EconomyArtifact> artifactList;
+    private final List< EconomyCreature > creatureList;
+    private final List<Artifact> artifactList;
     private final List<EconomySkills> skillsList;
     private final List<EconomySpells> spellsList;
-    private int gold = 4000;
-    private int numberOfCreatures;
-    private HeroCanBuyStatistics buyStatistics;
+    // strat amount of gold
+    private int gold = 10000;
 
     private static int heroCounter = 0;
     private final int heroNumber;
 
     public EconomyHero( final Fraction aFraction)
     {
-        buyStatistics = new HeroCanBuyStatistics(0,0,0,0,0,0,0,0,0,0,0,0,0,0);
-        numberOfCreatures = 0;
         heroCounter++;
         heroNumber = heroCounter;
         fraction = aFraction;
@@ -39,9 +34,6 @@ public class EconomyHero
         spellsList = new ArrayList<>();
     }
 
-    public HeroCanBuyStatistics getStatistics() {
-        return buyStatistics;
-    }
 
     public int getGold()
     {
@@ -52,88 +44,89 @@ public class EconomyHero
         this.gold = gold;
     }
 
-    public int getNumberOfCreatures()
-    {
-        return numberOfCreatures;
-    }
 
     public List<EconomyCreature> getCreatureList() {
-        return creatureList;
+        List<EconomyCreature> economyCreatureList = new ArrayList<>();
+        for( EconomyCreature c: this.creatureList){
+            economyCreatureList.add((EconomyCreature) c.clone());
+        }
+        return economyCreatureList;
     }
 
 
-    public List<EconomyArtifact> getArtifactList() {
-        return artifactList;
-    }
 
-    public List<EconomySkills> getSkillsList() {
-        return skillsList;
-    }
-
-    public List<EconomySpells> getSpellsList() {
-        return spellsList;
-    }
-
-    void addCreature( final EconomyCreature aCreature ){
+    // Hero cannot buy more than 7 creatures
+    public void addCreature(final EconomyCreature aCreature){
 
         int w = 0;
-
+        // check if we have this creature in List
+        // and need only to increase amount
         for (EconomyCreature c : this.creatureList){
             if (c.getName().equals(aCreature.getName())){
                 c.increaseAmount(aCreature.getAmount());
-                numberOfCreatures = numberOfCreatures + aCreature.getAmount();
-                buyStatistics.addLimitForAmountOfCreatures(aCreature.getAmount());
                 w = 1;
             }
         }
 
         if( w == 0 ) {
             creatureList.add(aCreature);
-            numberOfCreatures = numberOfCreatures + aCreature.getAmount();
-            buyStatistics.addLimitForAmountOfCreatures(aCreature.getAmount());
         }
 
     }
 
-
-    void addArtifact (final EconomyArtifact artifact){
-        artifactList.add(artifact);
-        if(artifact.getArtifact().getPlacement().equals(ArtifactPlacement.HEAD)){
-            buyStatistics.setBoughtHead(buyStatistics.getBoughtHead() + artifact.getAmount());
-        }
+    public void addArtifact(Artifact artifact){
+        this.artifactList.add(artifact);
     }
 
-    boolean canAddCreature(EconomyCreature creature){
+    // check if Hero can add more Creatures - use in Shop
+    public boolean canAddCreature(EconomyCreature economyCreature){
 
-        if( creatureList.size() == 7 )
-        {
-            for(EconomyCreature c:this.creatureList){
-                if(c.getName().equals(creature.getName())){
-                    return true;
-                }
+        boolean heroHasThisCreature = false;
+        for(int i=0;i<this.creatureList.size();i++){
+            if(economyCreature.getName().equals(creatureList.get(i).getName())){
+                heroHasThisCreature = true;
             }
+        }
+
+        if(creatureList.size() == 7 && !heroHasThisCreature)
+        {
             return false;
         }
-
         return true;
     }
 
-    boolean canAddArtifact(ArtifactPlacement placement,int amount){
-        if(placement.equals(ArtifactPlacement.HEAD)) {
-            if (amount <= (buyStatistics.getLimitHead() - buyStatistics.getBoughtHead()))
-                return true;
-            else
+    public boolean canAddArtifact(ArtifactPlacement placement){
+        for(Artifact a : this.artifactList){
+            if(a.getPlacement().equals(placement))
                 return false;
         }
-        return false;
+        return true;
     }
+
+
 
     public List< EconomyCreature > getCreatures()
     {
-        return List.copyOf( creatureList );
+        List<EconomyCreature> economyCreatureList = new ArrayList<>();
+        for(EconomyCreature e:creatureList){
+            economyCreatureList.add((EconomyCreature) e.clone());
+        }
+     return economyCreatureList;
+
     }
 
-    void substractGold( final int aAmount )
+    public List< Artifact > getArtifacts()
+    {
+
+        List<Artifact> artifacts = new ArrayList<>();
+        for(Artifact e:artifactList){
+            artifacts.add((Artifact) e.clone());
+        }
+      return artifacts;
+
+    }
+
+    public void substractGold( final int aAmount )
     {
         if( aAmount > gold )
         {
@@ -142,6 +135,7 @@ public class EconomyHero
         gold -= aAmount;
     }
 
+    // potem dodać nazwy
     public enum Fraction
     {
         NECROPOLIS,
@@ -149,9 +143,17 @@ public class EconomyHero
         FRACTION;
     }
 
+    public int numberOfArtifacts(){
+        return this.artifactList.size();
+    }
+
 
     @Override
     public String toString() {
         return "Hero " + heroNumber ;
+    }
+
+    public int getHeroNumber(){
+        return heroNumber;
     }
 }

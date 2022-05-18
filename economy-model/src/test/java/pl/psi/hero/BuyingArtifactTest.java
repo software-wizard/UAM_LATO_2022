@@ -3,11 +3,10 @@ package pl.psi.hero;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import pl.psi.EconomyEngine;
-import pl.psi.products.Products;
-import pl.psi.products.artifacts.ArtifactPlacement;
-import pl.psi.products.artifacts.EconomyArtifact;
-import pl.psi.products.artifacts.EconomyArtifactFactory;
-import pl.psi.products.creatures.EconomyNecropolisFactory;
+import pl.psi.ProductType;
+import pl.psi.artifacts.ArtifactPlacement;
+import pl.psi.artifacts.EconomyArtifactFactory;
+import pl.psi.creatures.EconomyNecropolisFactory;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -29,22 +28,25 @@ public class BuyingArtifactTest {
     }
 
     @Test
-    void shouldHeroBuyArtifactAndNumberOfArtifactsCanChangeCorrectlyAndNumberOfBoughtArtifactsShouldIncrease(){
-        economyEngine.buy( Products.CREATURE,creatureFactory.create( false, 1, 1 ) );
-        EconomyArtifact economyArtifact = artifactFactory.create("Crown of Dragontooth",1);
-        economyEngine.buy(Products.ARTIFACT,economyArtifact);
-        assertEquals(3600,hero1.getGold());
-        assertEquals(1,hero1.getArtifactList().size());
-        assertEquals(1,hero1.getCreatureList().size());
-        assertEquals(1,hero1.getStatistics().getBoughtHead());
-        assertEquals(false,hero1.canAddArtifact(ArtifactPlacement.HEAD,1));
+    void shouldHeroBuyArtefact(){
+        economyEngine.buy(ProductType.ARTIFACT,artifactFactory.create("Cape of Conjuring"));
+        assertEquals(1,hero1.numberOfArtifacts());
     }
-
 
     @Test
-    void shouldNotBuyArtifactsIfHeroDidntBuyCreatures(){
-        EconomyArtifact economyArtifact = artifactFactory.create("Crown of Dragontooth",1);
-        assertThrows( IllegalStateException.class,
-                () -> economyEngine.buy(Products.ARTIFACT,economyArtifact) );
+    void shouldHeroBuyDifferentTypesOfArtifacts(){
+        economyEngine.buy(ProductType.ARTIFACT,artifactFactory.create("Cape of Conjuring"));
+        economyEngine.buy(ProductType.ARTIFACT,artifactFactory.create("Crown of Dragontooth"));
+        assertEquals(2,hero1.numberOfArtifacts());
+        assertEquals(ArtifactPlacement.SHOULDERS,hero1.getArtifacts().get(0).getPlacement());
+        assertEquals(ArtifactPlacement.HEAD,hero1.getArtifacts().get(1).getPlacement());
     }
+
+    @Test
+    void shouldThrowExceptionWhenHeroTryToBuyArtifactOfTheTypeHeHas(){
+        economyEngine.buy(ProductType.ARTIFACT,artifactFactory.create("Cape of Conjuring"));
+        assertThrows(IllegalStateException.class,
+                () -> economyEngine.buy(ProductType.ARTIFACT,artifactFactory.create("Cape of Conjuring")));
+    }
+
 }

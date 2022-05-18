@@ -1,6 +1,6 @@
-package pl.psi.products;
+package pl.psi;
 
-public enum Products {
+public enum ProductType {
     CREATURE,
     ARTIFACT,
     SKILLS,

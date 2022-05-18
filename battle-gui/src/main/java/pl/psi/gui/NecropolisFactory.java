@@ -1,7 +1,7 @@
 package pl.psi.gui;
 
 import pl.psi.products.creatures.Creature;
-import pl.psi.products.creatures.CreatureStatistic;
+import pl.psi.creatures.CreatureStatistic;
 
 public class NecropolisFactory
 {

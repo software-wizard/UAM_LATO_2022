@@ -1,5 +1,7 @@
 package pl.psi.products.creatures;
 
+import pl.psi.creatures.CreatureStatistic;
+
 /**
  * TODO: Describe this class (The first line - until the first dot - will interpret as the brief description).
  */
