@@ -7,18 +7,18 @@ import pl.psi.creatures.*;
  * Class that represents changing creature stats based on current skill
  */
 
-public class CalculateBuffStrategy {
+public class UpgradeCalculator {
 
-    private final SkillName skillName;
+    private final SkillType skillName;
     private final double skillEffect;
 
-    public CalculateBuffStrategy( SkillName aName, double aEffect )
+    public UpgradeCalculator(SkillType aName, double aEffect )
     {
         this.skillName = aName;
         this.skillEffect = aEffect;
     }
 
-    public CreatureStats getBuffedStats(Creature aCreature )
+    public CreatureStats calculate(Creature aCreature )
     {
         double changedStat;
         CreatureStats statsToApply = null;
@@ -54,7 +54,7 @@ public class CalculateBuffStrategy {
         return statsToApply;
     }
 
-    public void getBuffedStats( Hero aHero )
+    public void calculate(Hero aHero )
     {
         double changedStat;
         switch ( this.skillName )

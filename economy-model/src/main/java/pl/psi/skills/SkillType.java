@@ -1,6 +1,6 @@
 package pl.psi.skills;
 
-public enum SkillName {
+public enum SkillType {
 
     ARCHERY,
     OFFENCE,

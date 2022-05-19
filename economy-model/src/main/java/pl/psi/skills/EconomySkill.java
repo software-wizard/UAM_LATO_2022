@@ -14,31 +14,31 @@ import java.util.List;
 @Getter
 public class EconomySkill {
 
-    private final SkillName skillName;
-    private final int skillCost;
-    private final double skillEffect;
+    private final SkillType skillType;
+    private final SkillCostValueObject skillCost;
+    private final double factor;
 
-    private final CalculateBuffStrategy calculateBuffStrategy;
+    private final UpgradeCalculator upgradeCalculator;
 
-    public EconomySkill( SkillName aName, int aCost, double aEffect )
+    public EconomySkill(SkillType aType, int aCost, double aFactor )
     {
-        this.skillName = aName;
-        this.skillCost = aCost;
-        this.skillEffect = aEffect;
-        this.calculateBuffStrategy = new CalculateBuffStrategy(this.skillName, this.skillEffect);
+        this.skillType = aType;
+        this.skillCost = new SkillCostValueObject(aCost);
+        this.factor = aFactor;
+        this.upgradeCalculator = new UpgradeCalculator(this.skillType, this.factor);
     }
 
     public void apply( List<Creature> aCreatures )
     {
         aCreatures.forEach( aCreature -> {
-            CreatureStats statsToApply = this.calculateBuffStrategy.getBuffedStats(aCreature);
+            CreatureStats statsToApply = this.upgradeCalculator.calculate(aCreature);
             aCreature.buff(statsToApply);
         });
     }
 
     public void apply( Hero aHero )
     {
-        this.calculateBuffStrategy.getBuffedStats( aHero );
+        this.upgradeCalculator.calculate( aHero );
     }
 
     // method that will take spell as an argument
