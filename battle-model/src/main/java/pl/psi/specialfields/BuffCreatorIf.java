@@ -2,8 +2,9 @@ package pl.psi.specialfields;
 
 import pl.psi.creatures.Creature;
 
+import java.util.List;
+
 public interface BuffCreatorIf {
 
-    void putBuffOnCreature(Creature creature);
-    void putDebuffOnCreature(Creature creature);
+    void putBuffOnAllCreatures(List<Creature> creatures);
 }

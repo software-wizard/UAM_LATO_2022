@@ -26,6 +26,7 @@ public class Creature implements PropertyChangeListener
     private int amount;
     private int currentHp;
     private int counterAttackCounter = 1;
+    private int morale = 1; // range = < -3;3 >
     private DamageCalculatorIf calculator;
 
     Creature()
@@ -67,6 +68,18 @@ public class Creature implements PropertyChangeListener
     protected void setCurrentHp( final int aCurrentHp )
     {
         currentHp = aCurrentHp;
+    }
+
+    public void setMorale(final int aMorale) {
+        if (aMorale > 3) {
+            throw new IllegalArgumentException("Morale must not be greater than 3");
+        }
+
+        if (aMorale < -3) {
+            throw new IllegalArgumentException("Morale must not be less than 3");
+        }
+
+        morale = aMorale;
     }
 
     private boolean canCounterAttack( final Creature aDefender )

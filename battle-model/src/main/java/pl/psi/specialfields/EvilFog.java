@@ -4,6 +4,8 @@ import lombok.*;
 import pl.psi.Point;
 import pl.psi.creatures.Creature;
 
+import java.util.List;
+
 @Getter
 @Setter
 @ToString
@@ -15,13 +17,25 @@ public class EvilFog implements BuffCreatorIf {
     private Point point;
 
     @Override
-    public void putBuffOnCreature(Creature creature) {
+    public void putBuffOnAllCreatures(List<Creature> creatures) {
 
-    }
+        if (creatures == null) {
+            throw new IllegalArgumentException("Creatures list must not be null");
+        }
 
-    @Override
-    public void putDebuffOnCreature(Creature creature) {
+        if (creatures.isEmpty()) {
+            throw new IllegalArgumentException("Creatures list must not be empty");
+        }
 
+        creatures.forEach(creature -> {
+            var currentMorale = creature.getMorale();
+
+            if (!creature.getStats().isGoodAligned()) {
+                creature.setMorale(currentMorale + 1);
+            } else {
+                creature.setMorale(currentMorale - 1);
+            }
+        });
     }
 
 }
