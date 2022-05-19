@@ -3,23 +3,19 @@ package pl.psi.spells;
 import pl.psi.creatures.Creature;
 import pl.psi.creatures.CreatureStats;
 
-import java.util.List;
-import java.util.Optional;
 
+public class BuffDebuffSpell extends Spell<Creature> {
 
-public class BuffDebuffSpell extends Spell<CreatureStats> {
+    private final CreatureStats creatureStats;
 
-    public BuffDebuffSpell(SpellsCategories category, String name, int rang, int manaCost, int multiplier, CreatureStats value) {
-        super(category, name, rang, manaCost, multiplier, value);
+    public BuffDebuffSpell(SpellsCategories category, String name, SpellRang rang, int manaCost, CreatureStats creatureStats) {
+        super(category, name, rang, manaCost);
+        this.creatureStats = creatureStats;
     }
+
 
     @Override
     public void castSpell(Creature aDefender) {
-        aDefender.setStatsWithSpells(getValue());
-    }
-
-    @Override
-    public void castSpell(List<Optional<Creature>> aDefender) {
-
+        aDefender.setStatsWithSpells(creatureStats);
     }
 }

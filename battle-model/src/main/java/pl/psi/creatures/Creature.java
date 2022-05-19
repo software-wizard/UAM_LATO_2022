@@ -73,6 +73,10 @@ public class Creature implements PropertyChangeListener {
         aDefender.setCurrentHp(aDefender.getCurrentHp() - aDamage);
     }
 
+    public void applySpellDamage(Creature aDefender, Integer damage) {
+        aDefender.setCurrentHp(aDefender.getCurrentHp() - damage);
+    }
+
     public void setCurrentHp(final int aCurrentHp) {
         currentHp = aCurrentHp;
     }

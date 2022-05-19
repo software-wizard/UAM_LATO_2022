@@ -11,13 +11,16 @@ import pl.psi.creatures.CreatureStats;
 import java.util.List;
 import java.util.Set;
 
+import static pl.psi.spells.SpellRang.ADVANCED;
+import static pl.psi.spells.SpellRang.BASIC;
+
 
 public class SpellTest {
 
-    private static final Spell LIGHTING_BOLT_RANG_1 = new SpellFactory().create("LightingBolt", 1, 10);
-    private static final Spell LIGHTING_BOLT_RANG_2 = new SpellFactory().create("LightingBolt", 2, 10);
-    private static final Spell HASTE = new SpellFactory().create("Haste", 1, 10);
-    private static final Spell FIREBALL = new SpellFactory().create("FireBall", 1, 10);
+    private static final Spell LIGHTING_BOLT_RANG_1 = new SpellFactory().create("LightingBolt", BASIC, 10, 1);
+    private static final Spell LIGHTING_BOLT_RANG_2 = new SpellFactory().create("LightingBolt", ADVANCED, 10, 1);
+    private static final Spell HASTE = new SpellFactory().create("Haste", BASIC, 10,1);
+    private static final Spell FIREBALL = new SpellFactory().create("FireBall", BASIC, 10, 1);
 
     private final Creature EXAMPLE_CREATURE_1 = new Creature.Builder()
             .statistic(

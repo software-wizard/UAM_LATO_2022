@@ -1,49 +1,47 @@
 package pl.psi.spells;
 
-import pl.psi.creatures.CreatureStatisticIf;
 import pl.psi.creatures.CreatureStats;
 
-import java.util.List;
-
+import static pl.psi.spells.SpellRang.*;
 import static pl.psi.spells.SpellsCategories.*;
 
 public class SpellFactory {
 
     private static final String EXCEPTION_MESSAGE = "We support rang from 1 to 7";
 
-    public Spell<?> create(String name, int rang, int manaCost) {
+    public Spell<?> create(String name, SpellRang rang, int manaCost, int spellPower) {
 
         switch (name) {
             case "LightingBolt":
                 switch (rang) {
-                    case 1:
-                        return new DamageSpell(DAMAGE, name, rang, manaCost, 25, 10);
-                    case 2:
-                        return new DamageSpell(DAMAGE, name, rang, manaCost, 25, 20);
-                    case 3:
-                        return new DamageSpell(DAMAGE, name, rang, manaCost, 25, 50);
+                    case BASIC:
+                        return new DamageSpell(DAMAGE, name, BASIC, manaCost, (spellPower * 25) + 10);
+                    case ADVANCED:
+                        return new DamageSpell(DAMAGE, name, ADVANCED, manaCost, (spellPower * 25) + 20);
+                    case EXPERT:
+                        return new DamageSpell(DAMAGE, name, EXPERT, manaCost, (spellPower * 25) + 50);
                     default:
                         throw new IllegalArgumentException(EXCEPTION_MESSAGE);
                 }
             case "Haste":
                 switch (rang) {
-                    case 1:
-                        return new BuffDebuffSpell(BUFF_DEBUFF, name, rang, manaCost, 1, CreatureStats.builder().moveRange(10).build());
-                    case 2:
-                        return new BuffDebuffSpell(BUFF_DEBUFF, name, rang, manaCost, 1, CreatureStats.builder().moveRange(20).build());
-                    case 3:
-                        return new BuffDebuffSpell(BUFF_DEBUFF, name, rang, manaCost, 1, CreatureStats.builder().moveRange(30).build());
+                    case BASIC:
+                        return new BuffDebuffSpell(BUFF_DEBUFF, name, BASIC, manaCost, CreatureStats.builder().moveRange(10).build());
+                    case ADVANCED:
+                        return new BuffDebuffSpell(BUFF_DEBUFF, name, ADVANCED, manaCost, CreatureStats.builder().moveRange(20).build());
+                    case EXPERT:
+                        return new BuffDebuffSpell(BUFF_DEBUFF, name, EXPERT, manaCost, CreatureStats.builder().moveRange(30).build());
                     default:
                         throw new IllegalArgumentException(EXCEPTION_MESSAGE);
                 }
             case "FireBall":
                 switch (rang) {
-                    case 1:
-                        return new DamageSpell(AREA, name, rang, manaCost, 1, 10);
-                    case 2:
-                        return new DamageSpell(AREA, name, rang, manaCost, 2, 20);
-                    case 3:
-                        return new DamageSpell(AREA, name, rang, manaCost, 3, 30);
+                    case BASIC:
+                        return new AreaDamageSpell(AREA, name, BASIC, manaCost, (spellPower * 1) + 10);
+                    case ADVANCED:
+                        return new AreaDamageSpell(AREA, name, ADVANCED, manaCost, (spellPower * 2) + 20);
+                    case EXPERT:
+                        return new AreaDamageSpell(AREA, name, EXPERT, manaCost, (spellPower * 3) + 30);
                     default:
                         throw new IllegalArgumentException(EXCEPTION_MESSAGE);
                 }

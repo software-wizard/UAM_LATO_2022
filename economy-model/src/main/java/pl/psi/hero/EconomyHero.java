@@ -11,6 +11,7 @@ public class EconomyHero {
     private final Fraction fraction;
     private final List<EconomyCreature> creatureList;
     private final List<EconomySpell> spellList;
+    private int spellPower;
     private int gold;
 
     public EconomyHero(final Fraction aFraction, List<EconomySpell> spellList, final int aGold) {
@@ -52,5 +53,9 @@ public class EconomyHero {
 
     public List<EconomySpell> getSpellList() {
         return spellList;
+    }
+
+    public int getSpellPower() {
+        return spellPower;
     }
 }

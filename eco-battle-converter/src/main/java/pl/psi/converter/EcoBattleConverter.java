@@ -1,19 +1,23 @@
 package pl.psi.converter;
 
-import java.io.IOException;
-import java.util.*;
-
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 import pl.psi.Hero;
 import pl.psi.creatures.Creature;
 import pl.psi.gui.MainBattleController;
 import pl.psi.gui.NecropolisFactory;
 import pl.psi.hero.EconomyHero;
-
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
 import pl.psi.spells.Spell;
 import pl.psi.spells.SpellFactory;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import static pl.psi.spells.SpellRang.BASIC;
 
 public class EcoBattleConverter {
 
@@ -45,7 +49,7 @@ public class EcoBattleConverter {
         final Set<Spell> spells = new HashSet<>();
         final SpellFactory spellFactory = new SpellFactory();
         aPlayer1.getSpellList()
-                .forEach(economySpell -> spells.add(spellFactory.create(economySpell.getName(), 1, 10)));
+                .forEach(economySpell -> spells.add(spellFactory.create(economySpell.getName(), BASIC, 10, aPlayer1.getSpellPower())));
 
         return new Hero(creatures, spells);
     }

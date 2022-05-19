@@ -4,27 +4,19 @@ import pl.psi.creatures.Creature;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-public class DamageSpell extends Spell<Integer> {
+public class DamageSpell extends Spell<Creature> {
 
-    public DamageSpell(SpellsCategories category, String name, int rang, int manaCost, int multiplier, Integer value) {
-        super(category, name, rang, manaCost, multiplier, value);
+    private final Integer value;
+
+    public DamageSpell(SpellsCategories category, String name, SpellRang rang, int manaCost, Integer value) {
+        super(category, name, rang, manaCost);
+        this.value = value;
     }
 
     @Override
     public void castSpell(Creature aDefender) {
-        applyDamage(aDefender, getValue());
+        aDefender.applySpellDamage(aDefender, value);
     }
 
-    @Override
-    public void castSpell(List<Optional<Creature>> aDefender) {
-        aDefender.forEach(
-                optionalCreature -> optionalCreature.ifPresent(
-                        creature -> applyDamage(creature, getValue())));
-    }
-
-    private void applyDamage(Creature aDefender, Integer damage) {
-        aDefender.setCurrentHp(aDefender.getCurrentHp() - (getMultiplier() + damage));
-    }
 }
