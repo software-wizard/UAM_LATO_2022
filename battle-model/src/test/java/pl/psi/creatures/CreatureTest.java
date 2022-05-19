@@ -1,6 +1,8 @@
 package pl.psi.creatures;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -221,5 +223,21 @@ public class CreatureTest
         turnQueue.next();
         turnQueue.next();
         assertThat( selfHealAfterEndOfTurnCreature.getCurrentHp() ).isEqualTo( 100 );
+    }
+
+    @Test
+    void shouldThrowExceptionWhenTryingToSetMoraleValueMoreThanPossible() {
+        var creature = new Creature.Builder().statistic(CreatureStats.builder().build()).build(); // current morale value = 1
+        var exception = assertThrows(IllegalArgumentException.class, () -> creature.setMorale(4));
+
+        assertEquals("Morale must not be greater than 3", exception.getMessage());
+    }
+
+    @Test
+    void shouldThrowExceptionWhenTryingToSetMoraleValueLessThanPossible() {
+        var creature = new Creature.Builder().statistic(CreatureStats.builder().build()).build(); // current morale value = 1
+        var exception = assertThrows(IllegalArgumentException.class, () -> creature.setMorale(-4));
+
+        assertEquals("Morale must not be less than 3", exception.getMessage());
     }
 }

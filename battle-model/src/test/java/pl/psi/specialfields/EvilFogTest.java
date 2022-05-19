@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class EvilFogTest {
 
     @Test
-    public void shouldGiveOneMoraleToAllBadAlignedCreaturesAndTakeOneMoraleFromAllGoodAlignedCreatures() {
+    void shouldGiveOneMoraleToAllBadAlignedCreaturesAndTakeOneMoraleFromAllGoodAlignedCreatures() {
 
         // given
         var evilFog = new EvilFog(new Point(10, 10));
@@ -64,7 +64,7 @@ public class EvilFogTest {
     }
 
     @Test
-    public void shouldThrowExceptionsWhenGivenDataIsIncorrect() {
+    void shouldThrowExceptionsWhenGivenDataIsIncorrect() {
 
         // given
         var evilFog = new EvilFog(new Point(10, 10));

@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class HolyGroundTest {
 
     @Test
-    public void shouldGiveOneMoraleToAllGoodAlignedCreaturesAndTakeOneMoraleFromAllBadAlignedCreatures() {
+    void shouldGiveOneMoraleToAllGoodAlignedCreaturesAndTakeOneMoraleFromAllBadAlignedCreatures() {
 
         // given
         var holyGround = new HolyGround(new Point(10, 10));
@@ -64,7 +64,7 @@ public class HolyGroundTest {
     }
 
     @Test
-    public void shouldThrowExceptionsWhenGivenDataIsIncorrect() {
+    void shouldThrowExceptionsWhenGivenDataIsIncorrect() {
 
         // given
         var holyGround = new HolyGround(new Point(10, 10));
