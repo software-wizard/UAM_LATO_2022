@@ -8,7 +8,7 @@ public class BuffDebuffSpell extends Spell<Creature> {
 
     private final CreatureStats creatureStats;
 
-    public BuffDebuffSpell(SpellsCategories category, String name, SpellRang rang, int manaCost, CreatureStats creatureStats) {
+    public BuffDebuffSpell(SpellTypes category, String name, SpellRang rang, int manaCost, CreatureStats creatureStats) {
         super(category, name, rang, manaCost);
         this.creatureStats = creatureStats;
     }

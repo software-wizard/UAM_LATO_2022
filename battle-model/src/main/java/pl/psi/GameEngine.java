@@ -64,8 +64,7 @@ public class GameEngine {
 
     public void castSpell(final Point point, Spell spell) {
         switch (spell.getCategory()) {
-            case DAMAGE:
-            case BUFF_DEBUFF:
+            case FIELD:
                 board.getCreature(point)
                         .ifPresent(defender -> {
                             turnQueue.getCurrentCreature()

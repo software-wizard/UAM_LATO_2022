@@ -9,7 +9,7 @@ public class AreaDamageSpell extends Spell<List<Optional<Creature>>> {
 
     private final int value;
 
-    public AreaDamageSpell(SpellsCategories category, String name, SpellRang rang, int manaCost, int value) {
+    public AreaDamageSpell(SpellTypes category, String name, SpellRang rang, int manaCost, int value) {
         super(category, name, rang, manaCost);
         this.value = value;
     }

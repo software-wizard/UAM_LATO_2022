@@ -3,7 +3,7 @@ package pl.psi.spells;
 import pl.psi.creatures.CreatureStats;
 
 import static pl.psi.spells.SpellRang.*;
-import static pl.psi.spells.SpellsCategories.*;
+import static pl.psi.spells.SpellTypes.*;
 
 public class SpellFactory {
 
@@ -15,22 +15,22 @@ public class SpellFactory {
             case "LightingBolt":
                 switch (rang) {
                     case BASIC:
-                        return new DamageSpell(DAMAGE, name, BASIC, manaCost, (spellPower * 25) + 10);
+                        return new DamageSpell(FIELD, name, BASIC, manaCost, (spellPower * 25) + 10);
                     case ADVANCED:
-                        return new DamageSpell(DAMAGE, name, ADVANCED, manaCost, (spellPower * 25) + 20);
+                        return new DamageSpell(FIELD, name, ADVANCED, manaCost, (spellPower * 25) + 20);
                     case EXPERT:
-                        return new DamageSpell(DAMAGE, name, EXPERT, manaCost, (spellPower * 25) + 50);
+                        return new DamageSpell(FIELD, name, EXPERT, manaCost, (spellPower * 25) + 50);
                     default:
                         throw new IllegalArgumentException(EXCEPTION_MESSAGE);
                 }
             case "Haste":
                 switch (rang) {
                     case BASIC:
-                        return new BuffDebuffSpell(BUFF_DEBUFF, name, BASIC, manaCost, CreatureStats.builder().moveRange(10).build());
+                        return new BuffDebuffSpell(FIELD, name, BASIC, manaCost, CreatureStats.builder().moveRange(10).build());
                     case ADVANCED:
-                        return new BuffDebuffSpell(BUFF_DEBUFF, name, ADVANCED, manaCost, CreatureStats.builder().moveRange(20).build());
+                        return new BuffDebuffSpell(FIELD, name, ADVANCED, manaCost, CreatureStats.builder().moveRange(20).build());
                     case EXPERT:
-                        return new BuffDebuffSpell(BUFF_DEBUFF, name, EXPERT, manaCost, CreatureStats.builder().moveRange(30).build());
+                        return new BuffDebuffSpell(FIELD, name, EXPERT, manaCost, CreatureStats.builder().moveRange(30).build());
                     default:
                         throw new IllegalArgumentException(EXCEPTION_MESSAGE);
                 }

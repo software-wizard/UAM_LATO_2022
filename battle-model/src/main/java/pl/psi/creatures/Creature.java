@@ -74,7 +74,7 @@ public class Creature implements PropertyChangeListener {
     }
 
     public void applySpellDamage(Creature aDefender, Integer damage) {
-        aDefender.setCurrentHp(aDefender.getCurrentHp() - damage);
+        aDefender.setCurrentHp(aDefender.getCurrentHp() - damage); // ToDo: include magic resist
     }
 
     public void setCurrentHp(final int aCurrentHp) {

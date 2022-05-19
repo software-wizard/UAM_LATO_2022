@@ -10,12 +10,12 @@ import lombok.ToString;
 @ToString
 public abstract class Spell<T> {
 
-    private final SpellsCategories category;
+    private final SpellTypes category;
     private final String name;
     private final SpellRang rang;
     private final int manaCost;
 
-    public Spell(SpellsCategories category, String name, SpellRang rang, int manaCost) {
+    public Spell(SpellTypes category, String name, SpellRang rang, int manaCost) {
         this.category = category;
         this.name = name;
         this.rang = rang;
