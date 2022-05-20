@@ -1,5 +1,7 @@
 package pl.psi.artifacts;
 
+import pl.psi.artifacts.model.ArtifactApplyingMode;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 

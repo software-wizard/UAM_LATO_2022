@@ -1,11 +1,11 @@
-package pl.psi.artifacts;
+package pl.psi.artifacts.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-enum ArtifactRank
+public enum ArtifactRank
 {
     TREASURE( "TREASURE", 0 ),
 

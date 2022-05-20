@@ -19,7 +19,7 @@ import pl.psi.TurnQueue;
 @Getter
 public class Creature implements PropertyChangeListener {
 
-    private CreatureStatistic stats;
+    private CreatureStatisticIf stats;
     private int amount;
     private int currentHp;
     private int counterAttackCounter = 1;
@@ -28,7 +28,7 @@ public class Creature implements PropertyChangeListener {
     Creature() {
     }
 
-    public Creature(final CreatureStatistic aStats, final DamageCalculatorIf aCalculator,
+    public Creature( final CreatureStatisticIf aStats, final DamageCalculatorIf aCalculator,
         final int aAmount) {
         stats = aStats;
         amount = aAmount;

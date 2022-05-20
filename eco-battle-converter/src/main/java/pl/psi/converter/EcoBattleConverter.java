@@ -1,18 +1,21 @@
 package pl.psi.converter;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import pl.psi.Hero;
-import pl.psi.artifacts.Artifact;
+import pl.psi.artifacts.model.Artifact;
+import pl.psi.artifacts.model.ArtifactTarget;
 import pl.psi.creatures.Creature;
 import pl.psi.creatures.CreatureStatistic;
 import pl.psi.gui.MainBattleController;
-import pl.psi.gui.NecropolisFactory;
 import pl.psi.hero.EconomyHero;
 
 public class EcoBattleConverter {
@@ -38,6 +41,11 @@ public class EcoBattleConverter {
     public static Hero convert( final EconomyHero aPlayer )
     {
         final List< Artifact > artifacts = Collections.emptyList();
+
+        // I think we should get already filtered Artifact from Equipment, but for now let's have it this way...
+        final Stream< Artifact > creatureArtifacts = artifacts.stream()
+                .filter( artifact -> artifact.getTarget().equals( ArtifactTarget.CREATURES ) );
+
         // TODO: get all bought artifacts from economy or economy creature (?)
 
         final List< Creature > creatures = aPlayer.getCreatures()
@@ -45,7 +53,7 @@ public class EcoBattleConverter {
             .map( economyCreature -> {
                 artifacts.forEach(artifact -> artifact.applyTo( economyCreature ) );
                 return new Creature(
-                    ( CreatureStatistic ) economyCreature.getUpgradedStats(), null,
+                    economyCreature.getUpgradedStats(), null,
                     economyCreature.getAmount() );
             } )
             .collect( Collectors.toList() );

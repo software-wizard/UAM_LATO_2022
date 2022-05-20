@@ -1,9 +1,11 @@
-package pl.psi.artifacts;
+package pl.psi.artifacts.model;
 
 import java.math.BigDecimal;
 import java.util.Objects;
 import lombok.Builder;
 import lombok.Getter;
+import pl.psi.artifacts.ArtifactEffectApplicable;
+import pl.psi.artifacts.CreatureArtifactApplicableProperty;
 
 @Getter
 @Builder
@@ -13,11 +15,11 @@ public class ArtifactEffect<T extends ArtifactEffectApplicable> {
 
     private final ArtifactApplyingMode effectApplyingMode;
 
-    private final ArtifactApplierTarget applierTarget;
+    private final CreatureArtifactApplicableProperty applierTarget;
 
-    void apply( T aAppliableModelObject )
+    void apply( T aApplicableModelObject )
     {
-        aAppliableModelObject.applyArtifactEffect( this );
+        aApplicableModelObject.applyArtifactEffect( this );
     }
 
     @Override

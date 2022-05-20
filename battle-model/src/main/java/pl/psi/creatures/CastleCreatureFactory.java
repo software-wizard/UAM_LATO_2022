@@ -1,6 +1,7 @@
 package pl.psi.creatures;
 
 import com.google.common.collect.Range;
+import pl.psi.artifacts.ArtifactFactory;
 
 /**
  * TODO: Describe this class (The first line - until the first dot - will interpret as the brief description).
@@ -9,6 +10,8 @@ public class CastleCreatureFactory
 {
     public Creature create( final int aTier, final boolean aIsUpgraded, final int aAmount )
     {
+        ArtifactFactory artifactFactory = new ArtifactFactory();
+
         if( aIsUpgraded )
         {
             switch( aTier )

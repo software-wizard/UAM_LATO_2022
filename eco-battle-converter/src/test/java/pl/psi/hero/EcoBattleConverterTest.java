@@ -9,10 +9,10 @@ import java.util.Set;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import pl.psi.artifacts.Artifact;
-import pl.psi.artifacts.ArtifactApplierTarget;
-import pl.psi.artifacts.ArtifactApplyingMode;
-import pl.psi.artifacts.ArtifactEffect;
+import pl.psi.artifacts.model.Artifact;
+import pl.psi.artifacts.CreatureArtifactApplicableProperty;
+import pl.psi.artifacts.model.ArtifactApplyingMode;
+import pl.psi.artifacts.model.ArtifactEffect;
 import pl.psi.artifacts.ArtifactEffectApplicable;
 import pl.psi.converter.EcoBattleConverter;
 import pl.psi.creatures.Creature;
@@ -115,19 +115,19 @@ class EcoBattleConverterTest
     final ArtifactEffect< ArtifactEffectApplicable > effect1 = ArtifactEffect.builder()
         .effectValue( BigDecimal.valueOf( 2 ) )
         .effectApplyingMode( ArtifactApplyingMode.ADD )
-        .applierTarget( ArtifactApplierTarget.ATTACK )
+        .applierTarget( CreatureArtifactApplicableProperty.ATTACK )
         .build();
 
     final ArtifactEffect< ArtifactEffectApplicable > effect2 = ArtifactEffect.builder()
         .effectValue( BigDecimal.valueOf( -2 ) )
         .effectApplyingMode( ArtifactApplyingMode.ADD )
-        .applierTarget( ArtifactApplierTarget.HEALTH )
+        .applierTarget( CreatureArtifactApplicableProperty.HEALTH )
         .build();
 
     final ArtifactEffect< ArtifactEffectApplicable > effect3 = ArtifactEffect.builder()
         .effectValue( BigDecimal.valueOf( -3 ) )
         .effectApplyingMode( ArtifactApplyingMode.ADD )
-        .applierTarget( ArtifactApplierTarget.DEFENCE )
+        .applierTarget( CreatureArtifactApplicableProperty.DEFENCE )
         .build();
 
     final Artifact artifact = Artifact.builder()
@@ -155,7 +155,7 @@ class EcoBattleConverterTest
     final ArtifactEffect< ArtifactEffectApplicable > effect1 = ArtifactEffect.builder()
         .effectValue( BigDecimal.valueOf( 0.2 ) )
         .effectApplyingMode( ArtifactApplyingMode.MULTIPLY )
-        .applierTarget( ArtifactApplierTarget.ATTACK )
+        .applierTarget( CreatureArtifactApplicableProperty.ATTACK )
         .build();
 
     final Artifact artifact = Artifact.builder()
@@ -181,13 +181,13 @@ class EcoBattleConverterTest
     final ArtifactEffect< ArtifactEffectApplicable > effect1 = ArtifactEffect.builder()
             .effectValue( BigDecimal.valueOf( 0.2 ) )
             .effectApplyingMode( ArtifactApplyingMode.MULTIPLY )
-            .applierTarget( ArtifactApplierTarget.HEALTH )
+            .applierTarget( CreatureArtifactApplicableProperty.HEALTH )
             .build();
 
     final ArtifactEffect< ArtifactEffectApplicable > effect2 = ArtifactEffect.builder()
             .effectValue( BigDecimal.valueOf( 3 ) )
             .effectApplyingMode( ArtifactApplyingMode.ADD )
-            .applierTarget( ArtifactApplierTarget.HEALTH )
+            .applierTarget( CreatureArtifactApplicableProperty.HEALTH )
             .build();
 
     final Artifact artifact = Artifact.builder()

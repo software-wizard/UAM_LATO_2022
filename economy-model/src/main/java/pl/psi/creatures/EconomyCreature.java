@@ -1,10 +1,14 @@
 package pl.psi.creatures;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
+
 import lombok.Getter;
 import lombok.Setter;
 import pl.psi.artifacts.*;
+import pl.psi.artifacts.model.ArtifactApplyingMode;
+import pl.psi.artifacts.model.ArtifactEffect;
+import pl.psi.artifacts.ArtifactEffectApplicable;
+import pl.psi.artifacts.CreatureArtifactApplicableProperty;
 
 @Getter
 @Setter
@@ -48,7 +52,7 @@ public class EconomyCreature implements ArtifactEffectApplicable
     {
         final BigDecimal effectValue = artifactEffect.getEffectValue();
         final ArtifactApplyingMode applyingMode = artifactEffect.getEffectApplyingMode();
-        final ArtifactApplierTarget applierTarget = artifactEffect.getApplierTarget();
+        final CreatureArtifactApplicableProperty applierTarget = artifactEffect.getApplierTarget();
 
         int upgradedMaxHp = upgradedStats.getMaxHp();
         int upgradedAttack = upgradedStats.getAttack();

@@ -1,4 +1,4 @@
-package pl.psi.artifacts;
+package pl.psi.artifacts.model;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -6,11 +6,14 @@ import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import pl.psi.artifacts.ArtifactEffectApplicable;
 
 @Getter
 @AllArgsConstructor
 @Builder
-public class Artifact implements ArtifactIf {
+public class Artifact implements ArtifactIf
+{
+  private final ArtifactTarget target;
 
   private final ArtifactRank rank;
 

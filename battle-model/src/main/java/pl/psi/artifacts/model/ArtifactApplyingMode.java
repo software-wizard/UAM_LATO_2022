@@ -1,4 +1,4 @@
-package pl.psi.artifacts;
+package pl.psi.artifacts.model;
 
 public enum ArtifactApplyingMode
 {
