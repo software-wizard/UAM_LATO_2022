@@ -14,17 +14,17 @@ public class EconomyHero
     private final Fraction fraction;
     private final List< EconomyCreature > creatureList;
     private int gold;
-    private HashSet< Artifact > items;
-    private List<Artifact> backpack;
-    private HeroStatistics heroClass;
+    private final Equipment equipment;
+    private final Backpack backpack;
+    private final HeroStatistics heroClass;
 
     public EconomyHero( final Fraction aFraction, final int aGold, final HeroStatistics aClass )
     {
         fraction = aFraction;
         gold = aGold;
         creatureList = new ArrayList<>();
-        items = new HashSet<Artifact>();
-        backpack = new ArrayList<Artifact>();
+        equipment = new Equipment();
+        backpack = new Backpack();
         heroClass = aClass;
     }
 
@@ -54,15 +54,34 @@ public class EconomyHero
     }
 
     public void addItem(final Artifact aItem){
-        backpack.add(aItem);
+        backpack.addItem(aItem);
     }
 
-    public void equipItem(final Artifact aItem){
+    public void equipHead(Artifact aItem){
+        equipment.setHead(aItem);
+    }
 
+    public void equipNeck(Artifact aItem){
+        equipment.setNeck(aItem);
+    }
+    public void equipTorso(Artifact aItem){
+        equipment.setTorso(aItem);
+    }
+    public void equipShoulders(Artifact aItem){
+        equipment.setShoulders(aItem);
+    }
+    public void equipRightHand(Artifact aItem){
+        equipment.setRightHand(aItem);
+    }
+    public void equipLeftHand(Artifact aItem){
+        equipment.setLeftHand(aItem);
+    }
+    public void equipFeet(Artifact aItem){
+        equipment.setFeet(aItem);
     }
 
     public enum Fraction
     {
-        NECROPOLIS;
+        NECROPOLIS
     }
 }

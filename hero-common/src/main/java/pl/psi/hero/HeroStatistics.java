@@ -6,12 +6,12 @@ import lombok.Getter;
 public enum HeroStatistics implements HeroStatisticsIf{
 
     // NECRO
-    DEATH_KNIGHT("Death_Knight", 1, 2, 2, 1, 0, 0),
-    NECROMANCER("Necromancer", 1, 0, 2, 2, 0, 0),
+    DEATH_KNIGHT("Death_Knight", 1, 2, 2, 1, 0, 0, 10),
+    NECROMANCER("Necromancer", 1, 0, 2, 2, 0, 0, 20),
 
     // CASTLE
-    KNIGHT("Knight", 2, 2, 1, 1, 0, 0),
-    CLERIC("Cleric", 1, 0, 2, 2, 0, 0);
+    KNIGHT("Knight", 2, 2, 1, 1, 0, 0, 10),
+    CLERIC("Cleric", 1, 0, 2, 2, 0, 0, 20);
 
     private final String name;
     private final int attack;
@@ -20,8 +20,9 @@ public enum HeroStatistics implements HeroStatisticsIf{
     private final int knowledge;
     private final int morale;
     private final int luck;
+    private final int spellPoints;
 
-    HeroStatistics(final String aName, final int aAttack, final int aDefence, final int aSpellPower, final int aKnowledge, final int aMorale, final int aLuck){
+    HeroStatistics(final String aName, final int aAttack, final int aDefence, final int aSpellPower, final int aKnowledge, final int aMorale, final int aLuck, final int aSpellPoints){
 
         name = aName;
         attack = aAttack;
@@ -30,6 +31,7 @@ public enum HeroStatistics implements HeroStatisticsIf{
         knowledge = aKnowledge;
         morale = aMorale;
         luck = aLuck;
+        spellPoints = aSpellPoints;
 
     }
 }

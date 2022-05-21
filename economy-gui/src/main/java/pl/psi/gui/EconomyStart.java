@@ -6,6 +6,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import pl.psi.hero.HeroStatistics;
 
 public class EconomyStart extends Application
 {
@@ -21,8 +22,8 @@ public class EconomyStart extends Application
         final FXMLLoader loader = new FXMLLoader();
         loader.setLocation( getClass().getClassLoader()
             .getResource( "fxml/eco.fxml" ) );
-        loader.setController( new EcoController( new EconomyHero( EconomyHero.Fraction.NECROPOLIS, 3000 ),
-            new EconomyHero( EconomyHero.Fraction.NECROPOLIS, 3000 ) ) );
+        loader.setController( new EcoController( new EconomyHero( EconomyHero.Fraction.NECROPOLIS, 3000, HeroStatistics.NECROMANCER),
+            new EconomyHero( EconomyHero.Fraction.NECROPOLIS, 3000, HeroStatistics.NECROMANCER ) ) );
         final Scene scene = new Scene( loader.load() );
         aStage.setScene( scene );
         aStage.setX( 5 );

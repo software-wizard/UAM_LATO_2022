@@ -13,4 +13,5 @@ public class HeroStats implements HeroStatisticsIf {
     private final int knowledge;
     private final int morale;
     private final int luck;
+    private final int spellPoints;
 }
