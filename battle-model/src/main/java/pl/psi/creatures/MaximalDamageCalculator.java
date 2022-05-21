@@ -10,6 +10,8 @@ public class MaximalDamageCalculator extends AbstractCalculateDamageStrategy{
     }
 
     @Override
-    boolean maximalDamageRange(){ return true; }
+    protected double getRandomValueFromAttackRange( final Creature aAttacker, final Creature aDefender ){
+        return aAttacker.getDamage().upperEndpoint();
+    }
 
 }

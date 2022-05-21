@@ -10,6 +10,8 @@ public class MinimalDamageCalculator extends AbstractCalculateDamageStrategy{
     }
 
     @Override
-    boolean minimalDamageRange(){ return true; }
+    protected double getRandomValueFromAttackRange( final Creature aAttacker, final Creature aDefender ){
+        return aAttacker.getDamage().lowerEndpoint();
+    }
 
 }

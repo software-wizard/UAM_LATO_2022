@@ -19,29 +19,35 @@ abstract class AbstractCalculateDamageStrategy implements DamageCalculatorIf
     @Override
     public int calculateDamage( final Creature aAttacker, final Creature aDefender )
     {
-        final double armor = getArmor( aDefender );
-        double randValue = rand.nextInt( (aAttacker.getDamage()
+        double randValue = getRandomValueFromAttackRange( aAttacker, aDefender );
+        double oneCreatureDamageToDeal = calculateDamageToDeal( aAttacker, aDefender, randValue );
+        if( oneCreatureDamageToDeal < 0 )
+        {
+            oneCreatureDamageToDeal = 0;
+        }
+        return (int)( aAttacker.getAmount() * oneCreatureDamageToDeal );
+    }
+
+    protected double getRandomValueFromAttackRange( final Creature aAttacker, final Creature aDefender ){
+        return rand.nextInt( (aAttacker.getDamage()
                 .upperEndpoint()
                 - aAttacker.getDamage()
                 .lowerEndpoint()
                 + 1)) + aAttacker.getDamage()
                 .lowerEndpoint();
-        if( minimalDamageRange() ) {
-            randValue = aAttacker.getDamage().lowerEndpoint();
-        }
-        else if( maximalDamageRange() ){
-            randValue = aAttacker.getDamage().upperEndpoint();
-        }
+    }
 
-        double oneCreatureDamageToDeal;
-        if( aAttacker.getAttack() >= armor )
+    private double calculateDamageToDeal( final Creature aAttacker, final Creature aDefender, final double randValue ){
+        final double armor = getArmor( aDefender );
+
+        if( aAttacker.getAttack() >= armor)
         {
             double attackPoints = aAttacker.getAttack() - armor;
             if( attackPoints > MAX_ATTACK_DIFF )
             {
                 attackPoints = MAX_ATTACK_DIFF;
             }
-            oneCreatureDamageToDeal = randValue * (1 + attackPoints * ATTACK_BONUS);
+            return randValue * (1 + attackPoints * ATTACK_BONUS);
         }
         else
         {
@@ -50,18 +56,9 @@ abstract class AbstractCalculateDamageStrategy implements DamageCalculatorIf
             {
                 defencePoints = MAX_DEFENCE_DIFF;
             }
-            oneCreatureDamageToDeal = randValue * (1 - defencePoints * DEFENCE_BONUS);
+            return randValue * (1 - defencePoints * DEFENCE_BONUS);
         }
-
-        if( oneCreatureDamageToDeal < 0 )
-        {
-            oneCreatureDamageToDeal = 0;
-        }
-        return (int)( aAttacker.getAmount() * oneCreatureDamageToDeal );
     }
-
-    boolean minimalDamageRange(){ return false; }
-    boolean maximalDamageRange(){ return false; }
 
     protected double getArmor( final Creature aDefender )
     {
