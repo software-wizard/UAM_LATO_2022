@@ -20,8 +20,8 @@ public class BuyingCreatureTest
     @BeforeEach
     void init()
     {
-        hero1 = new EconomyHero( EconomyHero.Fraction.NECROPOLIS, 1000 );
-        hero2 = new EconomyHero( EconomyHero.Fraction.NECROPOLIS, 1000 );
+        hero1 = new EconomyHero( EconomyHero.Fraction.NECROPOLIS, 1000, HeroStatistics.NECROMANCER);
+        hero2 = new EconomyHero( EconomyHero.Fraction.NECROPOLIS, 1000,HeroStatistics.NECROMANCER);
         economyEngine = new EconomyEngine( hero1, hero2 );
     }
 
@@ -56,7 +56,7 @@ public class BuyingCreatureTest
         assertThrows( IllegalStateException.class,
             () -> economyEngine.buy( creatureFactory.create( false, 1, 100 ) ) );
         assertEquals( 1000, hero1.getGold() );
-        assertEquals( 0, hero1.getCreatures()
+        assertEquals( 0, hero1.getCreatureList()
             .size() );
     }
 
@@ -74,7 +74,7 @@ public class BuyingCreatureTest
             () -> economyEngine.buy( creatureFactory.create( false, 1, 1 ) ) );
 
         assertEquals( 580, hero1.getGold() );
-        assertEquals( 7, hero1.getCreatures()
+        assertEquals( 7, hero1.getCreatureList()
             .size() );
     }
 }
