@@ -26,20 +26,11 @@ public class AgeOnHitCreature extends AbstractCreature{
             }
         }
     }
-    private void age( Creature defender ){
-        CreatureStats reduceMaxHp = new CreatureStats
-                .CreatureStatsBuilder()
-                    .maxHp( -(defender.getStats().getMaxHp() / 2) )
-                .build();
-        defender.updateStats( reduceMaxHp );
-        final double currentHpAfterAge = Math.max(defender.getCurrentHp() - ( defender.getBasicStats().getMaxHp() - defender.getStats().getMaxHp() ), 1);
-        defender.setCurrentHp( currentHpAfterAge );
-    }
 
     public void attackWithAge( Creature aDefender ){
         final int damage = getCalculator().calculateDamage( decorated, aDefender );
         applyDamage( aDefender, damage );
-        age( aDefender );
+        aDefender.age();
         if( canCounterAttack( aDefender ) )
         {
             decorated.counterAttack( aDefender );

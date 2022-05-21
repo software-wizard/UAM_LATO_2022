@@ -40,15 +40,13 @@ Creature()
                       final int aAmount )
     {
         basicStats = aStats;
-        externalStats.addStats( basicStats );
         amount = aAmount;
         currentHp = basicStats.getMaxHp();
         calculator = aCalculator;
     }
 
-    public void buff( CreatureStatisticIf aBuffedStats ){
-        buffedStats.addStats( aBuffedStats );
-        externalStats.addStats( buffedStats );
+    public void increaseStats( CreatureStatisticIf statIncrease ){
+        externalStats.addStats( statIncrease );
     }
 
     public void attack( final Creature aDefender )
@@ -78,6 +76,16 @@ Creature()
     protected void setCurrentHp( final double aCurrentHp )
     {
         currentHp = aCurrentHp;
+    }
+
+    public void age(){
+        CreatureStats reduceMaxHp = new CreatureStats
+                .CreatureStatsBuilder()
+                .maxHp( -(getStats().getMaxHp() / 2) )
+                .build();
+        buff( reduceMaxHp );
+        final double currentHpAfterAge = Math.max(getCurrentHp() - ( getBasicStats().getMaxHp() - getStats().getMaxHp() ), 1);
+        setCurrentHp( currentHpAfterAge );
     }
 
     private void calculateUnits(final double aAmountToAdd){
@@ -130,31 +138,35 @@ Creature()
         aAttacker.canCounterAttack = false;
     }
 
-    public void updateStats( CreatureStatisticIf statsToAdd ){
-        externalStats.addStats( statsToAdd );
+    public void buff( CreatureStatisticIf statsToAdd ){
+        buffedStats.addStats( statsToAdd );
     }
 
     public CreatureStatisticIf getStats(){
-        return externalStats;
+        CreatureStats stats = new CreatureStats.CreatureStatsBuilder().build();
+        stats.addStats( basicStats );
+        stats.addStats( externalStats );
+        stats.addStats( buffedStats );
+        return stats;
     }
 
     Range< Integer > getDamage()
     {
-        return getExternalStats().getDamage();
+        return getStats().getDamage();
     }
 
     double getMaxHp(){
-        return getExternalStats().getMaxHp();
+        return getStats().getMaxHp();
     }
 
     double getAttack()
     {
-        return getExternalStats().getAttack();
+        return getStats().getAttack();
     }
 
     double getArmor()
     {
-        return getExternalStats().getArmor();
+        return getStats().getArmor();
     }
 
     @Override
@@ -168,7 +180,7 @@ Creature()
 
     protected void restoreCurrentHpToMax()
     {
-        currentHp = getExternalStats().getMaxHp();
+        currentHp = getStats().getMaxHp();
     }
 
     public String getName()
@@ -178,7 +190,7 @@ Creature()
 
     public double getMoveRange()
     {
-        return getExternalStats().getMoveRange();
+        return getStats().getMoveRange();
     }
 
     public static class Builder

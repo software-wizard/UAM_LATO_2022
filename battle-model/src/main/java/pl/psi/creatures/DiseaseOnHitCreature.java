@@ -29,7 +29,7 @@ public class DiseaseOnHitCreature extends AbstractCreature{
                     .armor( -2 )
                     .attack( -2 )
                 .build();
-        aDefender.updateStats( statsChange );
+        aDefender.buff( statsChange );
     }
 
     public void attackWithDisease( final Creature aDefender ){
