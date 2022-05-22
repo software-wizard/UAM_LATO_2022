@@ -17,6 +17,12 @@ public class WarMachinesCreatureDecorator extends Creature {
     }
 
     public WarMachinesCreatureDecorator(CreatureStatisticIf aStatistic, DamageCalculatorIf aCalculator, int aAmount) {
+        Creature.Builder builder = new Creature.Builder();
+        builder.statistic(aStatistic);
+        builder.calculator(aCalculator);
+        builder.amount(aAmount);
+
+        decorated = builder.build();
         statistic = aStatistic;
         calculator = aCalculator;
         amount = aAmount;
@@ -24,6 +30,11 @@ public class WarMachinesCreatureDecorator extends Creature {
 
     public WarMachinesCreatureDecorator() {
 
+    }
+
+    @Override
+    public void attack(Creature aDefender) {
+        decorated.attack(aDefender);
     }
 
     @Override
@@ -62,37 +73,39 @@ public class WarMachinesCreatureDecorator extends Creature {
     }
 
     @Override
+    public int getCounterAttackCounter() {
+        return 0;
+    }
+
+    @Override
     public void propertyChange(final PropertyChangeEvent evt) {
         decorated.propertyChange(evt);
     }
 
-    public static class Builder
-    {
+    //heal do namiotu
+
+    public static class Builder {
         private int amount = 1;
-        private DamageCalculatorIf calculator = new DefaultDamageCalculator( new Random() );
+        private DamageCalculatorIf calculator = new DefaultDamageCalculator(new Random());
         private CreatureStatisticIf statistic;
 
-        public WarMachinesCreatureDecorator.Builder statistic(final CreatureStatisticIf aStatistic )
-        {
+        public WarMachinesCreatureDecorator.Builder statistic(final CreatureStatisticIf aStatistic) {
             statistic = aStatistic;
             return this;
         }
 
-        public WarMachinesCreatureDecorator.Builder amount(final int aAmount )
-        {
+        public WarMachinesCreatureDecorator.Builder amount(final int aAmount) {
             amount = aAmount;
             return this;
         }
 
-        WarMachinesCreatureDecorator.Builder calculator(final DamageCalculatorIf aCalc )
-        {
+        WarMachinesCreatureDecorator.Builder calculator(final DamageCalculatorIf aCalc) {
             calculator = aCalc;
             return this;
         }
 
-        public WarMachinesCreatureDecorator build()
-        {
-            return new WarMachinesCreatureDecorator( statistic, calculator, amount );
+        public WarMachinesCreatureDecorator build() {
+            return new WarMachinesCreatureDecorator(statistic, calculator, amount);
         }
     }
 
