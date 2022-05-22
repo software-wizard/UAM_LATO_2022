@@ -380,8 +380,6 @@ public class CreatureTest
                 .build() )
                 .build();
 
-        final Random random = new Random();
-
         final Creature minimalDamageDefender = new Creature.Builder().statistic( CreatureStats.builder()
                 .maxHp( 100 )
                 .damage( NOT_IMPORTANT_DMG )
@@ -401,15 +399,15 @@ public class CreatureTest
                 .build();
 
 
-        creature.setCalculator( new MinimalDamageCalculator( random ) );
+        creature.setCalculator( new MinimalDamageCalculator() );
         creature.attack( minimalDamageDefender );
         assertThat( minimalDamageDefender.getCurrentHp() ).isEqualTo( 95 );
 
-        creature.setCalculator( new MaximalDamageCalculator( random ) );
+        creature.setCalculator( new MaximalDamageCalculator() );
         creature.attack( maximalDamageDefender );
         assertThat( maximalDamageDefender.getCurrentHp() ).isEqualTo( 90 );
 
-        creature.setCalculator( new ReducedDamageCalculator( random, 0.5 ) );
+        creature.setCalculator( new ReducedDamageCalculator( 0.5 ) );
         creature.attack( reducedDamageDefender );
         assertThat( reducedDamageDefender.getCurrentHp() ).isBetween( 95.0, 98.0);
     }
@@ -525,6 +523,73 @@ public class CreatureTest
 
         curseOnHitCreature.attackWithCurse( defender );
         assertThat( curseOnHitCreature.getCurrentHp() ).isEqualTo( 1 );
+    }
+
+    @Test
+    void creatureShouldAttackTwice()
+    {
+        final Creature decorated = new Creature.Builder().statistic( CreatureStats.builder()
+                .maxHp( 100 )
+                .damage( Range.closed(10,10) )
+                .build() )
+                .build();
+
+        final DoubleAttackCreature doubleAttackCreature = new DoubleAttackCreature( decorated );
+
+        final Creature defender = new Creature.Builder().statistic( CreatureStats.builder()
+                .maxHp( 100 )
+                .damage( Range.closed(10,10) )
+                .build() )
+                .build();
+
+        doubleAttackCreature.attack( defender );
+        assertThat( defender.getCurrentHp() ).isEqualTo( 80 );
+        assertThat( doubleAttackCreature.getCurrentHp() ).isEqualTo( 90 );
+    }
+
+    @Test
+    void creatureShouldAttackWithThunderbolt()
+    {
+        final Creature decorated = new Creature.Builder().statistic( CreatureStats.builder()
+                .damage( Range.closed(5,5) )
+                .build() )
+                .amount( 2 )
+                .build();
+
+        final ThunderboltOnHitCreature thunderboltOnHitCreature = new ThunderboltOnHitCreature( decorated );
+
+        final Creature defender = new Creature.Builder().statistic( CreatureStats.builder()
+                .maxHp( 100 )
+                .damage( NOT_IMPORTANT_DMG )
+                .build() )
+                .build();
+
+        thunderboltOnHitCreature.attackWithThunderbolt( defender );
+        assertThat( defender.getCurrentHp() ).isEqualTo( 70 );
+    }
+
+    @Test
+    void creatureShouldAttackWithReducedDefenderDefence()
+    {
+        final Creature decorated = new Creature.Builder().statistic( CreatureStats.builder()
+                .maxHp( CreatureStatistic.BEHEMOTH.getMaxHp() )
+                .attack( CreatureStatistic.BEHEMOTH.getAttack() )
+                .damage( Range.closed( 30, 50 ) )
+                .build() )
+                .build();
+
+        final ReduceDefenceCreature reduceDefenceCreature = new ReduceDefenceCreature( decorated, 0.6 );
+
+
+        final Creature defender = new Creature.Builder().statistic( CreatureStats.builder()
+                .maxHp( CreatureStatistic.GHOST_DRAGON.getMaxHp() )
+                .damage( CreatureStatistic.GHOST_DRAGON.getDamage() )
+                .armor( CreatureStatistic.GHOST_DRAGON.getArmor() )
+                .build() )
+                .build();
+
+        reduceDefenceCreature.attack( defender );
+        assertThat( defender.getCurrentHp() ).isBetween( 133.0, 160.0 );  // not sure if the calculation is correct, was referring to this http://imzdx.pl/h3dmg/
     }
 
     /*@Test

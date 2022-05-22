@@ -6,8 +6,8 @@ public class ReducedDamageCalculator extends AbstractCalculateDamageStrategy{
 
     private final double reduceBy;
 
-    protected ReducedDamageCalculator(Random aRand, double aReduceBy) {
-        super(aRand);
+    protected ReducedDamageCalculator( double aReduceBy) {
+        super( new Random() );
         reduceBy = aReduceBy;
     }
 

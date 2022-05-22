@@ -5,8 +5,8 @@ import java.util.Random;
 public class MinimalDamageCalculator extends AbstractCalculateDamageStrategy{
 
 
-    protected MinimalDamageCalculator(Random aRand) {
-        super(aRand);
+    protected MinimalDamageCalculator() {
+        super(new Random());
     }
 
     @Override

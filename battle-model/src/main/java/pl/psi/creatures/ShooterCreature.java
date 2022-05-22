@@ -15,15 +15,15 @@ public class ShooterCreature extends AbstractCreature
     private boolean isInMelee = false;
     private final double MELEE_PENALTY = 0.5;
     private int range = Integer.MAX_VALUE;
-    private final ReducedDamageCalculator meleeDamageCalculator = new ReducedDamageCalculator( new Random(), MELEE_PENALTY);
-    private final DamageCalculatorIf defaultDamageCalculator;
+    private final ReducedDamageCalculator meleeDamageCalculator = new ReducedDamageCalculator( MELEE_PENALTY);
+    private final DamageCalculatorIf rangeDamageCalculator;
 
     public ShooterCreature( final Creature aDecorated, final int aShots )
     {
         super( aDecorated );
         decorated = aDecorated;
         shots = aShots;
-        defaultDamageCalculator = decorated.getCalculator();
+        rangeDamageCalculator = decorated.getCalculator();
     }
 
     @Override
@@ -52,7 +52,7 @@ public class ShooterCreature extends AbstractCreature
         else {
             isInMelee = false;
             range = Integer.MAX_VALUE;
-            decorated.setCalculator( defaultDamageCalculator );
+            decorated.setCalculator( rangeDamageCalculator );
         }
     }
 

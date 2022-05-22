@@ -5,7 +5,7 @@ import java.util.Random;
 public class CurseOnHitCreature extends AbstractCreature{
 
     private final Creature decorated;
-    private final MinimalDamageCalculator minimalDamageCalculator = new MinimalDamageCalculator( new Random() );
+    private final MinimalDamageCalculator minimalDamageCalculator = new MinimalDamageCalculator();
 
     public CurseOnHitCreature(Creature aDecorated) {
         super(aDecorated);

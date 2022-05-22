@@ -10,10 +10,10 @@ class ReduceDefenceCalculator extends AbstractCalculateDamageStrategy
 
     private final double factor;
 
-    public ReduceDefenceCalculator()
+    public ReduceDefenceCalculator( final double aFactor )
     {
         super( new Random() );
-        factor = 0.2;
+        factor = aFactor;
     }
 
     @Override

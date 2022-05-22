@@ -1,8 +1,6 @@
 package pl.psi.gui;
 
-import pl.psi.creatures.Creature;
-import pl.psi.creatures.CreatureStatistic;
-import pl.psi.creatures.NoCounterCreature;
+import pl.psi.creatures.*;
 
 public class StrongholdFactory
 {
@@ -24,9 +22,10 @@ public class StrongholdFactory
                             .amount( aAmount )
                             .build();
                 case 3:
-                    return new Creature.Builder().statistic( CreatureStatistic.ORC )
+                    Creature orc = new Creature.Builder().statistic( CreatureStatistic.ORC )
                             .amount( aAmount )
                             .build();
+                    return new ShooterCreature( orc, 12 );
                 case 4:
                     Creature decorated = new Creature.Builder().statistic( CreatureStatistic.OGRE )
                             .amount( aAmount )
@@ -37,13 +36,15 @@ public class StrongholdFactory
                             .amount( aAmount )
                             .build();
                 case 6:
-                    return new Creature.Builder().statistic( CreatureStatistic.CYCLOPS )
+                    Creature cyclops = new Creature.Builder().statistic( CreatureStatistic.CYCLOPS )
                             .amount( aAmount )
                             .build();
+                    return new ShooterCreature( cyclops, 16 );
                 case 7:
-                    return new Creature.Builder().statistic( CreatureStatistic.BEHEMOTH )
+                    Creature ancientBehemoth = new Creature.Builder().statistic( CreatureStatistic.ANCIENT_BEHEMOTH )
                             .amount( aAmount )
                             .build();
+                    return new ReduceDefenceCreature( ancientBehemoth, 0.6 );
                 default:
                     throw new IllegalArgumentException( EXCEPTION_MESSAGE );
             }
@@ -57,29 +58,34 @@ public class StrongholdFactory
                             .amount( aAmount )
                             .build();
                 case 2:
-                    return new Creature.Builder().statistic( CreatureStatistic.WOLF_RAIDER )
+                    Creature wolfRaider = new Creature.Builder().statistic( CreatureStatistic.WOLF_RAIDER )
                             .amount( aAmount )
                             .build();
+                    return new DoubleAttackCreature( wolfRaider );
                 case 3:
-                    return new Creature.Builder().statistic( CreatureStatistic.ORC_CHIEFTAIN )
+                    Creature orcChieftain = new Creature.Builder().statistic( CreatureStatistic.ORC_CHIEFTAIN )
                             .amount( aAmount )
                             .build();
+                    return new ShooterCreature( orcChieftain, 24 );
                 case 4:
                     return new Creature.Builder().statistic( CreatureStatistic.OGRE_MAGI )
                             .amount( aAmount )
                             .build();
                 case 5:
-                    return new Creature.Builder().statistic( CreatureStatistic.THUNDERBIRD )
+                    Creature thunderbird = new Creature.Builder().statistic( CreatureStatistic.THUNDERBIRD )
                             .amount( aAmount )
                             .build();
+                    return new ThunderboltOnHitCreature( thunderbird );
                 case 6:
-                    return new Creature.Builder().statistic( CreatureStatistic.CYCLOPS_KING )
+                    Creature cyclopsKing = new Creature.Builder().statistic( CreatureStatistic.CYCLOPS_KING )
                             .amount( aAmount )
                             .build();
+                    return new ShooterCreature( cyclopsKing, 24 );
                 case 7:
-                    return new Creature.Builder().statistic( CreatureStatistic.ANCIENT_BEHEMOTH )
+                    Creature ancientBehemoth = new Creature.Builder().statistic( CreatureStatistic.ANCIENT_BEHEMOTH )
                             .amount( aAmount )
                             .build();
+                    return new ReduceDefenceCreature( ancientBehemoth, 0.2 );
                 default:
                     throw new IllegalArgumentException( EXCEPTION_MESSAGE );
             }

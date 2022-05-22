@@ -5,8 +5,8 @@ import java.util.Random;
 public class MaximalDamageCalculator extends AbstractCalculateDamageStrategy{
 
 
-    protected MaximalDamageCalculator(Random aRand) {
-        super(aRand);
+    protected MaximalDamageCalculator() {
+        super(new Random());
     }
 
     @Override

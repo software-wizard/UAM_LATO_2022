@@ -6,7 +6,7 @@ import java.util.Random;
 
 public class DoubleDamageOnHitCreature extends AbstractCreature{
     private final Creature decorated;
-    private final ReducedDamageCalculator doubleDamageCalculator = new ReducedDamageCalculator( new Random(), 2 );
+    private final ReducedDamageCalculator doubleDamageCalculator = new ReducedDamageCalculator( 2 );
     private final DamageCalculatorIf defaultDamageCalculator;
 
     public DoubleDamageOnHitCreature(Creature aDecorated) {
