@@ -1,27 +1,25 @@
 package pl.psi.creatures;
 
 import java.math.BigDecimal;
-
 import lombok.Getter;
 import lombok.Setter;
-import pl.psi.artifacts.*;
+import pl.psi.artifacts.ArtifactEffectApplicable;
+import pl.psi.artifacts.ArtifactEffectApplyingProperties;
+import pl.psi.artifacts.CreatureArtifactApplicableProperty;
 import pl.psi.artifacts.model.ArtifactApplyingMode;
 import pl.psi.artifacts.model.ArtifactEffect;
-import pl.psi.artifacts.ArtifactEffectApplicable;
-import pl.psi.artifacts.CreatureArtifactApplicableProperty;
 
 @Getter
 @Setter
-public class EconomyCreature implements ArtifactEffectApplicable
-{
+public class EconomyCreature implements ArtifactEffectApplicable {
+
     private CreatureStatisticIf upgradedStats;
     private final CreatureStatistic baseStats;
     private final int amount;
     private final int goldCost;
 
-    EconomyCreature( final CreatureStatistic aStats, final int aAmount, final int aGoldCost )
-    {
-        upgradedStats = new CreatureStats( aStats );
+    EconomyCreature(final CreatureStatistic aStats, final int aAmount, final int aGoldCost) {
+        upgradedStats = new CreatureStats(aStats);
         baseStats = aStats;
         amount = aAmount;
         goldCost = aGoldCost;
@@ -48,8 +46,8 @@ public class EconomyCreature implements ArtifactEffectApplicable
     }
 
     @Override
-    public void applyArtifactEffect( final ArtifactEffect< ? extends ArtifactEffectApplicable > artifactEffect )
-    {
+    public void applyArtifactEffect(
+        final ArtifactEffect<? extends ArtifactEffectApplicable> artifactEffect) {
         final BigDecimal effectValue = artifactEffect.getEffectValue();
         final ArtifactApplyingMode applyingMode = artifactEffect.getEffectApplyingMode();
         final CreatureArtifactApplicableProperty applierTarget = artifactEffect.getApplierTarget();
@@ -58,24 +56,42 @@ public class EconomyCreature implements ArtifactEffectApplicable
         int upgradedAttack = upgradedStats.getAttack();
         int upgradedArmor = upgradedStats.getArmor();
 
-        switch ( applierTarget )
-        {
+        switch (applierTarget) {
             case HEALTH:
-                upgradedMaxHp = ArtifactUtils.calculateStatisticValueAfterApplyingArtifact( applyingMode, upgradedMaxHp,
-                        effectValue, baseStats.getMaxHp() );
+                upgradedMaxHp = artifactEffect.calculateStatisticValueAfterApplying(
+                    new ArtifactEffectApplyingProperties(applyingMode,
+                        effectValue,
+                        upgradedMaxHp,
+                        baseStats.getMaxHp()));
                 break;
             case ATTACK:
-                upgradedAttack = ArtifactUtils.calculateStatisticValueAfterApplyingArtifact( applyingMode, upgradedAttack,
-                        effectValue, baseStats.getAttack() );
+                upgradedAttack = artifactEffect.calculateStatisticValueAfterApplying(
+                    new ArtifactEffectApplyingProperties(applyingMode,
+                        effectValue,
+                        upgradedAttack,
+                        baseStats.getAttack()));
                 break;
             case DEFENCE:
-                upgradedArmor = ArtifactUtils.calculateStatisticValueAfterApplyingArtifact( applyingMode, upgradedArmor,
-                        effectValue, baseStats.getArmor() );
+                upgradedArmor = artifactEffect.calculateStatisticValueAfterApplying(
+                    new ArtifactEffectApplyingProperties(applyingMode,
+                        effectValue,
+                        upgradedArmor,
+                        baseStats.getArmor()));
                 break;
             default:
-                throw new UnsupportedOperationException( "Unrecognised applying target type." );
+                throw new UnsupportedOperationException("Unrecognised applying target type.");
         }
 
-        upgradedStats = new CreatureStats( upgradedStats, upgradedAttack, upgradedArmor, upgradedMaxHp );
+        upgradedStats = CreatureStats.builder()
+            .maxHp(upgradedMaxHp)
+            .attack(upgradedAttack)
+            .armor(upgradedArmor)
+            .name(upgradedStats.getName())
+            .moveRange(upgradedStats.getMoveRange())
+            .damage(upgradedStats.getDamage())
+            .tier(upgradedStats.getTier())
+            .description(upgradedStats.getDescription())
+            .isUpgraded(upgradedStats.isUpgraded())
+            .build();
     }
 }

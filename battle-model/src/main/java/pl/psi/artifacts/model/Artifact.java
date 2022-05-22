@@ -29,7 +29,7 @@ public class Artifact implements ArtifactIf
 
   public void applyTo( final ArtifactEffectApplicable aArtifactEffectApplicable )
   {
-      effects.forEach( effect -> effect.apply( aArtifactEffectApplicable ) );
+      effects.forEach(aArtifactEffectApplicable::applyArtifactEffect);
   }
 
   @Override

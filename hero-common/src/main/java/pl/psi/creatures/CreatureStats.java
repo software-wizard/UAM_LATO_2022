@@ -20,21 +20,16 @@ public class CreatureStats implements CreatureStatisticIf
   private final String description;
   private final boolean isUpgraded;
 
-  public CreatureStats( final CreatureStatisticIf aCreatureStatistics, final int aAttack, final int aArmor, final int aMaxHp )
+  public CreatureStats( final CreatureStatisticIf aCreatureStatistics )
   {
-      maxHp = aMaxHp;
-      armor = aArmor;
-      attack = aAttack;
+      maxHp = aCreatureStatistics.getMaxHp();
+      armor = aCreatureStatistics.getArmor();
+      attack = aCreatureStatistics.getAttack();
       name = aCreatureStatistics.getName();
       moveRange = aCreatureStatistics.getMoveRange();
       damage = aCreatureStatistics.getDamage();
       tier = aCreatureStatistics.getTier();
       description = aCreatureStatistics.getDescription();
       isUpgraded = aCreatureStatistics.isUpgraded();
-  }
-
-  public CreatureStats( final CreatureStatisticIf aCreatureStatics )
-  {
-      this( aCreatureStatics, aCreatureStatics.getAttack(), aCreatureStatics.getArmor(), aCreatureStatics.getMaxHp() );
   }
 }
