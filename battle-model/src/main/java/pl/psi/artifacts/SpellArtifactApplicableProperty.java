@@ -1,5 +1,7 @@
 package pl.psi.artifacts;
 
+import pl.psi.artifacts.model.ArtifactTarget;
+
 /**
  * Possible properties to apply Spell Artifacts to.
  */
@@ -11,7 +13,11 @@ public enum SpellArtifactApplicableProperty implements ArtifactApplicablePropert
 
     FIRE_DAMAGE,
 
-    WATER_DAMAGE,
+    WATER_DAMAGE;
 
-    UNLOCK;
+    @Override
+    public ArtifactTarget getArtifactTarget()
+    {
+        return ArtifactTarget.SPELLS;
+    }
 }

@@ -1,4 +1,8 @@
 package pl.psi.artifacts;
 
-public interface ArtifactApplicableProperty {
+import pl.psi.artifacts.model.ArtifactTarget;
+
+public interface ArtifactApplicableProperty
+{
+    ArtifactTarget getArtifactTarget();
 }

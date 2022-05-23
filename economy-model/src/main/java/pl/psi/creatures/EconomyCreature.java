@@ -11,18 +11,24 @@ import pl.psi.artifacts.model.ArtifactEffect;
 
 @Getter
 @Setter
-public class EconomyCreature implements ArtifactEffectApplicable {
+public class EconomyCreature implements ArtifactEffectApplicable
+{
 
     private CreatureStatisticIf upgradedStats;
     private final CreatureStatistic baseStats;
     private final int amount;
     private final int goldCost;
 
-    EconomyCreature(final CreatureStatistic aStats, final int aAmount, final int aGoldCost) {
-        upgradedStats = new CreatureStats(aStats);
+    private final ArtifactApplier artifactApplier;
+
+    EconomyCreature( final CreatureStatistic aStats, final int aAmount, final int aGoldCost )
+    {
         baseStats = aStats;
         amount = aAmount;
         goldCost = aGoldCost;
+
+        upgradedStats = new CreatureStats( aStats );
+        artifactApplier = new ArtifactApplier();
     }
 
     public int getAmount() {
@@ -46,41 +52,8 @@ public class EconomyCreature implements ArtifactEffectApplicable {
     }
 
     @Override
-    public void applyArtifactEffect(
-        final ArtifactEffect<? extends ArtifactEffectApplicable> artifactEffect) {
-        final CreatureArtifactApplicableProperty applierTarget = artifactEffect.getApplierTarget();
-
-        int upgradedMaxHp = upgradedStats.getMaxHp();
-        int upgradedAttack = upgradedStats.getAttack();
-        int upgradedArmor = upgradedStats.getArmor();
-
-        switch (applierTarget) {
-            case HEALTH:
-                upgradedMaxHp = artifactEffect.calculateStatisticValueAfterApplying(
-                    new ArtifactEffectApplyingProperties(baseStats.getMaxHp(),upgradedMaxHp));
-                break;
-            case ATTACK:
-                upgradedAttack = artifactEffect.calculateStatisticValueAfterApplying(
-                    new ArtifactEffectApplyingProperties(baseStats.getAttack(), upgradedAttack));
-                break;
-            case DEFENCE:
-                upgradedArmor = artifactEffect.calculateStatisticValueAfterApplying(
-                    new ArtifactEffectApplyingProperties(baseStats.getArmor(), upgradedArmor));
-                break;
-            default:
-                throw new UnsupportedOperationException("Unrecognised applying target type.");
-        }
-
-        upgradedStats = CreatureStats.builder()
-            .maxHp(upgradedMaxHp)
-            .attack(upgradedAttack)
-            .armor(upgradedArmor)
-            .name(upgradedStats.getName())
-            .moveRange(upgradedStats.getMoveRange())
-            .damage(upgradedStats.getDamage())
-            .tier(upgradedStats.getTier())
-            .description(upgradedStats.getDescription())
-            .isUpgraded(upgradedStats.isUpgraded())
-            .build();
+    public void applyArtifactEffect( final ArtifactEffect< ? extends ArtifactEffectApplicable > aArtifactEffect )
+    {
+        upgradedStats = artifactApplier.calculateCreatureUpgradedStatisticAfterApplyingArtifact( aArtifactEffect, baseStats, upgradedStats );
     }
 }
