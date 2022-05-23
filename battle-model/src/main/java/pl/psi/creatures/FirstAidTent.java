@@ -51,33 +51,6 @@ public class FirstAidTent extends WarMachinesAbstract {
         }
     }
 
-    @Override
-    double getAttack() {
-        return stats.getAttack();
-    }
-
-    @Override
-    double getArmor() {
-        return stats.getArmor();
-    }
-
-    @Override
-    public String getName() {
-        return stats.getName();
-    }
-
-    @Override
-    public double getMoveRange() {
-        return stats.getMoveRange();
-    }
-
-    @Override
-    public Range<Integer> getDamage()
-    {
-        return stats.getDamage();
-    }
-
-
     public static class Builder {
         private int amount = 1;
         private int skillLevel;

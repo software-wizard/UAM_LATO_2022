@@ -1,7 +1,5 @@
 package pl.psi.creatures;
 
-import com.google.common.collect.Range;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -14,11 +12,6 @@ public class Catapult extends WarMachinesAbstract {
         calculator = aCalculator;
         amount = aAmount;
         skillLevel = aSkillLevel;
-    }
-
-
-    public Catapult() {
-
     }
 
     @Override
@@ -42,31 +35,6 @@ public class Catapult extends WarMachinesAbstract {
 
     private void applyDamage(final Creature aDefender, final double aDamage) {
         aDefender.setCurrentHp(aDefender.getCurrentHp() - aDamage);
-    }
-
-    @Override
-    double getAttack() {
-        return stats.getAttack();
-    }
-
-    @Override
-    double getArmor() {
-        return stats.getArmor();
-    }
-
-    @Override
-    public String getName() {
-        return stats.getName();
-    }
-
-    @Override
-    public double getMoveRange() {
-        return stats.getMoveRange();
-    }
-
-    @Override
-    public Range<Integer> getDamage() {
-        return stats.getDamage();
     }
 
 
