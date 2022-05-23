@@ -30,7 +30,7 @@ class WarMachinesCreatureDecoratorTest {
         final Random randomMock = mock(Random.class);
         when(randomMock.nextInt(anyInt())).thenReturn(5);
 
-        final Creature attacker = new Creature.Builder().statistic(CreatureStats.builder()
+        final Creature defender = new Creature.Builder().statistic(CreatureStats.builder()
                         .maxHp(100)
                         .damage(Range.closed(10, 10))
                         .armor(5)
@@ -38,8 +38,8 @@ class WarMachinesCreatureDecoratorTest {
                 .build();
         final WarMachinesCreatureDecorator Ballista;
         Ballista = new WarMachinesFactory().create(1, 1, new DefaultDamageCalculator(randomMock));
-        Ballista.attack(attacker);
-        assertThat(attacker.getCurrentHp()).isEqualTo(84);
+        Ballista.attack(defender);
+        assertThat(defender.getCurrentHp()).isEqualTo(84);
     }
 
     @Test
@@ -78,4 +78,20 @@ class WarMachinesCreatureDecoratorTest {
         Mockito.verify(calcMock, times(0)).calculateDamage(attacker,Ballista);
     }
 
+    @Test
+    void firstAidTentCanNotHurtTheCreature() {
+        final Random randomMock = mock(Random.class);
+        when(randomMock.nextInt(anyInt())).thenReturn(10);
+
+        final Creature defender = new Creature.Builder().statistic(CreatureStats.builder()
+                        .maxHp(100)
+                        .damage(Range.closed(10, 10))
+                        .armor(0)
+                        .build())
+                .build();
+        final WarMachinesCreatureDecorator First_Aid_Tent;
+        First_Aid_Tent = new WarMachinesFactory().create(2, 1, new DefaultDamageCalculator(randomMock));
+        defender.attack(First_Aid_Tent);
+        assertThat(defender.getCurrentHp()).isEqualTo(100);
+    }
 }

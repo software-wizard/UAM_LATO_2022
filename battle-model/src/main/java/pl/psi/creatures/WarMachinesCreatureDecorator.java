@@ -81,7 +81,6 @@ public class WarMachinesCreatureDecorator extends Creature {
     public void propertyChange(final PropertyChangeEvent evt) {
         decorated.propertyChange(evt);
     }
-
     //heal do namiotu
 
     public static class Builder {
