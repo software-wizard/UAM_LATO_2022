@@ -2,6 +2,7 @@ package pl.psi.spells;
 
 import pl.psi.creatures.Creature;
 
+import java.beans.PropertyChangeEvent;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,5 +20,10 @@ public class AreaDamageSpell extends Spell<List<Optional<Creature>>> {
         aDefender.forEach(
                 optionalCreature -> optionalCreature.ifPresent(
                         creature -> creature.applySpellDamage(creature, value)));
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+
     }
 }

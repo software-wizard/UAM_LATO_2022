@@ -26,18 +26,18 @@ public class SpellFactory {
             case "Haste":
                 switch (rang) {
                     case BASIC:
-                        return new BuffDebuffSpell(FIELD, name, BASIC, manaCost, CreatureStats.builder().moveRange(10).build());
+                        return new BuffDebuffSpell(FIELD, name, BASIC, manaCost, CreatureStats.builder().moveRange(10).build(), 2);
                     case ADVANCED:
-                        return new BuffDebuffSpell(FIELD, name, ADVANCED, manaCost, CreatureStats.builder().moveRange(20).build());
+                        return new BuffDebuffSpell(FIELD, name, ADVANCED, manaCost, CreatureStats.builder().moveRange(20).build(), 4);
                     case EXPERT:
-                        return new BuffDebuffSpell(FIELD, name, EXPERT, manaCost, CreatureStats.builder().moveRange(30).build());
+                        return new BuffDebuffSpell(FIELD, name, EXPERT, manaCost, CreatureStats.builder().moveRange(30).build(), 2);
                     default:
                         throw new IllegalArgumentException(EXCEPTION_MESSAGE);
                 }
             case "FireBall":
                 switch (rang) {
                     case BASIC:
-                        return new AreaDamageSpell(AREA, name, BASIC, manaCost, (spellPower * 1) + 10);
+                        return new AreaDamageSpell(AREA, name, BASIC, manaCost, spellPower + 10);
                     case ADVANCED:
                         return new AreaDamageSpell(AREA, name, ADVANCED, manaCost, (spellPower * 2) + 20);
                     case EXPERT:

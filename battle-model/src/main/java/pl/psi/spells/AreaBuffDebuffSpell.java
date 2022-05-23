@@ -3,6 +3,7 @@ package pl.psi.spells;
 import pl.psi.creatures.Creature;
 import pl.psi.creatures.CreatureStats;
 
+import java.beans.PropertyChangeEvent;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,5 +21,10 @@ public class AreaBuffDebuffSpell extends Spell<List<Optional<Creature>>> {
         aDefender.forEach(
                 optionalCreature -> optionalCreature.ifPresent(
                         creature -> creature.setStatsWithSpells(creatureStats)));
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+
     }
 }

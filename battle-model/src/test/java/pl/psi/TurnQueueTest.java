@@ -23,7 +23,7 @@ class TurnQueueTest
         final Creature creature3 = new Creature.Builder().statistic( CreatureStats.builder()
             .build() )
             .build();
-        final TurnQueue turnQueue = new TurnQueue( List.of( creature1, creature2 ), List.of( creature3 ) );
+        final TurnQueue turnQueue = new TurnQueue( List.of( creature1, creature2 ), List.of( creature3 ));
 
         assertEquals( turnQueue.getCurrentCreature(), creature1 );
         turnQueue.next();

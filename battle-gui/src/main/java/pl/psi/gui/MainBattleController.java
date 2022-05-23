@@ -17,6 +17,8 @@ public class MainBattleController
     private GridPane gridMap;
     @FXML
     private Button passButton;
+    @FXML
+    private Button windowButton;
 
     public MainBattleController( final Hero aHero1, final Hero aHero2 )
     {
@@ -30,6 +32,12 @@ public class MainBattleController
 
         passButton.addEventHandler( MouseEvent.MOUSE_CLICKED, ( e ) -> {
             gameEngine.pass();
+            refreshGui();
+        } );
+
+        windowButton.addEventHandler( MouseEvent.MOUSE_CLICKED, ( e ) -> {
+            gameEngine.castSpell(new Point(14,1), gameEngine.getHero1().getSpells().get(0));
+            gameEngine.castSpell(new Point(14,1), gameEngine.getHero1().getSpells().get(1));
             refreshGui();
         } );
 

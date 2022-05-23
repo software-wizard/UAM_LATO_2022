@@ -3,6 +3,7 @@ package pl.psi.gui;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import pl.psi.Hero;
 
@@ -10,6 +11,10 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import pl.psi.spells.SpellFactory;
+
+import static pl.psi.spells.SpellRang.ADVANCED;
+import static pl.psi.spells.SpellRang.BASIC;
 
 public class Start extends Application
 {
@@ -48,13 +53,13 @@ public class Start extends Application
 
     private Hero createP2()
     {
-        final Hero ret = new Hero( List.of( new NecropolisFactory().create( true, 1, 5 ) ), Collections.emptySet());
+        final Hero ret = new Hero( List.of( new NecropolisFactory().create( true, 1, 5 ) ), Collections.emptyList());
         return ret;
     }
 
     private Hero createP1()
     {
-        final Hero ret = new Hero( List.of( new NecropolisFactory().create( false, 1, 5 ) ), Collections.emptySet());
+        final Hero ret = new Hero( List.of( new NecropolisFactory().create( false, 1, 5 ) ), List.of(new SpellFactory().create("Haste", BASIC, 10,1), new SpellFactory().create("Haste", ADVANCED, 10,1)));
         return ret;
     }
 

@@ -45,8 +45,8 @@ public class SpellTest {
         List<Creature> secondHeroCreatures = List.of(EXAMPLE_CREATURE_2);
 
         final GameEngine gameEngine =
-                new GameEngine(new Hero(firstHeroCreatures, Set.of(LIGHTING_BOLT_RANG_1)),
-                        new Hero(secondHeroCreatures, Set.of(LIGHTING_BOLT_RANG_1)));
+                new GameEngine(new Hero(firstHeroCreatures, List.of(LIGHTING_BOLT_RANG_1)),
+                        new Hero(secondHeroCreatures, List.of(LIGHTING_BOLT_RANG_1)));
 
         Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
                 .isPresent()).isTrue();
@@ -69,8 +69,8 @@ public class SpellTest {
 
 
         final GameEngine gameEngine =
-                new GameEngine(new Hero(firstHeroCreatures, Set.of(HASTE)),
-                        new Hero(secondHeroCreatures, Set.of(LIGHTING_BOLT_RANG_1)));
+                new GameEngine(new Hero(firstHeroCreatures, List.of(HASTE)),
+                        new Hero(secondHeroCreatures, List.of(LIGHTING_BOLT_RANG_1)));
 
         Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
                 .isPresent()).isTrue();
@@ -99,8 +99,8 @@ public class SpellTest {
         List<Creature> secondHeroCreatures = List.of(EXAMPLE_CREATURE_2);
 
         final GameEngine gameEngine =
-                new GameEngine(new Hero(secondHeroCreatures, Set.of(FIREBALL)),
-                        new Hero(firstHeroCreatures, Set.of(LIGHTING_BOLT_RANG_1)));
+                new GameEngine(new Hero(secondHeroCreatures, List.of(FIREBALL)),
+                        new Hero(firstHeroCreatures, List.of(LIGHTING_BOLT_RANG_1)));
 
         gameEngine.pass();
         gameEngine.move(new Point(14, 2));
@@ -136,8 +136,8 @@ public class SpellTest {
         List<Creature> secondHeroCreatures = List.of(EXAMPLE_CREATURE_2);
 
         final GameEngine gameEngine =
-                new GameEngine(new Hero(secondHeroCreatures, Set.of(LIGHTING_BOLT_RANG_1, LIGHTING_BOLT_RANG_2)),
-                        new Hero(firstHeroCreatures, Set.of(LIGHTING_BOLT_RANG_1)));
+                new GameEngine(new Hero(secondHeroCreatures, List.of(LIGHTING_BOLT_RANG_1, LIGHTING_BOLT_RANG_2)),
+                        new Hero(firstHeroCreatures, List.of(LIGHTING_BOLT_RANG_1)));
 
         gameEngine.pass();
         gameEngine.move(new Point(14, 2));

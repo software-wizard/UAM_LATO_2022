@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static pl.psi.TurnQueue.END_OF_TURN;
+
 /**
  * TODO: Describe this class (The first line - until the first dot - will interpret as the brief description).
  */
@@ -29,6 +31,7 @@ public class GameEngine {
         this.hero2 = aHero2;
         turnQueue = new TurnQueue(aHero1.getCreatures(), aHero2.getCreatures());
         board = new Board(aHero1.getCreatures(), aHero2.getCreatures());
+        hero1.getSpells().forEach( spell -> turnQueue.addObserver( END_OF_TURN, spell) );
     }
 
     public void attack(final Point point) {
@@ -74,7 +77,7 @@ public class GameEngine {
             case AREA:
                 List<Optional<Creature>> creatureList = new ArrayList<>();
                 if (board.getCreature(new Point(point.getX(), point.getY() + 1)).isPresent())
-                    creatureList.add(board.getCreature(new Point(point.getX(), point.getY() + 1)));
+                    creatureList.add(board.getCreature(new Point(point.getX(), point.getY() + 1))); // ToDo: CHANGE IT!!!!!!!!!!!!!!!
                 board.getCreature(point)
                         .ifPresent(defender -> {
                                     creatureList.add(board.getCreature(point));

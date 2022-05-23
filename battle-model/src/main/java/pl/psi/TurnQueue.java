@@ -1,13 +1,17 @@
 package pl.psi;
 
+import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import pl.psi.creatures.Creature;
+import pl.psi.spells.BuffDebuffSpell;
+import pl.psi.spells.Spell;
 
 /**
  * TODO: Describe this class (The first line - until the first dot - will interpret as the brief description).
@@ -22,8 +26,8 @@ public class TurnQueue
     private Creature currentCreature;
     private int roundNumber;
 
-    public TurnQueue( final Collection< Creature > aCreatureList,
-        final Collection< Creature > aCreatureList2 )
+    public TurnQueue(final Collection<Creature> aCreatureList,
+                     final Collection<Creature> aCreatureList2)
     {
         creatures = Stream.concat( aCreatureList.stream(), aCreatureList2.stream() )
             .collect( Collectors.toList() );
@@ -31,6 +35,10 @@ public class TurnQueue
         initQueue();
         creatures.forEach( c -> observerSupport.addPropertyChangeListener( END_OF_TURN, c ) );
         next();
+    }
+
+    public void addObserver(final String aEventType, final PropertyChangeListener aObserver) {
+        observerSupport.addPropertyChangeListener(aEventType, aObserver);
     }
 
     private void initQueue()

@@ -185,7 +185,7 @@ public class CreatureTest
             .build() )
             .build();
 
-        final TurnQueue turnQueue = new TurnQueue( List.of( attacker ), List.of( defender ) );
+        final TurnQueue turnQueue = new TurnQueue( List.of( attacker ), List.of( defender ));
 
         attacker.attack( defender );
         attacker.attack( defender );
@@ -214,7 +214,7 @@ public class CreatureTest
             .build() );
 
         final TurnQueue turnQueue =
-            new TurnQueue( List.of( attacker ), List.of( selfHealAfterEndOfTurnCreature ) );
+            new TurnQueue( List.of( attacker ), List.of( selfHealAfterEndOfTurnCreature ));
 
         attacker.attack( selfHealAfterEndOfTurnCreature );
         assertThat( selfHealAfterEndOfTurnCreature.getCurrentHp() ).isEqualTo( 90 );
