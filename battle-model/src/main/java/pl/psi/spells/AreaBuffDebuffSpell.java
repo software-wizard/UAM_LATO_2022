@@ -7,7 +7,7 @@ import java.beans.PropertyChangeEvent;
 import java.util.List;
 import java.util.Optional;
 
-public class AreaBuffDebuffSpell extends Spell<List<Optional<Creature>>> {
+public class AreaBuffDebuffSpell extends Spell<List<Creature>> {
 
     private final CreatureStats creatureStats;
 
@@ -17,10 +17,8 @@ public class AreaBuffDebuffSpell extends Spell<List<Optional<Creature>>> {
     }
 
     @Override
-    public void castSpell(List<Optional<Creature>> aDefender) {
-        aDefender.forEach(
-                optionalCreature -> optionalCreature.ifPresent(
-                        creature -> creature.setStatsWithSpells(creatureStats)));
+    public void castSpell(List<Creature> aDefender) {
+        aDefender.forEach(creature -> creature.applyStatsWithSpells(creatureStats));
     }
 
     @Override

@@ -16,10 +16,10 @@ public class CreatureStats implements CreatureStatisticIf {
     private final int attack;
     private final int armor;
     private final int maxHp;
-    private int moveRange;
+    private final int moveRange;
+    private final int magicResist;
     private final Range<Integer> damage;
     private final int tier;
     private final String description;
     private final boolean isUpgraded;
-
 }

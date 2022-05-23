@@ -31,7 +31,7 @@ public class GameEngine {
         this.hero2 = aHero2;
         turnQueue = new TurnQueue(aHero1.getCreatures(), aHero2.getCreatures());
         board = new Board(aHero1.getCreatures(), aHero2.getCreatures());
-        hero1.getSpells().forEach( spell -> turnQueue.addObserver( END_OF_TURN, spell) );
+        hero1.getSpells().forEach(spell -> turnQueue.addObserver(END_OF_TURN, spell));
     }
 
     public void attack(final Point point) {
@@ -75,18 +75,18 @@ public class GameEngine {
                         });
                 break;
             case AREA:
-                List<Optional<Creature>> creatureList = new ArrayList<>();
+                List<Creature> creatureList = new ArrayList<>();
                 if (board.getCreature(new Point(point.getX(), point.getY() + 1)).isPresent())
-                    creatureList.add(board.getCreature(new Point(point.getX(), point.getY() + 1))); // ToDo: CHANGE IT!!!!!!!!!!!!!!!
+                    board.getCreature(new Point(point.getX(), point.getY() + 1)).ifPresent(creatureList::add); // ToDo: CHANGE IT!!!!!!!!!!!!!!!
                 board.getCreature(point)
                         .ifPresent(defender -> {
-                                    creatureList.add(board.getCreature(point));
+                                    creatureList.add(defender);
                                     turnQueue.getCurrentCreature().castSpell(creatureList, spell);
                                 }
                         );
                 break;
             default:
-                break; // ToDo: Exception
+                throw new IllegalArgumentException("Not supported category.");
         }
 
     }

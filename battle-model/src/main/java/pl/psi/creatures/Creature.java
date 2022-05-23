@@ -26,7 +26,6 @@ import java.util.Random;
 @ToString
 public class Creature implements PropertyChangeListener {
     private CreatureStatisticIf stats;
-    @Setter
     private CreatureStatisticIf statsWithSpells;
     private int amount;
     private int currentHp;
@@ -59,7 +58,7 @@ public class Creature implements PropertyChangeListener {
             spell.castSpell(aDefender);
     }
 
-    public void castSpell(final List<Optional<Creature>> aDefender, Spell spell) {
+    public void castSpell(final List<Creature> aDefender, Spell spell) {
         if (isAlive()) {
             spell.castSpell(aDefender);
         }
@@ -77,7 +76,7 @@ public class Creature implements PropertyChangeListener {
         aDefender.setCurrentHp(aDefender.getCurrentHp() - damage); // ToDo: include magic resist
     }
 
-    public void setCurrentHp(final int aCurrentHp) {
+    protected void setCurrentHp(final int aCurrentHp) {
         currentHp = aCurrentHp;
     }
 
@@ -121,6 +120,18 @@ public class Creature implements PropertyChangeListener {
 
     public int getMoveRange() {
         return stats.getMoveRange();
+    }
+
+    public void applyStatsWithSpells(CreatureStats aCreatureStats) {
+        setStatsWithSpells(CreatureStats.builder()
+                .attack((statsWithSpells == null) ? aCreatureStats.getAttack() : statsWithSpells.getAttack() + aCreatureStats.getAttack() )
+                .armor((statsWithSpells == null) ? aCreatureStats.getArmor() : statsWithSpells.getArmor() + aCreatureStats.getArmor() )
+                .moveRange((statsWithSpells == null) ? aCreatureStats.getMoveRange() : statsWithSpells.getMoveRange() + aCreatureStats.getMoveRange() )
+                .build());
+    }
+
+    private void setStatsWithSpells(CreatureStatisticIf aStatsWithSpells) {
+        statsWithSpells = aStatsWithSpells;
     }
 
     public static class Builder {

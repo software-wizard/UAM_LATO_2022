@@ -9,7 +9,6 @@ import pl.psi.creatures.Creature;
 import pl.psi.creatures.CreatureStats;
 
 import java.util.List;
-import java.util.Set;
 
 import static pl.psi.spells.SpellRang.ADVANCED;
 import static pl.psi.spells.SpellRang.BASIC;

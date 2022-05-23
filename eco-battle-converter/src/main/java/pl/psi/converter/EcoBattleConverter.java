@@ -46,7 +46,7 @@ public class EcoBattleConverter {
                 .forEach(ecoCreature -> creatures.add(factory.create(ecoCreature.isUpgraded(),
                         ecoCreature.getTier(), ecoCreature.getAmount())));
 
-        final Set<Spell> spells = new HashSet<>();
+        final List<Spell> spells = new ArrayList<>();
         final SpellFactory spellFactory = new SpellFactory();
         aPlayer1.getSpellList()
                 .forEach(economySpell -> spells.add(spellFactory.create(economySpell.getName(), BASIC, 10, aPlayer1.getSpellPower())));
