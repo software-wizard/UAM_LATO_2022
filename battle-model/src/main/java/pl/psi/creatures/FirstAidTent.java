@@ -2,8 +2,7 @@ package pl.psi.creatures;
 
 import com.google.common.collect.Range;
 
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class FirstAidTent extends WarMachinesAbstract {
 
@@ -24,7 +23,10 @@ public class FirstAidTent extends WarMachinesAbstract {
             int maxHp = calculateHealHp(getSkillLevel());
             double heal = random.nextInt(maxHp - 1) + 1;
 
-            creatureList.stream()
+            List<Creature> creatures = new ArrayList<>(creatureList);
+            Collections.shuffle(creatures);
+
+            creatures.stream()
                     .filter(creature -> this.getHeroNumber() == creature.getHeroNumber())
                     .filter(Creature::isAlive)
                     .findAny()

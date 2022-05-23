@@ -42,14 +42,6 @@ public class TurnQueue
         return currentCreature;
     }
 
-    public Creature getRandomCreature()
-    {
-        return  creatures.stream()
-                .filter(c -> !(c instanceof WarMachinesAbstract))
-                .skip(new Random().nextInt(creatures.size()))
-                .findFirst().orElse(null);
-    }
-
     public void next()
     {
         if( creaturesQueue.isEmpty() )
@@ -57,6 +49,10 @@ public class TurnQueue
             endOfTurn();
         }
         currentCreature = creaturesQueue.poll();
+
+        if (currentCreature instanceof WarMachinesAbstract) {
+            handleWarMachineAction();
+        }
     }
 
     private void endOfTurn()
@@ -64,5 +60,15 @@ public class TurnQueue
         roundNumber++;
         initQueue();
         observerSupport.firePropertyChange( END_OF_TURN, roundNumber - 1, roundNumber );
+    }
+
+    private void handleWarMachineAction() {
+        WarMachinesAbstract warMachine = (WarMachinesAbstract) currentCreature;
+
+        if (warMachine.getSkillLevel() == 0)
+        {
+            warMachine.performAction((List<Creature>) creatures);
+            currentCreature = creaturesQueue.poll();
+        }
     }
 }

@@ -2,6 +2,8 @@ package pl.psi.creatures;
 
 import com.google.common.collect.Range;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -22,7 +24,10 @@ public class Catapult extends WarMachinesAbstract {
     @Override
     public void performAction(List<Creature> creatureList) {
         if (isAlive()) {
-            creatureList.stream()
+            List<Creature> creatures = new ArrayList<>(creatureList);
+            Collections.shuffle(creatures);
+
+            creatures.stream()
                     .filter(creature -> this.getHeroNumber() != creature.getHeroNumber())
                     .filter(creature -> creature instanceof SpecialFieldsToAttackDecorator)
                     .findAny()
