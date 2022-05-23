@@ -12,6 +12,7 @@ public class ShooterCreature extends AbstractCreature
 {
     private final Creature decorated;
     private int shots;
+    private final int maxShots;
     private boolean isInMelee = false;
     private final double MELEE_PENALTY = 0.5;
     private int range = Integer.MAX_VALUE;
@@ -23,6 +24,7 @@ public class ShooterCreature extends AbstractCreature
         super( aDecorated );
         decorated = aDecorated;
         shots = aShots;
+        maxShots = aShots;
         rangeDamageCalculator = decorated.getCalculator();
     }
 
@@ -63,5 +65,9 @@ public class ShooterCreature extends AbstractCreature
         else{
             throw new RuntimeException( "No more shots" );
         }
+    }
+
+    public void resetShots(){
+        shots = maxShots;
     }
 }

@@ -31,6 +31,7 @@ public class Creature implements PropertyChangeListener
     private double currentHp;
     private boolean canCounterAttack = true;
     private DamageCalculatorIf calculator;
+    private int heroNumber;
 
 Creature()
 {
