@@ -111,8 +111,28 @@ public class ArtifactFactory
 
     public ArtifactIf createArtifact( @NonNull SpellArtifactNamesHolder aArtifactName )
     {
-        // TODO: create and define spell artifacts.
-        throw new IllegalArgumentException( NO_ARTIFACT_IMPLEMENTATION_EXCEPTION_MESSAGE );
+        switch (aArtifactName) {
+
+            case ORB_OF_THE_FIRMAMENT:
+
+                return createOrbOfTheFirmament();
+
+            case ORB_OF_SILT:
+
+                return createOrbOfSilt();
+
+            case ORB_OF_TEMPSTUOUS_FIRE:
+
+                return createOrbOfTempstuousFire();
+
+            case ORB_OF_DRIVING_RAIN:
+
+                return createOrbOfDrivingRain();
+
+            default:
+                throw new IllegalArgumentException( NO_ARTIFACT_IMPLEMENTATION_EXCEPTION_MESSAGE );
+
+        }
     }
 
     private ArtifactIf createRingOfLifeArtifact()
@@ -477,6 +497,82 @@ public class ArtifactFactory
                 .rank( ArtifactRank.RELIC )
                 .target( ArtifactTarget.SKILL )
                 .effects( Set.of( thunderHelmetEffectSpell, thunderHelmetEffectKnowledge ) )
+                .build();
+    }
+
+    private ArtifactIf createOrbOfTheFirmament ()
+    {
+        final ArtifactEffect< ArtifactEffectApplicable > orbOfTheFirmamentEffect = ArtifactEffect.builder()
+                .effectValue( BigDecimal.valueOf( 1.5 ) )
+                .effectApplyingMode( ArtifactApplyingMode.MULTIPLY )
+                .applierTarget( SpellArtifactApplicableProperty.AIR_DAMAGE )
+                .build();
+
+        return Artifact.builder()
+                .name( "Orb Of The Firmament" )
+                .description( "Hero's air spells do extra 50% damage" )
+                .placement( ArtifactPlacement.MISC )
+                .price( BigDecimal.valueOf( 20 ) )
+                .rank( ArtifactRank.MAJOR )
+                .target( ArtifactTarget.SPELLS )
+                .effects( Set.of( orbOfTheFirmamentEffect ) )
+                .build();
+    }
+
+    private ArtifactIf createOrbOfSilt ()
+    {
+        final ArtifactEffect< ArtifactEffectApplicable > orbOfSiltEffect = ArtifactEffect.builder()
+                .effectValue( BigDecimal.valueOf( 1.5 ) )
+                .effectApplyingMode( ArtifactApplyingMode.MULTIPLY )
+                .applierTarget( SpellArtifactApplicableProperty.EARTH_DAMAGE )
+                .build();
+
+        return Artifact.builder()
+                .name( "Orb Of Silt" )
+                .description( "Hero's earth spells do extra 50% damage" )
+                .placement( ArtifactPlacement.MISC )
+                .price( BigDecimal.valueOf( 20 ) )
+                .rank( ArtifactRank.MAJOR )
+                .target( ArtifactTarget.SPELLS )
+                .effects( Set.of( orbOfSiltEffect ) )
+                .build();
+    }
+
+    private ArtifactIf createOrbOfTempstuousFire ()
+    {
+        final ArtifactEffect< ArtifactEffectApplicable > orbOfTempstuousFireEffect = ArtifactEffect.builder()
+                .effectValue( BigDecimal.valueOf( 1.5 ) )
+                .effectApplyingMode( ArtifactApplyingMode.MULTIPLY )
+                .applierTarget( SpellArtifactApplicableProperty.FIRE_DAMAGE )
+                .build();
+
+        return Artifact.builder()
+                .name( "Orb Of Tempstuous Fire" )
+                .description( "Hero's fire spells do extra 50% damage" )
+                .placement( ArtifactPlacement.MISC )
+                .price( BigDecimal.valueOf( 20 ) )
+                .rank( ArtifactRank.MAJOR )
+                .target( ArtifactTarget.SPELLS )
+                .effects( Set.of( orbOfTempstuousFireEffect ) )
+                .build();
+    }
+
+    private ArtifactIf createOrbOfDrivingRain ()
+    {
+        final ArtifactEffect< ArtifactEffectApplicable > orbOfDrivingRainEffect = ArtifactEffect.builder()
+                .effectValue( BigDecimal.valueOf( 1.5 ) )
+                .effectApplyingMode( ArtifactApplyingMode.MULTIPLY )
+                .applierTarget( SpellArtifactApplicableProperty.WATER_DAMAGE )
+                .build();
+
+        return Artifact.builder()
+                .name( "Orb Of Driving Rain" )
+                .description( "Hero's water spells do extra 50% damage" )
+                .placement( ArtifactPlacement.MISC )
+                .price( BigDecimal.valueOf( 20 ) )
+                .rank( ArtifactRank.MAJOR )
+                .target( ArtifactTarget.SPELLS )
+                .effects( Set.of( orbOfDrivingRainEffect ) )
                 .build();
     }
 }

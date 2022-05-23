@@ -5,5 +5,13 @@ package pl.psi.artifacts;
  */
 public enum SpellArtifactApplicableProperty implements ArtifactApplicableProperty
 {
-    // TODO: define properties to apply spell artifacts.
+    AIR_DAMAGE,
+
+    EARTH_DAMAGE,
+
+    FIRE_DAMAGE,
+
+    WATER_DAMAGE,
+
+    UNLOCK;
 }
