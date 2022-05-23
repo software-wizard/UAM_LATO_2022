@@ -5,6 +5,7 @@ import java.math.RoundingMode;
 import java.util.Objects;
 import lombok.Builder;
 import lombok.Getter;
+import pl.psi.artifacts.ArtifactApplicableProperty;
 import pl.psi.artifacts.ArtifactEffectApplicable;
 import pl.psi.artifacts.ArtifactEffectApplyingProperties;
 import pl.psi.artifacts.CreatureArtifactApplicableProperty;
@@ -17,7 +18,7 @@ public class ArtifactEffect<T extends ArtifactEffectApplicable> {
 
     private final ArtifactApplyingMode effectApplyingMode;
 
-    private final CreatureArtifactApplicableProperty applierTarget;
+    private final ArtifactApplicableProperty applierTarget;
 
     void apply( T aApplicableModelObject )
     {
