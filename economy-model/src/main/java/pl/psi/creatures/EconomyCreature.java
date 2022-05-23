@@ -48,8 +48,6 @@ public class EconomyCreature implements ArtifactEffectApplicable {
     @Override
     public void applyArtifactEffect(
         final ArtifactEffect<? extends ArtifactEffectApplicable> artifactEffect) {
-        final BigDecimal effectValue = artifactEffect.getEffectValue();
-        final ArtifactApplyingMode applyingMode = artifactEffect.getEffectApplyingMode();
         final CreatureArtifactApplicableProperty applierTarget = artifactEffect.getApplierTarget();
 
         int upgradedMaxHp = upgradedStats.getMaxHp();
@@ -59,24 +57,15 @@ public class EconomyCreature implements ArtifactEffectApplicable {
         switch (applierTarget) {
             case HEALTH:
                 upgradedMaxHp = artifactEffect.calculateStatisticValueAfterApplying(
-                    new ArtifactEffectApplyingProperties(applyingMode,
-                        effectValue,
-                        upgradedMaxHp,
-                        baseStats.getMaxHp()));
+                    new ArtifactEffectApplyingProperties(upgradedMaxHp, baseStats.getMaxHp()));
                 break;
             case ATTACK:
                 upgradedAttack = artifactEffect.calculateStatisticValueAfterApplying(
-                    new ArtifactEffectApplyingProperties(applyingMode,
-                        effectValue,
-                        upgradedAttack,
-                        baseStats.getAttack()));
+                    new ArtifactEffectApplyingProperties(upgradedAttack, baseStats.getAttack()));
                 break;
             case DEFENCE:
                 upgradedArmor = artifactEffect.calculateStatisticValueAfterApplying(
-                    new ArtifactEffectApplyingProperties(applyingMode,
-                        effectValue,
-                        upgradedArmor,
-                        baseStats.getArmor()));
+                    new ArtifactEffectApplyingProperties(upgradedArmor, baseStats.getArmor()));
                 break;
             default:
                 throw new UnsupportedOperationException("Unrecognised applying target type.");

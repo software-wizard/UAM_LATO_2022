@@ -19,19 +19,25 @@ public class ArtifactEffect<T extends ArtifactEffectApplicable> {
 
     private final CreatureArtifactApplicableProperty applierTarget;
 
+    void apply( T aApplicableModelObject )
+    {
+        aApplicableModelObject.applyArtifactEffect( this );
+    }
+
+
     public int calculateStatisticValueAfterApplying(final ArtifactEffectApplyingProperties effectStats) {
         BigDecimal result;
-        switch (effectStats.getApplyingMode()) {
+        switch (effectApplyingMode) {
             case ADD:
                 result =
-                    effectStats.getEffectValue()
-                        .add(BigDecimal.valueOf(effectStats.getCurrentValue()));
+                    effectValue
+                        .add(BigDecimal.valueOf(effectStats.getUpgradedValue()));
                 break;
             case MULTIPLY:
                 result =
-                    effectStats.getEffectValue()
+                    effectValue
                         .multiply(BigDecimal.valueOf(effectStats.getBaseValue()))
-                        .add(BigDecimal.valueOf(effectStats.getCurrentValue()));
+                        .add(BigDecimal.valueOf(effectStats.getUpgradedValue()));
                 break;
             default:
                 throw new UnsupportedOperationException("Unrecognised artifact applying mode");
