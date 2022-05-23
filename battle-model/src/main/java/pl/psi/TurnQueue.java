@@ -1,13 +1,12 @@
 package pl.psi;
 
 import java.beans.PropertyChangeSupport;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import pl.psi.creatures.Creature;
+import pl.psi.creatures.WarMachinesAbstract;
 
 /**
  * TODO: Describe this class (The first line - until the first dot - will interpret as the brief description).
@@ -41,6 +40,14 @@ public class TurnQueue
     public Creature getCurrentCreature()
     {
         return currentCreature;
+    }
+
+    public Creature getRandomCreature()
+    {
+        return  creatures.stream()
+                .filter(c -> !(c instanceof WarMachinesAbstract))
+                .skip(new Random().nextInt(creatures.size()))
+                .findFirst().orElse(null);
     }
 
     public void next()
