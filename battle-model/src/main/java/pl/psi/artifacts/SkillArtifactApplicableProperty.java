@@ -3,7 +3,13 @@ package pl.psi.artifacts;
 /**
  * Possible properties to apply Skill Artifacts to.
  */
-public class SkillArtifactApplicableProperty
+public enum SkillArtifactApplicableProperty implements ArtifactApplicableProperty
 {
-    // TODO: define properties to apply skill artifacts.
+    ATTACK,
+
+    DEFENCE,
+
+    SPELL_POWER,
+
+    KNOWLEDGE;
 }
