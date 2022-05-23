@@ -86,6 +86,21 @@ class WarMachinesCreatureDecoratorTest {
         attacker.attack(ballista);
         Mockito.verify(calcMock, times(0)).calculateDamage(attacker, ballista);
     }
+
+    @Test
+    void warMachineCatapultAttacksTheWall() {
+        final Random randomMock = mock(Random.class);
+        when(randomMock.nextInt(anyInt())).thenReturn(0);
+
+        final WarMachinesAbstract catapult;
+        catapult = new WarMachinesFactory().create(3, 1, new DefaultDamageCalculator(randomMock), 0);
+
+        final SpecialFieldsToAttackDecorator Wall;
+        Wall = new SpecialFieldsToAttackFactory().create(1, 1, new DefaultDamageCalculator(randomMock));
+
+        catapult.performAction(Wall);
+        assertThat(Wall.getCurrentHp()).isEqualTo(19);
+    }
 }
     /*@Test
     void firstAidTentHealsRandomCreature() {

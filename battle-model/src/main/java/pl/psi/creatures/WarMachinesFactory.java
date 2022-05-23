@@ -17,6 +17,11 @@ public class WarMachinesFactory implements WarMachinesIf<WarMachinesAbstract> {
                         .calculator(aCalculator)
                         .skillLevel(aSkillLevel)
                         .build();
+            case 3:
+                return new Catapult.Builder().statistic(WarMachinesStatistic.CATAPULT)
+                        .amount(aAmount)
+                        .calculator(aCalculator)
+                        .build();
             default:
                 throw new IllegalArgumentException("Illegal Argument Exception");
         }

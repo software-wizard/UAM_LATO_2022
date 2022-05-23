@@ -6,11 +6,9 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum WarMachinesStatistic implements CreatureStatisticIf {
+public enum SpecialFieldsToAttackStatistic implements CreatureStatisticIf {
 
-    BALLISTA("Ballista", 10, 24, 250, 0, Range.closed(8,12), 1, "Lorem ipsum", false),
-    FIRST_AID_TENT("First Aid Tent", 0, 0, 75, 0, Range.closed(0, 0), 2, "Lorem ipsum", false),
-    CATAPULT("Catapult", 10, 24, 1000, 0, Range.closed(1,2), 3, "Lorem ipsum", false);
+    WALL("Wall", 0, 0, 20, 0, Range.closed(0,0), 1, "Lorem ipsum", false);
 
     private final String name;
     private final int attack;
