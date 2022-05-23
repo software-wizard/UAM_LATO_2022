@@ -15,7 +15,7 @@ public enum CreatureArtifactApplicableProperty implements ArtifactApplicableProp
 
 
   @Override
-  public ArtifactTarget getArtifactTarget()
+  public final ArtifactTarget getArtifactTarget()
   {
       return ArtifactTarget.CREATURES;
   }

@@ -16,7 +16,7 @@ public enum SkillArtifactApplicableProperty implements ArtifactApplicablePropert
     KNOWLEDGE;
 
     @Override
-    public ArtifactTarget getArtifactTarget()
+    public final ArtifactTarget getArtifactTarget()
     {
         return ArtifactTarget.SKILL;
     }

@@ -4,6 +4,7 @@ import pl.psi.artifacts.ArtifactEffectApplicable;
 import pl.psi.artifacts.ArtifactEffectApplyingProperties;
 import pl.psi.artifacts.CreatureArtifactApplicableProperty;
 import pl.psi.artifacts.model.ArtifactEffect;
+import pl.psi.artifacts.model.ArtifactTarget;
 
 /**
  * Service responsible for taking care of calculating upgraded values after applying artifact.
@@ -14,6 +15,12 @@ public class ArtifactApplier
             final ArtifactEffect< ? extends ArtifactEffectApplicable > aArtifactEffect, final CreatureStatisticIf aBaseStats,
             final CreatureStatisticIf aUpgradedStats )
     {
+
+        if( !( aArtifactEffect.getApplierTarget().getArtifactTarget() == ArtifactTarget.CREATURES ) )
+        {
+            throw new IllegalArgumentException( "Artifact Effect is not meant to be applied to Creatures." );
+        }
+
         final CreatureArtifactApplicableProperty applierTarget = (CreatureArtifactApplicableProperty) aArtifactEffect.getApplierTarget();
 
         final CreatureStats.CreatureStatsBuilder creatureStatsBuilder = CreatureStats.builder()

@@ -16,7 +16,7 @@ public enum SpellArtifactApplicableProperty implements ArtifactApplicablePropert
     WATER_DAMAGE;
 
     @Override
-    public ArtifactTarget getArtifactTarget()
+    public final ArtifactTarget getArtifactTarget()
     {
         return ArtifactTarget.SPELLS;
     }
