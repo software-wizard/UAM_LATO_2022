@@ -57,15 +57,15 @@ public class EconomyCreature implements ArtifactEffectApplicable {
         switch (applierTarget) {
             case HEALTH:
                 upgradedMaxHp = artifactEffect.calculateStatisticValueAfterApplying(
-                    new ArtifactEffectApplyingProperties(upgradedMaxHp, baseStats.getMaxHp()));
+                    new ArtifactEffectApplyingProperties(baseStats.getMaxHp(),upgradedMaxHp));
                 break;
             case ATTACK:
                 upgradedAttack = artifactEffect.calculateStatisticValueAfterApplying(
-                    new ArtifactEffectApplyingProperties(upgradedAttack, baseStats.getAttack()));
+                    new ArtifactEffectApplyingProperties(baseStats.getAttack(), upgradedAttack));
                 break;
             case DEFENCE:
                 upgradedArmor = artifactEffect.calculateStatisticValueAfterApplying(
-                    new ArtifactEffectApplyingProperties(upgradedArmor, baseStats.getArmor()));
+                    new ArtifactEffectApplyingProperties(baseStats.getArmor(), upgradedArmor));
                 break;
             default:
                 throw new UnsupportedOperationException("Unrecognised applying target type.");
