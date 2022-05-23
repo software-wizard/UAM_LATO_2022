@@ -43,12 +43,12 @@ public class SpecialFieldsToAttackDecorator extends Creature {
     }
 
     @Override
-    public int getCurrentHp() {
+    public double getCurrentHp() {
         return decorated.getCurrentHp();
     }
 
     @Override
-    protected void setCurrentHp(final int aCurrentHp) {
+    protected void setCurrentHp(final double aCurrentHp) {
         decorated.setCurrentHp(aCurrentHp);
     }
 
@@ -58,12 +58,12 @@ public class SpecialFieldsToAttackDecorator extends Creature {
     }
 
     @Override
-    int getAttack() {
+    double getAttack() {
         return decorated.getAttack();
     }
 
     @Override
-    int getArmor() {
+    double getArmor() {
         return decorated.getArmor();
     }
 
@@ -73,8 +73,9 @@ public class SpecialFieldsToAttackDecorator extends Creature {
     }
 
     @Override
-    public int getCounterAttackCounter() {
-        return 0;
+    protected boolean canCounterAttack( final Creature aDefender )
+    {
+        return false;
     }
 
     @Override

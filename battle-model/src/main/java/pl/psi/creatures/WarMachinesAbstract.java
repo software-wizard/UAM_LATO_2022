@@ -4,24 +4,27 @@ import com.google.common.collect.Range;
 import lombok.Getter;
 
 import java.beans.PropertyChangeEvent;
+import java.util.List;
 
 @Getter
 public abstract class WarMachinesAbstract extends Creature{
 
     protected CreatureStatisticIf stats;
     protected int amount;
-    protected int currentHp;
+    protected double currentHp;
     protected DamageCalculatorIf calculator;
     protected Creature decorated;
     protected int skillLevel;
 
 
+
     @Override
-    public int getCounterAttackCounter() {
-        return 0;
+    protected boolean canCounterAttack( final Creature aDefender )
+    {
+        return false;
     }
 
-   public abstract void performAction(final Creature aDefender);
+   public abstract void performAction(List<Creature> creatureList);
 
 
 

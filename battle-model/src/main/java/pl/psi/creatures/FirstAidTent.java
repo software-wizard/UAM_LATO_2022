@@ -2,6 +2,7 @@ package pl.psi.creatures;
 
 import com.google.common.collect.Range;
 
+import java.util.List;
 import java.util.Random;
 
 public class FirstAidTent extends WarMachinesAbstract {
@@ -17,39 +18,44 @@ public class FirstAidTent extends WarMachinesAbstract {
 
 
     @Override
-    public void performAction(final Creature aDefender) {
-        int aSkillLevel = getSkillLevel();
-        int min = 1;
-        int max;
-        switch(aSkillLevel)
-        {
-            case 0:
-                max = 25;
-                break;
-            case 1:
-                max = 50;
-                break;
-            case 2:
-                max = 75;
-                break;
-            case 3:
-                max = 100;
-                break;
-            default:
-                max = 0;
+    public void performAction(List<Creature> creatureList) {
+        if (isAlive()) {
+
+            int maxHp = calculateHealHp(getSkillLevel());
+            double heal = random.nextInt(maxHp - 1) + 1;
+
+            creatureList.stream()
+                    .filter(creature -> this.getHeroNumber() == creature.getHeroNumber())
+                    .filter(Creature::isAlive)
+                    .findAny()
+                    .ifPresent(creature -> creature.heal(heal));
         }
-        int heal = random.nextInt((max - min) + 1) + min;
-        aDefender.setCurrentHp( aDefender.getCurrentHp() + heal );
 
     }
 
+    private int calculateHealHp (int skillLevel) {
+        switch(skillLevel)
+        {
+            case 0:
+                return  25;
+            case 1:
+                return  50;
+            case 2:
+                return  75;
+            case 3:
+                return  100;
+            default:
+                return  0;
+        }
+    }
+
     @Override
-    int getAttack() {
+    double getAttack() {
         return stats.getAttack();
     }
 
     @Override
-    int getArmor() {
+    double getArmor() {
         return stats.getArmor();
     }
 
@@ -59,7 +65,7 @@ public class FirstAidTent extends WarMachinesAbstract {
     }
 
     @Override
-    public int getMoveRange() {
+    public double getMoveRange() {
         return stats.getMoveRange();
     }
 
@@ -69,11 +75,6 @@ public class FirstAidTent extends WarMachinesAbstract {
         return stats.getDamage();
     }
 
-
-    @Override
-    public int getCounterAttackCounter() {
-        return 0;
-    }
 
     public static class Builder {
         private int amount = 1;

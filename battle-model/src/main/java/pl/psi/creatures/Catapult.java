@@ -2,15 +2,16 @@ package pl.psi.creatures;
 
 import com.google.common.collect.Range;
 
+import java.util.List;
 import java.util.Random;
 
-public class Catapult extends WarMachinesAbstract{
+public class Catapult extends WarMachinesAbstract {
 
     public Catapult(CreatureStatisticIf aStatistic, DamageCalculatorIf aCalculator, int aAmount, int aSkillLevel) {
         stats = aStatistic;
         calculator = aCalculator;
         amount = aAmount;
-        aSkillLevel = aSkillLevel;
+        skillLevel = aSkillLevel;
     }
 
 
@@ -19,26 +20,32 @@ public class Catapult extends WarMachinesAbstract{
     }
 
     @Override
-    public void performAction(final Creature aDefender) {
-        if( isAlive() )
-        {
-            final int damage = getCalculator().calculateDamage( this, aDefender );
-            applyDamage( aDefender, damage );
+    public void performAction(List<Creature> creatureList) {
+        if (isAlive()) {
+            creatureList.stream()
+                    .filter(creature -> this.getHeroNumber() != creature.getHeroNumber())
+                    .filter(creature -> creature instanceof SpecialFieldsToAttackDecorator)
+                    .findAny()
+                    .ifPresent(this::calculateAndApplyDamge);
         }
     }
 
-    private void applyDamage(final Creature aDefender, final int aDamage )
-    {
-        aDefender.setCurrentHp( aDefender.getCurrentHp() - aDamage );
+    private void calculateAndApplyDamge(Creature aDefender) {
+        final int damage = getCalculator().calculateDamage(this, aDefender);
+        applyDamage(aDefender, damage);
+    }
+
+    private void applyDamage(final Creature aDefender, final double aDamage) {
+        aDefender.setCurrentHp(aDefender.getCurrentHp() - aDamage);
     }
 
     @Override
-    int getAttack() {
+    double getAttack() {
         return stats.getAttack();
     }
 
     @Override
-    int getArmor() {
+    double getArmor() {
         return stats.getArmor();
     }
 
@@ -48,20 +55,15 @@ public class Catapult extends WarMachinesAbstract{
     }
 
     @Override
-    public int getMoveRange() {
+    public double getMoveRange() {
         return stats.getMoveRange();
     }
 
     @Override
-    public Range<Integer> getDamage()
-    {
+    public Range<Integer> getDamage() {
         return stats.getDamage();
     }
 
-    @Override
-    public int getCounterAttackCounter() {
-        return 0;
-    }
 
     public static class Builder {
         private int amount = 1;
@@ -84,8 +86,7 @@ public class Catapult extends WarMachinesAbstract{
             return this;
         }
 
-        public Catapult.Builder skillLevel(final int aSkillLevel)
-        {
+        public Catapult.Builder skillLevel(final int aSkillLevel) {
             skillLevel = aSkillLevel;
             return this;
         }
