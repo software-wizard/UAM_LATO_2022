@@ -5,16 +5,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import pl.psi.Hero;
 import pl.psi.artifacts.model.Artifact;
-import pl.psi.artifacts.model.ArtifactTarget;
 import pl.psi.creatures.Creature;
-import pl.psi.creatures.CreatureStatistic;
 import pl.psi.gui.MainBattleController;
 import pl.psi.hero.EconomyHero;
 
@@ -38,26 +34,39 @@ public class EcoBattleConverter {
         }
     }
 
-    public static Hero convert( final EconomyHero aPlayer )
-    {
-        final List< Artifact > artifacts = Collections.emptyList();
+    public static Hero convert(final EconomyHero aPlayer) {
+//         I think we should get already filtered Artifact from Equipment, but for now let's have it this way...
+        final List<Artifact> artifacts = Collections.emptyList(); // temporary empty list
 
-        // I think we should get already filtered Artifact from Equipment, but for now let's have it this way...
-        final Stream< Artifact > creatureArtifacts = artifacts.stream()
-                .filter( artifact -> artifact.getTarget().equals( ArtifactTarget.CREATURES ) );
+        final List<Artifact> creatureArtifacts = new ArrayList<>();
+        final List<Artifact> skillArtifacts = new ArrayList<>();
+        final List<Artifact> spellArtifacts = new ArrayList<>();
 
-        // TODO: get all bought artifacts from economy or economy creature (?)
+        artifacts.forEach(artifact -> {
+            switch (artifact.getTarget()) {
+                case CREATURES:
+                    creatureArtifacts.add(artifact);
+                    break;
+                case SPELLS:
+                    spellArtifacts.add(artifact);
+                    break;
+                case SKILL:
+                    skillArtifacts.add(artifact);
+                    break;
+            }
+        });
 
-        final List< Creature > creatures = aPlayer.getCreatures()
+        final List<Creature> creatures = aPlayer.getCreatures()
             .stream()
-            .map( economyCreature -> {
-                artifacts.forEach(artifact -> artifact.applyTo( economyCreature ) );
+            .map(economyCreature -> {
+
+                creatureArtifacts.forEach(artifact -> artifact.applyTo(economyCreature));
                 return new Creature(
                     economyCreature.getUpgradedStats(), null,
-                    economyCreature.getAmount() );
-            } )
-            .collect( Collectors.toList() );
+                    economyCreature.getAmount());
+            })
+            .collect(Collectors.toList());
 
-        return new Hero( creatures );
+        return new Hero(creatures);
     }
 }
