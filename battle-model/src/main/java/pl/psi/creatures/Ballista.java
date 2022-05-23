@@ -7,10 +7,11 @@ import java.util.Random;
 public class Ballista extends WarMachinesAbstract {
 
 
-    public Ballista(CreatureStatisticIf aStatistic, DamageCalculatorIf aCalculator, int aAmount) {
+    public Ballista(CreatureStatisticIf aStatistic, DamageCalculatorIf aCalculator, int aAmount, int aSkillLevel) {
         stats = aStatistic;
         calculator = aCalculator;
         amount = aAmount;
+        aSkillLevel = aSkillLevel;
     }
 
 
@@ -65,6 +66,7 @@ public class Ballista extends WarMachinesAbstract {
 
     public static class Builder {
         private int amount = 1;
+        private int skillLevel;
         private DamageCalculatorIf calculator = new DefaultDamageCalculator(new Random());
         private CreatureStatisticIf statistic;
 
@@ -78,13 +80,19 @@ public class Ballista extends WarMachinesAbstract {
             return this;
         }
 
+        public Ballista.Builder skillLevel(final int aSkillLevel)
+        {
+            skillLevel = aSkillLevel;
+            return this;
+        }
+
         public Ballista.Builder calculator(final DamageCalculatorIf aCalc) {
             calculator = aCalc;
             return this;
         }
 
         public Ballista build() {
-            return new Ballista(statistic, calculator, amount);
+            return new Ballista(statistic, calculator, amount, skillLevel);
         }
     }
 }

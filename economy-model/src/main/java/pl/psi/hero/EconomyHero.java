@@ -28,6 +28,8 @@ public class EconomyHero
         creatureList.add( aCreature );
     }
 
+
+
     public int getGold()
     {
         return gold;

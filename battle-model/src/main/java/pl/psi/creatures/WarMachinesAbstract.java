@@ -13,6 +13,7 @@ public abstract class WarMachinesAbstract extends Creature{
     protected int currentHp;
     protected DamageCalculatorIf calculator;
     protected Creature decorated;
+    protected int skillLevel;
 
 
     @Override
