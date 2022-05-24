@@ -1,4 +1,4 @@
-package pl.psi.products.creatures;
+package pl.psi.creatures;
 
 import java.util.Random;
 
@@ -10,15 +10,15 @@ class ReduceDefenceCalculator extends AbstractCalculateDamageStrategy
 
     private final double factor;
 
-    public ReduceDefenceCalculator()
+    public ReduceDefenceCalculator( final double aFactor )
     {
         super( new Random() );
-        factor = 0.2;
+        factor = aFactor;
     }
 
     @Override
-    protected int getArmor( final Creature aDefender )
+    protected double getArmor( final Creature aDefender )
     {
-        return (int)(aDefender.getArmor() * factor);
+        return (aDefender.getArmor() * factor);
     }
 }

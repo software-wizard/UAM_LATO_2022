@@ -1,92 +1,20 @@
-package pl.psi.products.creatures;
+package pl.psi.creatures;
 
 import java.beans.PropertyChangeEvent;
 
 import com.google.common.collect.Range;
-import pl.psi.creatures.CreatureStatisticIf;
 
 /**
  * TODO: Describe this class (The first line - until the first dot - will interpret as the brief description).
  */
-class SelfHealAfterTurnCreature extends Creature
+class SelfHealAfterTurnCreature extends AbstractCreature
 {
     private final Creature decorated;
 
     public SelfHealAfterTurnCreature( final Creature aDecorated )
     {
+        super( aDecorated );
         decorated = aDecorated;
-    }
-
-    @Override
-    public CreatureStatisticIf getStats()
-    {
-        return decorated.getStats();
-    }
-
-    @Override
-    public int getAmount()
-    {
-        return decorated.getAmount();
-    }
-
-    @Override
-    public int getCounterAttackCounter()
-    {
-        return decorated.getCounterAttackCounter();
-    }
-
-    @Override
-    public DamageCalculatorIf getCalculator()
-    {
-        return decorated.getCalculator();
-    }
-
-    @Override
-    public void attack( final Creature aDefender )
-    {
-        decorated.attack( aDefender );
-    }
-
-    @Override
-    public boolean isAlive()
-    {
-        return decorated.isAlive();
-    }
-
-    @Override
-    public int getCurrentHp()
-    {
-        return decorated.getCurrentHp();
-    }
-
-    @Override
-    protected void setCurrentHp( final int aCurrentHp )
-    {
-        decorated.setCurrentHp( aCurrentHp );
-    }
-
-    @Override
-    Range< Integer > getDamage()
-    {
-        return decorated.getDamage();
-    }
-
-    @Override
-    int getAttack()
-    {
-        return decorated.getAttack();
-    }
-
-    @Override
-    int getArmor()
-    {
-        return decorated.getArmor();
-    }
-
-    @Override
-    protected void restoreCurrentHpToMax()
-    {
-        decorated.restoreCurrentHpToMax();
     }
 
     @Override
