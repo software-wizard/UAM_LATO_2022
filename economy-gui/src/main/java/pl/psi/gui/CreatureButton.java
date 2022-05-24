@@ -1,6 +1,5 @@
 package pl.psi.gui;
 
-
 import javafx.geometry.Orientation;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -44,11 +43,12 @@ public class CreatureButton extends Button
                     aEcoController.buy(ProductType.CREATURE, new EconomyCastleFactory().create( aUpgraded, aTier, amount ) );
             }
 
-            try {
-                aEcoController.refreshGui();
-            } catch (FileNotFoundException fileNotFoundException) {
-                fileNotFoundException.printStackTrace();
-            }
+//            try {
+//                aEcoController.refreshStartGui();
+//            } catch (FileNotFoundException fileNotFoundException) {
+//                fileNotFoundException.printStackTrace();
+//            }
+
         } );
     }
 

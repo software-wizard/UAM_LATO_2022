@@ -145,12 +145,18 @@ public class EcoController implements PropertyChangeListener
 
         heroBoughtPane.setBackground(new Background(new BackgroundImage(imageHero, NO_REPEAT, NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
 
-        refreshGui();
+        refreshStartGui();
         economyEngine.addObserver( EconomyEngine.ACTIVE_HERO_CHANGED, this );
         economyEngine.addObserver( EconomyEngine.HERO_BOUGHT_CREATURE, this );
         economyEngine.addObserver( EconomyEngine.HERO_BOUGHT_ARTIFACT, this );
         economyEngine.addObserver( EconomyEngine.NEXT_ROUND, this );
         economyEngine.addObserver( EconomyEngine.END_SHOPPING, this );
+
+
+        playerLabel.setText( economyEngine.getActiveHero().toString() );
+        currentGoldLabel.setText( String.valueOf( economyEngine.getActiveHero().getGold()));
+        roundNumberLabel.setText( String.valueOf( economyEngine.getRoundNumber() ) );
+        fraction.setText("Fraction : " + economyEngine.getActiveHero().getFraction().name());
 
 
         readyButton.addEventHandler( MouseEvent.MOUSE_CLICKED, ( e ) -> {
@@ -172,7 +178,24 @@ public class EcoController implements PropertyChangeListener
     }
 
 
-    void refreshGui() throws FileNotFoundException {
+
+    @SneakyThrows
+    @Override
+    public void propertyChange( final PropertyChangeEvent aPropertyChangeEvent )
+    {
+        if(aPropertyChangeEvent.getPropertyName().equals("HERO_BOUGHT_CREATURE")){
+            refreshGuiHeroBoughtCreature();
+        }
+        else if (aPropertyChangeEvent.getPropertyName().equals("HERO_BOUGHT_ARTIFACT")){
+            refreshGuiHeroBoughtArtefact();
+        }
+        else if(aPropertyChangeEvent.getPropertyName().equals("NEXT_ROUND")){
+            refreshGuiHeroChanged();
+        }
+    }
+
+
+    void refreshStartGui() throws FileNotFoundException {
 
         // refresh top of the scene - activeHero , Gold , RoundNumber
         playerLabel.setText( economyEngine.getActiveHero().toString() );
@@ -180,6 +203,13 @@ public class EcoController implements PropertyChangeListener
         roundNumberLabel.setText( String.valueOf( economyEngine.getRoundNumber() ) );
         fraction.setText("Fraction : " + economyEngine.getActiveHero().getFraction().name());
 
+        fillShopWithCreatures();
+
+    }
+
+    void refreshGuiHeroBoughtCreature(){
+
+        currentGoldLabel.setText( String.valueOf( economyEngine.getActiveHero().getGold()));
         shopsBox.getChildren().clear();
 
         // refresh items in shop depends on what kind of products was chosen
@@ -189,31 +219,6 @@ public class EcoController implements PropertyChangeListener
         else if(shopChoose.equals(ProductType.CREATURE))
         {
             fillShopWithCreatures();
-        }
-
-
-        // refresh buttons of creatures for the hero2 - without it  hero2 can see what hero1 bought
-        if(economyEngine.getRoundNumber() == 2 ){
-            for(int i=0;i<7;i++) {
-                Button button = creatureButtons.get(i);
-                Image image = new Image("CLEAR.png");
-                ImageView imageView = new ImageView(image);
-                imageView.setFitWidth(30);
-                imageView.setFitHeight(30);
-                button.setGraphic(imageView);
-                button.setText("");
-            }
-
-            for(int i=0;i<7;i++){
-                Button button = artifactButtons.get(i);
-                Image image = new Image("CLEAR.png");
-                ImageView imageView = new ImageView(image);
-                imageView.setFitWidth(40);
-                imageView.setFitHeight(40);
-                button.setGraphic(imageView);
-
-            }
-
         }
 
         //refresh boughtCreatures
@@ -242,6 +247,22 @@ public class EcoController implements PropertyChangeListener
 
         }
 
+    }
+
+    void refreshGuiHeroBoughtArtefact(){
+
+        currentGoldLabel.setText( String.valueOf( economyEngine.getActiveHero().getGold()));
+        shopsBox.getChildren().clear();
+
+        // refresh items in shop depends on what kind of products was chosen
+        if(shopChoose.equals(ProductType.ARTIFACT)){
+            fillShopWithArtifacts();
+        }
+        else if(shopChoose.equals(ProductType.CREATURE))
+        {
+            fillShopWithCreatures();
+        }
+
         //refresh boughtArtifacts
         List<Artifact> artifacts = economyEngine.getActiveHero().getArtifacts();
         for(Map.Entry<ArtifactPlacement,Button> b :artifactPlacementButtonHashMap.entrySet()){
@@ -260,16 +281,53 @@ public class EcoController implements PropertyChangeListener
         }
     }
 
+
+    void refreshGuiHeroChanged(){
+
+        // refresh top of the scene - activeHero , Gold , RoundNumber
+        playerLabel.setText( economyEngine.getActiveHero().toString() );
+        currentGoldLabel.setText( String.valueOf( economyEngine.getActiveHero().getGold()));
+        roundNumberLabel.setText( String.valueOf( economyEngine.getRoundNumber() ) );
+        fraction.setText("Fraction : " + economyEngine.getActiveHero().getFraction().name());
+
+        // refresh buttons of creatures for the hero2 - without it  hero2 can see what hero1 bought
+        for(int i=0;i<7;i++) {
+            Button button = creatureButtons.get(i);
+            Image image = new Image("CLEAR.png");
+            ImageView imageView = new ImageView(image);
+            imageView.setFitWidth(30);
+            imageView.setFitHeight(30);
+            button.setGraphic(imageView);
+            button.setText("");
+        }
+
+        for(int i=0;i<7;i++){
+            Button button = artifactButtons.get(i);
+            Image image = new Image("CLEAR.png");
+            ImageView imageView = new ImageView(image);
+            imageView.setFitWidth(40);
+            imageView.setFitHeight(40);
+            button.setGraphic(imageView);
+
+        }
+
+        shopsBox.getChildren().clear();
+
+        // refresh items in shop depends on what kind of products was chosen
+        if(shopChoose.equals(ProductType.ARTIFACT)){
+            fillShopWithArtifacts();
+        }
+        else if(shopChoose.equals(ProductType.CREATURE))
+        {
+            fillShopWithCreatures();
+        }
+
+    }
+
+
     void buy(ProductType productType , final BuyProductInterface product )
     {
         economyEngine.buy( productType,product );
-    }
-
-    @SneakyThrows
-    @Override
-    public void propertyChange( final PropertyChangeEvent aPropertyChangeEvent )
-    {
-        refreshGui();
     }
 
 
@@ -441,6 +499,5 @@ public class EcoController implements PropertyChangeListener
         }
         shopsBox.getChildren().add( creatureShop );
     }
-
 
 }
