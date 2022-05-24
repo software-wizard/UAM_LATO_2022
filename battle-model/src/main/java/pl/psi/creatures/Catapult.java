@@ -22,6 +22,7 @@ public class Catapult extends WarMachinesAbstract {
     @Override
     public void performAction(List<Creature> creatureList) {
         if (isAlive()) {
+
             creatureList.stream()
                     .filter(creature -> this.getHeroNumber() != creature.getHeroNumber())
                     .filter(creature -> creature instanceof SpecialFieldsToAttackDecorator)
@@ -32,10 +33,10 @@ public class Catapult extends WarMachinesAbstract {
 
     private void calculateAndApplyDamge(Creature aDefender) {
         final int damage = getCalculator().calculateDamage(this, aDefender);
-        applyDamage(aDefender, damage);
+        applyDamageCatapult(aDefender, damage);
     }
 
-    private void applyDamage(final Creature aDefender, final double aDamage) {
+    private void applyDamageCatapult(final Creature aDefender, final double aDamage) {
         aDefender.setCurrentHp(aDefender.getCurrentHp() - aDamage);
     }
 
