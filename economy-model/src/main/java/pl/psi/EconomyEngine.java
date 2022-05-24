@@ -2,6 +2,7 @@ package pl.psi;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.IOException;
 
 import pl.psi.artifacts.Artifact;
 import pl.psi.creatures.EconomyCreature;
@@ -52,16 +53,14 @@ public class EconomyEngine
 
     }
 
-    public EconomyHero getActiveHero()
-    {
+    public EconomyHero getActiveHero()  {
         return activeHero;
     }
 
     // next round , change activeHero
     public void pass()
     {
-
-        if ( activeHero.getCreatureList().size() == 0){
+        if ( activeHero.getCreatures().size() == 0){
             throw new IllegalStateException( "hero cannot pass round if he didn't buy any creature" );
         }
         else {
@@ -92,13 +91,11 @@ public class EconomyEngine
         observerSupport.addPropertyChangeListener( aPropertyName, aObserver );
     }
 
-    public EconomyHero getPlayer1()
-    {
+    public EconomyHero getPlayer1()  {
         return hero1;
     }
 
-    public EconomyHero getPlayer2()
-    {
+    public EconomyHero getPlayer2()  {
         return hero2;
     }
 

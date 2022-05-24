@@ -21,27 +21,34 @@ public class ArtifactButton extends Button
 
     private final Artifact artifact;
 
-    public ArtifactButton( EcoController ecoController, Artifact artifact)
+    public ArtifactButton( EcoController ecoController, Artifact artifact,boolean canBuy,boolean canBuyType)
     {
         this.artifact  = artifact;
 
         addEventHandler( MouseEvent.MOUSE_CLICKED, ( e ) -> {
-            startDialog(ecoController);
+            startDialog(ecoController,canBuy,canBuyType);
         } );
     }
 
-    private void startDialog(EcoController ecoController)
+    private void startDialog(EcoController ecoController,boolean canBuy,boolean canBuyType)
     {
 
         Stage dialogWindow = new Stage();
         // OK and Close buttons
-        final HBox bottomPane = new HBox();
+        final VBox bottomPane = new VBox();
         // Pane for cost and info about item
         final FlowPane topPane = new FlowPane(Orientation.HORIZONTAL,0,5);
-
+        if(!canBuy || !canBuyType) {
+            HBox box = new HBox();
+            if(!canBuy)
+                box.getChildren().add(new Label("You don't have enought money to buy " + artifact.getName()));
+            else if(!canBuyType)
+                box.getChildren().add(new Label("You have already bought artifact of this type " + artifact.getPlacement()));
+            bottomPane.getChildren().add(box);
+        }
         final Stage dialog = prepareWindow( bottomPane, topPane,dialogWindow);
         // add buttons - OK and Close
-        prepareConfirmAndCancelButton( bottomPane ,ecoController, dialogWindow);
+        prepareConfirmAndCancelButton( bottomPane ,ecoController, dialogWindow, canBuy, canBuyType);
         // info on Top
         prepareTop( topPane);
         dialog.showAndWait();
@@ -66,25 +73,32 @@ public class ArtifactButton extends Button
         return dialog;
     }
 
-    private void prepareConfirmAndCancelButton( final HBox aBottomPane , EcoController ecoController, Stage dialog)
+    private void prepareConfirmAndCancelButton( final VBox aBottomPane , EcoController ecoController, Stage dialog,boolean canBuy,boolean canBuyType)
     {
-        final Button okButton = new Button( "OK" );
-        aBottomPane.setAlignment( Pos.CENTER );
-        okButton.addEventHandler( MouseEvent.MOUSE_CLICKED, ( e ) -> {
-            ecoController.buy(ProductType.ARTIFACT, new EconomyArtifactFactory().create( artifact.getName() ) );
-            dialog.close();
-        });
-        okButton.setPrefWidth( 200 );
-        aBottomPane.getChildren().add( okButton );
+        final HBox hBox = new HBox();
+        Button okButton = null;
+
+        if(canBuy && canBuyType) {
+            okButton = new Button( "OK" );
+            hBox.setAlignment(Pos.CENTER);
+            okButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
+                ecoController.buy(ProductType.ARTIFACT, new EconomyArtifactFactory().create(artifact.getName()));
+                dialog.close();
+            });
+            okButton.setPrefWidth( 200 );
+            hBox.getChildren().add( okButton );
+            HBox.setHgrow( okButton, Priority.ALWAYS );
+        }
+
 
         final Button cancelButton = new Button( "CLOSE" );
         cancelButton.addEventHandler( MouseEvent.MOUSE_CLICKED, ( e ) -> {
             dialog.close();
         } );
         cancelButton.setPrefWidth( 200 );
-        aBottomPane.getChildren().add( cancelButton );
+        hBox.getChildren().add( cancelButton );
 
-        HBox.setHgrow( okButton, Priority.ALWAYS );
+        aBottomPane.getChildren().add(hBox);
         HBox.setHgrow( cancelButton, Priority.ALWAYS );
 
     }
@@ -92,7 +106,7 @@ public class ArtifactButton extends Button
     private void prepareTop( final FlowPane aTopPane )
     {
 
-        aTopPane.getChildren().add( new Label( "Single Cost: " + artifact.getGoldCost() ) );;
+        aTopPane.getChildren().add( new Label( "Single Cost: " + artifact.getGoldCost().getPrice() ) );;
         aTopPane.getChildren().add( new Label( "             " ) );
         String characteristics = "Placement : "+ artifact.getPlacement();
         aTopPane.getChildren().add(new Label(characteristics));

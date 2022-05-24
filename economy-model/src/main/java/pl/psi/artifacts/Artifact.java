@@ -3,7 +3,7 @@ package pl.psi.artifacts;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import pl.psi.shop.BuyProductInterface;
-import pl.psi.shop.ProductPrice;
+import pl.psi.shop.Money;
 
 @Getter
 @AllArgsConstructor
@@ -11,7 +11,7 @@ public class Artifact implements BuyProductInterface {
 
     private final ArtifactPlacement placement;
     private final String name;
-    private ProductPrice price;
+    private Money price;
 
     @Override
     public int getAmount() {
@@ -19,12 +19,7 @@ public class Artifact implements BuyProductInterface {
     }
 
     @Override
-    public ProductPrice getGoldCost() {
+    public Money getGoldCost() {
         return price;
-    }
-
-    public Object clone(){
-        Artifact artifact = new Artifact(this.placement,this.name,this.price);
-        return artifact;
     }
 }

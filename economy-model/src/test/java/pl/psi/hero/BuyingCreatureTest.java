@@ -16,6 +16,7 @@ public class BuyingCreatureTest
     private EconomyHero hero1;
     private EconomyEngine economyEngine;
     private EconomyHero hero2;
+    private int startGold = 10000;
 
     @BeforeEach
     void init()
@@ -29,38 +30,32 @@ public class BuyingCreatureTest
     void heroShouldCanBuyCreature()
     {
         economyEngine.buy( ProductType.CREATURE,creatureFactory.create( false, 1, 1 ) );
-
-        assertEquals( 3900, hero1.getGold() );
+        assertEquals( startGold - 60, hero1.getGold());
+        assertEquals(1,hero1.getCreatures().size());
     }
 
     @Test
     void heroShouldCanBuyMoreThanOneCreatureInOneStack()
     {
         economyEngine.buy( ProductType.CREATURE,creatureFactory.create( false, 1, 2 ) );
-
-        assertEquals( 3800, hero1.getGold() );
+        assertEquals( startGold - 120, hero1.getGold());
+        assertEquals(2,hero1.getCreatures().get(0).getAmount());
+        assertEquals(1,hero1.getCreatures().size());
     }
 
     @Test
     void heroShouldCanBuyMoreThanOneCreatureInFewStack()
     {
         economyEngine.buy( ProductType.CREATURE,creatureFactory.create( false, 1, 2 ) );
-        economyEngine.buy( ProductType.CREATURE,creatureFactory.create( true, 2, 2 ) );
-
-        assertEquals( 3000, hero1.getGold() );
+        economyEngine.buy( ProductType.CREATURE,creatureFactory.create( true, 1, 2 ) );
+        assertEquals( startGold - 260, hero1.getGold());
+        assertEquals(2,hero1.getCreatures().size());
+        assertEquals(2,hero1.getCreatures().get(0).getAmount());
+        assertEquals(2,hero1.getCreatures().get(1).getAmount());
     }
 
     @Test
-    void heroCannotBuyCreatureWhenHasNotEnoughtGold()
-    {
-        assertThrows( IllegalStateException.class,
-                () -> economyEngine.buy( ProductType.CREATURE,creatureFactory.create( false, 1, 200 ) ) );
-        assertEquals( 4000, hero1.getGold() );
-        assertEquals( 0, hero1.getCreatures().size() );
-    }
-
-    @Test
-    void heroCannotBuyCreatureIfHeBought7TypesOfCreatures()
+    void heroCannotBuyAnotherTypeOfCreatureIfHeBought7TypesOfCreatures()
     {
         economyEngine.buy( ProductType.CREATURE,creatureFactory.create( false, 1, 1 ) );
         economyEngine.buy( ProductType.CREATURE,creatureFactory.create( false, 2, 1 ) );
@@ -69,10 +64,11 @@ public class BuyingCreatureTest
         economyEngine.buy( ProductType.CREATURE,creatureFactory.create( false, 5, 1 ) );
         economyEngine.buy( ProductType.CREATURE,creatureFactory.create( false, 6, 1 ) );
         economyEngine.buy( ProductType.CREATURE,creatureFactory.create( false, 7, 1 ) );
-        assertThrows( IllegalStateException.class,
-                () -> economyEngine.buy( ProductType.CREATURE,creatureFactory.create( false, 1, 2 ) ) );
 
-        assertEquals( 1200, hero1.getGold() );
+        assertThrows( IllegalStateException.class,
+                () -> economyEngine.buy( ProductType.CREATURE,creatureFactory.create( true, 1, 1 ) ) );
+
+        assertEquals( startGold - 4270, hero1.getGold() );
         assertEquals( 7, hero1.getCreatures().size() );
     }
 }

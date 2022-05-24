@@ -1,29 +1,34 @@
 package pl.psi.gui;
 
-import javafx.scene.image.Image;
-import pl.psi.hero.EconomyHero;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import pl.psi.hero.EconomyHero;
 
+public class ChooseFraction extends Application {
 
-public class EconomyStart extends Application
-{
-
-    public void startApp(EconomyHero.Fraction player1,EconomyHero.Fraction player2) throws Exception
+    public static void main( final String[] args )
     {
-        final Stage aStage = new Stage();
+        launch();
+    }
+
+    @Override
+    public void start( final Stage aStage ) throws Exception
+    {
+
+
         final FXMLLoader loader = new FXMLLoader();
         loader.setLocation( getClass().getClassLoader()
-                .getResource( "fxml/eco.fxml" ) );
+                .getResource( "fxml/fraction.fxml" ) );
+        loader.setController( new FractionController());
 
-        loader.setController( new EcoController(
-                new EconomyHero( player1),
-                new EconomyHero( player2 ) ) );
         final Scene scene = new Scene( loader.load() );
         aStage.setScene( scene );
+        aStage.setWidth(400);
+        aStage.setHeight(280);
 
         Image icon = new Image("ICON.png");
         aStage.getIcons().add(icon);
@@ -31,10 +36,5 @@ public class EconomyStart extends Application
         aStage.centerOnScreen();
         aStage.setResizable(false);
         aStage.show();
-    }
-
-    @Override
-    public void start(Stage stage) throws Exception {
-
     }
 }

@@ -1,13 +1,15 @@
 package pl.psi.hero;
 
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+
 import pl.psi.artifacts.Artifact;
 import pl.psi.artifacts.ArtifactPlacement;
 import pl.psi.creatures.EconomyCreature;
+import pl.psi.shop.Money;
 import pl.psi.skills.EconomySkills;
 import pl.psi.spells.EconomySpells;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class EconomyHero
 {
@@ -40,15 +42,11 @@ public class EconomyHero
         return gold;
     }
 
-    public void setGold(int gold) {
-        this.gold = gold;
-    }
 
-
-    public List<EconomyCreature> getCreatureList() {
+    public List<EconomyCreature> getCreatures() {
         List<EconomyCreature> economyCreatureList = new ArrayList<>();
         for( EconomyCreature c: this.creatureList){
-            economyCreatureList.add((EconomyCreature) c.clone());
+            economyCreatureList.add(new EconomyCreature(c.getStats(),c.getAmount(),c.getGoldCost()));
         }
         return economyCreatureList;
     }
@@ -79,6 +77,7 @@ public class EconomyHero
     }
 
     // check if Hero can add more Creatures - use in Shop
+    // check if Hero can add more Creatures - use in Shop
     public boolean canAddCreature(EconomyCreature economyCreature){
 
         boolean heroHasThisCreature = false;
@@ -105,33 +104,13 @@ public class EconomyHero
 
 
 
-    public List< EconomyCreature > getCreatures()
-    {
-        List<EconomyCreature> economyCreatureList = new ArrayList<>();
-        for(EconomyCreature e:creatureList){
-            economyCreatureList.add((EconomyCreature) e.clone());
-        }
-     return economyCreatureList;
-
-    }
-
     public List< Artifact > getArtifacts()
     {
-
-        List<Artifact> artifacts = new ArrayList<>();
-        for(Artifact e:artifactList){
-            artifacts.add((Artifact) e.clone());
-        }
-      return artifacts;
-
+        return List.copyOf( artifactList );
     }
 
     public void substractGold( final int aAmount )
     {
-        if( aAmount > gold )
-        {
-            throw new IllegalStateException( "Hero has not enought money" );
-        }
         gold -= aAmount;
     }
 
@@ -139,8 +118,11 @@ public class EconomyHero
     public enum Fraction
     {
         NECROPOLIS,
-        CASTLE,
-        FRACTION;
+        CASTLE
+    }
+
+    public Fraction getFraction() {
+        return fraction;
     }
 
     public int numberOfArtifacts(){
@@ -151,6 +133,17 @@ public class EconomyHero
     @Override
     public String toString() {
         return "Hero " + heroNumber ;
+    }
+
+    public EconomyHero cloneHero() throws IOException, ClassNotFoundException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream ous = new ObjectOutputStream(baos);
+        ous.writeObject(this);
+        ous.close();
+        ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+        ObjectInputStream ois = new ObjectInputStream(bais);
+        EconomyHero hero = (EconomyHero) ois.readObject();
+        return  hero;
     }
 
     public int getHeroNumber(){

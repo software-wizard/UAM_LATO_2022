@@ -1,12 +1,13 @@
 package pl.psi.gui;
 
-import javafx.event.EventHandler;
+
 import javafx.geometry.Orientation;
-import javafx.scene.Node;
-import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.StageStyle;
 import pl.psi.ProductType;
+
+import pl.psi.creatures.EconomyCastleFactory;
 import pl.psi.creatures.EconomyCreature;
 import pl.psi.creatures.EconomyNecropolisFactory;
 
@@ -19,6 +20,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import pl.psi.hero.EconomyHero;
 
 import java.io.FileNotFoundException;
 
@@ -26,17 +28,20 @@ public class CreatureButton extends Button
 {
     private final EconomyCreature creature;
 
-    public CreatureButton( final EcoController aEcoController, EconomyCreature creature , final int maxSliderValue )
+    public CreatureButton(final EcoController aEcoController, EconomyCreature creature , final int maxSliderValue , boolean canBuy , EconomyHero.Fraction fraction)
     {
         this.creature = creature;
 
         addEventHandler( MouseEvent.MOUSE_CLICKED, ( e ) -> {
-            final int amount = startDialogAndGetCreatureAmount(maxSliderValue);
+            final int amount = startDialogAndGetCreatureAmount(maxSliderValue,canBuy);
             if( amount != 0 )
             {
                 boolean aUpgraded = creature.isUpgraded();
                 int aTier = creature.getTier();
-                aEcoController.buy(ProductType.CREATURE, new EconomyNecropolisFactory().create( aUpgraded, aTier, amount ) );
+                if(fraction.equals(EconomyHero.Fraction.NECROPOLIS))
+                    aEcoController.buy(ProductType.CREATURE, new EconomyNecropolisFactory().create( aUpgraded, aTier, amount ) );
+                else
+                    aEcoController.buy(ProductType.CREATURE, new EconomyCastleFactory().create( aUpgraded, aTier, amount ) );
             }
 
             try {
@@ -47,7 +52,7 @@ public class CreatureButton extends Button
         } );
     }
 
-    private int startDialogAndGetCreatureAmount(final int maxSliderValue)
+    private int startDialogAndGetCreatureAmount(final int maxSliderValue,boolean canBuy)
     {
         // Slider
         final VBox centerPane = new VBox();
@@ -55,9 +60,17 @@ public class CreatureButton extends Button
         final HBox bottomPane = new HBox();
         // Pane for cost and info about item
         final FlowPane topPane = new FlowPane(Orientation.HORIZONTAL,0,5);
-        ;
+
+
         final Slider slider = createSlider(maxSliderValue);
-        centerPane.getChildren().add( slider );
+        slider.setMaxWidth(610);
+
+        // if hero cannot buy centerPane instead of Slider show Label , because to do delete Slider a lot of code can be changed
+        if(canBuy)
+            centerPane.getChildren().add( slider );
+        else
+            centerPane.getChildren().add(new Label("You don't have enought money to buy "+creature.getName()));
+
         prepareTop( topPane,slider);
 
         final Stage dialogWindow = new Stage();
@@ -74,7 +87,7 @@ public class CreatureButton extends Button
     {
         final BorderPane pane = new BorderPane();
         pane.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-        final Scene scene = new Scene( pane, 620, 250 );
+        final Scene scene = new Scene( pane, 620, 300 );
         scene.getStylesheets().add( "fxml/main.css" );
         dialog.setScene( scene );
         dialog.initOwner( this.getScene().getWindow() );
@@ -92,7 +105,7 @@ public class CreatureButton extends Button
     private void prepareTop( final FlowPane aTopPane,final Slider aSlider )
     {
 
-        aTopPane.getChildren().add( new Label( "Single Cost: " + creature.getGoldCost().getProductPrice() ) );
+        aTopPane.getChildren().add( new Label( "Single Cost: " + creature.getGoldCost().getPrice() ) );
 
         aTopPane.getChildren().add( new Label( "Amount:" ) );
         final Label slideValueLabel = new Label( "0" );
@@ -110,14 +123,19 @@ public class CreatureButton extends Button
             upgraded = " not upgrated";
         String characteristics = "Tier : "+creature.getTier()+" , "+upgraded+" | Attack : "+creature.getStats().getAttack()+
                 " | Armor : "+creature.getStats().getArmor()+" | HP : "+creature.getStats().getMaxHp();
+
         aTopPane.getChildren().add( new Label( "             " ) );
         aTopPane.getChildren().add(new Label(characteristics));
+        Text text = new Text();
+        text.setTabSize(7);
+        text.setText(creature.getStats().getDescription());
+        aTopPane.getChildren().add(text);
 
 
         aSlider.valueProperty().addListener(( slider, aOld, aNew )
                 -> {
             slideValueLabel.setText(String.valueOf(aNew.intValue()));
-            purchaseCost.setText(String.valueOf(aNew.intValue()*creature.getGoldCost().getProductPrice()));
+            purchaseCost.setText(String.valueOf(aNew.intValue()*creature.getGoldCost().getPrice()));
 
         });
 
@@ -128,7 +146,6 @@ public class CreatureButton extends Button
 
     private void prepareConfirmAndCancelButton( final HBox aBottomPane, final Slider aSlider , final Stage dialog)
     {
-
         aBottomPane.setAlignment( Pos.CENTER );
         aBottomPane.setSpacing(30);
         final Button okButton = new Button( "OK" );

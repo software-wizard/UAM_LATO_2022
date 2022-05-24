@@ -5,6 +5,6 @@ public class LaunchEconomy
 
     public static void main( final String[] args )
     {
-        EconomyStart.main( args );
+        ChooseFraction.main( args );
     }
 }

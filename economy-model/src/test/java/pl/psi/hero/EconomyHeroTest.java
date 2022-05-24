@@ -50,8 +50,8 @@ class EconomyHeroTest
         hero.addCreature( factory.create( true, 1, 1 ) );
 
         assertEquals( true, hero.canAddCreature(factory.create( true, 1, 1 )));
-        assertEquals(7,hero.getCreatureList().get(0).getAmount());
-        assertEquals( 1, hero.getCreatureList().size());
+        assertEquals(7,hero.getCreatures().get(0).getAmount());
+        assertEquals( 1, hero.getCreatures().size());
     }
 
 
@@ -60,19 +60,12 @@ class EconomyHeroTest
     void shouldAddAmountForExcitingInListCreatureInsteadOfAddCreatureToList()
     {
         final EconomyNecropolisFactory factory = new EconomyNecropolisFactory();
-
         hero.addCreature( factory.create( true, 7, 1 ) );
         hero.addCreature( factory.create( true, 7, 1 ) );
 
-        assertEquals( 2, hero.getCreatureList().get(0).getAmount() );
+        assertEquals( 2, hero.getCreatures().get(0).getAmount() );
     }
 
-
-    @Test
-    void shouldThrowExceptionWhileYouTrySubstractMoreGoldThanHeroHas()
-    {
-        assertThrows( IllegalStateException.class, () -> hero.substractGold( hero.getGold() + 1 ) );
-    }
 
 
     @Test
@@ -82,10 +75,10 @@ class EconomyHeroTest
         hero.addCreature( factory.create( true, 2, 3 ) );
         hero.addCreature( factory.create( true, 3, 5 ) );
 
-        List<EconomyCreature> economyCreatureList = hero.getCreatureList();
+        List<EconomyCreature> economyCreatureList = hero.getCreatures();
         economyCreatureList.add(factory.create( true, 4, 1 ));
         assertEquals(4,economyCreatureList.size());
-        assertEquals(3,hero.getCreatureList().size());
+        assertEquals(3,hero.getCreatures().size());
 
 
     }

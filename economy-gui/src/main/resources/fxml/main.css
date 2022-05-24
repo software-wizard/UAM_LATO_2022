@@ -11,6 +11,20 @@
     -fx-pref-width: 150;
 }
 
+/*.combo-box{*/
+/*    -fx-background-color: #6f0404;*/
+/*    -fx-text-fill: BLACK;*/
+/*    -fx-border-color: #dcab00;*/
+/*}*/
+
+
+.combo-box .cell{
+    -fx-background-color: #6f0404;
+    -fx-text-fill: BLACK;
+    -fx-border-color: #dcab00;
+}
+
+
 .button_creature{
     -fx-background-color: #301204;
     -fx-text-fill: white;
@@ -18,7 +32,12 @@
     -fx-min-width: 53;
     -fx-max-height: 48;
     -fx-max-width: 53;
-    -fx-font: bold 7pt "Arial";
+    -fx-font: bold 6pt "Arial";
+}
+
+.DefaultFraction{
+    -fx-font: bold 10pt "Arial";
+    -fx-text-fill: WHITE;
 }
 
 
@@ -31,6 +50,11 @@
 .labelHero{
     -fx-font: bold 12pt "Arial";
     -fx-text-fill: black;
+}
+
+.labelFraction{
+    -fx-font-family: "Times New Roman";
+    -fx-text-fill: #c68900;
 }
 
 
@@ -67,6 +91,15 @@
     -fx-border-color: black;
     -fx-border-width: 1;
     -fx-pref-width: 300;
+    -fx-pref-height: 200;
+}
+
+.centerHBoxGrey {
+    -fx-border-color: black;
+    -fx-border-width: 1;
+    -fx-pref-width: 300;
+    -fx-pref-height: 200;
+    -fx-background-color: GREY;
 }
 
 .centerHBox{
@@ -75,12 +108,6 @@
     -fx-pref-width: 700;
 }
 
-.centerHBoxGrey{
-    -fx-border-color: black;
-    -fx-background-color: GREY;
-    -fx-border-width: 1;
-    -fx-pref-width: 700;
-}
 
 .slider {
     -fx-padding: 50 10 10 10;

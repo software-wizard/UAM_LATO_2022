@@ -1,16 +1,18 @@
 package pl.psi.creatures;
 
 import pl.psi.shop.BuyProductInterface;
-import pl.psi.shop.ProductPrice;
+import pl.psi.shop.Money;
 
-public class EconomyCreature implements BuyProductInterface
+import java.io.Serializable;
+
+public class EconomyCreature implements BuyProductInterface, Serializable
 {
 
     private final CreatureStatistic stats;
     private int amount;
-    private ProductPrice goldCost;
+    private final Money goldCost;
 
-    EconomyCreature( final CreatureStatistic aStats, final int aAmount, final ProductPrice aGoldCost )
+    public EconomyCreature( final CreatureStatistic aStats, final int aAmount, final Money aGoldCost )
     {
         stats = aStats;
         amount = aAmount;
@@ -26,7 +28,7 @@ public class EconomyCreature implements BuyProductInterface
         amount = amount + aAmount;
     }
 
-    public ProductPrice getGoldCost()
+    public Money getGoldCost()
     {
         return goldCost;
     }
@@ -51,8 +53,4 @@ public class EconomyCreature implements BuyProductInterface
     }
 
 
-    public Object clone()  {
-        EconomyCreature aClone = new EconomyCreature(this.stats,this.amount,this.goldCost);
-        return aClone;
-    }
 }

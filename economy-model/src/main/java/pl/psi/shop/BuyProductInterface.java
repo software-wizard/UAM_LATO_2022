@@ -4,7 +4,7 @@ public interface BuyProductInterface {
 
     int getAmount();
 
-    ProductPrice getGoldCost();
+    Money getGoldCost();
 
     String getName();
 }

@@ -74,6 +74,7 @@
         <HBox BorderPane.alignment="CENTER" >
             <children>
                 <Label fx:id="playerLabel" text="Player" />
+                <Label fx:id="fraction" text="Fraction"/>
                 <Label fx:id="roundNumberStaticLabel" text="Round: " />
                 <Label fx:id="roundNumberLabel" text="X" />
                 <Label fx:id="currentStaticLabel" text="GOLD: " />
@@ -96,4 +97,3 @@
         <URL value="@main.css" />
     </stylesheets>
 </BorderPane>
-
