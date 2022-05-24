@@ -1,8 +1,10 @@
 package pl.psi.gui;
 
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
 class MapTile extends StackPane
@@ -29,6 +31,11 @@ class MapTile extends StackPane
     void setBackground( final Color aColor )
     {
         rect.setFill( aColor );
+    }
+
+    void setBackground(final Image img)
+    {
+        rect.setFill( new ImagePattern(img) );
     }
 
 }

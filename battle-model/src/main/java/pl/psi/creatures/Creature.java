@@ -33,18 +33,25 @@ public class Creature implements PropertyChangeListener
     private DamageCalculatorIf calculator;
     private int heroNumber;
     private double spellDamageReduction = 1;
+    private int morale = 1; // range = < -3;3 >
+    private int luck;
+    private Alignment alignment;
 
 Creature()
 {
 }
 
     private Creature( final CreatureStatisticIf aStats, final DamageCalculatorIf aCalculator,
-                      final int aAmount )
+        final int aAmount, final Alignment aAlignment, final int aDefense,
+                      final int aLuck )
     {
         basicStats = aStats;
         amount = aAmount;
         currentHp = basicStats.getMaxHp();
         calculator = aCalculator;
+        alignment = aAlignment;
+        defense = aDefense;
+        luck = aLuck;
     }
 
     public void increaseStats( CreatureStatisticIf statIncrease ){
@@ -76,6 +83,12 @@ Creature()
     }
 
     protected void setCurrentHp( final double aCurrentHp )
+
+    public void increaseLuckBy(int factor) {
+        setLuck(luck + factor);
+    }
+
+    protected void setCurrentHp( final int aCurrentHp )
     {
         currentHp = aCurrentHp;
     }
@@ -131,7 +144,23 @@ Creature()
         }
     }
 
-    protected boolean canCounterAttack( final Creature aDefender )
+    protected void setLuck(int aLuck) {
+        luck = aLuck;
+    }
+
+    public void setMorale(final int aMorale) {
+        if (aMorale > 3) {
+            throw new IllegalArgumentException("Morale must not be greater than 3");
+        }
+
+        if (aMorale < -3) {
+            throw new IllegalArgumentException("Morale must not be less than 3");
+        }
+
+        morale = aMorale;
+    }
+
+    private boolean canCounterAttack( final Creature aDefender )
     {
         return aDefender.canCounterAttack && aDefender.getCurrentHp() > 0;
     }
@@ -203,6 +232,9 @@ Creature()
     {
         private int amount = 1;
         private DamageCalculatorIf calculator = new DefaultDamageCalculator( new Random() );
+        private int defense = 10;
+        private int luck = 10;
+        private Alignment alignment = Alignment.NEUTRAL;
         private CreatureStatisticIf statistic;
 
         public Builder statistic( final CreatureStatisticIf aStatistic )
@@ -217,6 +249,24 @@ Creature()
             return this;
         }
 
+        public Builder alignment( final Alignment aAlignment )
+        {
+            alignment = aAlignment;
+            return this;
+        }
+
+        public Builder defense( final int aDefense )
+        {
+            defense = aDefense;
+            return this;
+        }
+
+        public Builder luck( final int aLuck )
+        {
+            luck = aLuck;
+            return this;
+        }
+
         Builder calculator( final DamageCalculatorIf aCalc )
         {
             calculator = aCalc;
@@ -226,7 +276,7 @@ Creature()
 
         public Creature build()
         {
-            return new Creature( statistic, calculator, amount );
+            return new Creature( statistic, calculator, amount, alignment, defense, luck );
         }
     }
 }

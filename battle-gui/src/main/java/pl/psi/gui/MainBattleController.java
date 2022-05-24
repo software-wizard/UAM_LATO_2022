@@ -1,5 +1,6 @@
 package pl.psi.gui;
 
+import javafx.scene.image.Image;
 import pl.psi.GameEngine;
 import pl.psi.Hero;
 import pl.psi.Point;
@@ -36,6 +37,25 @@ public class MainBattleController
         gameEngine.addObserver( GameEngine.CREATURE_MOVED, ( e ) -> refreshGui() );
     }
 
+    private void renderSpecialFields(MapTile mapTile, int x, int y)
+    {
+        if (x == 0 && y == 0)
+        {
+            Image img = new Image("/images/cracked_ice.png");
+            mapTile.setBackground(img);
+        }
+
+        if(x == 4 && y == 8) {
+            var img = new Image("/images/evilFog.png");
+            mapTile.setBackground(img);
+        }
+
+        if(x == 5 && y == 5) {
+            var img = new Image("/images/holyGround.png");
+            mapTile.setBackground(img);
+        }
+    }
+
     private void refreshGui()
     {
         for( int x = 0; x < 15; x++ )
@@ -70,6 +90,7 @@ public class MainBattleController
                             e -> gameEngine.heal( new Point( x1, y1 ) ) );
                 }
 
+                renderSpecialFields( mapTile, x, y );
                 gridMap.add( mapTile, x, y );
             }
         }
