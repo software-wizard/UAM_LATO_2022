@@ -15,5 +15,8 @@ public interface CreatureStatisticIf {
     CreatureStatistic.CreatureType getType();
     int getSize();
     boolean isGround();
-    boolean isGoodAligned();
+
+    default boolean isGoodAligned() {
+        return false;
+    }
 }

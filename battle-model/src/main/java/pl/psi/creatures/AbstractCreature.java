@@ -73,7 +73,7 @@ public class AbstractCreature extends Creature {
     }
 
     @Override
-    double getArmor() {
+    public double getArmor() {
         return decorated.getArmor();
     }
 

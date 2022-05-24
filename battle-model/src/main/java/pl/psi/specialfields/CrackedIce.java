@@ -9,7 +9,7 @@ public class CrackedIce implements BufferIf
     @Override
     public void buffCreature(Creature creature)
     {
-        creature.reduceDefenseBy(5);
+
     }
 
     @Override

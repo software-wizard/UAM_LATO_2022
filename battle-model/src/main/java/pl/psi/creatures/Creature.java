@@ -22,8 +22,7 @@ import lombok.Getter;
  */
 @Getter
 @Setter
-public class Creature implements PropertyChangeListener
-{
+public class Creature implements PropertyChangeListener {
     private CreatureStatisticIf basicStats;
     private CreatureStats externalStats = new CreatureStats.CreatureStatsBuilder().build();
     private CreatureStats buffedStats = new CreatureStats.CreatureStatsBuilder().build();
@@ -37,110 +36,98 @@ public class Creature implements PropertyChangeListener
     private int luck;
     private Alignment alignment;
 
-Creature()
-{
-}
+    Creature() {
+    }
 
-    private Creature( final CreatureStatisticIf aStats, final DamageCalculatorIf aCalculator,
-        final int aAmount, final Alignment aAlignment, final int aDefense,
-                      final int aLuck )
-    {
+    private Creature(final CreatureStatisticIf aStats, final DamageCalculatorIf aCalculator,
+                     final int aAmount, final Alignment aAlignment,
+                     final int aLuck) {
         basicStats = aStats;
         amount = aAmount;
         currentHp = basicStats.getMaxHp();
         calculator = aCalculator;
         alignment = aAlignment;
-        defense = aDefense;
         luck = aLuck;
     }
 
-    public void increaseStats( CreatureStatisticIf statIncrease ){
-        externalStats.addStats( statIncrease );
+    public void increaseStats(CreatureStatisticIf statIncrease) {
+        externalStats.addStats(statIncrease);
     }
 
-    public void attack( final Creature aDefender )
-    {
-        if( isAlive() )
-        {
-            final int damage = getCalculator().calculateDamage( this, aDefender );
-            applyDamage( aDefender, damage );
-            if( canCounterAttack( aDefender ) )
-            {
-                counterAttack( aDefender );
+    public void attack(final Creature aDefender) {
+        if (isAlive()) {
+            final int damage = getCalculator().calculateDamage(this, aDefender);
+            applyDamage(aDefender, damage);
+            if (canCounterAttack(aDefender)) {
+                counterAttack(aDefender);
             }
         }
     }
 
 
-    public boolean isAlive()
-    {
+    public boolean isAlive() {
         return getAmount() > 0;
     }
 
-    protected void applyDamage( final Creature aDefender, final double aDamage )
-    {
-        aDefender.setCurrentHp( (aDefender.getCurrentHp() - aDamage));
+    protected void applyDamage(final Creature aDefender, final double aDamage) {
+        aDefender.setCurrentHp((aDefender.getCurrentHp() - aDamage));
     }
 
-    protected void setCurrentHp( final double aCurrentHp )
+    protected void setCurrentHp(final double aCurrentHp) {
+        currentHp = aCurrentHp;
+    }
 
     public void increaseLuckBy(int factor) {
         setLuck(luck + factor);
     }
 
-    protected void setCurrentHp( final int aCurrentHp )
-    {
+    protected void setCurrentHp(final int aCurrentHp) {
         currentHp = aCurrentHp;
     }
 
-    public void age(){
+    public void age() {
         CreatureStats reduceMaxHp = new CreatureStats
                 .CreatureStatsBuilder()
-                .maxHp( -(getStats().getMaxHp() / 2) )
+                .maxHp(-(getStats().getMaxHp() / 2))
                 .build();
-        buff( reduceMaxHp );
-        final double currentHpAfterAge = Math.max(getCurrentHp() - ( getBasicStats().getMaxHp() - getStats().getMaxHp() ), 1);
-        setCurrentHp( currentHpAfterAge );
+        buff(reduceMaxHp);
+        final double currentHpAfterAge = Math.max(getCurrentHp() - (getBasicStats().getMaxHp() - getStats().getMaxHp()), 1);
+        setCurrentHp(currentHpAfterAge);
     }
 
-    private void calculateUnits(final double aAmountToAdd){
-        if (aAmountToAdd > 1){
+    private void calculateUnits(final double aAmountToAdd) {
+        if (aAmountToAdd > 1) {
             amount += aAmountToAdd - 1;
-        }
-        else{
+        } else {
             amount += aAmountToAdd;
         }
     }
 
-    public void applySpellDamage(final double damage){
-        applyDamage( this, damage * spellDamageReduction );
+    public void applySpellDamage(final double damage) {
+        applyDamage(this, damage * spellDamageReduction);
     }
 
-    protected void heal( double healAmount )
-    {
-        setCurrentHp( (getCurrentHp() + healAmount));
-        calculateUnits( calculateAmount() );
-        setCurrentHp( calculateCurrentHp() );
+    protected void heal(double healAmount) {
+        setCurrentHp((getCurrentHp() + healAmount));
+        calculateUnits(calculateAmount());
+        setCurrentHp(calculateCurrentHp());
     }
 
-    private double calculateAmount(){
-        if ( getCurrentHp() / getStats().getMaxHp() == 1 ){
+    private double calculateAmount() {
+        if (getCurrentHp() / getStats().getMaxHp() == 1) {
             return 1;
-        }
-        else if ( getCurrentHp() % getStats().getMaxHp() == 0 ){
-            return (int)(getCurrentHp() / getStats().getMaxHp());
-        }
-        else{
-            return (int)((getCurrentHp() / getStats().getMaxHp()) + 1);
+        } else if (getCurrentHp() % getStats().getMaxHp() == 0) {
+            return (int) (getCurrentHp() / getStats().getMaxHp());
+        } else {
+            return (int) ((getCurrentHp() / getStats().getMaxHp()) + 1);
         }
     }
 
-    private double calculateCurrentHp(){
-        if( getCurrentHp() - ( getAmount() * getStats().getMaxHp() ) == 0 ){
-            return (int)getStats().getMaxHp();
-        }
-        else{ // ( a % b + b ) % b == a % b   when a is negative % operator behaves funky
-            return (int)(( ( getCurrentHp() - ( getAmount() * getStats().getMaxHp() ) ) % ( getStats().getMaxHp() ) + ( getStats().getMaxHp() ) ) % getStats().getMaxHp());
+    private double calculateCurrentHp() {
+        if (getCurrentHp() - (getAmount() * getStats().getMaxHp()) == 0) {
+            return (int) getStats().getMaxHp();
+        } else { // ( a % b + b ) % b == a % b   when a is negative % operator behaves funky
+            return (int) (((getCurrentHp() - (getAmount() * getStats().getMaxHp())) % (getStats().getMaxHp()) + (getStats().getMaxHp())) % getStats().getMaxHp());
         }
     }
 
@@ -160,123 +147,99 @@ Creature()
         morale = aMorale;
     }
 
-    private boolean canCounterAttack( final Creature aDefender )
-    {
+    protected boolean canCounterAttack(final Creature aDefender) {
         return aDefender.canCounterAttack && aDefender.getCurrentHp() > 0;
     }
 
-    protected void counterAttack( final Creature aAttacker )
-    {
+    protected void counterAttack(final Creature aAttacker) {
         final int damage = aAttacker.getCalculator()
-                .calculateDamage( aAttacker, this );
-        applyDamage( this, damage );
+                .calculateDamage(aAttacker, this);
+        applyDamage(this, damage);
         aAttacker.canCounterAttack = false;
     }
 
-    public void buff( CreatureStatisticIf statsToAdd ){
-        buffedStats.addStats( statsToAdd );
+    public void buff(CreatureStatisticIf statsToAdd) {
+        buffedStats.addStats(statsToAdd);
     }
 
-    public CreatureStatisticIf getStats(){
+    public CreatureStatisticIf getStats() {
         CreatureStats stats = new CreatureStats.CreatureStatsBuilder().build();
-        stats.addStats( basicStats );
-        stats.addStats( externalStats );
-        stats.addStats( buffedStats );
+        stats.addStats(basicStats);
+        stats.addStats(externalStats);
+        stats.addStats(buffedStats);
         return stats;
     }
 
-    Range< Integer > getDamage()
-    {
+    Range<Integer> getDamage() {
         return getStats().getDamage();
     }
 
-    double getMaxHp(){
+    double getMaxHp() {
         return getStats().getMaxHp();
     }
 
-    double getAttack()
-    {
+    double getAttack() {
         return getStats().getAttack();
     }
 
-    double getArmor()
-    {
+    public double getArmor() {
         return getStats().getArmor();
     }
 
     @Override
-    public void propertyChange( final PropertyChangeEvent evt )
-    {
-        if( TurnQueue.END_OF_TURN.equals( evt.getPropertyName() ) )
-        {
+    public void propertyChange(final PropertyChangeEvent evt) {
+        if (TurnQueue.END_OF_TURN.equals(evt.getPropertyName())) {
             canCounterAttack = true;
         }
     }
 
-    protected void restoreCurrentHpToMax()
-    {
+    protected void restoreCurrentHpToMax() {
         currentHp = getStats().getMaxHp();
     }
 
-    public String getName()
-    {
+    public String getName() {
         return basicStats.getName();
     }
 
-    public double getMoveRange()
-    {
+    public double getMoveRange() {
         return getStats().getMoveRange();
     }
 
-    public static class Builder
-    {
+    public static class Builder {
         private int amount = 1;
-        private DamageCalculatorIf calculator = new DefaultDamageCalculator( new Random() );
-        private int defense = 10;
+        private DamageCalculatorIf calculator = new DefaultDamageCalculator(new Random());
         private int luck = 10;
         private Alignment alignment = Alignment.NEUTRAL;
         private CreatureStatisticIf statistic;
 
-        public Builder statistic( final CreatureStatisticIf aStatistic )
-        {
+        public Builder statistic(final CreatureStatisticIf aStatistic) {
             statistic = aStatistic;
             return this;
         }
 
-        public Builder amount( final int aAmount )
-        {
+        public Builder amount(final int aAmount) {
             amount = aAmount;
             return this;
         }
 
-        public Builder alignment( final Alignment aAlignment )
-        {
+        public Builder alignment(final Alignment aAlignment) {
             alignment = aAlignment;
             return this;
         }
 
-        public Builder defense( final int aDefense )
-        {
-            defense = aDefense;
-            return this;
-        }
-
-        public Builder luck( final int aLuck )
-        {
+        public Builder luck(final int aLuck) {
             luck = aLuck;
             return this;
         }
 
-        Builder calculator( final DamageCalculatorIf aCalc )
-        {
+        Builder calculator(final DamageCalculatorIf aCalc) {
             calculator = aCalc;
             return this;
         }
 
 
-        public Creature build()
-        {
-            return new Creature( statistic, calculator, amount, alignment, defense, luck );
+        public Creature build() {
+            return new Creature(statistic, calculator, amount, alignment, luck);
         }
     }
 }

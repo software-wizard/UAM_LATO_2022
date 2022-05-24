@@ -29,7 +29,7 @@ public abstract class WarMachinesAbstract extends Creature {
     }
 
     @Override
-    double getArmor() {
+    public double getArmor() {
         return stats.getArmor();
     }
 

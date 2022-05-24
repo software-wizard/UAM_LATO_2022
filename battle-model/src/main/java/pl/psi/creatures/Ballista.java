@@ -47,7 +47,7 @@ public class Ballista extends WarMachinesAbstract {
     }
 
     @Override
-    double getArmor() {
+    public double getArmor() {
         return stats.getArmor();
     }
 

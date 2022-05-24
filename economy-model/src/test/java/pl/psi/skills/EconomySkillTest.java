@@ -18,8 +18,8 @@ public class EconomySkillTest {
 
     @BeforeEach
     void init() {
-        hero1 = new EconomyHero( EconomyHero.Fraction.NECROPOLIS, 1000 );
-        hero2 = new EconomyHero( EconomyHero.Fraction.NECROPOLIS, 1000 );
+        hero1 = new EconomyHero( EconomyHero.Fraction.NECROPOLIS );
+        hero2 = new EconomyHero( EconomyHero.Fraction.NECROPOLIS );
         economyEngine = new EconomyEngine( hero1, hero2 );
     }
 
