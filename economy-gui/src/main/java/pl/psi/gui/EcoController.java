@@ -318,7 +318,8 @@ public class EcoController implements PropertyChangeListener
             int costOfCreature= creature.getGoldCost().getPrice();
             int maxCreaturesHeroCanBuy = gold/costOfCreature;
             boolean canBuy = gold >= costOfCreature;
-            CreatureButton button = new CreatureButton( this, creature , maxCreaturesHeroCanBuy , canBuy , EconomyHero.Fraction.CASTLE);
+            boolean canBuyMore = economyEngine.getActiveHero().canAddCreature(creature);
+            CreatureButton button = new CreatureButton( this, creature , maxCreaturesHeroCanBuy , canBuy , canBuyMore, EconomyHero.Fraction.CASTLE);
             String name = i + "0";
             Image image = new Image("/creatures/CASTLE/" +name+".png");
             ImageView imageView = new ImageView(image);
@@ -326,7 +327,7 @@ public class EcoController implements PropertyChangeListener
             imageView.setFitWidth(40);
             button.setGraphic(imageView);
             button.setText(creature.getName() + " | "+"Price : "+creature.getGoldCost().getPrice());
-            if(canBuy)
+            if(canBuy && canBuyMore)
                 button.getStyleClass().add("centerHBoxRight");
             else
                 button.getStyleClass().add("centerHBoxGrey");
@@ -337,7 +338,8 @@ public class EcoController implements PropertyChangeListener
             int costOfCreature2 = creature2.getGoldCost().getPrice();
             maxCreaturesHeroCanBuy = gold/costOfCreature2;
             boolean canBuy2 = gold >= costOfCreature2;
-            CreatureButton button2 = new CreatureButton( this, creature2 ,maxCreaturesHeroCanBuy, canBuy2, EconomyHero.Fraction.CASTLE);
+            boolean canBuyMore2 = economyEngine.getActiveHero().canAddCreature(creature2);
+            CreatureButton button2 = new CreatureButton( this, creature2 ,maxCreaturesHeroCanBuy, canBuy2,canBuyMore2, EconomyHero.Fraction.CASTLE);
             String name2 = i + "1";
             Image image2 = new Image("/creatures/CASTLE/" +name2+".png");
             ImageView imageView2 = new ImageView(image2);
@@ -346,7 +348,7 @@ public class EcoController implements PropertyChangeListener
             button2.setGraphic(imageView2);
             button2.setText(creature2.getName() + " | "+"Price : "+creature2.getGoldCost().getPrice());
             button2.setContentDisplay(ContentDisplay.LEFT);
-            if(canBuy2)
+            if(canBuy2 && canBuyMore2)
                 button2.getStyleClass().add("centerHBoxRight");
             else
                 button2.getStyleClass().add("centerHBoxGrey");
@@ -369,7 +371,8 @@ public class EcoController implements PropertyChangeListener
             int costOfCreature= creature.getGoldCost().getPrice();
             int maxCreaturesHeroCanBuy = gold/costOfCreature;
             boolean canBuy = gold >= costOfCreature;
-            CreatureButton button = new CreatureButton( this, creature , maxCreaturesHeroCanBuy , canBuy, EconomyHero.Fraction.NECROPOLIS );
+            boolean canBuyMore = economyEngine.getActiveHero().canAddCreature(creature);
+            CreatureButton button = new CreatureButton( this, creature , maxCreaturesHeroCanBuy , canBuy, canBuyMore,EconomyHero.Fraction.NECROPOLIS );
             String name = i + "0";
             Image image = new Image("/creatures/NECROPOLIS/" +name+".png");
             ImageView imageView = new ImageView(image);
@@ -377,7 +380,7 @@ public class EcoController implements PropertyChangeListener
             imageView.setFitWidth(40);
             button.setGraphic(imageView);
             button.setText(creature.getName() + " | "+"Price : "+creature.getGoldCost().getPrice());
-            if(canBuy)
+            if(canBuy && canBuyMore)
                 button.getStyleClass().add("centerHBoxRight");
             else
                 button.getStyleClass().add("centerHBoxGrey");
@@ -388,7 +391,8 @@ public class EcoController implements PropertyChangeListener
             int costOfCreature2 = creature2.getGoldCost().getPrice();
             maxCreaturesHeroCanBuy = gold/costOfCreature2;
             boolean canBuy2 = gold >= costOfCreature2;
-            CreatureButton button2 = new CreatureButton( this, creature2 ,maxCreaturesHeroCanBuy, canBuy2, EconomyHero.Fraction.NECROPOLIS);
+            boolean canBuyMore2 = economyEngine.getActiveHero().canAddCreature(creature2);
+            CreatureButton button2 = new CreatureButton( this, creature2 ,maxCreaturesHeroCanBuy, canBuy2,canBuyMore2, EconomyHero.Fraction.NECROPOLIS);
             String name2 = i + "1";
             Image image2 = new Image("/creatures/NECROPOLIS/" +name2+".png");
             ImageView imageView2 = new ImageView(image2);
@@ -397,7 +401,7 @@ public class EcoController implements PropertyChangeListener
             button2.setGraphic(imageView2);
             button2.setText(creature2.getName() + " | "+"Price : "+creature2.getGoldCost().getPrice());
             button2.setContentDisplay(ContentDisplay.LEFT);
-            if(canBuy2)
+            if(canBuy2 && canBuyMore2)
                 button2.getStyleClass().add("centerHBoxRight");
             else
                 button2.getStyleClass().add("centerHBoxGrey");

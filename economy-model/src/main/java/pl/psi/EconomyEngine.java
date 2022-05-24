@@ -54,7 +54,7 @@ public class EconomyEngine
     }
 
     public EconomyHero getActiveHero()  {
-        return activeHero;
+        return new EconomyHero(activeHero.getFraction(),activeHero.getCreatures(),activeHero.getArtifacts(),activeHero.getSkills(),activeHero.getSpells(),activeHero.getGold(),activeHero.getHeroNumber());
     }
 
     // next round , change activeHero
@@ -92,11 +92,11 @@ public class EconomyEngine
     }
 
     public EconomyHero getPlayer1()  {
-        return hero1;
+        return new EconomyHero(hero1.getFraction(),hero1.getCreatures(),hero1.getArtifacts(),hero1.getSkills(),hero1.getSpells(),hero1.getGold(),hero1.getHeroNumber());
     }
 
     public EconomyHero getPlayer2()  {
-        return hero2;
+        return new EconomyHero(hero2.getFraction(),hero2.getCreatures(),hero2.getArtifacts(),hero2.getSkills(),hero2.getSpells(),hero2.getGold(),hero2.getHeroNumber());
     }
 
     private void endShopping(){

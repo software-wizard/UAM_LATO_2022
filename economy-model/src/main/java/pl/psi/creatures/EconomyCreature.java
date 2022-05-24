@@ -3,9 +3,7 @@ package pl.psi.creatures;
 import pl.psi.shop.BuyProductInterface;
 import pl.psi.shop.Money;
 
-import java.io.Serializable;
-
-public class EconomyCreature implements BuyProductInterface, Serializable
+public class EconomyCreature implements BuyProductInterface
 {
 
     private final CreatureStatistic stats;

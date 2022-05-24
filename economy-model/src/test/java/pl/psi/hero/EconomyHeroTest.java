@@ -2,8 +2,12 @@ package pl.psi.hero;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import pl.psi.artifacts.Artifact;
+import pl.psi.artifacts.ArtifactPlacement;
+import pl.psi.artifacts.EconomyArtifactFactory;
 import pl.psi.creatures.EconomyCreature;
 import pl.psi.creatures.EconomyNecropolisFactory;
+import pl.psi.shop.Money;
 
 import java.util.List;
 
@@ -79,8 +83,6 @@ class EconomyHeroTest
         economyCreatureList.add(factory.create( true, 4, 1 ));
         assertEquals(4,economyCreatureList.size());
         assertEquals(3,hero.getCreatures().size());
-
-
     }
 
 }

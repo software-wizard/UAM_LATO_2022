@@ -28,12 +28,12 @@ public class CreatureButton extends Button
 {
     private final EconomyCreature creature;
 
-    public CreatureButton(final EcoController aEcoController, EconomyCreature creature , final int maxSliderValue , boolean canBuy , EconomyHero.Fraction fraction)
+    public CreatureButton(final EcoController aEcoController, EconomyCreature creature , final int maxSliderValue , boolean canBuy , boolean canBuyMore, EconomyHero.Fraction fraction)
     {
         this.creature = creature;
 
         addEventHandler( MouseEvent.MOUSE_CLICKED, ( e ) -> {
-            final int amount = startDialogAndGetCreatureAmount(maxSliderValue,canBuy);
+            final int amount = startDialogAndGetCreatureAmount(maxSliderValue,canBuy,canBuyMore);
             if( amount != 0 )
             {
                 boolean aUpgraded = creature.isUpgraded();
@@ -52,7 +52,7 @@ public class CreatureButton extends Button
         } );
     }
 
-    private int startDialogAndGetCreatureAmount(final int maxSliderValue,boolean canBuy)
+    private int startDialogAndGetCreatureAmount(final int maxSliderValue,boolean canBuy, boolean canBuyMore)
     {
         // Slider
         final VBox centerPane = new VBox();
@@ -66,10 +66,12 @@ public class CreatureButton extends Button
         slider.setMaxWidth(610);
 
         // if hero cannot buy centerPane instead of Slider show Label , because to do delete Slider a lot of code can be changed
-        if(canBuy)
+        if(canBuy && canBuyMore)
             centerPane.getChildren().add( slider );
-        else
+        else if(!canBuy)
             centerPane.getChildren().add(new Label("You don't have enought money to buy "+creature.getName()));
+        else if (!canBuyMore)
+            centerPane.getChildren().add(new Label("You already have bought 7 types of creatures"));
 
         prepareTop( topPane,slider);
 
@@ -127,7 +129,6 @@ public class CreatureButton extends Button
         aTopPane.getChildren().add( new Label( "             " ) );
         aTopPane.getChildren().add(new Label(characteristics));
         Text text = new Text();
-        text.setTabSize(7);
         text.setText(creature.getStats().getDescription());
         aTopPane.getChildren().add(text);
 
