@@ -5,6 +5,7 @@ import java.beans.PropertyChangeSupport;
 import java.util.Optional;
 
 import pl.psi.creatures.Creature;
+import pl.psi.creatures.FirstAidTent;
 
 /**
  * TODO: Describe this class (The first line - until the first dot - will interpret as the brief description).
@@ -28,6 +29,13 @@ public class GameEngine
         board.getCreature( point )
             .ifPresent( defender -> turnQueue.getCurrentCreature()
                 .attack( defender ) );
+    }
+
+    public void heal(final Point point )
+    {
+        FirstAidTent firstAidTent = (FirstAidTent) turnQueue.getCurrentCreature();
+        board.getCreature( point )
+                .ifPresent(firstAidTent::healCreature);
     }
 
     public boolean canMove( final Point aPoint )
@@ -59,5 +67,15 @@ public class GameEngine
     public boolean canAttack(final Point point )
     {
         return false;
+    }
+
+    public boolean canHeal(final Point point )
+    {
+        Creature currentCreature = turnQueue.getCurrentCreature();
+
+        return currentCreature instanceof FirstAidTent
+                && board.getCreature( point )
+                .filter(creature -> creature.getHeroNumber() == currentCreature.getHeroNumber())
+                .isPresent();
     }
 }

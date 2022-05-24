@@ -21,7 +21,7 @@ public class FirstAidTent extends WarMachinesAbstract {
         if (isAlive()) {
 
             int maxHp = calculateHealHp(getSkillLevel());
-            double heal = random.nextInt(maxHp - 1) + 1;
+            double hp = random.nextInt(maxHp - 1) + 1;
 
             List<Creature> creatures = new ArrayList<>(creatureList);
             Collections.shuffle(creatures);
@@ -30,9 +30,16 @@ public class FirstAidTent extends WarMachinesAbstract {
                     .filter(creature -> this.getHeroNumber() == creature.getHeroNumber())
                     .filter(Creature::isAlive)
                     .findAny()
-                    .ifPresent(creature -> creature.heal(heal));
+                    .ifPresent(creature -> creature.heal(hp));
         }
 
+    }
+
+    public void healCreature(Creature creature) {
+        int maxHp = calculateHealHp(getSkillLevel());
+        double hp = random.nextInt(maxHp - 1) + 1;
+
+        creature.heal(hp);
     }
 
     private int calculateHealHp (int skillLevel) {
