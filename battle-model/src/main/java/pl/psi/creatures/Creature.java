@@ -191,7 +191,7 @@ Creature()
 
     public String getName()
     {
-        return getStats().getName();
+        return basicStats.getName();
     }
 
     public double getMoveRange()
