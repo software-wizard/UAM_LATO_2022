@@ -592,6 +592,26 @@ public class CreatureTest
         assertThat( defender.getCurrentHp() ).isBetween( 133.0, 160.0 );  // not sure if the calculation is correct, was referring to this http://imzdx.pl/h3dmg/
     }
 
+    @Test
+    void creatureShouldTakeReducedSpellDamage()
+    {
+        final Creature normalSpellDamage = new Creature.Builder().statistic( CreatureStats.builder()
+                .maxHp( 100 )
+                .build() )
+                .build();
+
+        final Creature reducedSpellDamage = new Creature.Builder().statistic( CreatureStats.builder()
+                .maxHp( 100 )
+                .build() )
+                .build();
+
+        reducedSpellDamage.setSpellDamageReduction( 0.5 );
+        normalSpellDamage.applySpellDamage( 10 );
+        reducedSpellDamage.applySpellDamage( 10 );
+        assertThat( normalSpellDamage.getCurrentHp() ).isEqualTo( 90 );
+        assertThat( reducedSpellDamage.getCurrentHp() ).isEqualTo( 95 );
+    }
+
     /*@Test
     void dreadKnightCreatureTest()
     {

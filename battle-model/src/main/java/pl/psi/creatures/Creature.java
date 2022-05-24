@@ -32,6 +32,7 @@ public class Creature implements PropertyChangeListener
     private boolean canCounterAttack = true;
     private DamageCalculatorIf calculator;
     private int heroNumber;
+    private double spellDamageReduction = 1;
 
 Creature()
 {
@@ -69,7 +70,7 @@ Creature()
         return getAmount() > 0;
     }
 
-    protected void applyDamage( final Creature aDefender, final int aDamage )
+    protected void applyDamage( final Creature aDefender, final double aDamage )
     {
         aDefender.setCurrentHp( (aDefender.getCurrentHp() - aDamage));
     }
@@ -96,6 +97,10 @@ Creature()
         else{
             amount += aAmountToAdd;
         }
+    }
+
+    public void applySpellDamage(final double damage){
+        applyDamage( this, damage * spellDamageReduction );
     }
 
     protected void heal( double healAmount )
