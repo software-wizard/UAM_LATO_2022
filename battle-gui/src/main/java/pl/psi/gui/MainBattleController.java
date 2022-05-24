@@ -62,6 +62,13 @@ public class MainBattleController
                     mapTile.addEventHandler( MouseEvent.MOUSE_CLICKED,
                         e -> gameEngine.attack( new Point( x1, y1 ) ) );
                 }
+                if( gameEngine.canHeal( new Point( x, y ) ) )
+                {
+                    mapTile.setBackground( Color.YELLOW );
+
+                    mapTile.addEventHandler( MouseEvent.MOUSE_CLICKED,
+                            e -> gameEngine.heal( new Point( x1, y1 ) ) );
+                }
 
                 gridMap.add( mapTile, x, y );
             }

@@ -1,13 +1,12 @@
 package pl.psi;
 
 import java.beans.PropertyChangeSupport;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import pl.psi.creatures.Creature;
+import pl.psi.creatures.WarMachinesAbstract;
 
 /**
  * TODO: Describe this class (The first line - until the first dot - will interpret as the brief description).
@@ -44,11 +43,26 @@ public class TurnQueue {
             endOfTurn();
         }
         currentCreature = creaturesQueue.poll();
+
+        if (currentCreature instanceof WarMachinesAbstract) {
+            handleWarMachineAction();
+        }
     }
 
     private void endOfTurn() {
         roundNumber++;
         initQueue();
         observerSupport.firePropertyChange(END_OF_TURN, roundNumber - 1, roundNumber);
+    }
+
+    private void handleWarMachineAction() {
+        WarMachinesAbstract warMachine = (WarMachinesAbstract) currentCreature;
+
+        if (warMachine.getSkillLevel() == 0)
+        {
+            List<Creature> creatureList = new ArrayList<>(creatures);
+            warMachine.performAction(creatureList);
+            currentCreature = creaturesQueue.poll();
+        }
     }
 }

@@ -43,4 +43,5 @@ public class EcoBattleConverter {
                         ecoCreature.getTier(), ecoCreature.getAmount())));
         return new Hero(creatures, aPlayer1.getHeroClass());
     }
+
 }
