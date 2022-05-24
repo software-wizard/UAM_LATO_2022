@@ -1,4 +1,4 @@
-package pl.psi.products.creatures;
+package pl.psi.creatures;
 
 public interface DamageCalculatorIf
 {
