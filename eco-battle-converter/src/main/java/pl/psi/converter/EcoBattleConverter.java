@@ -13,6 +13,7 @@ import pl.psi.hero.EconomyHero;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import pl.psi.hero.HeroStatistics;
 
 public class EcoBattleConverter {
 
@@ -40,6 +41,6 @@ public class EcoBattleConverter {
         aPlayer1.getCreatures()
                 .forEach(ecoCreature -> creatures.add(factory.create(ecoCreature.isUpgraded(),
                         ecoCreature.getTier(), ecoCreature.getAmount())));
-        return new Hero(creatures);
+        return new Hero(creatures, aPlayer1.getHeroClass());
     }
 }

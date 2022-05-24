@@ -2,6 +2,8 @@ package pl.psi.hero;
 
 import lombok.Getter;
 import lombok.Setter;
+import pl.psi.artifacts.Artifact;
+import pl.psi.artifacts.ArtifactPlacement;
 
 import java.util.Objects;
 

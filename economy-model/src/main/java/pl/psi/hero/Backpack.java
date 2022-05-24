@@ -1,6 +1,7 @@
 package pl.psi.hero;
 
 import lombok.Getter;
+import pl.psi.artifacts.Artifact;
 
 import java.util.ArrayList;
 
@@ -14,5 +15,9 @@ public class Backpack {
 
     public void addItem(Artifact aItem){
         items.add(aItem);
+    }
+
+    int size() {
+        return items.size();
     }
 }

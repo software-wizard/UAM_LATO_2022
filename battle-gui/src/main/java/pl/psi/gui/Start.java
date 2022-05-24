@@ -9,51 +9,43 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import pl.psi.hero.HeroStatistics;
 
-public class Start extends Application
-{
+public class Start extends Application {
 
-    public Start()
-    {
+    public Start() {
 
     }
 
-    static void main( final String[] args )
-    {
-        launch( args );
+    static void main(final String[] args) {
+        launch(args);
     }
 
     @Override
-    public void start( final Stage primaryStage )
-    {
+    public void start(final Stage primaryStage) {
         Scene scene = null;
-        try
-        {
+        try {
             final FXMLLoader loader = new FXMLLoader();
-            loader.setLocation( Start.class.getClassLoader()
-                .getResource( "fxml/main-battle.fxml" ) );
-            loader.setController( new MainBattleController( createP1(), createP2() ) );
-            scene = new Scene( loader.load() );
-            primaryStage.setScene( scene );
-            primaryStage.setX( 5 );
-            primaryStage.setY( 5 );
+            loader.setLocation(Start.class.getClassLoader()
+                    .getResource("fxml/main-battle.fxml"));
+            loader.setController(new MainBattleController(createP1(), createP2()));
+            scene = new Scene(loader.load());
+            primaryStage.setScene(scene);
+            primaryStage.setX(5);
+            primaryStage.setY(5);
             primaryStage.show();
-        }
-        catch( final IOException aE )
-        {
+        } catch (final IOException aE) {
             aE.printStackTrace();
         }
     }
 
-    private Hero createP2()
-    {
-        final Hero ret = new Hero( List.of( new NecropolisFactory().create( true, 1, 5 ) ) );
+    private Hero createP2() {
+        final Hero ret = new Hero(List.of(new NecropolisFactory().create(true, 1, 5)), HeroStatistics.NECROMANCER);
         return ret;
     }
 
-    private Hero createP1()
-    {
-        final Hero ret = new Hero( List.of( new NecropolisFactory().create( false, 1, 5 ) ) );
+    private Hero createP1() {
+        final Hero ret = new Hero(List.of(new NecropolisFactory().create(false, 1, 5)), HeroStatistics.NECROMANCER);
         return ret;
     }
 

@@ -33,6 +33,10 @@ public class EconomyHero {
     private static int heroCounter = 0;
     private final int heroNumber;
 
+    public EconomyHero(final Fraction aFraction ) {
+        this(aFraction, HeroStatistics.NECROMANCER);
+    }
+
     public EconomyHero(final Fraction aFraction, final HeroStatistics aClass) {
         heroCounter++;
         heroNumber = heroCounter;
@@ -54,6 +58,9 @@ public class EconomyHero {
         this.spellsList = spellsList;
         this.gold = gold;
         this.heroNumber = heroNumber;
+        equipment = new Equipment();
+        backpack = new Backpack();
+        heroClass = HeroStatistics.NECROMANCER;
     }
 
 
