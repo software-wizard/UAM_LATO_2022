@@ -1,9 +1,6 @@
 package pl.psi.gui;
 
-import pl.psi.creatures.Creature;
-import pl.psi.creatures.CreatureStatistic;
-import pl.psi.creatures.HealFromAttackCreature;
-import pl.psi.creatures.NoCounterCreature;
+import pl.psi.creatures.*;
 
 public class NecropolisFactory
 {
@@ -25,9 +22,10 @@ public class NecropolisFactory
                         .amount( aAmount )
                         .build();
                 case 3:
-                    return new Creature.Builder().statistic( CreatureStatistic.WIGHT )
-                        .amount( aAmount )
-                        .build();
+                    Creature wight = new Creature.Builder().statistic( CreatureStatistic.WIGHT )
+                            .amount( aAmount )
+                            .build();
+                    return new SelfHealAfterTurnCreature( wight );
                 case 4:
                     Creature decorated = new Creature.Builder().statistic( CreatureStatistic.VAMPIRE )
                             .amount( aAmount )
@@ -38,9 +36,10 @@ public class NecropolisFactory
                         .amount( aAmount )
                         .build();
                 case 6:
-                    return new Creature.Builder().statistic( CreatureStatistic.BLACK_KNIGHT )
+                    Creature blackKnight = new Creature.Builder().statistic( CreatureStatistic.BLACK_KNIGHT )
                         .amount( aAmount )
                         .build();
+                    return new CurseOnHitCreature( blackKnight );
                 case 7:
                     return new Creature.Builder().statistic( CreatureStatistic.BONE_DRAGON )
                         .amount( aAmount )
@@ -58,13 +57,15 @@ public class NecropolisFactory
                         .amount( aAmount )
                         .build();
                 case 2:
-                    return new Creature.Builder().statistic( CreatureStatistic.ZOMBIE )
+                    Creature zombie = new Creature.Builder().statistic( CreatureStatistic.ZOMBIE )
                         .amount( aAmount )
                         .build();
+                    return new DiseaseOnHitCreature( zombie );
                 case 3:
-                    return new Creature.Builder().statistic( CreatureStatistic.WRAITH )
+                    Creature wraith = new Creature.Builder().statistic( CreatureStatistic.WRAITH )
                         .amount( aAmount )
                         .build();
+                    return new SelfHealAfterTurnCreature( wraith );
                 case 4:
                     Creature decorated = new Creature.Builder().statistic( CreatureStatistic.VAMPIRE_LORD )
                         .amount( aAmount )
@@ -76,13 +77,16 @@ public class NecropolisFactory
                         .amount( aAmount )
                         .build();
                 case 6:
-                    return new Creature.Builder().statistic( CreatureStatistic.DREAD_KNIGHT )
-                        .amount( aAmount )
-                        .build();
+                    Creature blackKnight = new Creature.Builder().statistic( CreatureStatistic.DREAD_KNIGHT )  // if making dread knight by hand remember to first do double damage then curse on hit
+                            .amount( aAmount )
+                            .build();
+                    DoubleDamageOnHitCreature dreadKnight = new DoubleDamageOnHitCreature( blackKnight );
+                    return new CurseOnHitCreature( dreadKnight );
                 case 7:
-                    return new Creature.Builder().statistic( CreatureStatistic.GHOST_DRAGON )
+                    Creature ghostDragon = new Creature.Builder().statistic( CreatureStatistic.GHOST_DRAGON )
                         .amount( aAmount )
                         .build();
+                    return new AgeOnHitCreature( ghostDragon );
                 default:
                     throw new IllegalArgumentException( EXCEPTION_MESSAGE );
             }

@@ -44,7 +44,7 @@ public class StrongholdFactory
                     Creature ancientBehemoth = new Creature.Builder().statistic( CreatureStatistic.ANCIENT_BEHEMOTH )
                             .amount( aAmount )
                             .build();
-                    return new ReduceDefenceCreature( ancientBehemoth, 0.6 );
+                    return new DefenceReductionCreature( ancientBehemoth, 0.6 );
                 default:
                     throw new IllegalArgumentException( EXCEPTION_MESSAGE );
             }
@@ -85,7 +85,7 @@ public class StrongholdFactory
                     Creature ancientBehemoth = new Creature.Builder().statistic( CreatureStatistic.ANCIENT_BEHEMOTH )
                             .amount( aAmount )
                             .build();
-                    return new ReduceDefenceCreature( ancientBehemoth, 0.2 );
+                    return new DefenceReductionCreature( ancientBehemoth, 0.2 );
                 default:
                     throw new IllegalArgumentException( EXCEPTION_MESSAGE );
             }

@@ -64,7 +64,6 @@ Creature()
         }
     }
 
-
     public boolean isAlive()
     {
         return getAmount() > 0;
@@ -99,7 +98,7 @@ Creature()
         }
     }
 
-    public void applySpellDamage(final double damage){
+    public void applySpellDamage( final double damage ){
         applyDamage( this, damage * spellDamageReduction );
     }
 

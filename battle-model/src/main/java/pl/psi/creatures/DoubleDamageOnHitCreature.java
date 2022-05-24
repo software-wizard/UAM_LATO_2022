@@ -28,7 +28,7 @@ public class DoubleDamageOnHitCreature extends AbstractCreature{
         }
     }
 
-    public void attackWithDoubleDamage( final Creature aDefender ){
+    protected void attackWithDoubleDamage( final Creature aDefender ){
         decorated.setCalculator( doubleDamageCalculator );
         decorated.attack( aDefender );
         decorated.setCalculator( defaultDamageCalculator );

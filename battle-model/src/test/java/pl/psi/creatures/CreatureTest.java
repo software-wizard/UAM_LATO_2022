@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
 import java.util.List;
-import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
@@ -578,7 +577,7 @@ public class CreatureTest
                 .build() )
                 .build();
 
-        final ReduceDefenceCreature reduceDefenceCreature = new ReduceDefenceCreature( decorated, 0.6 );
+        final DefenceReductionCreature reduceDefenceCreature = new DefenceReductionCreature( decorated, 0.6 );
 
 
         final Creature defender = new Creature.Builder().statistic( CreatureStats.builder()
@@ -612,30 +611,6 @@ public class CreatureTest
         assertThat( reducedSpellDamage.getCurrentHp() ).isEqualTo( 95 );
     }
 
-    /*@Test
-    void dreadKnightCreatureTest()
-    {
-        final Creature decorated = new Creature.Builder().statistic( CreatureStats.builder()
-                .maxHp( 1 )
-                .damage( Range.closed(10,10) )
-                .build() )
-                .build();
-
-        final DoubleDamageOnHitCreature doubleDamageOnHitCreature = new DoubleDamageOnHitCreature( decorated );
-        final CurseOnHitCreature dreadKnight = new CurseOnHitCreature( doubleDamageOnHitCreature );
-
-
-        final Creature defender = new Creature.Builder().statistic( CreatureStats.builder()
-                .maxHp( 100 )
-                .damage( Range.closed( 0,100 ) )
-                .type( CreatureStatistic.CreatureType.ALIVE )
-                .build() )
-                .build();
-
-        dreadKnight.attackWithCurse( defender );
-        assertThat( dreadKnight.getCurrentHp() ).isEqualTo( 1 );
-        assertThat( defender.getCurrentHp() ).isEqualTo( 80 );
-    }*/
 
 
 }

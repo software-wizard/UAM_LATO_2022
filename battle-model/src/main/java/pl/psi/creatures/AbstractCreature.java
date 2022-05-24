@@ -43,6 +43,12 @@ public class AbstractCreature extends Creature
     }
 
     @Override
+    protected void applyDamage( final Creature aDefender, final double aDamage )
+    {
+        decorated.applyDamage( aDefender, aDamage );
+    }
+
+    @Override
     public void attack( final Creature aDefender )
     {
         decorated.attack( aDefender );
@@ -54,6 +60,27 @@ public class AbstractCreature extends Creature
         return decorated.isAlive();
     }
 
+    @Override
+    public void age()
+    {
+        decorated.age();
+    }
+
+    @Override
+    public void applySpellDamage( final double damage )
+    {
+        decorated.applyDamage( decorated, damage );
+    }
+
+    @Override
+    public void buff( CreatureStatisticIf statsToAdd ){
+        decorated.buff( statsToAdd );
+    }
+
+    @Override
+    public void increaseStats( CreatureStatisticIf statIncrease ){
+        decorated.increaseStats( statIncrease );
+    }
 
     @Override
     public void heal( final double healAmount)
@@ -89,6 +116,18 @@ public class AbstractCreature extends Creature
     double getArmor()
     {
         return decorated.getArmor();
+    }
+
+    @Override
+    public String getName()
+    {
+        return decorated.getName();
+    }
+
+    @Override
+    public double getMoveRange()
+    {
+        return decorated.getMoveRange();
     }
 
     @Override
