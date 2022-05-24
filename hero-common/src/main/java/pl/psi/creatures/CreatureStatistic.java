@@ -112,6 +112,7 @@ public enum CreatureStatistic implements CreatureStatisticIf {
     CRUSADER("Crusader", 12, 12, 35, 6, Range.closed(7, 10), 4,
             "Good upgrade, but still lacks speed. Seem undefeatable in large numbers.\n",
             false, CreatureType.ALIVE, true, 1);
+            true,CreatureType.UNDEAD,false, 2),
 
     public enum CreatureType {
         ALIVE, UNDEAD, NON_LIVING

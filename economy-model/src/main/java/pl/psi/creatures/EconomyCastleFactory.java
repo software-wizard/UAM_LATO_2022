@@ -14,13 +14,13 @@ public class EconomyCastleFactory
             switch( aTier )
             {
                 case 1:
-                    return new EconomyCreature( CreatureStatistic.PIKEMAN, aAmount, new Money(60) );
+                    return new EconomyCreature( CreatureStatistic.PIKEMAN, aAmount, 60 );
                 case 2:
                     // TODO
                     // add archer
-                    return new EconomyCreature( CreatureStatistic.GRIFFIN, aAmount, new Money(200) );
+                    return new EconomyCreature( CreatureStatistic.GRIFFIN, aAmount, 200 );
                 case 3:
-                    return new EconomyCreature( CreatureStatistic.SWORDSMAN, aAmount, new Money(300) );
+                    return new EconomyCreature( CreatureStatistic.SWORDSMAN, aAmount, 300 );
                 default:
                     throw new IllegalArgumentException( EXCEPTION_MESSAGE );
             }
@@ -30,11 +30,11 @@ public class EconomyCastleFactory
             switch( aTier )
             {
                 case 1:
-                    return new EconomyCreature( CreatureStatistic.HALBERDIER, aAmount, new Money(75) );
+                    return new EconomyCreature( CreatureStatistic.HALBERDIER, aAmount, 75 );
                 case 2:
-                    return new EconomyCreature( CreatureStatistic.ROYAL_GRIFFIN, aAmount, new Money(240) );
+                    return new EconomyCreature( CreatureStatistic.ROYAL_GRIFFIN, aAmount, 240 );
                 case 3:
-                    return new EconomyCreature( CreatureStatistic.CRUSADER, aAmount, new Money(400) );
+                    return new EconomyCreature( CreatureStatistic.CRUSADER, aAmount, 400 );
                 default:
                     throw new IllegalArgumentException( EXCEPTION_MESSAGE );
             }
