@@ -13,9 +13,7 @@ import pl.psi.spells.SpellFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static pl.psi.spells.SpellRang.BASIC;
 
@@ -49,7 +47,7 @@ public class EcoBattleConverter {
         final List<Spell> spells = new ArrayList<>();
         final SpellFactory spellFactory = new SpellFactory();
         aPlayer1.getSpellList()
-                .forEach(economySpell -> spells.add(spellFactory.create(economySpell.getName(), BASIC, 10, aPlayer1.getSpellPower())));
+                .forEach(economySpell -> spells.add(spellFactory.create(economySpell.getSpellStats().getName(), economySpell.getSpellRang(), aPlayer1.getSpellPower())));
 
         return new Hero(creatures, spells);
     }

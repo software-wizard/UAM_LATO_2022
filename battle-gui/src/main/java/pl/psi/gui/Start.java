@@ -59,7 +59,7 @@ public class Start extends Application
 
     private Hero createP1()
     {
-        final Hero ret = new Hero( List.of( new NecropolisFactory().create( false, 1, 5 ) ), List.of(new SpellFactory().create("Haste", BASIC, 10,1), new SpellFactory().create("Haste", ADVANCED, 10,1)));
+        final Hero ret = new Hero( List.of( new NecropolisFactory().create( false, 1, 5 ) ), List.of(new SpellFactory().create("Haste", BASIC, 1), new SpellFactory().create("Haste", ADVANCED, 1)));
         return ret;
     }
 

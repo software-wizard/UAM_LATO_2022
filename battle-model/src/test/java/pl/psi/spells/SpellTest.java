@@ -16,10 +16,10 @@ import static pl.psi.spells.SpellRang.BASIC;
 
 public class SpellTest {
 
-    private static final Spell LIGHTING_BOLT_RANG_1 = new SpellFactory().create("LightingBolt", BASIC, 10, 1);
-    private static final Spell LIGHTING_BOLT_RANG_2 = new SpellFactory().create("LightingBolt", ADVANCED, 10, 1);
-    private static final Spell HASTE = new SpellFactory().create("Haste", BASIC, 10,1);
-    private static final Spell FIREBALL = new SpellFactory().create("FireBall", BASIC, 10, 1);
+    private static final Spell LIGHTING_BOLT_RANG_1 = new SpellFactory().create("LightingBolt", BASIC, 1);
+    private static final Spell LIGHTING_BOLT_RANG_2 = new SpellFactory().create("LightingBolt", ADVANCED, 1);
+    private static final Spell HASTE = new SpellFactory().create("Haste", BASIC, 1);
+    private static final Spell FIREBALL = new SpellFactory().create("FireBall", BASIC, 1);
 
     private final Creature EXAMPLE_CREATURE_1 = new Creature.Builder()
             .statistic(
