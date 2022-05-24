@@ -33,10 +33,9 @@ public class Catapult extends WarMachinesAbstract {
         applyDamage(aDefender, damage);
     }
 
-    private void applyDamage(final Creature aDefender, final double aDamage) {
+    protected void applyDamage(final Creature aDefender, final double aDamage) {
         aDefender.setCurrentHp(aDefender.getCurrentHp() - aDamage);
     }
-
 
     public static class Builder {
         private int amount = 1;
