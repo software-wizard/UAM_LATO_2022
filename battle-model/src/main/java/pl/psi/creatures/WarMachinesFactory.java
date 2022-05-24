@@ -22,6 +22,11 @@ public class WarMachinesFactory implements WarMachinesIf<WarMachinesAbstract> {
                         .amount(aAmount)
                         .calculator(aCalculator)
                         .build();
+            case 4:
+                return new AmmoCart.Builder().statistic(WarMachinesStatistic.AMMO_CART)
+                        .amount(aAmount)
+                        .calculator(aCalculator)
+                        .build();
             default:
                 throw new IllegalArgumentException("Illegal Argument Exception");
         }

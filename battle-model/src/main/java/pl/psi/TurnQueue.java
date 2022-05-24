@@ -67,7 +67,8 @@ public class TurnQueue
 
         if (warMachine.getSkillLevel() == 0)
         {
-            warMachine.performAction((List<Creature>) creatures);
+            List<Creature> creatureList = new ArrayList<>(creatures);
+            warMachine.performAction(creatureList);
             currentCreature = creaturesQueue.poll();
         }
     }
