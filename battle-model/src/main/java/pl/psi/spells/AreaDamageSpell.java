@@ -1,17 +1,20 @@
 package pl.psi.spells;
 
+import lombok.Getter;
 import pl.psi.creatures.Creature;
 
 import java.beans.PropertyChangeEvent;
 import java.util.List;
-import java.util.Optional;
 
 public class AreaDamageSpell extends Spell<List<Creature>> {
 
+    @Getter
+    private final boolean[][] area;
     private final int value;
 
-    public AreaDamageSpell(SpellTypes category, String name, SpellRang rang, int manaCost, int value) {
+    public AreaDamageSpell(SpellTypes category, String name, SpellRang rang, int manaCost, boolean[][] area, int value) {
         super(category, name, rang, manaCost);
+        this.area = area;
         this.value = value;
     }
 

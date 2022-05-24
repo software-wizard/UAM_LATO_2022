@@ -37,11 +37,26 @@ public class SpellFactory {
             case "FireBall":
                 switch (rang) {
                     case BASIC:
-                        return new AreaDamageSpell(AREA, name, BASIC, manaCost, spellPower + 10);
+                        return new AreaDamageSpell(AREA, name, BASIC, manaCost,
+                                new boolean[][]{{false, false, true, false, false},
+                                                {false, true, true, true, false},
+                                                {true, true, true, true, true},
+                                                {false, true, true, true, false},
+                                                {false, false, true, false, false}}, spellPower + 10);
                     case ADVANCED:
-                        return new AreaDamageSpell(AREA, name, ADVANCED, manaCost, (spellPower * 2) + 20);
+                        return new AreaDamageSpell(AREA, name, ADVANCED, manaCost,
+                                new boolean[][]{{false, false, true, false, false},
+                                                {false, true, true, true, false},
+                                                {true, true, true, true, true},
+                                                {false, true, true, true, false},
+                                                {false, false, true, false, false}}, spellPower + 10);
                     case EXPERT:
-                        return new AreaDamageSpell(AREA, name, EXPERT, manaCost, (spellPower * 3) + 30);
+                        return new AreaDamageSpell(AREA, name, EXPERT, manaCost,
+                                new boolean[][]{{false, false, true, false, false},
+                                                {false, true, true, true, false},
+                                                {true, true, true, true, true},
+                                                {false, true, true, true, false},
+                                                {false, false, true, false, false}}, spellPower + 10);
                     default:
                         throw new IllegalArgumentException(EXCEPTION_MESSAGE);
                 }

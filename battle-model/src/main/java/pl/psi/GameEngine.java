@@ -2,6 +2,7 @@ package pl.psi;
 
 import lombok.Getter;
 import pl.psi.creatures.Creature;
+import pl.psi.spells.AreaDamageSpell;
 import pl.psi.spells.Spell;
 
 import java.beans.PropertyChangeListener;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static java.lang.Math.ceil;
 import static pl.psi.TurnQueue.END_OF_TURN;
 
 /**
@@ -75,19 +77,34 @@ public class GameEngine {
                         });
                 break;
             case AREA:
-                List<Creature> creatureList = new ArrayList<>();
-                if (board.getCreature(new Point(point.getX(), point.getY() + 1)).isPresent())
-                    board.getCreature(new Point(point.getX(), point.getY() + 1)).ifPresent(creatureList::add); // ToDo: CHANGE IT!!!!!!!!!!!!!!!
-                board.getCreature(point)
-                        .ifPresent(defender -> {
-                                    creatureList.add(defender);
-                                    turnQueue.getCurrentCreature().castSpell(creatureList, spell);
-                                }
-                        );
+                List<Creature> creatureList = getCreaturesFromArea(point, (AreaDamageSpell) spell);
+                turnQueue.getCurrentCreature().castSpell(creatureList, spell);
                 break;
             default:
                 throw new IllegalArgumentException("Not supported category.");
         }
 
+    }
+
+    //ToDO: In the future think about better solution and refactor this
+    private List<Creature> getCreaturesFromArea(Point point, AreaDamageSpell areaDamageSpell) {
+        List<Creature> creatures = new ArrayList<>();
+
+        int centerOfArea = (int) ceil((float) areaDamageSpell.getArea().length / 2);
+
+        int startX = point.getX() - centerOfArea + 1;
+        int endX = startX + (centerOfArea * 2) - 1;
+        int startY = point.getY() - centerOfArea + 1;
+        int endY = startY + (centerOfArea * 2) - 1;
+
+        for (int i = startY; i < endY; i++) {
+            for (int j = startX; j < endX; j++) {
+                if (board.getCreature(new Point(j, i)).isPresent()) {
+                    board.getCreature(new Point(j, i)).ifPresent(creatures::add);
+                }
+            }
+        }
+
+        return creatures;
     }
 }

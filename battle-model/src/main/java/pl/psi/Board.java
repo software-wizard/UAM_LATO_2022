@@ -13,13 +13,13 @@ import com.google.common.collect.HashBiMap;
  */
 public class Board
 {
-    private static final int MAX_WITDH = 14;
+    private static final int MAX_WIDTH = 14;
     private final BiMap< Point, Creature > map = HashBiMap.create();
 
     public Board( final List< Creature > aCreatures1, final List< Creature > aCreatures2 )
     {
         addCreatures( aCreatures1, 0 );
-        addCreatures( aCreatures2, MAX_WITDH );
+        addCreatures( aCreatures2, MAX_WIDTH);
     }
 
     private void addCreatures( final List< Creature > aCreatures, final int aXPosition )
