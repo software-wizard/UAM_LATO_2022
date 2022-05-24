@@ -3,17 +3,15 @@ package pl.psi.artifacts;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import pl.psi.shop.BuyProductInterface;
+import pl.psi.shop.ProductPrice;
 
-// Class only for compile ( later we will use Artifacts from another group )
 @Getter
 @AllArgsConstructor
 public class Artifact implements BuyProductInterface {
 
     private final ArtifactPlacement placement;
-
     private final String name;
-
-    private final int price;
+    private ProductPrice price;
 
     @Override
     public int getAmount() {
@@ -21,7 +19,7 @@ public class Artifact implements BuyProductInterface {
     }
 
     @Override
-    public int getGoldCost() {
+    public ProductPrice getGoldCost() {
         return price;
     }
 

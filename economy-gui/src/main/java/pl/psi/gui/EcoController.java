@@ -3,6 +3,7 @@ package pl.psi.gui;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.*;
 
 import javafx.geometry.Insets;
@@ -36,6 +37,10 @@ public class EcoController implements PropertyChangeListener
     private final EconomyEngine economyEngine;
     @FXML
     ScrollPane heroBoughtScrollPane;
+    @FXML
+    ScrollPane skillsScrollPane;
+    @FXML
+    ScrollPane spellsScrollPane;
     @FXML
     StackPane heroBoughtPane;
 
@@ -100,6 +105,8 @@ public class EcoController implements PropertyChangeListener
         economyEngine = new EconomyEngine( aHero1, aHero2 );
         // default choose creatures
         shopChoose = ProductType.CREATURE;
+
+
     }
 
     @FXML
@@ -125,8 +132,11 @@ public class EcoController implements PropertyChangeListener
         imageViewGold.setFitHeight(30);
         GoldImage.setGraphic(imageViewGold);
 
+        // enable scroll Width/Height
         scrollPane.setFitToWidth(true);
         heroBoughtScrollPane.setFitToWidth(true);
+        spellsScrollPane.setFitToHeight(true);
+        skillsScrollPane.setFitToHeight(true);
 
         Image imageHero = new Image("HERO.png");
         ImageView imageView = new ImageView(imageHero);
@@ -142,6 +152,7 @@ public class EcoController implements PropertyChangeListener
         economyEngine.addObserver( EconomyEngine.NEXT_ROUND, this );
         economyEngine.addObserver( EconomyEngine.END_SHOPPING, this );
 
+
         readyButton.addEventHandler( MouseEvent.MOUSE_CLICKED, ( e ) -> {
             if( economyEngine.getRoundNumber() == 1 )
             {
@@ -151,15 +162,11 @@ public class EcoController implements PropertyChangeListener
 
                 economyEngine.pass();
                 goToBattle();
-
             }
         } );
-
-
     }
 
-    private void goToBattle()
-    {
+    private void goToBattle() {
         EcoBattleConverter.startBattle( economyEngine.getPlayer1(), economyEngine.getPlayer2() );
     }
 
@@ -203,8 +210,8 @@ public class EcoController implements PropertyChangeListener
                 button.setGraphic(imageView);
 
             }
-        }
 
+        }
 
         //refresh boughtCreatures
         List<EconomyCreature> creatureList = economyEngine.getActiveHero().getCreatures();
@@ -294,31 +301,52 @@ public class EcoController implements PropertyChangeListener
 
 
     private void fillShopWithCreatures(){
+        int gold = economyEngine.getActiveHero().getGold();
         final VBox creatureShop = new VBox();
         // refresh creatures
         final EconomyNecropolisFactory factory = new EconomyNecropolisFactory();
         for( int i = 1; i < 8; i++ )
         {
-            CreatureButton button = new CreatureButton( this, factory, false, i );
+            EconomyCreature creature = factory.create(false,i,1);
+            int costOfCreature= creature.getGoldCost().getProductPrice();
+            int maxCreaturesHeroCanBuy = gold/costOfCreature;
+            CreatureButton button = new CreatureButton( this, creature , maxCreaturesHeroCanBuy );
             String name = i + "0";
             Image image = new Image("/creatures/"+name+".png");
             ImageView imageView = new ImageView(image);
             imageView.setFitHeight(40);
             imageView.setFitWidth(40);
             button.setGraphic(imageView);
+            button.setText(creature.getName());
             button.setContentDisplay(ContentDisplay.LEFT);
-            button.getStyleClass().add("centerHBoxRight");
+            // if hero cannot buy button will be grey
+            if(gold < costOfCreature){
+                button.getStyleClass().add("centerHBoxGrey");
+            }
+            else{
+                button.getStyleClass().add("centerHBoxRight");
+            }
             creatureShop.getChildren().add(button);
 
-            CreatureButton button2 = new CreatureButton( this, factory, true, i );
+            EconomyCreature creature2 = factory.create(true,i,1);
+            int costOfCreature2 = creature2.getGoldCost().getProductPrice();
+            maxCreaturesHeroCanBuy = gold/costOfCreature2;
+            CreatureButton button2 = new CreatureButton( this, creature2 ,maxCreaturesHeroCanBuy);
             String name2 = i + "1";
             Image image2 = new Image("/creatures/"+name2+".png");
             ImageView imageView2 = new ImageView(image2);
             imageView2.setFitHeight(40);
             imageView2.setFitWidth(40);
             button2.setGraphic(imageView2);
+            button2.setText(creature2.getName());
             button2.setContentDisplay(ContentDisplay.LEFT);
-            button2.getStyleClass().add("centerHBoxRight");
+            // if hero cannot buy button will be grey
+            if(gold < costOfCreature2){
+                button2.getStyleClass().add("centerHBoxGrey");
+            }
+            else{
+                button2.getStyleClass().add("centerHBoxRight");
+            }
             creatureShop.getChildren().add( button2 );
         }
         shopsBox.getChildren().add( creatureShop );
@@ -329,9 +357,14 @@ public class EcoController implements PropertyChangeListener
         final EconomyArtifactFactory economyArtifactFactory = new EconomyArtifactFactory();
         List<String> namesOfArtifacts = List.of("Cape of Conjuring","Crown of Dragontooth","Blackshard of the Dead Knight");
         int size = namesOfArtifacts.size();
+        int gold = economyEngine.getActiveHero().getGold();
         for(int i=0;i<size;i++){
+
             String name = namesOfArtifacts.get(i);
-            ArtifactButton button = new ArtifactButton( this, economyArtifactFactory, name);
+            Artifact artifact = economyArtifactFactory.create(name);
+            int costOfArtifact = artifact.getGoldCost().getProductPrice();
+            ArtifactButton button = new ArtifactButton(this,artifact);
+
             Image image = new Image("/artifacts/"+name+".png");
             ImageView imageView = new ImageView(image);
             imageView.setFitHeight(40);
@@ -339,7 +372,15 @@ public class EcoController implements PropertyChangeListener
             button.setGraphic(imageView);
             button.setText(name);
             button.setContentDisplay(ContentDisplay.LEFT);
+            // if hero cannot buy button will be grey
+            if(gold < costOfArtifact){
+                button.getStyleClass().add("centerHBoxGrey");
+            }
+            else{
+                button.getStyleClass().add("centerHBoxRight");
+            }
             button.getStyleClass().add("centerHBoxRight");
+
             creatureShop.getChildren().add(button);
         }
         shopsBox.getChildren().add( creatureShop );

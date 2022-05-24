@@ -9,14 +9,14 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
     <center>
         <HBox>
             <ScrollPane fx:id="heroBoughtScrollPane" styleClass="centerHBoxLeft" BorderPane.alignment="CENTER">
                 <VBox fx:id="VBoxHero">
                     <Label text="                                             Hero" styleClass="labelHero"/>
-
                     <StackPane fx:id="heroBoughtPane"  styleClass="centerHBoxLeft" prefHeight="450" prefWidth="350">
+
                         <!--                            Creature Buttons-->
                         <Button  fx:id = "creaturete1" translateX="-116" translateY="140"  styleClass="button_creature"/>
                         <Button  fx:id = "creaturete2" translateX="-60" translateY="140"  styleClass="button_creature" />
@@ -31,8 +31,8 @@
                         <Button  fx:id = "NECK" translateX="15" translateY="-148" prefWidth="53" prefHeight="48"  styleClass="button_aritfact" />
                         <Button  fx:id = "TORSO" translateX="15" translateY="-95"  prefWidth="53" prefHeight="48"  styleClass="button_aritfact"/>
                         <Button  fx:id = "SHOULDERS" translateX="85" translateY="15" prefWidth="53" prefHeight="48"  styleClass="button_aritfact"/>
-                        <Button  fx:id = "LEFT_HAND" translateX="79" translateY="-45" prefWidth="53" prefHeight="48"  styleClass="button_aritfact"/>
-                        <Button  fx:id = "RIGHT_HAND" translateX="-140" translateY="-158" prefWidth="53" prefHeight="48"  styleClass="button_aritfact" />
+                        <Button  fx:id = "RIGHT_HAND" translateX="79" translateY="-45" prefWidth="53" prefHeight="48"  styleClass="button_aritfact"/>
+                        <Button  fx:id = "LEFT_HAND" translateX="-140" translateY="-158" prefWidth="53" prefHeight="48"  styleClass="button_aritfact" />
                         <Button  fx:id = "FEET" translateX="22" translateY="65" prefWidth="53" prefHeight="48"  styleClass="button_aritfact"/>
 
                     </StackPane>

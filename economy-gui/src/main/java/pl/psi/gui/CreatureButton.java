@@ -1,6 +1,9 @@
 package pl.psi.gui;
 
+import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
+import javafx.scene.Node;
+import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
 import javafx.stage.StageStyle;
 import pl.psi.ProductType;
@@ -21,37 +24,21 @@ import java.io.FileNotFoundException;
 
 public class CreatureButton extends Button
 {
+    private final EconomyCreature creature;
 
-    private final String creatureName;
-    private Stage dialog;
-    private final int cost;
-    private final String characteristics;
-
-    // create each button to each Creature from Factory ( Factory must delivery another group )
-    public CreatureButton( final EcoController aEcoController, final EconomyNecropolisFactory aFactory,
-                           final boolean aUpgraded, final int aTier )
+    public CreatureButton( final EcoController aEcoController, EconomyCreature creature , final int maxSliderValue )
     {
-        super( aFactory.create( aUpgraded, aTier, 1 ).getName() );
-        EconomyCreature creature = aFactory.create( aUpgraded, aTier, 1 );
-        creatureName = creature.getName();
-        cost = creature.getGoldCost();
-        String upgraded = null;
-        if(aUpgraded)
-            upgraded = " upgrated";
-        else
-            upgraded = " not upgrated";
-
-        characteristics = "Tier : "+creature.getTier()+" , "+upgraded+" | Attack : "+creature.getStats().getAttack()+
-                " | Armor : "+creature.getStats().getArmor()+" | HP : "+creature.getStats().getMaxHp();
-
-        getStyleClass().add( "creatureButton" );
+        this.creature = creature;
 
         addEventHandler( MouseEvent.MOUSE_CLICKED, ( e ) -> {
-            final int amount = startDialogAndGetCreatureAmount();
+            final int amount = startDialogAndGetCreatureAmount(maxSliderValue);
             if( amount != 0 )
             {
-                aEcoController.buy(ProductType.CREATURE, aFactory.create( aUpgraded, aTier, amount ) );
+                boolean aUpgraded = creature.isUpgraded();
+                int aTier = creature.getTier();
+                aEcoController.buy(ProductType.CREATURE, new EconomyNecropolisFactory().create( aUpgraded, aTier, amount ) );
             }
+
             try {
                 aEcoController.refreshGui();
             } catch (FileNotFoundException fileNotFoundException) {
@@ -60,29 +47,52 @@ public class CreatureButton extends Button
         } );
     }
 
-    private int startDialogAndGetCreatureAmount()
+    private int startDialogAndGetCreatureAmount(final int maxSliderValue)
     {
+        // Slider
         final VBox centerPane = new VBox();
+        // OK and Close Bottoms
         final HBox bottomPane = new HBox();
+        // Pane for cost and info about item
         final FlowPane topPane = new FlowPane(Orientation.HORIZONTAL,0,5);
-        final Stage dialog = prepareWindow( centerPane, bottomPane, topPane);
-        final Slider slider = createSlider();
-        prepareConfirmAndCancelButton( bottomPane, slider );
+        ;
+        final Slider slider = createSlider(maxSliderValue);
+        centerPane.getChildren().add( slider );
         prepareTop( topPane,slider);
-        centerPane.getChildren()
-                .add( slider );
+
+        final Stage dialogWindow = new Stage();
+        final Stage dialog = prepareWindow( centerPane, bottomPane, topPane , dialogWindow);
+
+        prepareConfirmAndCancelButton( bottomPane, slider , dialogWindow);
 
         dialog.showAndWait();
 
         return (int)slider.getValue();
     }
 
+    private Stage prepareWindow( final Pane aCenter, final Pane aBottom, final Pane aTop, final Stage dialog)
+    {
+        final BorderPane pane = new BorderPane();
+        pane.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+        final Scene scene = new Scene( pane, 620, 250 );
+        scene.getStylesheets().add( "fxml/main.css" );
+        dialog.setScene( scene );
+        dialog.initOwner( this.getScene().getWindow() );
+        dialog.initModality( Modality.APPLICATION_MODAL );
+        dialog.initStyle(StageStyle.UNDECORATED);
+
+        pane.setTop( aTop );
+        pane.setCenter( aCenter );
+        pane.setBottom( aBottom );
+        return dialog;
+    }
+
 
     // Top of window of buying
     private void prepareTop( final FlowPane aTopPane,final Slider aSlider )
     {
-        // TODO creature cops should be visible here
-        aTopPane.getChildren().add( new Label( "Single Cost: " + cost ) );
+
+        aTopPane.getChildren().add( new Label( "Single Cost: " + creature.getGoldCost().getProductPrice() ) );
 
         aTopPane.getChildren().add( new Label( "Amount:" ) );
         final Label slideValueLabel = new Label( "0" );
@@ -92,6 +102,14 @@ public class CreatureButton extends Button
         final Label purchaseCost = new Label( "0" );
         aTopPane.getChildren().add( purchaseCost );
 
+
+        String upgraded = null;
+        if(creature.isUpgraded())
+            upgraded = " upgrated";
+        else
+            upgraded = " not upgrated";
+        String characteristics = "Tier : "+creature.getTier()+" , "+upgraded+" | Attack : "+creature.getStats().getAttack()+
+                " | Armor : "+creature.getStats().getArmor()+" | HP : "+creature.getStats().getMaxHp();
         aTopPane.getChildren().add( new Label( "             " ) );
         aTopPane.getChildren().add(new Label(characteristics));
 
@@ -99,42 +117,25 @@ public class CreatureButton extends Button
         aSlider.valueProperty().addListener(( slider, aOld, aNew )
                 -> {
             slideValueLabel.setText(String.valueOf(aNew.intValue()));
-            purchaseCost.setText(String.valueOf(aNew.intValue()*cost));
+            purchaseCost.setText(String.valueOf(aNew.intValue()*creature.getGoldCost().getProductPrice()));
 
         });
 
 
     }
 
-    // window of buying
-    private Stage prepareWindow( final Pane aCenter, final Pane aBottom, final Pane aTop)
+
+
+    private void prepareConfirmAndCancelButton( final HBox aBottomPane, final Slider aSlider , final Stage dialog)
     {
-        dialog = new Stage();
-        final BorderPane pane = new BorderPane();
-        pane.setBorder(new Border(new BorderStroke(Color.BLACK,
-                BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-        final Scene scene = new Scene( pane, 600, 250 );
-        scene.getStylesheets().add( "fxml/main.css" );
-        dialog.setScene( scene );
-        dialog.initOwner( this.getScene().getWindow() );
-        dialog.initModality( Modality.APPLICATION_MODAL );
-        dialog.setTitle( "Buying " + creatureName );
-        dialog.initStyle(StageStyle.UNDECORATED);
 
-
-        pane.setTop( aTop );
-        pane.setCenter( aCenter );
-        pane.setBottom( aBottom );
-        return dialog;
-    }
-
-    // Close , OK button
-    private void prepareConfirmAndCancelButton( final HBox aBottomPane, final Slider aSlider )
-    {
-        final Button okButton = new Button( "OK" );
         aBottomPane.setAlignment( Pos.CENTER );
+        aBottomPane.setSpacing(30);
+        final Button okButton = new Button( "OK" );
         okButton.addEventHandler( MouseEvent.MOUSE_CLICKED, ( e ) -> dialog.close() );
         okButton.setPrefWidth( 200 );
+        aBottomPane.getChildren().add( okButton );
+
 
         final Button cancelButton = new Button( "CLOSE" );
         cancelButton.addEventHandler( MouseEvent.MOUSE_CLICKED, ( e ) -> {
@@ -142,27 +143,24 @@ public class CreatureButton extends Button
             dialog.close();
         } );
         cancelButton.setPrefWidth( 200 );
+        aBottomPane.getChildren().add( cancelButton );
 
         HBox.setHgrow( okButton, Priority.ALWAYS );
         HBox.setHgrow( cancelButton, Priority.ALWAYS );
-        aBottomPane.getChildren()
-                .add( okButton );
-        aBottomPane.getChildren()
-                .add( cancelButton );
     }
 
-    // Choose amount of creatures
-    private Slider createSlider()
+    private Slider createSlider(final int maxSliderValue)
     {
         final Slider slider = new Slider();
         slider.setMin( 0 );
-        slider.setMax( 20 );
+        slider.setMax( maxSliderValue);
         slider.setValue( 0 );
         slider.setShowTickLabels( true );
         slider.setShowTickMarks( true );
         slider.setMajorTickUnit( 10 );
         slider.setMinorTickCount( 5 );
-        slider.setBlockIncrement( 10 );
+        slider.setBlockIncrement( 5 );
         return slider;
     }
+
 }

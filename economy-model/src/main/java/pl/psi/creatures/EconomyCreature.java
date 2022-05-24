@@ -1,15 +1,16 @@
 package pl.psi.creatures;
 
 import pl.psi.shop.BuyProductInterface;
+import pl.psi.shop.ProductPrice;
 
 public class EconomyCreature implements BuyProductInterface
 {
 
     private final CreatureStatistic stats;
     private int amount;
-    private final int goldCost;
+    private ProductPrice goldCost;
 
-    EconomyCreature( final CreatureStatistic aStats, final int aAmount, final int aGoldCost )
+    EconomyCreature( final CreatureStatistic aStats, final int aAmount, final ProductPrice aGoldCost )
     {
         stats = aStats;
         amount = aAmount;
@@ -25,7 +26,7 @@ public class EconomyCreature implements BuyProductInterface
         amount = amount + aAmount;
     }
 
-    public int getGoldCost()
+    public ProductPrice getGoldCost()
     {
         return goldCost;
     }

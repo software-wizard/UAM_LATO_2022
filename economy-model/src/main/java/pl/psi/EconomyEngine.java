@@ -19,8 +19,6 @@ public class EconomyEngine
     public static final String END_SHOPPING = "END_SHOPPING";
     private final EconomyHero hero1;
     private final EconomyHero hero2;
-    private final CreatureShop creatureShop = new CreatureShop();
-    private final ArtifactShop artifactShop = new ArtifactShop();
     private final PropertyChangeSupport observerSupport;
     private EconomyHero activeHero;
     private boolean end;
@@ -40,11 +38,13 @@ public class EconomyEngine
     public void buy(ProductType product , final BuyProductInterface buyProduct )
     {
         if(product.equals(ProductType.CREATURE)){
+            CreatureShop creatureShop = new CreatureShop();
             EconomyCreature creature = (EconomyCreature)buyProduct;
             creatureShop.addToHero(creature,activeHero);
             observerSupport.firePropertyChange( HERO_BOUGHT_CREATURE, null, null );
         }
         else if(product.equals(ProductType.ARTIFACT)){
+            ArtifactShop artifactShop = new ArtifactShop();
             Artifact artifact = (Artifact) buyProduct;
             artifactShop.addToHero(artifact,activeHero);
             observerSupport.firePropertyChange( HERO_BOUGHT_ARTIFACT, null, null );
@@ -94,13 +94,11 @@ public class EconomyEngine
 
     public EconomyHero getPlayer1()
     {
-        // TODO make copy
         return hero1;
     }
 
     public EconomyHero getPlayer2()
     {
-        // TODO make copy
         return hero2;
     }
 
