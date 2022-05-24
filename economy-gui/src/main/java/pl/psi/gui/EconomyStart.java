@@ -7,6 +7,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import pl.psi.hero.HeroStatistics;
 
 
 public class EconomyStart extends Application
@@ -20,8 +21,8 @@ public class EconomyStart extends Application
                 .getResource( "fxml/eco.fxml" ) );
 
         loader.setController( new EcoController(
-                new EconomyHero( player1),
-                new EconomyHero( player2 ) ) );
+                new EconomyHero( player1, HeroStatistics.NECROMANCER),
+                new EconomyHero( player2, HeroStatistics.NECROMANCER ) ) );
         final Scene scene = new Scene( loader.load() );
         aStage.setScene( scene );
 

@@ -1,5 +1,8 @@
 package pl.psi.hero;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import pl.psi.artifacts.Artifact;
@@ -14,15 +17,22 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+
 class EconomyHeroTest
 {
 
     private EconomyHero hero;
+    private Artifact item1;
+    private Artifact item2;
 
     @BeforeEach
     void init()
     {
-        hero = new EconomyHero( EconomyHero.Fraction.NECROPOLIS );
+        hero = new EconomyHero( EconomyHero.Fraction.NECROPOLIS, HeroStatistics.NECROMANCER);
+        item1 = new Artifact("item1", "adadadadad", new BigDecimal("4"), ArtifactPlacement.FEET);
+        item2 = new Artifact("item12", "adadadadadadad", new BigDecimal("4"), ArtifactPlacement.HEAD);
     }
 
     @Test
@@ -68,6 +78,31 @@ class EconomyHeroTest
         hero.addCreature( factory.create( true, 7, 1 ) );
 
         assertEquals( 2, hero.getCreatures().get(0).getAmount() );
+    }
+
+    @Test
+    void shouldAddItemToBackpack()
+    {
+        hero.addItem(item1);
+        assertEquals(hero.getBackpack().size(),1);
+    }
+
+    @Test
+    void addItemtoEqSlot()
+    {
+        EqSlot slot = new EqSlot(ArtifactPlacement.FEET);
+        slot.setItem(item1);
+        assertEquals(slot.getItem(),item1);
+        assertThrows(IllegalStateException.class, () -> slot.setItem(item2));
+
+    }
+
+    @Test
+    void addItemToEqSlotErrorThrow()
+    {
+        EqSlot slot = new EqSlot(ArtifactPlacement.FEET);
+        assertThrows(IllegalStateException.class, () -> slot.setItem(item2));
+
     }
 
 

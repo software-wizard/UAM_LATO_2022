@@ -14,8 +14,8 @@ import pl.psi.creatures.EconomyNecropolisFactory;
 class EcoBattleConverterTest {
 
     @Test
-    void shouldConvertCreaturesCorrectly() {
-        final EconomyHero ecoHero = new EconomyHero(EconomyHero.Fraction.NECROPOLIS);
+    void shouldConvertCreaturesCorrectly()    {
+        final EconomyHero ecoHero = new EconomyHero( EconomyHero.Fraction.NECROPOLIS, HeroStatistics.NECROMANCER );
         final EconomyNecropolisFactory factory = new EconomyNecropolisFactory();
         ecoHero.addCreature(factory.create(false, 1, 1));
         ecoHero.addCreature(factory.create(false, 2, 2));
