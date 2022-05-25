@@ -7,7 +7,7 @@ import com.google.common.collect.Range;
 /**
  * TODO: Describe this class (The first line - until the first dot - will interpret as the brief description).
  */
-class SelfHealAfterTurnCreature extends AbstractCreature
+public class SelfHealAfterTurnCreature extends AbstractCreature
 {
     private final Creature decorated;
 

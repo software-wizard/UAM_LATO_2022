@@ -611,13 +611,6 @@ public class CreatureTest {
         assertThat( dreadKnight.getCurrentHp() ).isEqualTo( 1 );
         assertThat( defender.getCurrentHp() ).isEqualTo( 80 );
     }*/
-    @Test
-    void shouldThrowExceptionWhenTryingToSetMoraleValueMoreThanPossible() {
-        var creature = new Creature.Builder().statistic(CreatureStats.builder().build()).build(); // current morale value = 1
-        var exception = assertThrows(IllegalArgumentException.class, () -> creature.setMorale(4));
-
-        assertEquals("Morale must not be greater than 3", exception.getMessage());
-    }
 
     @Test
     void shouldThrowExceptionWhenTryingToSetMoraleValueLessThanPossible() {

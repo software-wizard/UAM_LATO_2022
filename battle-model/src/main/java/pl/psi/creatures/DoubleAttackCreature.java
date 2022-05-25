@@ -1,6 +1,5 @@
 package pl.psi.creatures;
 
-import java.util.Random;
 
 public class DoubleAttackCreature extends AbstractCreature{
     private final Creature decorated;
