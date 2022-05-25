@@ -1,12 +1,19 @@
 package pl.psi;
 
+import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Set;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import pl.psi.creatures.Creature;
 import pl.psi.creatures.WarMachinesAbstract;
+import pl.psi.spells.BuffDebuffSpell;
+import pl.psi.spells.Spell;
 
 /**
  * TODO: Describe this class (The first line - until the first dot - will interpret as the brief description).
@@ -30,8 +37,13 @@ public class TurnQueue {
         next();
     }
 
-    private void initQueue() {
-        creaturesQueue.addAll(creatures);
+    public void addObserver(final String aEventType, final PropertyChangeListener aObserver) {
+        observerSupport.addPropertyChangeListener(aEventType, aObserver);
+    }
+
+    private void initQueue()
+    {
+        creaturesQueue.addAll( creatures );
     }
 
     public Creature getCurrentCreature() {

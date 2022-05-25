@@ -10,6 +10,9 @@ import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import pl.psi.GameEngine;
+import pl.psi.Hero;
+import pl.psi.Point;
 
 public class MainBattleController
 {
@@ -18,6 +21,10 @@ public class MainBattleController
     private GridPane gridMap;
     @FXML
     private Button passButton;
+    @FXML
+    private Button windowButton;
+    @FXML
+    private Button defenceModeButton;
 
     public MainBattleController( final Hero aHero1, final Hero aHero2 )
     {
@@ -31,6 +38,17 @@ public class MainBattleController
 
         passButton.addEventHandler( MouseEvent.MOUSE_CLICKED, ( e ) -> {
             gameEngine.pass();
+            refreshGui();
+        } );
+
+        windowButton.addEventHandler( MouseEvent.MOUSE_CLICKED, ( e ) -> {
+            gameEngine.castSpell(new Point(14,1), gameEngine.getHero1().getSpells().get(0));
+            gameEngine.castSpell(new Point(14,1), gameEngine.getHero1().getSpells().get(1));
+            refreshGui();
+        } );
+
+        defenceModeButton.addEventHandler( MouseEvent.MOUSE_CLICKED, ( e ) -> {
+            gameEngine.castSpell(new Point(14,3), gameEngine.getHero1().getSpells().get(0));
             refreshGui();
         } );
 
