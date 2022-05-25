@@ -11,13 +11,18 @@ import java.util.List;
 @EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
-public class FieldOfGlory implements BuffCreatorIf {
+public class FieldOfGlory implements BufferIf {
 
     private Point point;
 
 
     @Override
-    public void putBuffOnAllCreatures(List<Creature> creatures) {
+    public void buffCreature(Creature creature) {
+
+    }
+
+    @Override
+    public void buffCreatures(List<Creature> creatures) {
         if (creatures == null) {
             throw new IllegalArgumentException("Creatures list must not be null");
         }

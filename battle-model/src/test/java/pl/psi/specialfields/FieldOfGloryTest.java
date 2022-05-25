@@ -21,8 +21,8 @@ public class FieldOfGloryTest {
         var fieldOfGlory = new FieldOfGlory(new Point(10, 10));
 
         // when
-        var exceptionWhenGivenDataIsNull = assertThrows(IllegalArgumentException.class, () -> fieldOfGlory.putBuffOnAllCreatures(null));
-        var exceptionWhenGivenDataIsEmpty = assertThrows(IllegalArgumentException.class, () -> fieldOfGlory.putBuffOnAllCreatures(List.of()));
+        var exceptionWhenGivenDataIsNull = assertThrows(IllegalArgumentException.class, () -> fieldOfGlory.buffCreatures(null));
+        var exceptionWhenGivenDataIsEmpty = assertThrows(IllegalArgumentException.class, () -> fieldOfGlory.buffCreatures(List.of()));
 
         // then
         assertEquals("Creatures list must not be null", exceptionWhenGivenDataIsNull.getMessage());
@@ -58,7 +58,7 @@ public class FieldOfGloryTest {
         );
 
         // when
-        fieldOfGlory.putBuffOnAllCreatures(creatures);
+        fieldOfGlory.buffCreatures(creatures);
 
         // then
         assertEquals(-1, Creature1.getLuck());
