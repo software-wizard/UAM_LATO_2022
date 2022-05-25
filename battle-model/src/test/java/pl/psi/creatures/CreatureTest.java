@@ -554,7 +554,7 @@ public class CreatureTest {
                 .build())
                 .build();
 
-        final ReduceDefenceCreature reduceDefenceCreature = new ReduceDefenceCreature(decorated, 0.6);
+        final DefenceReductionCreature reduceDefenceCreature = new DefenceReductionCreature(decorated, 0.6);
 
 
         final Creature defender = new Creature.Builder().statistic(CreatureStats.builder()
