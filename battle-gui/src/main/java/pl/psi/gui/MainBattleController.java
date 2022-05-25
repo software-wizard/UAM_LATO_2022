@@ -44,6 +44,15 @@ public class MainBattleController
             Image img = new Image("/images/cracked_ice.png");
             mapTile.setBackground(img);
         }
+        if(x == 4 && y == 8) {
+            var img = new Image("/images/evilFog.png");
+            mapTile.setBackground(img);
+        }
+
+        if(x == 5 && y == 5) {
+            var img = new Image("/images/holyGround.png");
+            mapTile.setBackground(img);
+        }
         if (x == 3 && y == 4)
         {
             Image img = new Image("/images/fields_of_Glory.png");
