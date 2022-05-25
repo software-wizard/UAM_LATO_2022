@@ -10,6 +10,6 @@ import lombok.RequiredArgsConstructor;
 @Builder
 public class ArtifactEffectApplyingProperties {
 
-  private final int baseValue;
-  private final int upgradedValue;
+  private final double baseValue;
+  private final double upgradedValue;
 }

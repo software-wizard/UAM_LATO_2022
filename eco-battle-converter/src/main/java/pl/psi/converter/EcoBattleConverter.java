@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -12,6 +13,7 @@ import pl.psi.Hero;
 import pl.psi.artifacts.model.Artifact;
 import pl.psi.creatures.Creature;
 import pl.psi.gui.MainBattleController;
+import pl.psi.gui.NecropolisFactory;
 import pl.psi.hero.EconomyHero;
 
 import javafx.fxml.FXMLLoader;
@@ -61,18 +63,12 @@ public class EcoBattleConverter {
             }
         });
 
-        final List<Creature> creatures = aPlayer.getCreatures()
-            .stream()
-            .map(economyCreature -> {
-
-                creatureArtifacts.forEach(artifact -> artifact.applyTo(economyCreature));
-                return new Creature(
-                    economyCreature.getUpgradedStats(), null,
-                    economyCreature.getAmount());
-            })
-            .collect(Collectors.toList());
-
-        return new Hero(creatures);
+        final List<Creature> creatures = new ArrayList<>();
+        final NecropolisFactory factory = new NecropolisFactory();
+        aPlayer.getCreatures()
+                .forEach(ecoCreature -> creatures.add(factory.create(ecoCreature.isUpgraded(),
+                        ecoCreature.getTier(), ecoCreature.getAmount())));
+        return new Hero(creatures, aPlayer.getHeroClass());
     }
 
 }

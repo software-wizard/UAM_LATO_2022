@@ -39,7 +39,7 @@ public class CreatureStats implements CreatureStatisticIf{
         return size;
     }
 
-    public void addStats( CreatureStatisticIf statsToAdd ){
+    public CreatureStatisticIf addStats(CreatureStatisticIf statsToAdd ){
         attack += statsToAdd.getAttack();
         armor += statsToAdd.getArmor();
         maxHp += statsToAdd.getMaxHp();
@@ -47,6 +47,7 @@ public class CreatureStats implements CreatureStatisticIf{
         if( !Objects.isNull( statsToAdd.getDamage() ) ){
             damage = statsToAdd.getDamage();
         }
+        return this;
     }
 
 

@@ -87,4 +87,8 @@ public class AbstractCreature extends Creature {
         decorated.propertyChange(evt);
     }
 
+    @Override
+    public String getName() {
+        return decorated.getName();
+    }
 }

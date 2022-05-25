@@ -15,10 +15,7 @@ import pl.psi.artifacts.model.ArtifactApplyingMode;
 import pl.psi.artifacts.model.ArtifactEffect;
 import pl.psi.artifacts.ArtifactEffectApplicable;
 import pl.psi.converter.EcoBattleConverter;
-import pl.psi.creatures.Creature;
-import pl.psi.creatures.CreatureStatistic;
-import pl.psi.creatures.EconomyCreature;
-import pl.psi.creatures.EconomyNecropolisFactory;
+import pl.psi.creatures.*;
 
 class EcoBattleConverterTest
 {
@@ -33,7 +30,7 @@ class EcoBattleConverterTest
   @Test
   void shouldConvertCreaturesCorrectly()
   {
-    final EconomyHero ecoHero = new EconomyHero( EconomyHero.Fraction.NECROPOLIS, 1000 );
+    final EconomyHero ecoHero = new EconomyHero( EconomyHero.Fraction.NECROPOLIS, HeroStatistics.CLERIC );
 
     ecoHero.addCreature(necropolisFactory.create(false, 1, 1));
     ecoHero.addCreature(necropolisFactory.create(false, 2, 2));
@@ -99,7 +96,7 @@ class EcoBattleConverterTest
 
     // then
     final CreatureStatisticIf upgradedStats = economyCreature.getUpgradedStats();
-    final CreatureStatistic baseStats = economyCreature.getBaseStats();
+    final CreatureStatisticIf baseStats = economyCreature.getBaseStats();
 
     assertEquals( baseStats.getAttack(), upgradedStats.getAttack() );
     assertEquals( baseStats.getMaxHp(), upgradedStats.getMaxHp() );
@@ -140,7 +137,7 @@ class EcoBattleConverterTest
 
     // then
     final CreatureStatisticIf upgradedStats = economyCreature.getUpgradedStats();
-    final CreatureStatistic baseStats = economyCreature.getBaseStats();
+    final CreatureStatisticIf baseStats = economyCreature.getBaseStats();
 
     assertEquals( baseStats.getAttack() + 2, upgradedStats.getAttack() );
     assertEquals( baseStats.getMaxHp() - 2, upgradedStats.getMaxHp() );
@@ -168,7 +165,7 @@ class EcoBattleConverterTest
 
     // then
     final CreatureStatisticIf upgradedStats = economyCreature.getUpgradedStats();
-    final CreatureStatistic baseStats = economyCreature.getBaseStats();
+    final CreatureStatisticIf baseStats = economyCreature.getBaseStats();
 
     assertEquals( (int) (baseStats.getAttack() + baseStats.getAttack() * 0.2 ), upgradedStats.getAttack() );
   }
@@ -200,7 +197,7 @@ class EcoBattleConverterTest
 
     // then
     final CreatureStatisticIf upgradedStats = economyCreature.getUpgradedStats();
-    final CreatureStatistic baseStats = economyCreature.getBaseStats();
+    final CreatureStatisticIf baseStats = economyCreature.getBaseStats();
 
     assertEquals( (int) ( baseStats.getMaxHp() + ( baseStats.getMaxHp() * 0.2 ) + 3 ), upgradedStats.getMaxHp() );
   }
