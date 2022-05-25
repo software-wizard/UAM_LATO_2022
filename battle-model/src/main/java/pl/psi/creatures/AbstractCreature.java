@@ -1,11 +1,10 @@
 package pl.psi.creatures;
 
 import com.google.common.collect.Range;
-
-import java.beans.PropertyChangeEvent;
-
 import lombok.AccessLevel;
 import lombok.Getter;
+
+import java.beans.PropertyChangeEvent;
 
 
 public class AbstractCreature extends Creature {
@@ -37,9 +36,8 @@ public class AbstractCreature extends Creature {
     }
 
     @Override
-    protected void applyDamage( final Creature aDefender, final double aDamage )
-    {
-        decorated.applyDamage( aDefender, aDamage );
+    protected void applyDamage(final Creature aDefender, final double aDamage) {
+        decorated.applyDamage(aDefender, aDamage);
     }
 
     @Override
@@ -53,25 +51,23 @@ public class AbstractCreature extends Creature {
     }
 
     @Override
-    public void age()
-    {
+    public void age() {
         decorated.age();
     }
 
     @Override
-    public void applySpellDamage( final double damage )
-    {
-        decorated.applyDamage( decorated, damage );
+    public void applySpellDamage(final double damage) {
+        decorated.applyDamage(decorated, damage);
     }
 
     @Override
-    public void buff( CreatureStatisticIf statsToAdd ){
-        decorated.buff( statsToAdd );
+    public void buff(CreatureStatisticIf statsToAdd) {
+        decorated.buff(statsToAdd);
     }
 
     @Override
-    public void increaseStats( CreatureStatisticIf statIncrease ){
-        decorated.increaseStats( statIncrease );
+    public void increaseStats(CreatureStatisticIf statIncrease) {
+        decorated.increaseStats(statIncrease);
     }
 
     @Override
@@ -105,14 +101,12 @@ public class AbstractCreature extends Creature {
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return decorated.getName();
     }
 
     @Override
-    public double getMoveRange()
-    {
+    public double getMoveRange() {
         return decorated.getMoveRange();
     }
 

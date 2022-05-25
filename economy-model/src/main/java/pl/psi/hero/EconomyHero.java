@@ -1,39 +1,31 @@
 package pl.psi.hero;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-
 import lombok.Getter;
 import pl.psi.artifacts.Artifact;
 import pl.psi.artifacts.ArtifactPlacement;
 import pl.psi.creatures.EconomyCreature;
 import pl.psi.skills.EconomySkills;
-import pl.psi.spells.EconomySpells;
+import pl.psi.spells.EconomySpell;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 public class EconomyHero {
 
-    public enum Fraction {
-        NECROPOLIS,
-        CASTLE
-    }
-
+    private static int heroCounter = 0;
     private final Fraction fraction;
     private final List<EconomyCreature> creatureList;
     private final List<Artifact> artifactList;
     private final List<EconomySkills> skillsList;
-    private final List<EconomySpells> spellsList;
-    // start amount of gold
-    private int gold = 10000;
+    private final List<EconomySpell> spellsList;
     private final Equipment equipment;
     private final Backpack backpack;
-    private final HeroStatistics heroClass;
-
-    private static int heroCounter = 0;
+    private final HeroStatistics heroStats;
     private final int heroNumber;
-
-    public EconomyHero(final Fraction aFraction ) {
+    // start amount of gold
+    private int gold = 10000;
+    public EconomyHero(final Fraction aFraction) {
         this(aFraction, HeroStatistics.NECROMANCER);
     }
 
@@ -47,10 +39,10 @@ public class EconomyHero {
         spellsList = new ArrayList<>();
         equipment = new Equipment();
         backpack = new Backpack();
-        heroClass = aClass;
+        heroStats = aClass;
     }
 
-    public EconomyHero(Fraction fraction, List<EconomyCreature> creatureList, List<Artifact> artifactList, List<EconomySkills> skillsList, List<EconomySpells> spellsList, int gold, int heroNumber) {
+    public EconomyHero(Fraction fraction, List<EconomyCreature> creatureList, List<Artifact> artifactList, List<EconomySkills> skillsList, List<EconomySpell> spellsList, int gold, int heroNumber) {
         this.fraction = fraction;
         this.creatureList = creatureList;
         this.artifactList = artifactList;
@@ -60,9 +52,8 @@ public class EconomyHero {
         this.heroNumber = heroNumber;
         equipment = new Equipment();
         backpack = new Backpack();
-        heroClass = HeroStatistics.NECROMANCER;
+        heroStats = HeroStatistics.NECROMANCER;
     }
-
 
     public List<EconomyCreature> getCreatures() {
         List<EconomyCreature> economyCreatureList = new ArrayList<>();
@@ -71,7 +62,6 @@ public class EconomyHero {
         }
         return economyCreatureList;
     }
-
 
     // Hero cannot buy more than 7 creatures
     public void addCreature(final EconomyCreature aCreature) {
@@ -95,7 +85,6 @@ public class EconomyHero {
         this.artifactList.add(artifact);
     }
 
-
     public boolean canAddCreature(EconomyCreature economyCreature) {
 
         boolean heroHasThisCreature = false;
@@ -112,24 +101,23 @@ public class EconomyHero {
         return true;
     }
 
-    public boolean canAddArtifact(ArtifactPlacement placement){
-        for(Artifact a : this.artifactList){
-            if(a.getPlacement().equals(placement))
+    public boolean canAddArtifact(ArtifactPlacement placement) {
+        for (Artifact a : this.artifactList) {
+            if (a.getPlacement().equals(placement))
                 return false;
         }
         return true;
     }
 
-    public List< Artifact > getArtifacts()
-    {
-        return List.copyOf( artifactList );
+    public List<Artifact> getArtifacts() {
+        return List.copyOf(artifactList);
     }
 
     public List<EconomySkills> getSkills() {
         return List.copyOf(skillsList);
     }
 
-    public List<EconomySpells> getSpells() {
+    public List<EconomySpell> getSpells() {
         return List.copyOf(spellsList);
     }
 
@@ -178,10 +166,22 @@ public class EconomyHero {
         return "Hero " + heroNumber;
     }
 
-
     public int getHeroNumber() {
         return heroNumber;
     }
 
+
+    public enum Fraction {
+        NECROPOLIS,
+        CASTLE
+    }
+
+    public List<EconomySpell> getSpellList() {
+        return spellsList;
+    }
+
+    public int getSpellPower() {
+        return heroStats.getSpellPower();
+    }
 
 }

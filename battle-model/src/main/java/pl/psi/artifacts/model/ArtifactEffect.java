@@ -1,14 +1,14 @@
 package pl.psi.artifacts.model;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.Objects;
 import lombok.Builder;
 import lombok.Getter;
 import pl.psi.artifacts.ArtifactApplicableProperty;
 import pl.psi.artifacts.ArtifactEffectApplicable;
 import pl.psi.artifacts.ArtifactEffectApplyingProperties;
-import pl.psi.artifacts.CreatureArtifactApplicableProperty;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Objects;
 
 @Getter
 @Builder
@@ -20,9 +20,8 @@ public class ArtifactEffect<T extends ArtifactEffectApplicable> {
 
     private final ArtifactApplicableProperty applierTarget;
 
-    void apply( T aApplicableModelObject )
-    {
-        aApplicableModelObject.applyArtifactEffect( this );
+    void apply(T aApplicableModelObject) {
+        aApplicableModelObject.applyArtifactEffect(this);
     }
 
 
@@ -31,14 +30,14 @@ public class ArtifactEffect<T extends ArtifactEffectApplicable> {
         switch (effectApplyingMode) {
             case ADD:
                 result =
-                    effectValue
-                        .add(BigDecimal.valueOf(effectStats.getUpgradedValue()));
+                        effectValue
+                                .add(BigDecimal.valueOf(effectStats.getUpgradedValue()));
                 break;
             case MULTIPLY:
                 result =
-                    effectValue
-                        .multiply(BigDecimal.valueOf(effectStats.getBaseValue()))
-                        .add(BigDecimal.valueOf(effectStats.getUpgradedValue()));
+                        effectValue
+                                .multiply(BigDecimal.valueOf(effectStats.getBaseValue()))
+                                .add(BigDecimal.valueOf(effectStats.getUpgradedValue()));
                 break;
             default:
                 throw new UnsupportedOperationException("Unrecognised artifact applying mode");
@@ -57,8 +56,8 @@ public class ArtifactEffect<T extends ArtifactEffectApplicable> {
         }
         final ArtifactEffect<?> that = (ArtifactEffect<?>) o;
         return getEffectValue().equals(that.getEffectValue())
-            && getEffectApplyingMode() == that.getEffectApplyingMode()
-            && getApplierTarget() == that.getApplierTarget();
+                && getEffectApplyingMode() == that.getEffectApplyingMode()
+                && getApplierTarget() == that.getApplierTarget();
     }
 
     @Override

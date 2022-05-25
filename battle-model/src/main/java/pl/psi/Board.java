@@ -1,12 +1,11 @@
 package pl.psi;
 
-import java.util.List;
-import java.util.Optional;
-
-import pl.psi.creatures.Creature;
-
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import pl.psi.creatures.Creature;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  * TODO: Describe this class (The first line - until the first dot - will interpret as the brief description).

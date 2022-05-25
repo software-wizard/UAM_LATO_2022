@@ -1,13 +1,12 @@
 package pl.psi;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
+import pl.psi.creatures.Creature;
+import pl.psi.creatures.CreatureStats;
 
 import java.util.List;
 
-import org.junit.jupiter.api.Test;
-
-import pl.psi.creatures.Creature;
-import pl.psi.creatures.CreatureStats;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 class TurnQueueTest {

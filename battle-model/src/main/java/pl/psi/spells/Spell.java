@@ -5,13 +5,12 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 
 
 @Getter
 @Setter
 @ToString
-public abstract class Spell<T> implements PropertyChangeListener{
+public abstract class Spell<T> implements PropertyChangeListener {
 
     private final SpellTypes category;
     private final String name;

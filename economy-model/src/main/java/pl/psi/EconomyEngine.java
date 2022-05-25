@@ -1,15 +1,14 @@
 package pl.psi;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
-import java.io.IOException;
-
 import pl.psi.artifacts.Artifact;
 import pl.psi.creatures.EconomyCreature;
+import pl.psi.hero.EconomyHero;
 import pl.psi.shop.ArtifactShop;
 import pl.psi.shop.BuyProductInterface;
 import pl.psi.shop.CreatureShop;
-import pl.psi.hero.EconomyHero;
+
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
 public class EconomyEngine {
     public static final String HERO_BOUGHT_CREATURE = "HERO_BOUGHT_CREATURE";

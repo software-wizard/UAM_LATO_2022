@@ -20,30 +20,26 @@ public class EconomySkill {
 
     private final UpgradeCalculator upgradeCalculator;
 
-    public EconomySkill(SkillType aType, int aCost, double aFactor )
-    {
+    public EconomySkill(SkillType aType, int aCost, double aFactor) {
         this.skillType = aType;
         this.skillCost = new SkillCostValueObject(aCost);
         this.factor = aFactor;
         this.upgradeCalculator = new UpgradeCalculator(this.skillType, this.factor);
     }
 
-    public void apply( List<Creature> aCreatures )
-    {
-        aCreatures.forEach( aCreature -> {
+    public void apply(List<Creature> aCreatures) {
+        aCreatures.forEach(aCreature -> {
             CreatureStats statsToApply = this.upgradeCalculator.calculate(aCreature);
             aCreature.buff(statsToApply);
         });
     }
 
-    public void apply( Hero aHero )
-    {
-        this.upgradeCalculator.calculate( aHero );
+    public void apply(Hero aHero) {
+        this.upgradeCalculator.calculate(aHero);
     }
 
     // method that will take spell as an argument
-    public void apply(  )
-    {
+    public void apply() {
         throw new UnsupportedOperationException("Method not implemented");
     }
 }

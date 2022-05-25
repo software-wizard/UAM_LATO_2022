@@ -13,7 +13,7 @@ public class Backpack {
         items = new ArrayList<>();
     }
 
-    public void addItem(Artifact aItem){
+    public void addItem(Artifact aItem) {
         items.add(aItem);
     }
 

@@ -1,16 +1,14 @@
 package pl.psi.creatures;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import com.google.common.collect.Range;
+import org.junit.jupiter.api.Test;
+import pl.psi.TurnQueue;
 
 import java.util.List;
 
-import org.junit.jupiter.api.Test;
-
-import pl.psi.TurnQueue;
-
-import com.google.common.collect.Range;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * TODO: Describe this class (The first line - until the first dot - will interpret as the brief description).

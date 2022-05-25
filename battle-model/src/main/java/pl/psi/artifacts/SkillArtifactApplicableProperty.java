@@ -5,8 +5,7 @@ import pl.psi.artifacts.model.ArtifactTarget;
 /**
  * Possible properties to apply Skill Artifacts to.
  */
-public enum SkillArtifactApplicableProperty implements ArtifactApplicableProperty
-{
+public enum SkillArtifactApplicableProperty implements ArtifactApplicableProperty {
     ATTACK,
 
     DEFENCE,
@@ -16,8 +15,7 @@ public enum SkillArtifactApplicableProperty implements ArtifactApplicablePropert
     KNOWLEDGE;
 
     @Override
-    public final ArtifactTarget getArtifactTarget()
-    {
+    public final ArtifactTarget getArtifactTarget() {
         return ArtifactTarget.SKILL;
     }
 }

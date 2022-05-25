@@ -5,15 +5,14 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum ArtifactRank
-{
-    TREASURE( "TREASURE", 0 ),
+public enum ArtifactRank {
+    TREASURE("TREASURE", 0),
 
-    MINOR( "MINOR",1 ),
+    MINOR("MINOR", 1),
 
-    MAJOR( "MAJOR", 2 ),
+    MAJOR("MAJOR", 2),
 
-    RELIC( "RELIC", 3 );
+    RELIC("RELIC", 3);
 
     private final String name;
 
@@ -24,10 +23,9 @@ public enum ArtifactRank
      *
      * @param aComparedRank rank to compare with.
      * @return 0 - if ranks are the same, 1 if rank that you compare is higher and finally -1 if rank that you compare
-     *         with is lower.
+     * with is lower.
      */
-    public int compareRanks( ArtifactRank aComparedRank )
-    {
-        return Integer.compare( this.getRank(), aComparedRank.getRank() );
+    public int compareRanks(ArtifactRank aComparedRank) {
+        return Integer.compare(this.getRank(), aComparedRank.getRank());
     }
 }

@@ -1,7 +1,6 @@
 package pl.psi.artifacts.holder;
 
-public enum CreatureArtifactNamesHolder
-{
+public enum CreatureArtifactNamesHolder {
     RING_OF_VITALITY,
 
     RING_OF_LIFE,

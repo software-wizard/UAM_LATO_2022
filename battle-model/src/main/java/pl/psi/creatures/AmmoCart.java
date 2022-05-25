@@ -3,7 +3,7 @@ package pl.psi.creatures;
 import java.util.List;
 import java.util.Random;
 
-public class AmmoCart extends WarMachinesAbstract{
+public class AmmoCart extends WarMachinesAbstract {
 
     public AmmoCart(CreatureStatisticIf aStatistic, DamageCalculatorIf aCalculator, int aAmount, int aSkillLevel) {
         stats = aStatistic;
@@ -34,8 +34,7 @@ public class AmmoCart extends WarMachinesAbstract{
             return this;
         }
 
-        public AmmoCart.Builder skillLevel(final int aSkillLevel)
-        {
+        public AmmoCart.Builder skillLevel(final int aSkillLevel) {
             skillLevel = aSkillLevel;
             return this;
         }

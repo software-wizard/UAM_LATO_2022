@@ -1,18 +1,12 @@
 package pl.psi.creatures;
 
 import com.google.common.collect.Range;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.*;
 
 class FirstAidTentTest {
 
@@ -21,15 +15,14 @@ class FirstAidTentTest {
 
 
     @Test
-    void firstAidTentHeals()
-    {
+    void firstAidTentHeals() {
         List<Creature> creaturesList = new ArrayList();
         final Creature creature1 = new Creature.Builder().statistic(CreatureStats.builder()
-                        .name("creature1")
-                        .maxHp(100)
-                        .damage(NOT_IMPORTANT_DMG)
-                        .armor(NOT_IMPORTANT)
-                        .build())
+                .name("creature1")
+                .maxHp(100)
+                .damage(NOT_IMPORTANT_DMG)
+                .armor(NOT_IMPORTANT)
+                .build())
                 .build();
         creature1.setHeroNumber(1);
         creature1.setCurrentHp(30);
@@ -50,35 +43,34 @@ class FirstAidTentTest {
     }
 
     @Test
-    void firstAidTentDoesNotHealCreaturesWithDifferentHeroNumber()
-    {
+    void firstAidTentDoesNotHealCreaturesWithDifferentHeroNumber() {
         List<Creature> creaturesList = new ArrayList();
         final Creature creature1 = new Creature.Builder().statistic(CreatureStats.builder()
-                        .name("creature1")
-                        .maxHp(100)
-                        .damage(NOT_IMPORTANT_DMG)
-                        .armor(NOT_IMPORTANT)
-                        .build())
+                .name("creature1")
+                .maxHp(100)
+                .damage(NOT_IMPORTANT_DMG)
+                .armor(NOT_IMPORTANT)
+                .build())
                 .build();
         creature1.setHeroNumber(2);
         creature1.setCurrentHp(20);
 
         final Creature creature2 = new Creature.Builder().statistic(CreatureStats.builder()
-                        .name("creature2")
-                        .maxHp(100)
-                        .damage(NOT_IMPORTANT_DMG)
-                        .armor(NOT_IMPORTANT)
-                        .build())
+                .name("creature2")
+                .maxHp(100)
+                .damage(NOT_IMPORTANT_DMG)
+                .armor(NOT_IMPORTANT)
+                .build())
                 .build();
         creature2.setHeroNumber(2);
         creature2.setCurrentHp(50);
 
         final Creature creature3 = new Creature.Builder().statistic(CreatureStats.builder()
-                        .name("creature1")
-                        .maxHp(100)
-                        .damage(NOT_IMPORTANT_DMG)
-                        .armor(NOT_IMPORTANT)
-                        .build())
+                .name("creature1")
+                .maxHp(100)
+                .damage(NOT_IMPORTANT_DMG)
+                .armor(NOT_IMPORTANT)
+                .build())
                 .build();
         creature3.setHeroNumber(1);
         creature3.setCurrentHp(15);

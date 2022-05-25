@@ -6,8 +6,7 @@ import lombok.Getter;
 public class SkillCostValueObject {
     private final int goldCost;
 
-    public SkillCostValueObject( int aGoldCost )
-    {
+    public SkillCostValueObject(int aGoldCost) {
         this.goldCost = aGoldCost;
     }
 }

@@ -5,18 +5,16 @@ import pl.psi.artifacts.model.ArtifactTarget;
 /**
  * Possible properties to apply Creature Artifacts to.
  */
-public enum CreatureArtifactApplicableProperty implements ArtifactApplicableProperty
-{
-  HEALTH,
+public enum CreatureArtifactApplicableProperty implements ArtifactApplicableProperty {
+    HEALTH,
 
-  ATTACK,
+    ATTACK,
 
-  DEFENCE;
+    DEFENCE;
 
 
-  @Override
-  public final ArtifactTarget getArtifactTarget()
-  {
-      return ArtifactTarget.CREATURES;
-  }
+    @Override
+    public final ArtifactTarget getArtifactTarget() {
+        return ArtifactTarget.CREATURES;
+    }
 }

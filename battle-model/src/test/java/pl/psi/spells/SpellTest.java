@@ -80,7 +80,7 @@ public class SpellTest {
 
         //then
         Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
-                .get().getStatsWithSpells().getMoveRange()).isEqualTo(10); // ToDo: change to checking get summed up stats
+                .get().getBuffedStats().getMoveRange()).isEqualTo(10); // ToDo: change to checking get summed up stats
     }
 
 

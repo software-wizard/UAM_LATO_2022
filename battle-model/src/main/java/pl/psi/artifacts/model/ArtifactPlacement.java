@@ -1,7 +1,6 @@
 package pl.psi.artifacts.model;
 
-public enum ArtifactPlacement
-{
+public enum ArtifactPlacement {
     HEAD,
 
     NECK,

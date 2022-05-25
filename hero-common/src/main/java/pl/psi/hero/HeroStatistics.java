@@ -3,7 +3,7 @@ package pl.psi.hero;
 import lombok.Getter;
 
 @Getter
-public enum HeroStatistics implements HeroStatisticsIf{
+public enum HeroStatistics implements HeroStatisticsIf {
 
     // NECRO
     DEATH_KNIGHT("Death_Knight", 1, 2, 2, 1, 0, 0, 10),
@@ -22,7 +22,7 @@ public enum HeroStatistics implements HeroStatisticsIf{
     private final int luck;
     private final int spellPoints;
 
-    HeroStatistics(final String aName, final int aAttack, final int aDefence, final int aSpellPower, final int aKnowledge, final int aMorale, final int aLuck, final int aSpellPoints){
+    HeroStatistics(final String aName, final int aAttack, final int aDefence, final int aSpellPower, final int aKnowledge, final int aMorale, final int aLuck, final int aSpellPoints) {
 
         name = aName;
         attack = aAttack;

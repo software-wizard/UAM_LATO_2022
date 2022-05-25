@@ -2,7 +2,6 @@ package pl.psi.artifacts;
 
 import pl.psi.artifacts.model.ArtifactTarget;
 
-public interface ArtifactApplicableProperty
-{
+public interface ArtifactApplicableProperty {
     ArtifactTarget getArtifactTarget();
 }

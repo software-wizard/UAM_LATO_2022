@@ -6,5 +6,6 @@ import java.util.List;
 
 public interface DebufferIf {
     void debuffCreature(Creature creature);
+
     void debuffCreatures(List<Creature> creatures);
 }

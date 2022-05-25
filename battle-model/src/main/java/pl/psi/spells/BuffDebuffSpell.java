@@ -35,7 +35,7 @@ public class BuffDebuffSpell extends Spell<Creature> {
                 .build();
     }
 
-    public void unCastSpell(Creature creature){
+    public void unCastSpell(Creature creature) {
         creature.applyStatsWithSpells(convertToNegative(creatureStats));
     }
 
@@ -48,7 +48,7 @@ public class BuffDebuffSpell extends Spell<Creature> {
             }));
 
             spellTimer.forEach(((creature, currentTimer) -> {
-                if(currentTimer == 0) unCastSpell(creature);
+                if (currentTimer == 0) unCastSpell(creature);
             }));
 
             spellTimer.values().removeIf(currentTimer -> (currentTimer == 0));

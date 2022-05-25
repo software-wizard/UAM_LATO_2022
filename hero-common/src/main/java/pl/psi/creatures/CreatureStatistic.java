@@ -1,7 +1,6 @@
 package pl.psi.creatures;
 
 import com.google.common.collect.Range;
-
 import lombok.Getter;
 
 @Getter
@@ -113,11 +112,6 @@ public enum CreatureStatistic implements CreatureStatisticIf {
             "Good upgrade, but still lacks speed. Seem undefeatable in large numbers.\n",
             false, CreatureType.ALIVE, true, 1);
 
-    public enum CreatureType {
-        ALIVE, UNDEAD, NON_LIVING
-    }
-
-
     private final String name;
     private final double attack;
     private final double armor;
@@ -130,7 +124,6 @@ public enum CreatureStatistic implements CreatureStatisticIf {
     private final CreatureType type;
     private final boolean isGround;
     private final int size;
-
     CreatureStatistic(final String aName, final int aAttack, final int aArmor, final int aMaxHp,
                       final int aMoveRange, final Range<Integer> aDamage, final int aTier, final String aDescription,
                       final boolean aIsUpgraded, final CreatureType aType, final boolean aIsGround, final int aSize) {
@@ -148,8 +141,7 @@ public enum CreatureStatistic implements CreatureStatisticIf {
         isGround = aIsGround;
     }
 
-    String getTranslatedName() {
-        return name;
+    public enum CreatureType {
+        ALIVE, UNDEAD, NON_LIVING
     }
-
 }

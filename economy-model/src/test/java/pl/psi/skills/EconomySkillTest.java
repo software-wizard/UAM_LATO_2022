@@ -5,22 +5,18 @@ import org.junit.jupiter.api.Test;
 import pl.psi.EconomyEngine;
 import pl.psi.hero.EconomyHero;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 public class EconomySkillTest {
 
+    private final EconomySkillFactory economySkillFactory = new EconomySkillFactory();
     private EconomyHero hero1;
     private EconomyEngine economyEngine;
     private EconomyHero hero2;
 
-    private final EconomySkillFactory economySkillFactory = new EconomySkillFactory();
-
     @BeforeEach
     void init() {
-        hero1 = new EconomyHero( EconomyHero.Fraction.NECROPOLIS );
-        hero2 = new EconomyHero( EconomyHero.Fraction.NECROPOLIS );
-        economyEngine = new EconomyEngine( hero1, hero2 );
+        hero1 = new EconomyHero(EconomyHero.Fraction.NECROPOLIS);
+        hero2 = new EconomyHero(EconomyHero.Fraction.NECROPOLIS);
+        economyEngine = new EconomyEngine(hero1, hero2);
     }
 
     @Test

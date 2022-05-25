@@ -5,9 +5,9 @@ import pl.psi.artifacts.ArtifactEffectApplicable;
 import java.math.BigDecimal;
 import java.util.Set;
 
-public interface ArtifactIf
-{
+public interface ArtifactIf {
     ArtifactTarget getTarget();
+
     ArtifactRank getRank();
 
     ArtifactPlacement getPlacement();
@@ -18,5 +18,5 @@ public interface ArtifactIf
 
     BigDecimal getPrice();
 
-    Set< ArtifactEffect<ArtifactEffectApplicable> > getEffects();
+    Set<ArtifactEffect<ArtifactEffectApplicable>> getEffects();
 }

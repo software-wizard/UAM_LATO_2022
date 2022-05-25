@@ -5,7 +5,6 @@ import pl.psi.creatures.CreatureStats;
 
 import java.beans.PropertyChangeEvent;
 import java.util.List;
-import java.util.Optional;
 
 public class AreaBuffDebuffSpell extends Spell<List<Creature>> {
 

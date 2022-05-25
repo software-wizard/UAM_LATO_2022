@@ -20,33 +20,32 @@ public class BuyingArtifactTest {
     private EconomyHero hero2;
 
     @BeforeEach
-    void init()
-    {
-        hero1 = new EconomyHero( EconomyHero.Fraction.NECROPOLIS );
-        hero2 = new EconomyHero( EconomyHero.Fraction.NECROPOLIS );
-        economyEngine = new EconomyEngine( hero1, hero2 );
+    void init() {
+        hero1 = new EconomyHero(EconomyHero.Fraction.NECROPOLIS);
+        hero2 = new EconomyHero(EconomyHero.Fraction.NECROPOLIS);
+        economyEngine = new EconomyEngine(hero1, hero2);
     }
 
     @Test
-    void shouldHeroBuyArtefact(){
-        economyEngine.buy(ProductType.ARTIFACT,artifactFactory.create("Cape of Conjuring"));
-        assertEquals(1,hero1.getArtifacts().size());
+    void shouldHeroBuyArtefact() {
+        economyEngine.buy(ProductType.ARTIFACT, artifactFactory.create("Cape of Conjuring"));
+        assertEquals(1, hero1.getArtifacts().size());
     }
 
     @Test
-    void shouldHeroBuyDifferentTypesOfArtifacts(){
-        economyEngine.buy(ProductType.ARTIFACT,artifactFactory.create("Cape of Conjuring"));
-        economyEngine.buy(ProductType.ARTIFACT,artifactFactory.create("Crown of Dragontooth"));
-        assertEquals(2,hero1.getArtifacts().size());
-        assertEquals(ArtifactPlacement.SHOULDERS,hero1.getArtifacts().get(0).getPlacement());
-        assertEquals(ArtifactPlacement.HEAD,hero1.getArtifacts().get(1).getPlacement());
+    void shouldHeroBuyDifferentTypesOfArtifacts() {
+        economyEngine.buy(ProductType.ARTIFACT, artifactFactory.create("Cape of Conjuring"));
+        economyEngine.buy(ProductType.ARTIFACT, artifactFactory.create("Crown of Dragontooth"));
+        assertEquals(2, hero1.getArtifacts().size());
+        assertEquals(ArtifactPlacement.SHOULDERS, hero1.getArtifacts().get(0).getPlacement());
+        assertEquals(ArtifactPlacement.HEAD, hero1.getArtifacts().get(1).getPlacement());
     }
 
     @Test
-    void shouldThrowExceptionWhenHeroTryToBuyArtifactOfTheTypeHeHas(){
-        economyEngine.buy(ProductType.ARTIFACT,artifactFactory.create("Cape of Conjuring"));
+    void shouldThrowExceptionWhenHeroTryToBuyArtifactOfTheTypeHeHas() {
+        economyEngine.buy(ProductType.ARTIFACT, artifactFactory.create("Cape of Conjuring"));
         assertThrows(IllegalStateException.class,
-                () -> economyEngine.buy(ProductType.ARTIFACT,artifactFactory.create("Cape of Conjuring")));
+                () -> economyEngine.buy(ProductType.ARTIFACT, artifactFactory.create("Cape of Conjuring")));
     }
 
 }

@@ -1,19 +1,13 @@
 package pl.psi;
 
+import pl.psi.creatures.Creature;
+import pl.psi.creatures.WarMachinesAbstract;
+
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Set;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import pl.psi.creatures.Creature;
-import pl.psi.creatures.WarMachinesAbstract;
-import pl.psi.spells.BuffDebuffSpell;
-import pl.psi.spells.Spell;
 
 /**
  * TODO: Describe this class (The first line - until the first dot - will interpret as the brief description).
@@ -41,9 +35,8 @@ public class TurnQueue {
         observerSupport.addPropertyChangeListener(aEventType, aObserver);
     }
 
-    private void initQueue()
-    {
-        creaturesQueue.addAll( creatures );
+    private void initQueue() {
+        creaturesQueue.addAll(creatures);
     }
 
     public Creature getCurrentCreature() {
@@ -70,8 +63,7 @@ public class TurnQueue {
     private void handleWarMachineAction() {
         WarMachinesAbstract warMachine = (WarMachinesAbstract) currentCreature;
 
-        if (warMachine.getSkillLevel() == 0)
-        {
+        if (warMachine.getSkillLevel() == 0) {
             List<Creature> creatureList = new ArrayList<>(creatures);
             warMachine.performAction(creatureList);
             currentCreature = creaturesQueue.poll();

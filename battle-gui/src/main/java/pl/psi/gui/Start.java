@@ -1,15 +1,14 @@
 package pl.psi.gui;
 
-import java.io.IOException;
-import java.util.List;
-
-import pl.psi.Hero;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import pl.psi.Hero;
 import pl.psi.hero.HeroStatistics;
+
+import java.io.IOException;
+import java.util.List;
 
 public class Start extends Application {
 

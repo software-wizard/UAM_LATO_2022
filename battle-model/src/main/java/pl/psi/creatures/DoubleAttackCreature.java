@@ -1,7 +1,7 @@
 package pl.psi.creatures;
 
 
-public class DoubleAttackCreature extends AbstractCreature{
+public class DoubleAttackCreature extends AbstractCreature {
     private final Creature decorated;
 
     public DoubleAttackCreature(Creature aDecorated) {
@@ -10,9 +10,8 @@ public class DoubleAttackCreature extends AbstractCreature{
     }
 
     @Override
-    public void attack( final Creature aDefender )
-    {
-        decorated.attack( aDefender );
-        decorated.attack( aDefender );
+    public void attack(final Creature aDefender) {
+        decorated.attack(aDefender);
+        decorated.attack(aDefender);
     }
 }

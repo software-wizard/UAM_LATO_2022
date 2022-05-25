@@ -1,13 +1,8 @@
 package pl.psi.creatures;
 
-import java.math.BigDecimal;
-
 import lombok.Getter;
 import lombok.Setter;
 import pl.psi.artifacts.ArtifactEffectApplicable;
-import pl.psi.artifacts.ArtifactEffectApplyingProperties;
-import pl.psi.artifacts.CreatureArtifactApplicableProperty;
-import pl.psi.artifacts.model.ArtifactApplyingMode;
 import pl.psi.artifacts.model.ArtifactEffect;
 import pl.psi.shop.BuyProductInterface;
 import pl.psi.shop.Money;
@@ -16,12 +11,11 @@ import pl.psi.shop.Money;
 @Setter
 public class EconomyCreature implements BuyProductInterface, ArtifactEffectApplicable {
 
-    private CreatureStatisticIf upgradedStats;
     private final CreatureStatisticIf baseStats;
-    private int amount;
     private final Money goldCost;
-
     private final ArtifactApplier artifactApplier;
+    private CreatureStatisticIf upgradedStats;
+    private int amount;
 
     public EconomyCreature(final CreatureStatisticIf aStats, final int aAmount, final Money aGoldCost) {
         baseStats = aStats;

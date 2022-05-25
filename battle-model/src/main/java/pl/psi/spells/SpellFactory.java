@@ -3,7 +3,8 @@ package pl.psi.spells;
 import pl.psi.creatures.CreatureStats;
 
 import static pl.psi.spells.SpellRang.*;
-import static pl.psi.spells.SpellTypes.*;
+import static pl.psi.spells.SpellTypes.AREA;
+import static pl.psi.spells.SpellTypes.FIELD;
 
 public class SpellFactory {
 
@@ -39,24 +40,24 @@ public class SpellFactory {
                     case BASIC:
                         return new AreaDamageSpell(AREA, name, BASIC, 25,
                                 new boolean[][]{{false, false, true, false, false},
-                                                {false, true, true, true, false},
-                                                {true, true, true, true, true},
-                                                {false, true, true, true, false},
-                                                {false, false, true, false, false}}, spellPower + 10);
+                                        {false, true, true, true, false},
+                                        {true, true, true, true, true},
+                                        {false, true, true, true, false},
+                                        {false, false, true, false, false}}, spellPower + 10);
                     case ADVANCED:
                         return new AreaDamageSpell(AREA, name, ADVANCED, 30,
                                 new boolean[][]{{false, false, true, false, false},
-                                                {false, true, true, true, false},
-                                                {true, true, true, true, true},
-                                                {false, true, true, true, false},
-                                                {false, false, true, false, false}}, spellPower + 10);
+                                        {false, true, true, true, false},
+                                        {true, true, true, true, true},
+                                        {false, true, true, true, false},
+                                        {false, false, true, false, false}}, spellPower + 10);
                     case EXPERT:
                         return new AreaDamageSpell(AREA, name, EXPERT, 45,
                                 new boolean[][]{{false, false, true, false, false},
-                                                {false, true, true, true, false},
-                                                {true, true, true, true, true},
-                                                {false, true, true, true, false},
-                                                {false, false, true, false, false}}, spellPower + 10);
+                                        {false, true, true, true, false},
+                                        {true, true, true, true, true},
+                                        {false, true, true, true, false},
+                                        {false, false, true, false, false}}, spellPower + 10);
                     default:
                         throw new IllegalArgumentException(EXCEPTION_MESSAGE);
                 }

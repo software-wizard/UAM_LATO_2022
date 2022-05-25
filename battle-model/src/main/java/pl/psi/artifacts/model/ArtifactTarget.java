@@ -1,7 +1,6 @@
 package pl.psi.artifacts.model;
 
-public enum ArtifactTarget
-{
+public enum ArtifactTarget {
     CREATURES,
 
     SPELLS,

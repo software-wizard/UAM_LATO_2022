@@ -1,9 +1,8 @@
 package pl.psi.converter;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 import pl.psi.Hero;
 import pl.psi.artifacts.model.Artifact;
 import pl.psi.creatures.Creature;
@@ -13,14 +12,10 @@ import pl.psi.hero.EconomyHero;
 import pl.psi.spells.Spell;
 import pl.psi.spells.SpellFactory;
 
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-import pl.psi.hero.HeroStatistics;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import static pl.psi.spells.SpellRang.BASIC;
 
 public class EcoBattleConverter {
 
@@ -66,16 +61,16 @@ public class EcoBattleConverter {
 
         final List<Creature> creatures = new ArrayList<>();
         final NecropolisFactory factory = new NecropolisFactory();
-        aPlayer1.getCreatures()
-            .forEach( ecoCreature -> creatures.add( factory.create( ecoCreature.isUpgraded(),
-                ecoCreature.getTier(), ecoCreature.getAmount() ) ) );
+        aPlayer.getCreatures()
+                .forEach(ecoCreature -> creatures.add(factory.create(ecoCreature.isUpgraded(),
+                        ecoCreature.getTier(), ecoCreature.getAmount())));
 
         final List<Spell> spells = new ArrayList<>();
         final SpellFactory spellFactory = new SpellFactory();
-        aPlayer1.getSpellList()
-                .forEach(economySpell -> spells.add(spellFactory.create(economySpell.getSpellStats().getName(), economySpell.getSpellRang(), aPlayer1.getSpellPower())));
+        aPlayer.getSpellList()
+                .forEach(economySpell -> spells.add(spellFactory.create(economySpell.getSpellStats().getName(), economySpell.getSpellRang(), aPlayer.getSpellPower())));
 
-        return new Hero( creatures, spells );
+        return new Hero(creatures, spells);
     }
 
 }

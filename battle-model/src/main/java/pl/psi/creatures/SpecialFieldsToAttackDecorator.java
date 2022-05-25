@@ -73,8 +73,7 @@ public class SpecialFieldsToAttackDecorator extends Creature {
     }
 
     @Override
-    protected boolean canCounterAttack( final Creature aDefender )
-    {
+    protected boolean canCounterAttack(final Creature aDefender) {
         return false;
     }
 

@@ -1,8 +1,9 @@
 package pl.psi.creatures;
 
-import com.google.common.collect.Range;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 public class FirstAidTent extends WarMachinesAbstract {
 
@@ -42,19 +43,18 @@ public class FirstAidTent extends WarMachinesAbstract {
         creature.heal(hp);
     }
 
-    private int calculateHealHp (int skillLevel) {
-        switch(skillLevel)
-        {
+    private int calculateHealHp(int skillLevel) {
+        switch (skillLevel) {
             case 0:
-                return  25;
+                return 25;
             case 1:
-                return  50;
+                return 50;
             case 2:
-                return  75;
+                return 75;
             case 3:
-                return  100;
+                return 100;
             default:
-                return  0;
+                return 0;
         }
     }
 
@@ -69,8 +69,7 @@ public class FirstAidTent extends WarMachinesAbstract {
             return this;
         }
 
-        public FirstAidTent.Builder skillLevel(final int aSkillLevel)
-        {
+        public FirstAidTent.Builder skillLevel(final int aSkillLevel) {
             skillLevel = aSkillLevel;
             return this;
         }

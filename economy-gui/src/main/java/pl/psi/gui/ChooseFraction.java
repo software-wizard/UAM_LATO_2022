@@ -4,29 +4,25 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import pl.psi.hero.EconomyHero;
 
 public class ChooseFraction extends Application {
 
-    public static void main( final String[] args )
-    {
+    public static void main(final String[] args) {
         launch();
     }
 
     @Override
-    public void start( final Stage aStage ) throws Exception
-    {
+    public void start(final Stage aStage) throws Exception {
 
 
         final FXMLLoader loader = new FXMLLoader();
-        loader.setLocation( getClass().getClassLoader()
-                .getResource( "fxml/fraction.fxml" ) );
-        loader.setController( new FractionController());
+        loader.setLocation(getClass().getClassLoader()
+                .getResource("fxml/fraction.fxml"));
+        loader.setController(new FractionController());
 
-        final Scene scene = new Scene( loader.load() );
-        aStage.setScene( scene );
+        final Scene scene = new Scene(loader.load());
+        aStage.setScene(scene);
         aStage.setWidth(400);
         aStage.setHeight(280);
 

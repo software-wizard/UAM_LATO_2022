@@ -1,7 +1,6 @@
 package pl.psi.hero;
 
 import lombok.Getter;
-import lombok.Setter;
 import pl.psi.artifacts.Artifact;
 import pl.psi.artifacts.ArtifactPlacement;
 
@@ -27,30 +26,35 @@ public class Equipment {
         feetSlot = new EqSlot(ArtifactPlacement.FEET);
     }
 
-    public void setHead(Artifact aItem){
+    public void setHead(Artifact aItem) {
         headSlot.setItem(aItem);
     }
 
-    public void setNeck(Artifact aItem){
+    public void setNeck(Artifact aItem) {
         neckSlot.setItem(aItem);
     }
-    public void setTorso(Artifact aItem){
+
+    public void setTorso(Artifact aItem) {
         torsoSlot.setItem(aItem);
     }
-    public void setShoulders(Artifact aItem){
+
+    public void setShoulders(Artifact aItem) {
         shouldersSlot.setItem(aItem);
     }
-    public void setRightHand(Artifact aItem){
+
+    public void setRightHand(Artifact aItem) {
         rightHandSlot.setItem(aItem);
     }
-    public void setLeftHand(Artifact aItem){
+
+    public void setLeftHand(Artifact aItem) {
         leftHandSlot.setItem(aItem);
     }
-    public void setFeet(Artifact aItem){
+
+    public void setFeet(Artifact aItem) {
         feetSlot.setItem(aItem);
     }
 
-    public ArrayList<Artifact> getEquipment(){
+    public ArrayList<Artifact> getEquipment() {
         ArrayList<Artifact> items = new ArrayList<>();
         items.add(headSlot.getItem());
         items.add(neckSlot.getItem());

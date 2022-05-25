@@ -1,7 +1,9 @@
 package pl.psi.skills;
 
 import pl.psi.Hero;
-import pl.psi.creatures.*;
+import pl.psi.creatures.Creature;
+import pl.psi.creatures.CreatureStats;
+import pl.psi.creatures.ShooterCreature;
 
 /**
  * Class that represents changing creature stats based on current skill
@@ -12,21 +14,17 @@ public class UpgradeCalculator {
     private final SkillType skillName;
     private final double skillEffect;
 
-    public UpgradeCalculator(SkillType aName, double aEffect )
-    {
+    public UpgradeCalculator(SkillType aName, double aEffect) {
         this.skillName = aName;
         this.skillEffect = aEffect;
     }
 
-    public CreatureStats calculate(Creature aCreature )
-    {
+    public CreatureStats calculate(Creature aCreature) {
         double changedStat;
         CreatureStats statsToApply = null;
-        switch ( this.skillName )
-        {
+        switch (this.skillName) {
             case ARCHERY:
-                if (aCreature instanceof ShooterCreature)
-                {
+                if (aCreature instanceof ShooterCreature) {
                     changedStat = (1 + this.skillEffect) * aCreature.getStats().getAttack();
                     statsToApply = CreatureStats.builder()
                             .armor(changedStat)
@@ -54,15 +52,13 @@ public class UpgradeCalculator {
         return statsToApply;
     }
 
-    public void calculate(Hero aHero )
-    {
+    public void calculate(Hero aHero) {
         double changedStat;
-        switch ( this.skillName )
-        {
+        switch (this.skillName) {
             case LEADERSHIP:
                 // update hero's morale
                 break;
-            case  LUCK:
+            case LUCK:
                 // update hero's luck
                 break;
         }

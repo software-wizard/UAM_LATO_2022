@@ -34,32 +34,32 @@ public class BallistaTest {
         when(randomMock.nextInt(anyInt())).thenReturn(5);
 
         final Creature defender = new Creature.Builder().statistic(CreatureStats.builder()
-                        .maxHp(100)
-                        .damage(Range.closed(10, 10))
-                        .armor(5)
-                        .build())
+                .maxHp(100)
+                .damage(Range.closed(10, 10))
+                .armor(5)
+                .build())
                 .build();
         defender.setHeroNumber(1);
 
         final WarMachinesAbstract maszyna_ballista;
         maszyna_ballista = new WarMachinesFactory().create(1, 1, new DefaultDamageCalculator(randomMock), 0);
         maszyna_ballista.setHeroNumber(2);
-        List<Creature> list=new ArrayList<Creature>();
+        List<Creature> list = new ArrayList<Creature>();
         list.add(defender);
         maszyna_ballista.performAction(list);
         assertThat(list.get(0).getCurrentHp()).isEqualTo(84);
     }
 
-@Test
+    @Test
     void warMachineDoesNotCounterAttack() {
         final Random randomMock = mock(Random.class);
         when(randomMock.nextInt(anyInt())).thenReturn(5);
 
         final Creature attacker = new Creature.Builder().statistic(CreatureStats.builder()
-                        .maxHp(100)
-                        .damage(Range.closed(10, 10))
-                        .armor(5)
-                        .build())
+                .maxHp(100)
+                .damage(Range.closed(10, 10))
+                .armor(5)
+                .build())
                 .build();
         attacker.setHeroNumber(1);
 
@@ -71,14 +71,14 @@ public class BallistaTest {
         assertThat(attacker.getCurrentHp()).isEqualTo(100);
     }
 
- @Test
+    @Test
     void howManyIterationsOfCalculator() {
 
         final Creature attacker = new Creature.Builder().statistic(CreatureStats.builder()
-                        .maxHp(100)
-                        .damage(Range.closed(10, 10))
-                        .armor(5)
-                        .build())
+                .maxHp(100)
+                .damage(Range.closed(10, 10))
+                .armor(5)
+                .build())
                 .build();
         final DefaultDamageCalculator calcMock = mock(DefaultDamageCalculator.class);
         when(calcMock.getArmor(attacker)).thenReturn(2.0);

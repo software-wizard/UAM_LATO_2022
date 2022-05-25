@@ -5,8 +5,6 @@ import lombok.Setter;
 import pl.psi.artifacts.Artifact;
 import pl.psi.artifacts.ArtifactPlacement;
 
-import java.util.Objects;
-
 @Getter
 @Setter
 public class EqSlot {
@@ -18,9 +16,8 @@ public class EqSlot {
     }
 
     public void setItem(Artifact aItem) {
-        if (aItem.getPlacement().equals(type)){
+        if (aItem.getPlacement().equals(type)) {
             item = aItem;
-        }
-        else throw new IllegalStateException( "Incorrect item placement" );
+        } else throw new IllegalStateException("Incorrect item placement");
     }
 }

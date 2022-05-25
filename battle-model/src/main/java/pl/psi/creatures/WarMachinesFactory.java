@@ -4,7 +4,7 @@ public class WarMachinesFactory implements WarMachinesIf<WarMachinesAbstract> {
 
     @Override
     public WarMachinesAbstract create(final int aTier, final int aAmount, final DamageCalculatorIf aCalculator, int aSkillLevel) {
-        switch(aTier) {
+        switch (aTier) {
             case 1:
                 return new Ballista.Builder().statistic(WarMachinesStatistic.BALLISTA)
                         .amount(aAmount)

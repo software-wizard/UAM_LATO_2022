@@ -6,16 +6,16 @@ package pl.psi.creatures;
 //
 //  ******************************************************************
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.*;
-
+import com.google.common.collect.Range;
+import lombok.Getter;
 import lombok.Setter;
 import pl.psi.TurnQueue;
+import pl.psi.spells.Spell;
 
-import com.google.common.collect.Range;
-
-import lombok.Getter;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.List;
+import java.util.Random;
 
 /**
  * TODO: Describe this class (The first line - until the first dot - will interpret as the brief description).
@@ -64,6 +64,16 @@ public class Creature implements PropertyChangeListener {
         }
     }
 
+    public void castSpell(final Creature aDefender, Spell spell) {
+        if (isAlive())
+            spell.castSpell(aDefender);
+    }
+
+    public void castSpell(final List<Creature> aDefender, Spell spell) {
+        if (isAlive()) {
+            spell.castSpell(aDefender);
+        }
+    }
 
     public boolean isAlive() {
         return getAmount() > 0;
@@ -75,6 +85,10 @@ public class Creature implements PropertyChangeListener {
 
     protected void setCurrentHp(final double aCurrentHp) {
         currentHp = aCurrentHp;
+    }
+
+    public void applySpellDamage(Creature aDefender, Integer damage) {
+        aDefender.setCurrentHp(aDefender.getCurrentHp() - damage); // ToDo: include magic resist
     }
 
     public void increaseLuckBy(int factor) {
@@ -203,6 +217,18 @@ public class Creature implements PropertyChangeListener {
 
     public double getMoveRange() {
         return getStats().getMoveRange();
+    }
+
+    public void applyStatsWithSpells(CreatureStats aCreatureStats) {
+        setStatsWithSpells(CreatureStats.builder()
+                .attack((buffedStats == null) ? aCreatureStats.getAttack() : buffedStats.getAttack() + aCreatureStats.getAttack() )
+                .armor((buffedStats == null) ? aCreatureStats.getArmor() : buffedStats.getArmor() + aCreatureStats.getArmor() )
+                .moveRange((buffedStats == null) ? aCreatureStats.getMoveRange() : buffedStats.getMoveRange() + aCreatureStats.getMoveRange() )
+                .build());
+    }
+
+    private void setStatsWithSpells(CreatureStats aStatsWithSpells) {
+        buffedStats = aStatsWithSpells;
     }
 
     public static class Builder {
