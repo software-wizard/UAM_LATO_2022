@@ -285,6 +285,9 @@ public class GameEngine {
     public void castSpell(final Point point, Spell spell) {
         switch (spell.getCategory()) {
             case FIELD:
+            case FOR_ALL_ENEMY_CREATURES:
+            case FOR_ALL_ALLIED_CREATURES:
+            case FOR_ALL_CREATURES:
                 board.getCreature(point)
                         .ifPresent(defender -> {
                             if (spell instanceof BuffDebuffSpell) {
