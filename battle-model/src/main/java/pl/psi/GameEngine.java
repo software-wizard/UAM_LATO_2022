@@ -11,6 +11,7 @@ import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static java.lang.Math.ceil;
 
@@ -56,12 +57,25 @@ public class GameEngine {
         observerSupport.firePropertyChange(CREATURE_MOVED, null, aPoint);
     }
 
+    private boolean currentCreatureInMeleeRange( ){
+        Point position = board.getCreaturePosition( turnQueue.getCurrentCreature() );
+        List<Point> adjacentPositionsList = board.getAdjacentPositions( position );
+        List<Optional<Creature>> creaturesOnAdjacentPositions = adjacentPositionsList.stream().map(this::getCreature).collect( Collectors.toList() );
+        while (creaturesOnAdjacentPositions.remove(Optional.empty())) {  // remove every instance of "Optional.empty null" from list
+        }
+        return !creaturesOnAdjacentPositions.isEmpty();
+    }
+
     public Optional<Creature> getCreature(final Point aPoint) {
         return board.getCreature(aPoint);
     }
 
+
     public void pass() {
         turnQueue.next();
+        if(turnQueue.getCurrentCreature().isRange()){
+            turnQueue.getCurrentShooterCreature().setInMelee(currentCreatureInMeleeRange());
+        }
     }
 
     public void addObserver(final String aEventType, final PropertyChangeListener aObserver) {

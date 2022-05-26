@@ -4,6 +4,7 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import pl.psi.creatures.Creature;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,5 +42,30 @@ public class Board {
         final Point oldPosition = map.inverse()
                 .get(aCreature);
         return aPoint.distance(oldPosition.getX(), oldPosition.getY()) < aCreature.getMoveRange();
+    }
+
+    Point getCreaturePosition(final Creature aCreature){
+        return map.inverse().get(aCreature);
+    }
+
+    List<Point> getAdjacentPositions( final Point point ){
+        List<Point> positionsList = new ArrayList<>();
+        Point adjacentPoint1 = new Point(point.getX()-1,point.getY()+1 );
+        Point adjacentPoint2 = new Point(point.getX(),point.getY()+1 );
+        Point adjacentPoint3 = new Point(point.getX()+1,point.getY()+1 );
+        Point adjacentPoint4 = new Point(point.getX()-1,point.getY() );
+        Point adjacentPoint5 = new Point(point.getX()+1,point.getY() );
+        Point adjacentPoint6 = new Point(point.getX()-1,point.getY()-1 );
+        Point adjacentPoint7 = new Point(point.getX(),point.getY()-1 );
+        Point adjacentPoint8 = new Point(point.getX()+1,point.getY()-1 );
+        positionsList.add(adjacentPoint1);
+        positionsList.add(adjacentPoint2);
+        positionsList.add(adjacentPoint3);
+        positionsList.add(adjacentPoint4);
+        positionsList.add(adjacentPoint5);
+        positionsList.add(adjacentPoint6);
+        positionsList.add(adjacentPoint7);
+        positionsList.add(adjacentPoint8);
+        return positionsList;
     }
 }

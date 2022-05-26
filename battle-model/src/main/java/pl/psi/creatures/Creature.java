@@ -200,6 +200,10 @@ public class Creature implements PropertyChangeListener {
         return getStats().getArmor();
     }
 
+    public boolean isRange(){
+        return false;
+    }
+
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
         if (TurnQueue.END_OF_TURN.equals(evt.getPropertyName())) {

@@ -1,6 +1,7 @@
 package pl.psi;
 
 import pl.psi.creatures.Creature;
+import pl.psi.creatures.ShooterCreature;
 import pl.psi.creatures.WarMachinesAbstract;
 
 import java.beans.PropertyChangeListener;
@@ -41,6 +42,10 @@ public class TurnQueue {
 
     public Creature getCurrentCreature() {
         return currentCreature;
+    }
+
+    public ShooterCreature getCurrentShooterCreature(){
+        return (ShooterCreature) currentCreature;
     }
 
     public void next() {

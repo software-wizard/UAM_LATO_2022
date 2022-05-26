@@ -11,6 +11,11 @@ public class CastleCreatureFactory {
                     return new Creature.Builder().statistic(CreatureStatistic.BLACK_KNIGHT)
                             .amount(aAmount)
                             .build();
+                case 2:
+                    Creature creature = new Creature.Builder().statistic(CreatureStatistic.BLACK_KNIGHT)
+                        .amount(aAmount)
+                        .build();
+                    return new ShooterCreature( creature, 12 );
             }
         } else {
             switch (aTier) {
