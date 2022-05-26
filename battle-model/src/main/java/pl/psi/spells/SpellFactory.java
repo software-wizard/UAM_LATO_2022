@@ -3,8 +3,7 @@ package pl.psi.spells;
 import pl.psi.creatures.CreatureStats;
 
 import static pl.psi.spells.SpellRang.*;
-import static pl.psi.spells.SpellTypes.AREA;
-import static pl.psi.spells.SpellTypes.FIELD;
+import static pl.psi.spells.SpellTypes.*;
 
 public class SpellFactory {
 
@@ -31,7 +30,18 @@ public class SpellFactory {
                     case ADVANCED:
                         return new BuffDebuffSpell(FIELD, name, ADVANCED, 15, CreatureStats.builder().moveRange(20).build(), 4);
                     case EXPERT:
-                        return new BuffDebuffSpell(FIELD, name, EXPERT, 20, CreatureStats.builder().moveRange(30).build(), 2);
+                        return new BuffDebuffSpell(FOR_ALL_ALLIED_CREATURES, name, EXPERT, 20, CreatureStats.builder().moveRange(30).build(), 2);
+                    default:
+                        throw new IllegalArgumentException(EXCEPTION_MESSAGE);
+                }
+            case "Slow":
+                switch (rang) {
+                    case BASIC:
+                        return new BuffDebuffSpell(FIELD, name, BASIC, 10, CreatureStats.builder().moveRange(-10).build(), 2); // ToDo: change to procentage damage
+                    case ADVANCED:
+                        return new BuffDebuffSpell(FIELD, name, ADVANCED, 15, CreatureStats.builder().moveRange(-20).build(), 4);
+                    case EXPERT:
+                        return new BuffDebuffSpell(FOR_ALL_ENEMY_CREATURES, name, EXPERT, 20, CreatureStats.builder().moveRange(-30).build(), 2);
                     default:
                         throw new IllegalArgumentException(EXCEPTION_MESSAGE);
                 }
@@ -58,6 +68,17 @@ public class SpellFactory {
                                         {true, true, true, true, true},
                                         {false, true, true, true, false},
                                         {false, false, true, false, false}}, spellPower + 10);
+                    default:
+                        throw new IllegalArgumentException(EXCEPTION_MESSAGE);
+                }
+            case "DeathRipple":
+                switch (rang) {
+                    case BASIC:
+                        return new DamageSpell(FOR_ALL_CREATURES, name, BASIC, 10, (spellPower * 5) + 10);
+                    case ADVANCED:
+                        return new DamageSpell(FOR_ALL_CREATURES, name, ADVANCED, 15, (spellPower * 5) + 20);
+                    case EXPERT:
+                        return new DamageSpell(FOR_ALL_CREATURES, name, EXPERT, 20, (spellPower * 5) + 30);
                     default:
                         throw new IllegalArgumentException(EXCEPTION_MESSAGE);
                 }

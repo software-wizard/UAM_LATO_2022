@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.lang.Math.ceil;
 
@@ -304,12 +305,31 @@ public class GameEngine {
     }
 
     public void castSpell(Spell spell) {
-        //ToDo: REFACTOR THIS
         //I can't cast for all heroes creatures
-        //There will be a name switch covering these several spel
-        hero2.getCreatures().forEach(creature ->
-                board.getPoint(creature).ifPresent(creatureFromBoard ->
-                        castSpell(creatureFromBoard, spell)));
+        Hero currentHero = (hero1.getCreatures().contains(turnQueue.getCurrentCreature())) ? hero2 : hero1;
+        Hero enemyHero = (hero1.getCreatures().contains(turnQueue.getCurrentCreature())) ? hero1 : hero2;
+
+        switch (spell.getCategory()) {
+            case FOR_ALL_ENEMY_CREATURES:
+                currentHero.getCreatures().forEach(creature ->
+                        board.getPoint(creature).ifPresent(creatureFromBoard ->
+                                castSpell(creatureFromBoard, spell)));
+                break;
+            case FOR_ALL_ALLIED_CREATURES:
+                enemyHero.getCreatures().forEach(creature ->
+                        board.getPoint(creature).ifPresent(creatureFromBoard ->
+                                castSpell(creatureFromBoard, spell)));
+                break;
+            case FOR_ALL_CREATURES:
+                Stream.concat(currentHero.getCreatures().stream(), enemyHero.getCreatures().stream())
+                        .forEach(creature ->
+                                board.getPoint(creature).ifPresent(creatureFromBoard ->
+                                        castSpell(creatureFromBoard, spell)));
+                break;
+            default:
+                throw new IllegalArgumentException("Not supported category.");
+        }
+
     }
 
     //ToDO: In the future think about better solution and refactor this
