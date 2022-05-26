@@ -3,7 +3,6 @@ package pl.psi.spells;
 import lombok.Getter;
 import pl.psi.creatures.Creature;
 
-import java.beans.PropertyChangeEvent;
 import java.util.List;
 
 public class AreaDamageSpell extends Spell<List<Creature>> {
@@ -21,10 +20,5 @@ public class AreaDamageSpell extends Spell<List<Creature>> {
     @Override
     public void castSpell(List<Creature> aDefender) {
         aDefender.forEach(creature -> creature.applySpellDamage(creature, value));
-    }
-
-    @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-
     }
 }

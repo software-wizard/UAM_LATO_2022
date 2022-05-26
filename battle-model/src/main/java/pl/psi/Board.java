@@ -50,6 +50,10 @@ public class Board {
         return Optional.ofNullable(map.get(aPoint));
     }
 
+    Optional<Point> getPoint(final Creature aCreature) {
+        return Optional.ofNullable(map.inverse().get(aCreature));
+    }
+
     void move(final Creature aCreature, final Point aPoint) {
         if (canMove(aCreature, aPoint)) {
             map.inverse()

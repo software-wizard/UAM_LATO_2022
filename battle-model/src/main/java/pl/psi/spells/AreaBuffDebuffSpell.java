@@ -3,7 +3,6 @@ package pl.psi.spells;
 import pl.psi.creatures.Creature;
 import pl.psi.creatures.CreatureStats;
 
-import java.beans.PropertyChangeEvent;
 import java.util.List;
 
 public class AreaBuffDebuffSpell extends Spell<List<Creature>> {
@@ -18,10 +17,5 @@ public class AreaBuffDebuffSpell extends Spell<List<Creature>> {
     @Override
     public void castSpell(List<Creature> aDefender) {
         aDefender.forEach(creature -> creature.applyStatsWithSpells(creatureStats));
-    }
-
-    @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-
     }
 }

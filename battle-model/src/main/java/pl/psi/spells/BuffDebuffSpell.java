@@ -5,11 +5,12 @@ import pl.psi.creatures.Creature;
 import pl.psi.creatures.CreatureStats;
 
 import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.Map;
 
 
-public class BuffDebuffSpell extends Spell<Creature> {
+public class BuffDebuffSpell extends Spell<Creature> implements PropertyChangeListener {
 
     private final CreatureStats creatureStats;
     private final int timer;

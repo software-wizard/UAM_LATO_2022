@@ -301,7 +301,15 @@ public class GameEngine {
             default:
                 throw new IllegalArgumentException("Not supported category.");
         }
+    }
 
+    public void castSpell(Spell spell) {
+        //ToDo: REFACTOR THIS
+        //I can't cast for all heroes creatures
+        //There will be a name switch covering these several spel
+        hero2.getCreatures().forEach(creature ->
+                board.getPoint(creature).ifPresent(creatureFromBoard ->
+                        castSpell(creatureFromBoard, spell)));
     }
 
     //ToDO: In the future think about better solution and refactor this

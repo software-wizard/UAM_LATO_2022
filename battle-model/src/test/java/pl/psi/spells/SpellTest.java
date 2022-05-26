@@ -157,4 +157,51 @@ public class SpellTest {
         Assertions.assertThat(gameEngine.getCreature(new Point(14, 2)).get().getCurrentHp()).isEqualTo(65);
         Assertions.assertThat(gameEngine.getCreature(new Point(14, 3)).get().getCurrentHp()).isEqualTo(55);
     }
+
+
+    @Test
+    void shouldCastHasteForAllEnemyCreatures() {
+        //given
+        List<Creature> firstHeroCreatures = List.of(EXAMPLE_CREATURE_1);
+        List<Creature> secondHeroCreatures = List.of(EXAMPLE_CREATURE_2);
+
+
+        final GameEngine gameEngine =
+                new GameEngine(new Hero(firstHeroCreatures, List.of(HASTE)),
+                        new Hero(secondHeroCreatures, List.of(LIGHTING_BOLT_RANG_1)));
+
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
+                .isPresent()).isTrue();
+
+        //when
+        gameEngine.castSpell(HASTE);
+
+
+        //then
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
+                .get().getBuffedStats().getMoveRange()).isEqualTo(10); // ToDo: change to checking get summed up stats
+    }
+
+    @Test
+    void whenCastHasteForAllEnemyCreaturesAlliedCreaturesShouldHaveSameStats() {
+        //given
+        List<Creature> firstHeroCreatures = List.of(EXAMPLE_CREATURE_1);
+        List<Creature> secondHeroCreatures = List.of(EXAMPLE_CREATURE_2);
+
+
+        final GameEngine gameEngine =
+                new GameEngine(new Hero(firstHeroCreatures, List.of(HASTE)),
+                        new Hero(secondHeroCreatures, List.of(LIGHTING_BOLT_RANG_1)));
+
+        Assertions.assertThat(gameEngine.getCreature(new Point(0, 1))
+                .isPresent()).isTrue();
+
+        //when
+        gameEngine.castSpell(HASTE);
+
+
+        //then
+        Assertions.assertThat(gameEngine.getCreature(new Point(0, 1))
+                .get().getBuffedStats().getMoveRange()).isEqualTo(0); // ToDo: change to checking get summed up stats
+    }
 }

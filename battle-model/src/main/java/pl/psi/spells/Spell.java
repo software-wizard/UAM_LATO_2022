@@ -4,13 +4,11 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.beans.PropertyChangeListener;
-
 
 @Getter
 @Setter
 @ToString
-public abstract class Spell<T> implements PropertyChangeListener {
+public abstract class Spell<T> {
 
     private final SpellTypes category;
     private final String name;
