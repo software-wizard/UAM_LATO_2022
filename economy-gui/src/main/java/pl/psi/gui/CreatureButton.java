@@ -135,7 +135,7 @@ public class CreatureButton extends Button {
 
 
     private void prepareConfirmAndCancelButton(final HBox aBottomPane, final Slider aSlider, final Stage dialog) {
-        aBottomPane.setAlignment(Pos.CENTER);
+        //aBottomPane.setAlignment(Pos.CENTER);
         aBottomPane.setSpacing(30);
         final Button okButton = new Button("OK");
         okButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> dialog.close());
