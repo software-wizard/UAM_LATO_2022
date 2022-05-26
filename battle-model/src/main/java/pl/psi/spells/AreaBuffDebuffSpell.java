@@ -9,18 +9,13 @@ public class AreaBuffDebuffSpell extends Spell<List<Creature>> {
 
     private final CreatureStats creatureStats;
 
-    public AreaBuffDebuffSpell(SpellTypes category, SpellNames name, SpellMagicClass spellMagicClass, SpellRang rang, int manaCost, CreatureStats creatureStats) {
-        super(category, name, spellMagicClass, rang, manaCost);
+    public AreaBuffDebuffSpell(SpellTypes category, String name, SpellRang rang, int manaCost, CreatureStats creatureStats) {
+        super(category, name, rang, manaCost);
         this.creatureStats = creatureStats;
     }
 
     @Override
     public void castSpell(List<Creature> aDefender) {
         aDefender.forEach(creature -> creature.applyStatsWithSpells(creatureStats));
-    }
-
-    @Override
-    public void unCastSpell(List<Creature> aDefender) {
-
     }
 }
