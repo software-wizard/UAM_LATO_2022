@@ -54,12 +54,16 @@ public class ShooterCreature extends AbstractCreature {
         return true;
     }
 
-    public boolean canShoot() {
+    public boolean enoughShots() {
         if (shots > 0) {
             return true;
         } else {
             throw new RuntimeException("No more shots");
         }
+    }
+
+    public boolean canShoot(){
+        return !isInMelee && enoughShots();
     }
 
     public void resetShots() {
