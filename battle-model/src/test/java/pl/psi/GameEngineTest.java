@@ -40,44 +40,32 @@ public class GameEngineTest {
         gameEngine.getHero2().getCreatures().get(0).setHeroNumber(2);
         gameEngine.getHero2().getCreatures().get(1).setHeroNumber(2);
 
+        //hero1 turn, creature moves to the center
+        gameEngine.move( new Point( 6,1 ) );
+        gameEngine.move( new Point( 7,1 ) );
 
-        //hero1 turn
-        gameEngine.move(new Point( 6,1 ) );
-        gameEngine.move(new Point( 7,1 ) );
-        assertThat( gameEngine.getHero2().getCreatures().get(0).getCalculator() ).isInstanceOf( DefaultDamageCalculator.class );
         gameEngine.pass();
         //hero2 creature 1 turn
-        assertThat( gameEngine.getHero2().getCreatures().get(0).getCalculator() ).isInstanceOf( DefaultDamageCalculator.class );
+
         gameEngine.pass();
-        //hero2 creature 2 turn
-        gameEngine.move(new Point( 14,2 ) );
+        //hero2 creature 2 turn, second shooter creature moves next to the first
+        gameEngine.move( new Point( 14,2 ) );
+        //two shooter creatures from the same hero don't collide
+        assertThat( gameEngine.getHero2().getCreatures().get(0).getCalculator() ).isInstanceOf( DefaultDamageCalculator.class );
+        assertThat( gameEngine.getHero2().getCreatures().get(1).getCalculator() ).isInstanceOf( DefaultDamageCalculator.class );
+
         gameEngine.pass();
         //hero1 turn
+
         gameEngine.pass();
-        //hero2 creature 1 turn
-        assertThat( gameEngine.getHero2().getCreatures().get(0).getCalculator() ).isInstanceOf( DefaultDamageCalculator.class );
-        gameEngine.move(new Point( 9,1 ) );
-        gameEngine.move(new Point( 8,1 ) );
-        gameEngine.pass();
-        //hero2 creature 2 turn
-        gameEngine.pass();
-        //hero1 turn
-        assertThat( gameEngine.getCreature( new Point(7,1 )).get().isRange() ).isEqualTo(false);
-        assertThat( gameEngine.getCreature( new Point( 8,1 )).get().isRange() ).isEqualTo(true);
-        gameEngine.pass();
-        //hero2 creature 1 turn
+        //hero2 creature 1 turn, first shooter creature moves near enemy
+        gameEngine.move( new Point( 9,1 ) );
+        gameEngine.move( new Point( 8,1 ) );
+        //while near enemy, isInMelee == true so damage calculator changes
         assertThat( gameEngine.getHero2().getCreatures().get(0).getCalculator() ).isInstanceOf( ReducedDamageCalculator.class );
+
         gameEngine.move( new Point( 10, 5 ) );
-        assertThat( gameEngine.getCreature(new Point( 10,5 )).get().isRange() ).isEqualTo( gameEngine.getHero2().getCreatures().get(0).isRange() );
-        gameEngine.pass();
-        //hero2 creature 2 turn
-        gameEngine.pass();
-        //hero1 turn
-        gameEngine.pass();
-        //hero2 creature 1 turn
+        //when shooter creature moves away from enemy damage calculator goes back to default
         assertThat( gameEngine.getHero2().getCreatures().get(0).getCalculator() ).isInstanceOf( DefaultDamageCalculator.class );
-
-
-
     }
 }

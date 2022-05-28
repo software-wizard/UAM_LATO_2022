@@ -3,7 +3,6 @@ package pl.psi.creatures;
 import lombok.Getter;
 
 @Getter
-
 public class ShooterCreature extends AbstractCreature {
     private final Creature decorated;
     private final int maxShots;
@@ -37,7 +36,8 @@ public class ShooterCreature extends AbstractCreature {
         shots -= 1;
     }
 
-    public void setInMelee(boolean value) {
+    @Override
+    public void setInMelee(final boolean value) {
         if (value) {
             isInMelee = true;
             range = 1;

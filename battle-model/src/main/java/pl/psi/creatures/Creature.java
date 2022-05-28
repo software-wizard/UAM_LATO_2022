@@ -172,6 +172,8 @@ public class Creature implements PropertyChangeListener {
         aAttacker.canCounterAttack = false;
     }
 
+    public void setInMelee(final boolean value){}
+
     public void buff(CreatureStatisticIf statsToAdd) {
         buffedStats.addStats(statsToAdd);
     }

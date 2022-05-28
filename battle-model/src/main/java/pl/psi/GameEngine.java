@@ -54,17 +54,19 @@ public class GameEngine {
 
     public void move(final Point aPoint) {
         board.move(turnQueue.getCurrentCreature(), aPoint);
+        turnQueue.getRangeCreatures().forEach(this::creatureInMeleeRange);
         observerSupport.firePropertyChange(CREATURE_MOVED, null, aPoint);
     }
 
-    private boolean currentCreatureInMeleeRange(){
-        Point position = board.getCreaturePosition( turnQueue.getCurrentCreature() );
+    private void creatureInMeleeRange( final Creature creature ){
+        Point position = board.getCreaturePosition( creature );
         List<Point> adjacentPositionsList = board.getAdjacentPositions( position );
         List<Optional<Creature>> creaturesOnAdjacentPositions = adjacentPositionsList.stream().map(this::getEnemyCreature).collect( Collectors.toList() );
         while (creaturesOnAdjacentPositions.remove(Optional.empty())) {  // remove every instance of "Optional.empty null" from list
         }
-        return !creaturesOnAdjacentPositions.isEmpty();
+        creature.setInMelee( !creaturesOnAdjacentPositions.isEmpty() );
     }
+
 
     public Optional<Creature> getCreature(final Point aPoint) {
         return board.getCreature(aPoint);
@@ -82,9 +84,6 @@ public class GameEngine {
 
     public void pass() {
         turnQueue.next();
-        if(turnQueue.getCurrentCreature().isRange()){
-            turnQueue.getCurrentShooterCreature().setInMelee(currentCreatureInMeleeRange());
-        }
     }
 
     public void addObserver(final String aEventType, final PropertyChangeListener aObserver) {

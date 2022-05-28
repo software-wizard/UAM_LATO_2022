@@ -48,6 +48,10 @@ public class TurnQueue {
         return (ShooterCreature) currentCreature;
     }
 
+    public Collection<Creature> getRangeCreatures(){
+        return creatures.stream().filter(Creature::isRange).collect( Collectors.toList() );
+    }
+
     public void next() {
         if (creaturesQueue.isEmpty()) {
             endOfTurn();
