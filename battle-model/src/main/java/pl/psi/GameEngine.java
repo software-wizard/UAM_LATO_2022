@@ -57,10 +57,10 @@ public class GameEngine {
         observerSupport.firePropertyChange(CREATURE_MOVED, null, aPoint);
     }
 
-    private boolean currentCreatureInMeleeRange( ){
+    private boolean currentCreatureInMeleeRange(){
         Point position = board.getCreaturePosition( turnQueue.getCurrentCreature() );
         List<Point> adjacentPositionsList = board.getAdjacentPositions( position );
-        List<Optional<Creature>> creaturesOnAdjacentPositions = adjacentPositionsList.stream().map(this::getCreature).collect( Collectors.toList() );
+        List<Optional<Creature>> creaturesOnAdjacentPositions = adjacentPositionsList.stream().map(this::getEnemyCreature).collect( Collectors.toList() );
         while (creaturesOnAdjacentPositions.remove(Optional.empty())) {  // remove every instance of "Optional.empty null" from list
         }
         return !creaturesOnAdjacentPositions.isEmpty();
@@ -68,6 +68,15 @@ public class GameEngine {
 
     public Optional<Creature> getCreature(final Point aPoint) {
         return board.getCreature(aPoint);
+    }
+
+    private Optional<Creature> getEnemyCreature(final Point aPoint) {
+        if( board.getCreature( aPoint ).isPresent() ){
+            if( board.getCreature(aPoint).get().getHeroNumber() != turnQueue.getCurrentCreature().getHeroNumber()){
+                return board.getCreature(aPoint);
+            }
+        }
+        return Optional.empty();
     }
 
 

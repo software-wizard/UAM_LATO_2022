@@ -35,7 +35,10 @@ public class GameEngineTest {
         final CastleCreatureFactory creatureFactory = new CastleCreatureFactory();
         final GameEngine gameEngine =
                 new GameEngine(new Hero(List.of(creatureFactory.create(1, false, 5)), HeroStatistics.NECROMANCER),
-                        new Hero(List.of(creatureFactory.create(2, true, 5)), HeroStatistics.NECROMANCER));
+                        new Hero(List.of(creatureFactory.create(2, true, 5), creatureFactory.create(2, true, 5)), HeroStatistics.NECROMANCER));
+        gameEngine.getHero1().getCreatures().get(0).setHeroNumber(1);
+        gameEngine.getHero2().getCreatures().get(0).setHeroNumber(2);
+        gameEngine.getHero2().getCreatures().get(1).setHeroNumber(2);
 
 
         //hero1 turn
@@ -43,24 +46,35 @@ public class GameEngineTest {
         gameEngine.move(new Point( 7,1 ) );
         assertThat( gameEngine.getHero2().getCreatures().get(0).getCalculator() ).isInstanceOf( DefaultDamageCalculator.class );
         gameEngine.pass();
-        //hero2 turn
+        //hero2 creature 1 turn
+        assertThat( gameEngine.getHero2().getCreatures().get(0).getCalculator() ).isInstanceOf( DefaultDamageCalculator.class );
+        gameEngine.pass();
+        //hero2 creature 2 turn
+        gameEngine.move(new Point( 14,2 ) );
+        gameEngine.pass();
+        //hero1 turn
+        gameEngine.pass();
+        //hero2 creature 1 turn
         assertThat( gameEngine.getHero2().getCreatures().get(0).getCalculator() ).isInstanceOf( DefaultDamageCalculator.class );
         gameEngine.move(new Point( 9,1 ) );
         gameEngine.move(new Point( 8,1 ) );
-        assertThat( gameEngine.getHero2().getCreatures().get(0).getCalculator() ).isInstanceOf( DefaultDamageCalculator.class );
+        gameEngine.pass();
+        //hero2 creature 2 turn
         gameEngine.pass();
         //hero1 turn
         assertThat( gameEngine.getCreature( new Point(7,1 )).get().isRange() ).isEqualTo(false);
         assertThat( gameEngine.getCreature( new Point( 8,1 )).get().isRange() ).isEqualTo(true);
         gameEngine.pass();
-        //hero2 turn
+        //hero2 creature 1 turn
         assertThat( gameEngine.getHero2().getCreatures().get(0).getCalculator() ).isInstanceOf( ReducedDamageCalculator.class );
         gameEngine.move( new Point( 10, 5 ) );
         assertThat( gameEngine.getCreature(new Point( 10,5 )).get().isRange() ).isEqualTo( gameEngine.getHero2().getCreatures().get(0).isRange() );
         gameEngine.pass();
+        //hero2 creature 2 turn
+        gameEngine.pass();
         //hero1 turn
         gameEngine.pass();
-        //hero2 turn
+        //hero2 creature 1 turn
         assertThat( gameEngine.getHero2().getCreatures().get(0).getCalculator() ).isInstanceOf( DefaultDamageCalculator.class );
 
 
