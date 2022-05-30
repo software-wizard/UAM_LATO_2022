@@ -237,6 +237,10 @@ public class Creature implements PropertyChangeListener {
         buffedStats = aStatsWithSpells;
     }
 
+    public double getAttackRange() {
+        return 2;
+    }
+
     public static class Builder {
         private int amount = 1;
         private DamageCalculatorIf calculator = new DefaultDamageCalculator(new Random());

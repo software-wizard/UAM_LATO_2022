@@ -49,7 +49,7 @@ public class GameEngine {
     }
 
     public boolean canMove(final Point aPoint) {
-        return board.canMove(turnQueue.getCurrentCreature(), aPoint);
+        return board.canMove(turnQueue.getCurrentCreature(), aPoint) && board.getCreature( aPoint ).isEmpty();
     }
 
     public void move(final Point aPoint) {
@@ -91,7 +91,7 @@ public class GameEngine {
     }
 
     public boolean canAttack(final Point point) {
-        return false;
+        return board.canAttack( turnQueue.getCurrentCreature(), point )  && board.getCreature( point ).isPresent() && board.getCreature( point ).get().getHeroNumber() != turnQueue.getCurrentCreature().getHeroNumber();
     }
 
     public boolean canHeal(final Point point) {

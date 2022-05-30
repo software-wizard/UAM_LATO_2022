@@ -44,6 +44,13 @@ public class Board {
         return aPoint.distance(oldPosition.getX(), oldPosition.getY()) < aCreature.getMoveRange();
     }
 
+    boolean canAttack(final Creature aCreature, final Point aPoint) {
+        final Point currentPosition = map.inverse()
+                .get(aCreature);
+
+        return aPoint.distance(currentPosition.getX(), currentPosition.getY()) < aCreature.getAttackRange();
+    }
+
     Point getCreaturePosition(final Creature aCreature){
         return map.inverse().get(aCreature);
     }

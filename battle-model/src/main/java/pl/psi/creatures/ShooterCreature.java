@@ -40,7 +40,7 @@ public class ShooterCreature extends AbstractCreature {
     public void setInMelee(final boolean value) {
         if (value) {
             isInMelee = true;
-            range = 1;
+            range = 2;
             decorated.setCalculator(meleeDamageCalculator);
         } else {
             isInMelee = false;
@@ -52,6 +52,11 @@ public class ShooterCreature extends AbstractCreature {
     @Override
     public boolean isRange(){
         return true;
+    }
+
+    @Override
+    public double getAttackRange(){
+        return range;
     }
 
     public boolean enoughShots() {

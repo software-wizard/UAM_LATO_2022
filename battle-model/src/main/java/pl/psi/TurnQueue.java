@@ -44,10 +44,6 @@ public class TurnQueue {
         return currentCreature;
     }
 
-    public ShooterCreature getCurrentShooterCreature(){
-        return (ShooterCreature) currentCreature;
-    }
-
     public Collection<Creature> getRangeCreatures(){
         return creatures.stream().filter(Creature::isRange).collect( Collectors.toList() );
     }

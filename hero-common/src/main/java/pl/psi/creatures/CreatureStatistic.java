@@ -29,7 +29,7 @@ public enum CreatureStatistic implements CreatureStatisticIf {
             false, CreatureType.UNDEAD, false, 2), //
     SKELETON_WARRIOR("Skeleton Warrior", 6, 6, 6, 5, Range.closed(1, 3), 1,
             "Numerous skeletons become even better, but running back to town and upgrading is a problem... If there is no room in your army for ordinary skeletons, necromancy skill will resurrect skeleton warriors, but there will be less of them than normal skeletons, so it might be a good idea not to upgrade cursed temple at all.",
-            true, CreatureType.UNDEAD, true, 1), //
+            true, CreatureType.UNDEAD, true, 1),
     ZOMBIE("Zombie", 5, 5, 20, 4, Range.closed(2, 3), 2,
             "Attack ratings are way too low... In my opinion, necropolis has the worst lvl2 creature.\nSpecial: 20% chance to disease enemies (-2Att -2Def for 3 rounds)\n",
             true, CreatureType.UNDEAD, true, 1), //
@@ -124,6 +124,7 @@ public enum CreatureStatistic implements CreatureStatisticIf {
     private final CreatureType type;
     private final boolean isGround;
     private final int size;
+
     CreatureStatistic(final String aName, final int aAttack, final int aArmor, final int aMaxHp,
                       final int aMoveRange, final Range<Integer> aDamage, final int aTier, final String aDescription,
                       final boolean aIsUpgraded, final CreatureType aType, final boolean aIsGround, final int aSize) {
