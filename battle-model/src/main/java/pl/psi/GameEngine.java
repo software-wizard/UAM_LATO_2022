@@ -40,6 +40,8 @@ public class GameEngine {
         board.getCreature(point)
                 .ifPresent(defender -> turnQueue.getCurrentCreature()
                         .attack(defender));
+        System.out.println( "Attacker amount: " + turnQueue.getCurrentCreature().getAmount() + " attacker hp: " + turnQueue.getCurrentCreature().getCurrentHp() );
+        System.out.println( "Defender amount: " + board.getCreature( point ).get().getAmount() + " defender hp: " + board.getCreature( point ).get().getCurrentHp() );
     }
 
     public void heal(final Point point) {

@@ -80,7 +80,44 @@ public class Creature implements PropertyChangeListener {
     }
 
     protected void applyDamage(final Creature aDefender, final double aDamage) {
-        aDefender.setCurrentHp((aDefender.getCurrentHp() - aDamage));
+        aDefender.setCurrentHp( ((aDefender.getAmount()-1) * aDefender.getMaxHp()) + aDefender.getCurrentHp() - aDamage );
+        aDefender.setAmount( calculateUnits( aDefender ) );
+        aDefender.setCurrentHp( calculateCurrentHp( aDefender ) );
+    }
+
+    private int calculateUnits( final Creature aDefender ){
+        if( aDefender.getCurrentHp() > 0 ){
+            if( aDefender.getCurrentHp() > aDefender.getMaxHp() ){
+                if( aDefender.getCurrentHp() % aDefender.getMaxHp() == 0){
+                    return (int) (aDefender.getCurrentHp() / aDefender.getMaxHp());
+                }
+                else{
+                    return  (int) (aDefender.getCurrentHp() / aDefender.getMaxHp()) + 1 ;
+                }
+            }
+            else{
+                return 1;
+            }
+        }
+        else{
+            return 0;
+        }
+    }
+
+    private double calculateCurrentHp( final Creature aDefender ){
+        if( aDefender.getAmount() == 0 ){
+            return 0;
+        }
+        else{
+            if( aDefender.getCurrentHp() % aDefender.getMaxHp() == 0){
+                return aDefender.getMaxHp();
+            }
+            else{  // ( a % b + b ) % b == a % b   just like with healing, modulo with negative numbers is crazy
+                // a = (aDefender.getCurrentHp() - ( aDefender.getAmount() * aDefender.getMaxHp() ))
+                // b = aDefender.getMaxHp()
+                return (((aDefender.getCurrentHp() - ( aDefender.getAmount() * aDefender.getMaxHp())) % aDefender.getMaxHp()) + aDefender.getMaxHp()) % aDefender.getMaxHp();
+            }
+        }
     }
 
     protected void setCurrentHp(final double aCurrentHp) {
