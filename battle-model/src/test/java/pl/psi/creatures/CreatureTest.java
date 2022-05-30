@@ -585,31 +585,6 @@ public class CreatureTest {
         assertThat(reducedSpellDamage.getCurrentHp()).isEqualTo(95);
     }
 
-    /*@Test
-    void dreadKnightCreatureTest()
-    {
-        final Creature decorated = new Creature.Builder().statistic( CreatureStats.builder()
-                .maxHp( 1 )
-                .damage( Range.closed(10,10) )
-                .build() )
-                .build();
-
-        final DoubleDamageOnHitCreature doubleDamageOnHitCreature = new DoubleDamageOnHitCreature( decorated );
-        final CurseOnHitCreature dreadKnight = new CurseOnHitCreature( doubleDamageOnHitCreature );
-
-
-        final Creature defender = new Creature.Builder().statistic( CreatureStats.builder()
-                .maxHp( 100 )
-                .damage( Range.closed( 0,100 ) )
-                .type( CreatureStatistic.CreatureType.ALIVE )
-                .build() )
-                .build();
-
-        dreadKnight.attackWithCurse( defender );
-        assertThat( dreadKnight.getCurrentHp() ).isEqualTo( 1 );
-        assertThat( defender.getCurrentHp() ).isEqualTo( 80 );
-    }*/
-
     @Test
     void shouldThrowExceptionWhenTryingToSetMoraleValueLessThanPossible() {
         var creature = new Creature.Builder().statistic(CreatureStats.builder().build()).build(); // current morale value = 1

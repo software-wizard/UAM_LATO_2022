@@ -38,6 +38,12 @@ public class Start extends Application {
         }
     }
 
+    private Hero createP1() {
+        final Hero ret = new Hero(List.of(new NecropolisFactory().create(false, 5, 1)), HeroStatistics.NECROMANCER);
+        ret.getCreatures().get(0).setHeroNumber(1);
+        return ret;
+    }
+
     private Hero createP2() {
         final Hero ret = new Hero(List.of(new NecropolisFactory().create(false, 1, 30), new NecropolisFactory().create(false, 1, 15)), HeroStatistics.NECROMANCER);
         ret.getCreatures().get(0).setHeroNumber(2);
@@ -45,10 +51,5 @@ public class Start extends Application {
         return ret;
     }
 
-    private Hero createP1() {
-        final Hero ret = new Hero(List.of(new NecropolisFactory().create(false, 5, 5)), HeroStatistics.NECROMANCER);
-        ret.getCreatures().get(0).setHeroNumber(1);
-        return ret;
-    }
 
 }
