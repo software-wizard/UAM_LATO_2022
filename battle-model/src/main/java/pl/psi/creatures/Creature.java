@@ -275,7 +275,7 @@ public class Creature implements PropertyChangeListener {
     }
 
     public double getAttackRange() {
-        return 2;
+        return 1.5;
     }
 
     public static class Builder {

@@ -51,13 +51,15 @@ public class GameEngine {
     }
 
     public boolean canMove(final Point aPoint) {
+        turnQueue.getRangeCreatures().forEach(this::creatureInMeleeRange); // setting inMelee for every range creature
         return board.canMove(turnQueue.getCurrentCreature(), aPoint) && board.getCreature( aPoint ).isEmpty();
     }
 
     public void move(final Point aPoint) {
         board.move(turnQueue.getCurrentCreature(), aPoint);
-        turnQueue.getRangeCreatures().forEach(this::creatureInMeleeRange);
         observerSupport.firePropertyChange(CREATURE_MOVED, null, aPoint);
+        turnQueue.getRangeCreatures().forEach(this::creatureInMeleeRange); // dont ask me why its setting this again, i dont know either
+
     }
 
     private void creatureInMeleeRange( final Creature creature ){

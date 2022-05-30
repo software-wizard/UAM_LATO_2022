@@ -41,7 +41,7 @@ public class GameEngineTest {
         gameEngine.getHero2().getCreatures().get(1).setHeroNumber(2);
 
         //hero1 turn, creature moves to the center
-        gameEngine.move( new Point( 6,1 ) );
+        gameEngine.move( new Point( 4,1 ) );
         gameEngine.move( new Point( 7,1 ) );
 
         gameEngine.pass();

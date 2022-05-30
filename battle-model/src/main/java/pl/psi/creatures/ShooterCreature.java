@@ -11,7 +11,7 @@ public class ShooterCreature extends AbstractCreature {
     private final DefaultDamageCalculator rangeDamageCalculator;
     private int shots;
     private boolean isInMelee = false;
-    private int range = Integer.MAX_VALUE;
+    private double range = Integer.MAX_VALUE;
 
     public ShooterCreature(final Creature aDecorated, final int aShots) {
         super(aDecorated);
@@ -40,9 +40,10 @@ public class ShooterCreature extends AbstractCreature {
     public void setInMelee(final boolean value) {
         if (value) {
             isInMelee = true;
-            range = 2;
+            range = 1.5;
             decorated.setCalculator(meleeDamageCalculator);
-        } else {
+        }
+        else {
             isInMelee = false;
             range = Integer.MAX_VALUE;
             decorated.setCalculator(rangeDamageCalculator);
