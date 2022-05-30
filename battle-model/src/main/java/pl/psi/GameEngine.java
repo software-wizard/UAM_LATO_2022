@@ -42,6 +42,7 @@ public class GameEngine {
                         .attack(defender));
         System.out.println( "Attacker amount: " + turnQueue.getCurrentCreature().getAmount() + " attacker hp: " + turnQueue.getCurrentCreature().getCurrentHp() );
         System.out.println( "Defender amount: " + board.getCreature( point ).get().getAmount() + " defender hp: " + board.getCreature( point ).get().getCurrentHp() );
+        board.print();
     }
 
     public void heal(final Point point) {
@@ -52,6 +53,7 @@ public class GameEngine {
 
     public boolean canMove(final Point aPoint) {
         turnQueue.getRangeCreatures().forEach(this::creatureInMeleeRange); // setting inMelee for every range creature
+        clearDeadCreatures();
         return board.canMove(turnQueue.getCurrentCreature(), aPoint) && board.getCreature( aPoint ).isEmpty();
     }
 
@@ -88,6 +90,12 @@ public class GameEngine {
 
     public void pass() {
         turnQueue.next();
+    }
+
+
+    public void clearDeadCreatures(){
+        board.clearBoard();
+        turnQueue.removeDeadCreatureFromQueue();
     }
 
     public void addObserver(final String aEventType, final PropertyChangeListener aObserver) {

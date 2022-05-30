@@ -39,7 +39,7 @@ public class Start extends Application {
     }
 
     private Hero createP1() {
-        final Hero ret = new Hero(List.of(new NecropolisFactory().create(false, 5, 1)), HeroStatistics.NECROMANCER);
+        final Hero ret = new Hero(List.of(new NecropolisFactory().create(false, 5, 5)), HeroStatistics.NECROMANCER);
         ret.getCreatures().get(0).setHeroNumber(1);
         return ret;
     }

@@ -20,6 +20,22 @@ public class Board {
         addCreatures(aCreatures2, MAX_WITDH);
     }
 
+    public void clearBoard(){
+        for(int x = 0; x<16; x++){
+            for(int y = 0; y<10; y++){
+                Point point = new Point(x,y);
+                if(getCreature( point ).isPresent() && getCreature( point ).get().getCurrentHp() == 0){
+                    map.inverse().remove(getCreature( point ).get());
+                    map.put( point,null );
+                }
+            }
+        }
+    }
+
+    public void print(){
+        System.out.println(map.get(new Point( 5,5 )));
+    }
+
     private void addCreatures(final List<Creature> aCreatures, final int aXPosition) {
         for (int i = 0; i < aCreatures.size(); i++) {
             map.put(new Point(aXPosition, i * 2 + 1), aCreatures.get(i));
@@ -39,16 +55,27 @@ public class Board {
     }
 
     boolean canMove(final Creature aCreature, final Point aPoint) {
-        final Point oldPosition = map.inverse()
-                .get(aCreature);
-        return aPoint.distance(oldPosition.getX(), oldPosition.getY()) < aCreature.getMoveRange();
+        if( !aCreature.isAlive() ){
+            return false;
+        }
+        else{
+            final Point oldPosition = map.inverse()
+                    .get(aCreature);
+            return aPoint.distance(oldPosition.getX(), oldPosition.getY()) < aCreature.getMoveRange();
+        }
+
     }
 
     boolean canAttack(final Creature aCreature, final Point aPoint) {
-        final Point currentPosition = map.inverse()
-                .get(aCreature);
+        if( !aCreature.isAlive() ){
+            return false;
+        }
+        else{
+            final Point currentPosition = map.inverse()
+                    .get(aCreature);
+            return aPoint.distance(currentPosition.getX(), currentPosition.getY()) <= aCreature.getAttackRange();
+        }
 
-        return aPoint.distance(currentPosition.getX(), currentPosition.getY()) <= aCreature.getAttackRange();
     }
 
     Point getCreaturePosition(final Creature aCreature){

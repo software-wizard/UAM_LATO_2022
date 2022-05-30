@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 public class TurnQueue {
 
     public static final String END_OF_TURN = "END_OF_TURN";
-    private final Collection<Creature> creatures;
+    private Collection<Creature> creatures;
     private final Queue<Creature> creaturesQueue;
     private final PropertyChangeSupport observerSupport = new PropertyChangeSupport(this);
     private Creature currentCreature;
@@ -42,6 +42,10 @@ public class TurnQueue {
 
     public Creature getCurrentCreature() {
         return currentCreature;
+    }
+
+    public void removeDeadCreatureFromQueue(){
+        creatures = creatures.stream().filter( creature -> creature.getCurrentHp() <= 0 ).collect(Collectors.toList());
     }
 
     public Collection<Creature> getRangeCreatures(){
