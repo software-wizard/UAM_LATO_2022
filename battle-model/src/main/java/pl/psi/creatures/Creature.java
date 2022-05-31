@@ -132,10 +132,6 @@ public class Creature implements PropertyChangeListener {
         setLuck(luck + factor);
     }
 
-    protected void setCurrentHp(final int aCurrentHp) {
-        currentHp = aCurrentHp;
-    }
-
     public void age() {
         CreatureStats reduceMaxHp = new CreatureStats
                 .CreatureStatsBuilder()

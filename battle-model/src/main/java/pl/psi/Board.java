@@ -55,7 +55,7 @@ public class Board {
     }
 
     boolean canMove(final Creature aCreature, final Point aPoint) {
-        if( !aCreature.isAlive() ){
+        if( aCreature == null || !aCreature.isAlive() ){
             return false;
         }
         else{
@@ -67,7 +67,7 @@ public class Board {
     }
 
     boolean canAttack(final Creature aCreature, final Point aPoint) {
-        if( !aCreature.isAlive() ){
+        if( aCreature == null || !aCreature.isAlive() ){
             return false;
         }
         else{

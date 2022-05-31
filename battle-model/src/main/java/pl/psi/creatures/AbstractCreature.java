@@ -31,6 +31,11 @@ public class AbstractCreature extends Creature {
     }
 
     @Override
+    public void setAmount( final int aAmount) {
+        decorated.setAmount(aAmount);
+    }
+
+    @Override
     public DamageCalculatorIf getCalculator() {
         return decorated.getCalculator();
     }
@@ -88,6 +93,11 @@ public class AbstractCreature extends Creature {
     @Override
     Range<Integer> getDamage() {
         return decorated.getDamage();
+    }
+
+    @Override
+    double getMaxHp() {
+        return decorated.getMaxHp();
     }
 
     @Override
