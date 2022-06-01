@@ -38,10 +38,14 @@ public class GameEngine {
 
     public void attack(final Point point) {
         turnQueue.getCurrentCreature().setCanAttack(false);
+        if(turnQueue.getCurrentCreature().isDefending()){
+            turnQueue.getCurrentCreature().defend(false);
+        }
         board.getCreature(point)
                 .ifPresent(defender -> turnQueue.getCurrentCreature()
                         .attack(defender));
         observerSupport.firePropertyChange(CREATURE_MOVED, null, null);
+        System.out.println(getCurrentCreature().isDefending());
     }
 
     public boolean canAttack(final Point point) {
@@ -56,15 +60,18 @@ public class GameEngine {
 
     public void move(final Point aPoint) {
         turnQueue.getCurrentCreature().setCanMove(false);
+        if(turnQueue.getCurrentCreature().isDefending()){
+            turnQueue.getCurrentCreature().defend(false);
+        }
         board.move(turnQueue.getCurrentCreature(), aPoint);
         observerSupport.firePropertyChange(CREATURE_MOVED, null, aPoint);
         turnQueue.getRangeCreatures().forEach(this::creatureInMeleeRange); // dont ask me why its setting this again, i dont know either
-
+        System.out.println(getCurrentCreature().isDefending());
     }
 
     public boolean canMove(final Point aPoint) {
         turnQueue.getRangeCreatures().forEach(this::creatureInMeleeRange); // setting inMelee for every range creature
-        return board.canMove(turnQueue.getCurrentCreature(), aPoint) && board.getCreature( aPoint ).isEmpty() && turnQueue.getCurrentCreature().canMove();
+        return board.canMove(turnQueue.getCurrentCreature(), aPoint) && board.getCreature( aPoint ).isEmpty() && turnQueue.getCurrentCreature().canMove() && turnQueue.getCurrentCreature().canAttack();
     }
 
     private void creatureInMeleeRange( final Creature creature ){
@@ -79,6 +86,10 @@ public class GameEngine {
 
     public Optional<Creature> getCreature(final Point aPoint) {
         return board.getCreature(aPoint);
+    }
+
+    public Creature getCurrentCreature(){
+        return turnQueue.getCurrentCreature();
     }
 
     public boolean isCurrentCreature( final Point point ){
@@ -161,5 +172,9 @@ public class GameEngine {
         }
 
         return creatures;
+    }
+
+    public void setCurrentCreatureDefence() {
+        turnQueue.getCurrentCreature().defend(true);
     }
 }

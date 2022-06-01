@@ -31,12 +31,15 @@ public class Creature implements PropertyChangeListener {
     private boolean canCounterAttack = true;
     private DamageCalculatorIf calculator;
     private int heroNumber;
+    private double DEFENCE_MULTIPLIER = 0.2;
     private double spellDamageReduction = 1;
     private int morale = 1; // range = < -3;3 >
     private int luck;
     private Alignment alignment;
     private boolean canAttack = true;
     private boolean canMove = true;
+    private double defenceBonusArmor = 0;
+    private boolean isDefending = false;
 
     Creature() {
     }
@@ -258,6 +261,7 @@ public class Creature implements PropertyChangeListener {
             canCounterAttack = true;
             canAttack = true;
             canMove = true;
+            defend(false);
         }
     }
 
@@ -287,6 +291,18 @@ public class Creature implements PropertyChangeListener {
 
     public double getAttackRange() {
         return 1.5;
+    }
+
+    public void defend(final boolean value) {
+        if(value){
+            defenceBonusArmor = getArmor() * 0.2;
+            isDefending = true;
+            buff(new CreatureStats.CreatureStatsBuilder().armor(defenceBonusArmor).build());
+        }
+        else{
+            isDefending = false;
+            buff(new CreatureStats.CreatureStatsBuilder().armor(-defenceBonusArmor).build());
+        }
     }
 
     public static class Builder {

@@ -41,6 +41,7 @@ public class MainBattleController {
         });
 
         defenceModeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
+            gameEngine.setCurrentCreatureDefence();
             refreshGui();
         });
 

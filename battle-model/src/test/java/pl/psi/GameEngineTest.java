@@ -68,4 +68,23 @@ public class GameEngineTest {
         //when shooter creature moves away from enemy damage calculator goes back to default
         assertThat( gameEngine.getHero2().getCreatures().get(0).getCalculator() ).isInstanceOf( DefaultDamageCalculator.class );
     }
+
+    @Test
+    void defenceShouldWorkProperly() {
+        final CastleCreatureFactory creatureFactory = new CastleCreatureFactory();
+        final GameEngine gameEngine =
+                new GameEngine(new Hero(List.of(creatureFactory.create(1, false, 5)), HeroStatistics.NECROMANCER),
+                        new Hero(List.of(creatureFactory.create(1, false, 5)), HeroStatistics.NECROMANCER));
+
+        gameEngine.setCurrentCreatureDefence();
+        assertThat( gameEngine.getCurrentCreature().isDefending() ).isEqualTo( true );
+
+        gameEngine.move( new Point(2,2) );
+        assertThat( gameEngine.getCurrentCreature().isDefending() ).isEqualTo( false );
+
+        gameEngine.setCurrentCreatureDefence();
+
+        gameEngine.attack( new Point(2,3) );
+        assertThat( gameEngine.getCurrentCreature().isDefending() ).isEqualTo( false );
+    }
 }

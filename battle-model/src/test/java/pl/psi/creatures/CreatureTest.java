@@ -593,4 +593,18 @@ public class CreatureTest {
         assertEquals("Morale must not be less than 3", exception.getMessage());
     }
 
+    @Test
+    void defendShouldIncreaseDefense() {
+        final Creature creature = new Creature.Builder().statistic(CreatureStats.builder()
+                .maxHp(NOT_IMPORTANT)
+                .armor(11)
+                .build())
+                .build();
+
+        creature.defend(true);
+        assertThat( creature.getArmor() ).isEqualTo(13.2);
+        creature.defend( false );
+        assertThat( creature.getArmor() ).isEqualTo(11);
+    }
+
 }
