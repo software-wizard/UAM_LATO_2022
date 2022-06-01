@@ -9,6 +9,9 @@ import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -17,30 +20,24 @@ import pl.psi.ProductType;
 import pl.psi.creatures.EconomyCastleFactory;
 import pl.psi.creatures.EconomyCreature;
 import pl.psi.creatures.EconomyNecropolisFactory;
+import pl.psi.creatures.EconomyStrongholdFactory;
 import pl.psi.hero.EconomyHero;
 
+// TODO createConfirm - Stage and Top - nie
+// TODO &&
 public class CreatureButton extends Button {
     private final EconomyCreature creature;
 
-    public CreatureButton(final EcoController aEcoController, EconomyCreature creature, final int maxSliderValue, boolean canBuy, boolean canBuyMore, EconomyHero.Fraction fraction) {
+    public CreatureButton(final EcoController aEcoController, EconomyCreature creature, final int maxSliderValue, boolean canBuy, boolean canBuyMore) {
         this.creature = creature;
 
         addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
             final int amount = startDialogAndGetCreatureAmount(maxSliderValue, canBuy, canBuyMore);
             if (amount != 0) {
-                boolean aUpgraded = creature.isUpgraded();
-                int aTier = creature.getTier();
-                if (fraction.equals(EconomyHero.Fraction.NECROPOLIS))
-                    aEcoController.buy(ProductType.CREATURE, new EconomyNecropolisFactory().create(aUpgraded, aTier, amount));
-                else
-                    aEcoController.buy(ProductType.CREATURE, new EconomyCastleFactory().create(aUpgraded, aTier, amount));
-            }
+                creature.increaseAmount(amount-1);
+                aEcoController.buy(ProductType.CREATURE,creature);
 
-//            try {
-//                aEcoController.refreshStartGui();
-//            } catch (FileNotFoundException fileNotFoundException) {
-//                fileNotFoundException.printStackTrace();
-//            }
+            }
 
         });
     }
@@ -69,7 +66,6 @@ public class CreatureButton extends Button {
 
         final Stage dialogWindow = new Stage();
         final Stage dialog = prepareWindow(centerPane, bottomPane, topPane, dialogWindow);
-
         prepareConfirmAndCancelButton(bottomPane, slider, dialogWindow);
 
         dialog.showAndWait();
@@ -78,8 +74,10 @@ public class CreatureButton extends Button {
     }
 
     private Stage prepareWindow(final Pane aCenter, final Pane aBottom, final Pane aTop, final Stage dialog) {
+
         final BorderPane pane = new BorderPane();
         pane.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+
         final Scene scene = new Scene(pane, 620, 300);
         scene.getStylesheets().add("fxml/main.css");
         dialog.setScene(scene);
@@ -119,6 +117,7 @@ public class CreatureButton extends Button {
         aTopPane.getChildren().add(new Label("             "));
         aTopPane.getChildren().add(new Label(characteristics));
         Text text = new Text();
+        text.setFont(Font.font("Arial", FontWeight.MEDIUM, FontPosture.REGULAR, 9));
         text.setText(creature.getStats().getDescription());
         aTopPane.getChildren().add(text);
 
@@ -135,7 +134,7 @@ public class CreatureButton extends Button {
 
 
     private void prepareConfirmAndCancelButton(final HBox aBottomPane, final Slider aSlider, final Stage dialog) {
-        //aBottomPane.setAlignment(Pos.CENTER);
+//        aBottomPane.setAlignment(Pos.CENTER);
         aBottomPane.setSpacing(30);
         final Button okButton = new Button("OK");
         okButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> dialog.close());

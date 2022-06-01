@@ -4,20 +4,22 @@ import lombok.Getter;
 import pl.psi.artifacts.Artifact;
 import pl.psi.artifacts.ArtifactPlacement;
 import pl.psi.creatures.EconomyCreature;
-import pl.psi.skills.EconomySkills;
+import pl.psi.skills.EconomySkill;
 import pl.psi.spells.EconomySpell;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+// TODO - zamiast Artifact - Slots
+// TODO - Economy Engine decide if we have slots and can Buy
 public class EconomyHero {
 
     private static int heroCounter = 0;
     private final Fraction fraction;
     private final List<EconomyCreature> creatureList;
     private final List<Artifact> artifactList;
-    private final List<EconomySkills> skillsList;
+    private final List<EconomySkill> skillsList;
     private final List<EconomySpell> spellsList;
     private final Equipment equipment;
     private final Backpack backpack;
@@ -25,6 +27,7 @@ public class EconomyHero {
     private final int heroNumber;
     // start amount of gold
     private int gold = 10000;
+
     public EconomyHero(final Fraction aFraction) {
         this(aFraction, HeroStatistics.NECROMANCER);
     }
@@ -42,7 +45,8 @@ public class EconomyHero {
         heroStats = aClass;
     }
 
-    public EconomyHero(Fraction fraction, List<EconomyCreature> creatureList, List<Artifact> artifactList, List<EconomySkills> skillsList, List<EconomySpell> spellsList, int gold, int heroNumber) {
+    // konstruktor samokopiujący
+    public EconomyHero(Fraction fraction, List<EconomyCreature> creatureList, List<Artifact> artifactList, List<EconomySkill> skillsList, List<EconomySpell> spellsList, int gold, int heroNumber,HeroStatistics aClass) {
         this.fraction = fraction;
         this.creatureList = creatureList;
         this.artifactList = artifactList;
@@ -50,9 +54,10 @@ public class EconomyHero {
         this.spellsList = spellsList;
         this.gold = gold;
         this.heroNumber = heroNumber;
+        // TODO copy of backpack and equipment
         equipment = new Equipment();
         backpack = new Backpack();
-        heroStats = HeroStatistics.NECROMANCER;
+        heroStats = aClass;
     }
 
     public List<EconomyCreature> getCreatures() {
@@ -113,7 +118,7 @@ public class EconomyHero {
         return List.copyOf(artifactList);
     }
 
-    public List<EconomySkills> getSkills() {
+    public List<EconomySkill> getSkills() {
         return List.copyOf(skillsList);
     }
 
@@ -170,10 +175,42 @@ public class EconomyHero {
         return heroNumber;
     }
 
+    public boolean canAddSkill(EconomySkill economySkill) {
+        for(EconomySkill s: skillsList){
+            if(s.getSkillType().equals(economySkill.getSkillType()))
+                return false;
+        }
+        return true;
+    }
+
+    public void addSkill(EconomySkill economySkill) {
+        this.skillsList.add(economySkill);
+    }
+
+    public boolean canAddSpell(EconomySpell economySpell){
+        // TODO other group must deliver requiredMagicGuildLevel
+        int requiredMagicGuildLevel = 1;
+        if(economySpell.getRequiredMagicGuildLevel() > requiredMagicGuildLevel)
+            return false;
+
+        for(EconomySpell spell:spellsList){
+            if(spell.getSpellStats().equals(economySpell.getSpellStats()) && spell.getSpellRang().equals(economySpell.getSpellRang()))
+                return false;
+        }
+
+        return true;
+    }
+
+    public void addSpell(EconomySpell spell){
+        this.spellsList.add(spell);
+    }
+
+
 
     public enum Fraction {
         NECROPOLIS,
-        CASTLE
+        CASTLE,
+        STRONGHOLD
     }
 
     public List<EconomySpell> getSpellList() {
@@ -183,5 +220,4 @@ public class EconomyHero {
     public int getSpellPower() {
         return heroStats.getSpellPower();
     }
-
 }

@@ -14,11 +14,6 @@ public class Artifact implements BuyProductInterface {
     private Money price;
 
     @Override
-    public int getAmount() {
-        return 1;
-    }
-
-    @Override
     public Money getGoldCost() {
         return price;
     }

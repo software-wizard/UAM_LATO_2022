@@ -42,14 +42,14 @@
                     <Label text="                                          Spells" styleClass="labelHero"/>
                     <ScrollPane fx:id="spellsScrollPane">
                         <content>
-                            <HBox prefHeight="100" styleClass="centerHBox"/>
+                            <HBox fx:id="spellsScrollPaneHBox"  prefHeight="100" styleClass="centerHBox"/>
                         </content>
                     </ScrollPane>
 
                     <Label text="                                          Skills" styleClass="labelHero"/>
                     <ScrollPane fx:id="skillsScrollPane">
                         <content>
-                            <HBox prefHeight="100" styleClass="centerHBox"/>
+                            <HBox fx:id="skillsScrollPaneHBox" prefHeight="100" styleClass="centerHBox"/>
                         </content>
                     </ScrollPane>
                 </VBox>

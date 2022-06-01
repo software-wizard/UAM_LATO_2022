@@ -25,8 +25,8 @@ public class FractionController {
 
     @FXML
     public void initialize() {
-        boxFractionPlayer1.getItems().setAll(EconomyHero.Fraction.CASTLE, EconomyHero.Fraction.NECROPOLIS);
-        boxFractionPlayer2.getItems().setAll(EconomyHero.Fraction.CASTLE, EconomyHero.Fraction.NECROPOLIS);
+        boxFractionPlayer1.getItems().setAll(EconomyHero.Fraction.CASTLE, EconomyHero.Fraction.NECROPOLIS, EconomyHero.Fraction.STRONGHOLD);
+        boxFractionPlayer2.getItems().setAll(EconomyHero.Fraction.CASTLE, EconomyHero.Fraction.NECROPOLIS, EconomyHero.Fraction.STRONGHOLD);
 
         Image image = new Image("walp.jpg");
         BackgroundSize bSize = new BackgroundSize(400, 300, false, false, false, false);
