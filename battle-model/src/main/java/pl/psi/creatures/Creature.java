@@ -35,6 +35,8 @@ public class Creature implements PropertyChangeListener {
     private int morale = 1; // range = < -3;3 >
     private int luck;
     private Alignment alignment;
+    private boolean canAttack = true;
+    private boolean canMove = true;
 
     Creature() {
     }
@@ -79,10 +81,21 @@ public class Creature implements PropertyChangeListener {
         return getAmount() > 0;
     }
 
+    public boolean canAttack(){
+        return canAttack;
+    }
+
+    public boolean canMove(){
+        return canMove;
+    }
+
+    public void setCanMove(final boolean value){canMove = value;}
+
     protected void applyDamage(final Creature aDefender, final double aDamage) {
         aDefender.setCurrentHp( ((aDefender.getAmount()-1) * aDefender.getMaxHp()) + aDefender.getCurrentHp() - aDamage );
         aDefender.setAmount( calculateUnits( aDefender ) );
         aDefender.setCurrentHp( calculateCurrentHp( aDefender ) );
+        canAttack = false;
     }
 
     private int calculateUnits( final Creature aDefender ){
@@ -243,6 +256,8 @@ public class Creature implements PropertyChangeListener {
     public void propertyChange(final PropertyChangeEvent evt) {
         if (TurnQueue.END_OF_TURN.equals(evt.getPropertyName())) {
             canCounterAttack = true;
+            canAttack = true;
+            canMove = true;
         }
     }
 

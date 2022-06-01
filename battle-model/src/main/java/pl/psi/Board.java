@@ -32,10 +32,6 @@ public class Board {
         }
     }
 
-    public void print(){
-        System.out.println(map.get(new Point( 5,5 )));
-    }
-
     private void addCreatures(final List<Creature> aCreatures, final int aXPosition) {
         for (int i = 0; i < aCreatures.size(); i++) {
             map.put(new Point(aXPosition, i * 2 + 1), aCreatures.get(i));

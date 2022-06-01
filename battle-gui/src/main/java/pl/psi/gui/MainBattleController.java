@@ -41,7 +41,6 @@ public class MainBattleController {
         });
 
         defenceModeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
-            gameEngine.castSpell(new Point(14, 3), gameEngine.getHero1().getSpells().get(0));
             refreshGui();
         });
 
@@ -71,9 +70,16 @@ public class MainBattleController {
                 final int x1 = x;
                 final int y1 = y;
                 final MapTile mapTile = new MapTile("");
-                gameEngine.getCreature(new Point(x, y))
-                        .ifPresent(c -> mapTile.setName(c.getName()));
-
+//                gameEngine.getCreature(new Point(x, y))
+//                        .ifPresent(c -> mapTile.setName(c.getName()));
+                if(gameEngine.getCreature(new Point(x, y)).isPresent()){
+                    if(gameEngine.getCreature(new Point(x, y)).get().isAlive()){
+                        mapTile.setName(gameEngine.getCreature(new Point(x, y)).get().getName());
+                    }
+                }
+                if (gameEngine.isCurrentCreature(new Point(x,y)) && gameEngine.isCurrentCreatureAlive()) {
+                    mapTile.setBackground(Color.GREEN);
+                }
                 if (gameEngine.canMove(new Point(x, y))) {
                     mapTile.setBackground(Color.GREY);
 

@@ -56,6 +56,26 @@ public class AbstractCreature extends Creature {
     }
 
     @Override
+    public void setCanMove(final boolean value){
+        decorated.setCanMove( value );
+    }
+
+    @Override
+    public boolean canMove() {
+        return decorated.canMove();
+    }
+
+    @Override
+    public void setCanAttack(final boolean value){
+        decorated.setCanAttack( value );
+    }
+
+    @Override
+    public boolean canAttack() {
+        return decorated.canAttack();
+    }
+
+    @Override
     public void age() {
         decorated.age();
     }
