@@ -40,6 +40,10 @@ public class TurnQueue {
         creaturesQueue.addAll(creatures);
     }
 
+    public void pushCurrentCreatureToEndOfQueue(){
+        creaturesQueue.add(currentCreature);
+    }
+
     public Creature getCurrentCreature() {
         return currentCreature;
     }
@@ -57,6 +61,9 @@ public class TurnQueue {
             endOfTurn();
         }
         currentCreature = creaturesQueue.poll();
+        if(!currentCreature.isAlive()){
+            next();
+        }
 
         if (currentCreature instanceof WarMachinesAbstract) {
             handleWarMachineAction();

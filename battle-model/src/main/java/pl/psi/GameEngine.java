@@ -28,6 +28,7 @@ public class GameEngine {
     private final Hero hero1;
     @Getter
     private final Hero hero2;
+    private boolean currentCreatureCanMove = true;
 
     public GameEngine(final Hero aHero1, final Hero aHero2) {
         hero1 = aHero1;
@@ -37,7 +38,6 @@ public class GameEngine {
     }
 
     public void attack(final Point point) {
-        turnQueue.getCurrentCreature().setCanAttack(false);
         if(turnQueue.getCurrentCreature().isDefending()){
             turnQueue.getCurrentCreature().defend(false);
         }
@@ -45,11 +45,10 @@ public class GameEngine {
                 .ifPresent(defender -> turnQueue.getCurrentCreature()
                         .attack(defender));
         observerSupport.firePropertyChange(CREATURE_MOVED, null, null);
-        System.out.println(getCurrentCreature().isDefending());
     }
 
     public boolean canAttack(final Point point) {
-        return board.canAttack( turnQueue.getCurrentCreature(), point )  && board.getCreature( point ).isPresent() && board.getCreature( point ).get().getHeroNumber() != turnQueue.getCurrentCreature().getHeroNumber() && turnQueue.getCurrentCreature().canAttack();
+        return board.canAttack( turnQueue.getCurrentCreature(), point )  && board.getCreature( point ).isPresent() && board.getCreature(point).get().isAlive() && board.getCreature( point ).get().getHeroNumber() != turnQueue.getCurrentCreature().getHeroNumber() && turnQueue.getCurrentCreature().canAttack();
     }
 
     public void heal(final Point point) {
@@ -59,19 +58,23 @@ public class GameEngine {
     }
 
     public void move(final Point aPoint) {
-        turnQueue.getCurrentCreature().setCanMove(false);
+        currentCreatureCanMove = false;
         if(turnQueue.getCurrentCreature().isDefending()){
             turnQueue.getCurrentCreature().defend(false);
         }
         board.move(turnQueue.getCurrentCreature(), aPoint);
         observerSupport.firePropertyChange(CREATURE_MOVED, null, aPoint);
         turnQueue.getRangeCreatures().forEach(this::creatureInMeleeRange); // dont ask me why its setting this again, i dont know either
-        System.out.println(getCurrentCreature().isDefending());
     }
 
     public boolean canMove(final Point aPoint) {
         turnQueue.getRangeCreatures().forEach(this::creatureInMeleeRange); // setting inMelee for every range creature
-        return board.canMove(turnQueue.getCurrentCreature(), aPoint) && board.getCreature( aPoint ).isEmpty() && turnQueue.getCurrentCreature().canMove() && turnQueue.getCurrentCreature().canAttack();
+        if(board.getCreature(aPoint).isPresent()){
+            return !board.getCreature(aPoint).get().isAlive() && board.canMove(turnQueue.getCurrentCreature(), aPoint) && currentCreatureCanMove && turnQueue.getCurrentCreature().canAttack();
+        }
+        else{
+            return board.canMove(turnQueue.getCurrentCreature(), aPoint) && currentCreatureCanMove && turnQueue.getCurrentCreature().canAttack();
+        }
     }
 
     private void creatureInMeleeRange( final Creature creature ){
@@ -111,13 +114,13 @@ public class GameEngine {
 
 
     public void pass() {
+        currentCreatureCanMove = true;
         turnQueue.next();
-        //clearDeadCreatures();
+//currentCreatureCanMove
     }
 
-    public void clearDeadCreatures(){
-        board.clearBoard();
-        turnQueue.removeDeadCreatureFromQueue();
+    public void pushCurrentCreatureToEndOfQueue(){
+        turnQueue.pushCurrentCreatureToEndOfQueue();
     }
 
     public void addObserver(final String aEventType, final PropertyChangeListener aObserver) {
