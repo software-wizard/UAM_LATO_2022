@@ -4,6 +4,7 @@ import pl.psi.Hero;
 import pl.psi.creatures.Creature;
 import pl.psi.creatures.CreatureStats;
 import pl.psi.creatures.ShooterCreature;
+import pl.psi.hero.EconomyHero;
 
 /**
  * Class that represents changing creature stats based on current skill
@@ -52,7 +53,7 @@ public class UpgradeCalculator {
         return statsToApply;
     }
 
-    public void calculate(Hero aHero) {
+    public void calculate(EconomyHero aHero) {
         double changedStat;
         switch (this.skillName) {
             case LEADERSHIP:

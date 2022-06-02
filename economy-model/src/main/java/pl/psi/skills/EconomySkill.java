@@ -4,6 +4,7 @@ import lombok.Getter;
 import pl.psi.Hero;
 import pl.psi.creatures.Creature;
 import pl.psi.creatures.CreatureStats;
+import pl.psi.hero.EconomyHero;
 
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class EconomySkill {
         });
     }
 
-    public void apply(Hero aHero) {
+    public void apply(EconomyHero aHero) {
         this.upgradeCalculator.calculate(aHero);
     }
 
