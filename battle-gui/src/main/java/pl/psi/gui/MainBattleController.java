@@ -48,7 +48,7 @@ public class MainBattleController {
         });
 
         waitButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
-            if(gameEngine.anyActionLeft()){
+            if(gameEngine.allActionLeft()){
                 gameEngine.waitAction();
                 gameEngine.pass();
             }
