@@ -76,13 +76,13 @@ public class GameEngineTest {
                 new GameEngine(new Hero(List.of(creatureFactory.create(1, false, 5)), HeroStatistics.NECROMANCER),
                         new Hero(List.of(creatureFactory.create(1, false, 5)), HeroStatistics.NECROMANCER));
 
-        gameEngine.setCurrentCreatureDefence();
+        gameEngine.defendAction();
         assertThat( gameEngine.getCurrentCreature().isDefending() ).isEqualTo( true );
 
         gameEngine.move( new Point(2,2) );
         assertThat( gameEngine.getCurrentCreature().isDefending() ).isEqualTo( false );
 
-        gameEngine.setCurrentCreatureDefence();
+        gameEngine.defendAction();
 
         gameEngine.attack( new Point(2,3) );
         assertThat( gameEngine.getCurrentCreature().isDefending() ).isEqualTo( false );

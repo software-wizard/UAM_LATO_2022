@@ -15,11 +15,15 @@ public class MainBattleController {
     @FXML
     private GridPane gridMap;
     @FXML
+    private Button waitButton;
+    @FXML
+    private Button defendButton;
+    @FXML
     private Button passButton;
     @FXML
     private Button windowButton;
-    @FXML
-    private Button defenceModeButton;
+
+
 
     public MainBattleController(final Hero aHero1, final Hero aHero2) {
         gameEngine = new GameEngine(aHero1, aHero2);
@@ -40,12 +44,25 @@ public class MainBattleController {
             refreshGui();
         });
 
-        defenceModeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
-            if(gameEngine.getCurrentCreature().canAttack()){
-                gameEngine.setCurrentCreatureDefence();
+        waitButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
+            if(gameEngine.allActionLeft()){
+                gameEngine.waitAction();
+                gameEngine.pass();
             }
-            gameEngine.pushCurrentCreatureToEndOfQueue();
-            gameEngine.pass();
+            else{
+                throw new RuntimeException("Action already performed.");
+            }
+            refreshGui();
+        });
+
+        defendButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
+            if(gameEngine.allActionLeft()){
+                gameEngine.defendAction();
+                gameEngine.pass();
+            }
+            else{
+                throw new RuntimeException("Action already performed.");
+            }
             refreshGui();
         });
 

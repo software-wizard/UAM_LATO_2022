@@ -20,17 +20,17 @@ public class Board {
         addCreatures(aCreatures2, MAX_WITDH);
     }
 
-//    public void clearBoard(){
-//        for(int x = 0; x<16; x++){
-//            for(int y = 0; y<10; y++){
-//                Point point = new Point(x,y);
-//                if(getCreature( point ).isPresent() && getCreature( point ).get().getCurrentHp() == 0){
-////                    map.inverse().remove(getCreature( point ).get());
-////                    map.put( point,null );
-//                }
-//            }
-//        }
-//    }
+    public boolean canCreatureAttackAnyone( Creature creature ){
+        for(int x = 0; x<15; x++){
+            for(int y = 0; y<9; y++){
+                Point point = new Point(x,y);
+                if(getCreature(point).isPresent() && !getCreature(point).get().getName().equals(creature.getName()) && canAttack( creature, point )){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     private void addCreatures(final List<Creature> aCreatures, final int aXPosition) {
         for (int i = 0; i < aCreatures.size(); i++) {
