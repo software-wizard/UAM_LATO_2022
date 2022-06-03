@@ -38,6 +38,7 @@ public class Creature implements PropertyChangeListener {
     private Alignment alignment;
     private double defenceBonusArmor = 0;
     private boolean isDefending = false;
+    private double lastHealAmount = 0;
 
     Creature() {
     }
@@ -59,7 +60,7 @@ public class Creature implements PropertyChangeListener {
 
     public void attack(final Creature aDefender) {
         if (isAlive()) {
-            final int damage = getCalculator().calculateDamage(this, aDefender);
+            final double damage = getCalculator().calculateDamage(this, aDefender);
             applyDamage(aDefender, damage);
             if (canCounterAttack(aDefender)) {
                 counterAttack(aDefender);
@@ -157,10 +158,15 @@ public class Creature implements PropertyChangeListener {
         applyDamage(this, damage * spellDamageReduction);
     }
 
+    public double getLastHealAmount(){
+        return lastHealAmount;
+    }
+
     protected void heal(double healAmount) {
         setCurrentHp((getCurrentHp() + healAmount));
         calculateUnits(calculateAmount());
         setCurrentHp(calculateCurrentHp());
+        lastHealAmount = healAmount;
     }
 
     private double calculateAmount() {

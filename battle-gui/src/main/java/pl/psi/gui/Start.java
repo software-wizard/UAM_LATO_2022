@@ -39,16 +39,14 @@ public class Start extends Application {
     }
 
     private Hero createP1() {
-        final Hero ret = new Hero(List.of(new NecropolisFactory().create(false, 5, 5), new NecropolisFactory().create(false, 4, 5)), HeroStatistics.NECROMANCER);
-        ret.getCreatures().get(0).setHeroNumber(1);
-        ret.getCreatures().get(1).setHeroNumber(1);
+        final Hero ret = new Hero(List.of(new NecropolisFactory().create(false, 5, 5), new NecropolisFactory().create(true, 4, 5)), HeroStatistics.NECROMANCER);
+        ret.getCreatures().forEach(creature -> creature.setHeroNumber(1));
         return ret;
     }
 
     private Hero createP2() {
-        final Hero ret = new Hero(List.of(new NecropolisFactory().create(false, 1, 30), new NecropolisFactory().create(false, 1, 15)), HeroStatistics.NECROMANCER);
-        ret.getCreatures().get(0).setHeroNumber(2);
-        ret.getCreatures().get(1).setHeroNumber(2);
+        final Hero ret = new Hero(List.of(new StrongholdFactory().create(false, 1, 30), new StrongholdFactory().create(false, 1, 15), new StrongholdFactory().create(true, 1, 5)), HeroStatistics.KNIGHT);
+        ret.getCreatures().forEach(creature -> creature.setHeroNumber(2));
         return ret;
     }
 

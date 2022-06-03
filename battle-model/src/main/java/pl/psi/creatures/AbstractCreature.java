@@ -61,6 +61,11 @@ public class AbstractCreature extends Creature {
     }
 
     @Override
+    public double getLastHealAmount() {
+        return decorated.getLastHealAmount();
+    }
+
+    @Override
     public void applySpellDamage(final double damage) {
         decorated.applyDamage(decorated, damage);
     }

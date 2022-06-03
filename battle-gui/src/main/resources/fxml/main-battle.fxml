@@ -40,6 +40,12 @@
     <bottom>
         <HBox alignment="TOP_RIGHT" prefHeight="1.0" prefWidth="600.0" BorderPane.alignment="CENTER">
             <children>
+                <Label fx:id="console" alignment="TOP_LEFT" layoutX="94.0" layoutY="10.0" style="-fx-padding: 0 100 0 20;"
+                       text=" ">
+                    <font>
+                        <Font size="14.0"/>
+                    </font>
+                </Label>
                 <Button fx:id="passButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="115.0" text="PASS"
                         textAlignment="CENTER">
                     <font>

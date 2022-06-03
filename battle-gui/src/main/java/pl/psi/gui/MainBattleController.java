@@ -2,6 +2,7 @@ package pl.psi.gui;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
@@ -22,8 +23,8 @@ public class MainBattleController {
     private Button passButton;
     @FXML
     private Button windowButton;
-
-
+    @FXML
+    private Label console;
 
     public MainBattleController(final Hero aHero1, final Hero aHero2) {
         gameEngine = new GameEngine(aHero1, aHero2);
@@ -32,6 +33,8 @@ public class MainBattleController {
     @FXML
     private void initialize() {
         refreshGui();
+
+        console.setText("");
 
         passButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
             gameEngine.pass();
@@ -45,7 +48,7 @@ public class MainBattleController {
         });
 
         waitButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
-            if(gameEngine.allActionLeft()){
+            if(gameEngine.anyActionLeft()){
                 gameEngine.waitAction();
                 gameEngine.pass();
             }
@@ -107,6 +110,9 @@ public class MainBattleController {
                     mapTile.addEventHandler(MouseEvent.MOUSE_CLICKED,
                             e -> gameEngine.attack(new Point(x1, y1)));
                 }
+
+                console.setText(gameEngine.getInformation());
+
                 if (gameEngine.canHeal(new Point(x, y))) {
                     mapTile.setBackground(Color.YELLOW);
 

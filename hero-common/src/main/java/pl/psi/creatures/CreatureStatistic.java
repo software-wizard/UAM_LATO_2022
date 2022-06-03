@@ -36,7 +36,7 @@ public enum CreatureStatistic implements CreatureStatisticIf {
     WRAITH("Wraith", 7, 7, 18, 5, Range.closed(3, 5), 3,
             "Regenerating ability is really good when fighting weak enemies, especially shooters.\nSpecial: top wight of the stack regenerates all lost damage in the beginning of each round\n",
             true, CreatureType.UNDEAD, false, 1), //
-    VAMPIRE_LORD("Vampire Lord", 10, 10, 40, 9, Range.closed(5, 8), 4,
+    VAMPIRE_LORD("VampireL", 10, 10, 40, 9, Range.closed(5, 8), 4,
             "My favorite necropolis unit. Use them as main striking unit and you might end up with no losses!\nSpecial: no enemy retaliation ; resurrects members of their own stack by restoring health equal to the amount of damage they do to living enemies.\n",
             true, CreatureType.UNDEAD, false, 1), //
     POWER_LICH("Power Lich", 13, 10, 40, 7, Range.closed(11, 15), 5,

@@ -69,7 +69,14 @@ public class Board {
         else{
             final Point currentPosition = map.inverse()
                     .get(aCreature);
-            return aPoint.distance(currentPosition.getX(), currentPosition.getY()) <= aCreature.getAttackRange();
+            if(getCreature(aPoint).isPresent()){
+                return aPoint.distance(currentPosition.getX(), currentPosition.getY()) <= aCreature.getAttackRange() && getCreature(aPoint).get().getHeroNumber() != aCreature.getHeroNumber();
+
+            }
+            else{
+                return aPoint.distance(currentPosition.getX(), currentPosition.getY()) <= aCreature.getAttackRange();
+
+            }
         }
 
     }
