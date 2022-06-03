@@ -65,8 +65,10 @@ public class GameEngine {
         int damageDealt = (int) calculateDamageDealt(maxHp, beforeAmount, beforeCurrentHp, afterAmount, afterCurrentHp );
         System.out.println(getCurrentCreature().getName() + " attacked " + getCreature(point).get().getName() + " for " + damageDealt + ". " + (beforeAmount-afterAmount) + " " + getCreature(point).get().getName() + " perish.");
         attackInformation = getCurrentCreature().getName() + " attacked " + getCreature(point).get().getName() + " for " + damageDealt + ". " + (beforeAmount-afterAmount) + " " + getCreature(point).get().getName() + " perish.";
+        System.out.println(getCreature(point).get().getName() + " counter attacked " + getCurrentCreature().getName() + " for " + getCurrentCreature().getLastCounterAttackDamage() + ".");
+        attackInformation = attackInformation + "\n" + getCreature(point).get().getName() + " counter attacked " + getCurrentCreature().getName() + " for " + getCurrentCreature().getLastCounterAttackDamage() + ".";
         if(getCurrentCreature().getLastHealAmount() > 0){
-            additionalInformation = additionalInformation + getCurrentCreature().getName() + " healed for " + getCurrentCreature().getLastHealAmount();
+            additionalInformation = getCurrentCreature().getName() + " healed for " + getCurrentCreature().getLastHealAmount();
         }
     }
 

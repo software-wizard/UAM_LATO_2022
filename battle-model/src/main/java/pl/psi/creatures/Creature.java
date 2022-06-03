@@ -40,6 +40,7 @@ public class Creature implements PropertyChangeListener {
     private boolean isDefending = false;
     private double lastHealAmount = 0;
     private double lastAttackDamage = 0;
+    private double lastCounterAttackDamage = 0;
 
     Creature() {
     }
@@ -218,7 +219,12 @@ public class Creature implements PropertyChangeListener {
         final int damage = aAttacker.getCalculator()
                 .calculateDamage(aAttacker, this);
         applyDamage(this, damage);
+        setLastCounterAttackDamage(damage);
         aAttacker.canCounterAttack = false;
+    }
+
+    public void setLastCounterAttackDamage( final double damage ) {
+        lastCounterAttackDamage = damage;
     }
 
     public void setInMelee(final boolean value){}

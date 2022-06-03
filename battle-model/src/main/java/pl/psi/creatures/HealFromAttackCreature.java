@@ -14,6 +14,5 @@ public class HealFromAttackCreature extends AbstractCreature {
         if (aDefender.getBasicStats().getType().equals(CreatureStatistic.CreatureType.ALIVE)) {
             decorated.heal(decorated.getLastAttackDamage());
         }
-
     }
 }

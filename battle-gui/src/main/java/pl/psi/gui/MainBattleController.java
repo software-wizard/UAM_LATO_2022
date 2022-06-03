@@ -1,6 +1,7 @@
 package pl.psi.gui;
 
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -35,6 +36,7 @@ public class MainBattleController {
         refreshGui();
 
         console.setText("");
+        console.setAlignment(Pos.BOTTOM_LEFT);
 
         passButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
             gameEngine.pass();
