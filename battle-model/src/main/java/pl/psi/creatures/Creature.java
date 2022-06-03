@@ -39,6 +39,7 @@ public class Creature implements PropertyChangeListener {
     private double defenceBonusArmor = 0;
     private boolean isDefending = false;
     private double lastHealAmount = 0;
+    private double lastAttackDamage = 0;
 
     Creature() {
     }
@@ -85,6 +86,12 @@ public class Creature implements PropertyChangeListener {
 
     protected void applyDamage(final Creature aDefender, final double aDamage) {
         aDefender.setCurrentHp( ((aDefender.getAmount()-1) * aDefender.getMaxHp()) + aDefender.getCurrentHp() - aDamage );
+        if(aDefender.getCurrentHp() < 0){
+            lastAttackDamage = aDamage + aDefender.getCurrentHp();
+        }
+        else{
+            lastAttackDamage = aDamage;
+        }
         aDefender.setAmount( calculateUnits( aDefender ) );
         aDefender.setCurrentHp( calculateCurrentHp( aDefender ) );
     }

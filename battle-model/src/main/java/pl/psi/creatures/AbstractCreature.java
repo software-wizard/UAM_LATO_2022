@@ -51,6 +51,11 @@ public class AbstractCreature extends Creature {
     }
 
     @Override
+    public double getLastAttackDamage() {
+        return decorated.getLastAttackDamage();
+    }
+
+    @Override
     public boolean isAlive() {
         return decorated.isAlive();
     }
