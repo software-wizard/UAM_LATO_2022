@@ -32,7 +32,7 @@ public class GameEngine {
     private boolean currentCreatureCanMove = true;
     private boolean currentCreatureCanAttack = true;
     private String attackInformation = "";
-    private String additionalInformation = "";
+    private String additionalAttackInformation = "";
 
     public GameEngine(final Hero aHero1, final Hero aHero2) {
         hero1 = aHero1;
@@ -60,7 +60,7 @@ public class GameEngine {
         board.getCreature(point)
                 .ifPresent(defender -> turnQueue.getCurrentCreature()
                         .attack(defender));
-        additionalInformation = "";
+        additionalAttackInformation = "";
         int afterAmount = getCreature(point).get().getAmount();
         double afterCurrentHp = getCreature(point).get().getCurrentHp();
         int damageDealt = (int) calculateDamageDealt(maxHp, beforeAmount, beforeCurrentHp, afterAmount, afterCurrentHp );
@@ -77,7 +77,7 @@ public class GameEngine {
             attackInformation = attackInformation + "\n" + getCreature(point).get().getName() + " counter attacked " + getCurrentCreature().getName() + " for " + (int)(getCurrentCreature().getLastCounterAttackDamage()) + ".";
         }
         if(getCurrentCreature().getLastHealAmount() > 0){
-            additionalInformation = getCurrentCreature().getName() + " healed for " + getCurrentCreature().getLastHealAmount();
+            additionalAttackInformation = getCurrentCreature().getName() + " healed for " + getCurrentCreature().getLastHealAmount();
         }
     }
 
@@ -127,8 +127,8 @@ public class GameEngine {
         return currentCreatureCanAttack || currentCreatureCanMove;
     }
 
-    public String  getInformation(){
-        return attackInformation + "\n" + additionalInformation;
+    public String getAttackInformation(){
+        return attackInformation + "\n" + additionalAttackInformation;
     }
 
     public boolean allActionLeft(){
@@ -172,6 +172,10 @@ public class GameEngine {
             }
         }
         return Optional.empty();
+    }
+
+    public String getCreatureInformation(Point point){
+        return getCreature(point).get().getCreatureInformation();
     }
 
 

@@ -5,6 +5,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -105,18 +106,13 @@ public class MainBattleController {
                 if (gameEngine.canMove(new Point(x, y))) {
                     mapTile.setBackground(Color.GREY);
 
-                    mapTile.addEventHandler(MouseEvent.MOUSE_CLICKED,
-                            e -> gameEngine.move(new Point(x1, y1)));
+                    mapTile.setOnMouseClicked(
+                            e -> {
+                                if(e.getButton() == MouseButton.PRIMARY){
+                                    gameEngine.move(new Point(x1, y1));
+                                }
+                            });
                 }
-
-                if (gameEngine.canAttack(new Point(x, y))) {
-                    mapTile.setBackground(Color.RED);
-
-                    mapTile.addEventHandler(MouseEvent.MOUSE_CLICKED,
-                            e -> gameEngine.attack(new Point(x1, y1)));
-                }
-
-                console.setText(gameEngine.getInformation());
 
                 if (gameEngine.canHeal(new Point(x, y))) {
                     mapTile.setBackground(Color.YELLOW);
@@ -126,6 +122,7 @@ public class MainBattleController {
                 }
 
                 renderSpecialFields(mapTile, x, y);
+
                 if(gameEngine.getCreature(new Point(x, y)).isPresent()){
                     if(gameEngine.getCreature(new Point(x, y)).get().isAlive()){
                         mapTile.setName(gameEngine.getCreature(new Point(x, y)).get().getName() + "\n\n"
@@ -136,7 +133,29 @@ public class MainBattleController {
                         var img = new Image("/images/dead.jpg");
                         mapTile.setBackground(img);
                     }
+                    int finalX = x;
+                    int finalY = y;
+                    mapTile.setOnMouseClicked(e -> {
+                        if (e.getButton() == MouseButton.SECONDARY) {
+                            System.out.println(gameEngine.getCreatureInformation(new Point(finalX,finalY)));
+                            console.setText(gameEngine.getCreatureInformation(new Point(finalX,finalY)));
+                        }
+                    });
+
+                    if (gameEngine.canAttack(new Point(x, y))) {
+                        mapTile.setBackground(Color.RED);
+
+                        mapTile.setOnMousePressed(
+                                e -> {
+                                    if(e.getButton() == MouseButton.PRIMARY){
+                                        gameEngine.attack(new Point(x1, y1));
+                                    }
+                                });
+                    }
                 }
+
+                console.setText(gameEngine.getAttackInformation());
+
                 gridMap.add(mapTile, x, y);
             }
         }
