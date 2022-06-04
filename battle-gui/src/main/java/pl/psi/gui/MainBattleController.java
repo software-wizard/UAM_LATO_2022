@@ -96,27 +96,14 @@ public class MainBattleController {
         }
     }
 
-    public static void showStage(final String information, final boolean hasSpecial){
-        int SMALL_WIDTH = 250;
-        int SMALL_HEIGHT = 225;
-        int BIG_WIDTH = 360;
-        int BIG_HEIGHT = 355;
+    public static void showStage(final String information){
         Stage newStage = new Stage();
         VBox comp = new VBox();
         Text text = new Text(information);
         text.setStyle("-fx-font: 24 arial;");
         comp.getChildren().add(text);
-        final int width;
-        final int height;
-        if(hasSpecial){
-            width = BIG_WIDTH;
-            height = BIG_HEIGHT;
-        }
-        else {
-            width = SMALL_WIDTH;
-            height = SMALL_HEIGHT;
-        }
-        Scene stageScene = new Scene(comp, width, height);
+
+        Scene stageScene = new Scene(comp, 300, 195);
         newStage.setScene(stageScene);
         newStage.show();
     }
@@ -166,7 +153,7 @@ public class MainBattleController {
                     int finalY = y;
                     mapTile.setOnMouseClicked(e -> {
                         if (e.getButton() == MouseButton.SECONDARY) {
-                            showStage(gameEngine.getCreatureInformation(new Point(finalX,finalY)),gameEngine.getCreature(new Point(finalX,finalY)).get().hasSpecial());
+                            showStage(gameEngine.getCreatureInformation(new Point(finalX,finalY)));
                         }
                     });
 

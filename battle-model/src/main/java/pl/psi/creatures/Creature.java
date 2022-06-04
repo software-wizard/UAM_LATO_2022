@@ -232,21 +232,7 @@ public class Creature implements PropertyChangeListener {
     }
 
     public String getCreatureInformation(){
-        return "Name: " + getBasicStats().getName() + "\nAttack: " + (int)getBasicStats().getAttack() + "(" + (int)getStats().getAttack() + ")" + "\nArmor: " + (int)getBasicStats().getArmor() + "(" + (int)getStats().getArmor() + ")" + "\nShots: " + getShots() + "\nDamage: " + getBasicStats().getDamage().lowerEndpoint() + "-" + getBasicStats().getDamage().upperEndpoint() + "\nMax health: " + (int)getStats().getMaxHp() + "\nCurrent health: " + (int)getCurrentHp() + "\nSpeed: " + (int)getBasicStats().getMoveRange() + "(" + (int)getStats().getMoveRange() + ")\n" + getSpecial();
-    }
-
-    public boolean hasSpecial(){
-        return getSpecial().length() > 1;
-    }
-
-    private String getSpecial(){
-        String description = getBasicStats().getDescription();
-        String[] special = description.split(";");
-        return special[1];
-    }
-
-    public String getShots(){
-        return "";
+        return "Name: " + getBasicStats().getName() + "\nAttack: " + (int)getBasicStats().getAttack() + "(" + (int)getStats().getAttack() + ")" + "\nArmor: " + (int)getBasicStats().getArmor() + "(" + (int)getStats().getArmor() + ")" + "\nDamage: " + getBasicStats().getDamage().lowerEndpoint() + "-" + getBasicStats().getDamage().upperEndpoint() + "\nMax health: " + (int)getStats().getMaxHp() + "\nCurrent health: " + (int)getCurrentHp() + "\nSpeed: " + (int)getBasicStats().getMoveRange() + "(" + (int)getStats().getMoveRange() + ")";
     }
 
     public void setCanCounterAttack(boolean value) {
