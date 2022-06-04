@@ -51,6 +51,12 @@ public class ShooterCreature extends AbstractCreature {
     }
 
     @Override
+    public String getShots(){
+        return "" + shots;
+    }
+
+
+    @Override
     public boolean isRange(){
         return true;
     }
