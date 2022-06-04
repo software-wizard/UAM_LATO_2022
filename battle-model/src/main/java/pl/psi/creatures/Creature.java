@@ -232,7 +232,7 @@ public class Creature implements PropertyChangeListener {
     }
 
     public String getCreatureInformation(){
-        return "Name: " + getBasicStats().getName() + ", Attack: " + (int)getBasicStats().getAttack() + "(" + (int)getStats().getAttack() + ")" + ", Armor: " + (int)getBasicStats().getArmor() + "(" + (int)getStats().getArmor() + ")" + ", Damage: " + getBasicStats().getDamage().lowerEndpoint() + "-" + getBasicStats().getDamage().upperEndpoint() + "\nMax health: " + (int)getStats().getMaxHp() + ", Current health: " + (int)getCurrentHp() + ", Speed: " + (int)getBasicStats().getMoveRange() + "(" + (int)getStats().getMoveRange() + ")";
+        return "Name: " + getBasicStats().getName() + "\nAttack: " + (int)getBasicStats().getAttack() + "(" + (int)getStats().getAttack() + ")" + "\nArmor: " + (int)getBasicStats().getArmor() + "(" + (int)getStats().getArmor() + ")" + "\nDamage: " + getBasicStats().getDamage().lowerEndpoint() + "-" + getBasicStats().getDamage().upperEndpoint() + "\nMax health: " + (int)getStats().getMaxHp() + "\nCurrent health: " + (int)getCurrentHp() + "\nSpeed: " + (int)getBasicStats().getMoveRange() + "(" + (int)getStats().getMoveRange() + ")";
     }
 
     public void setCanCounterAttack(boolean value) {

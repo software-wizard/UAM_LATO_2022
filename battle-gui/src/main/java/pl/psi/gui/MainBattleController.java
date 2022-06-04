@@ -2,6 +2,7 @@ package pl.psi.gui;
 
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -9,6 +10,9 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import pl.psi.GameEngine;
 import pl.psi.Hero;
 import pl.psi.Point;
@@ -92,6 +96,18 @@ public class MainBattleController {
         }
     }
 
+    public static void showStage(final String information){
+        Stage newStage = new Stage();
+        VBox comp = new VBox();
+        Text text = new Text(information);
+        text.setStyle("-fx-font: 24 arial;");
+        comp.getChildren().add(text);
+
+        Scene stageScene = new Scene(comp, 300, 195);
+        newStage.setScene(stageScene);
+        newStage.show();
+    }
+
     private void refreshGui() {
         for (int x = 0; x < 15; x++) {
             for (int y = 0; y < 10; y++) {
@@ -137,8 +153,7 @@ public class MainBattleController {
                     int finalY = y;
                     mapTile.setOnMouseClicked(e -> {
                         if (e.getButton() == MouseButton.SECONDARY) {
-                            System.out.println(gameEngine.getCreatureInformation(new Point(finalX,finalY)));
-                            console.setText(gameEngine.getCreatureInformation(new Point(finalX,finalY)));
+                            showStage(gameEngine.getCreatureInformation(new Point(finalX,finalY)));
                         }
                     });
 
