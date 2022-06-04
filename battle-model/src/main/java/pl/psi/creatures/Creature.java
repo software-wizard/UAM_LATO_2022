@@ -85,13 +85,21 @@ public class Creature implements PropertyChangeListener {
         return getAmount() > 0;
     }
 
+    private void setLastAttackDamage(final double damage){
+        lastAttackDamage = damage;
+    }
+
+    public double getLastAttackDamage(){
+        return lastAttackDamage;
+    }
+
     protected void applyDamage(final Creature aDefender, final double aDamage) {
         aDefender.setCurrentHp( ((aDefender.getAmount()-1) * aDefender.getMaxHp()) + aDefender.getCurrentHp() - aDamage );
         if(aDefender.getCurrentHp() < 0){
-            lastAttackDamage = aDamage + aDefender.getCurrentHp();
+            setLastAttackDamage(aDamage + aDefender.getCurrentHp());
         }
         else{
-            lastAttackDamage = aDamage;
+            setLastAttackDamage(aDamage);
         }
         aDefender.setAmount( calculateUnits( aDefender ) );
         aDefender.setCurrentHp( calculateCurrentHp( aDefender ) );
@@ -212,7 +220,7 @@ public class Creature implements PropertyChangeListener {
     }
 
     protected boolean canCounterAttack(final Creature aDefender) {
-        return aDefender.canCounterAttack && aDefender.getCurrentHp() > 0;
+        return aDefender.getCanCounterAttack() && aDefender.getCurrentHp() > 0;
     }
 
     protected void counterAttack(final Creature aAttacker) {
@@ -220,10 +228,18 @@ public class Creature implements PropertyChangeListener {
                 .calculateDamage(aAttacker, this);
         applyDamage(this, damage);
         setLastCounterAttackDamage(damage);
-        aAttacker.canCounterAttack = false;
+        aAttacker.setCanCounterAttack(false);
     }
 
-    public void setLastCounterAttackDamage( final double damage ) {
+    public void setCanCounterAttack(boolean value) {
+        canCounterAttack = value;
+    }
+
+    public boolean getCanCounterAttack(){
+        return canCounterAttack;
+    }
+
+    private void setLastCounterAttackDamage( final double damage ) {
         lastCounterAttackDamage = damage;
     }
 
@@ -259,14 +275,6 @@ public class Creature implements PropertyChangeListener {
 
     public boolean isRange(){
         return false;
-    }
-
-    @Override
-    public void propertyChange(final PropertyChangeEvent evt) {
-        if (TurnQueue.END_OF_TURN.equals(evt.getPropertyName())) {
-            canCounterAttack = true;
-            defend(false);
-        }
     }
 
     protected void restoreCurrentHpToMax() {
@@ -306,6 +314,14 @@ public class Creature implements PropertyChangeListener {
         else{
             isDefending = false;
             buff(new CreatureStats.CreatureStatsBuilder().armor(-defenceBonusArmor).build());
+        }
+    }
+
+    @Override
+    public void propertyChange(final PropertyChangeEvent evt) {
+        if (TurnQueue.END_OF_TURN.equals(evt.getPropertyName())) {
+            setCanCounterAttack(true);
+            defend(false);
         }
     }
 

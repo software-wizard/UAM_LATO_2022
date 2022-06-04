@@ -60,13 +60,22 @@ public class GameEngine {
         board.getCreature(point)
                 .ifPresent(defender -> turnQueue.getCurrentCreature()
                         .attack(defender));
+        additionalInformation = "";
         int afterAmount = getCreature(point).get().getAmount();
         double afterCurrentHp = getCreature(point).get().getCurrentHp();
         int damageDealt = (int) calculateDamageDealt(maxHp, beforeAmount, beforeCurrentHp, afterAmount, afterCurrentHp );
-        System.out.println(getCurrentCreature().getName() + " attacked " + getCreature(point).get().getName() + " for " + damageDealt + ". " + (beforeAmount-afterAmount) + " " + getCreature(point).get().getName() + " perish.");
-        attackInformation = getCurrentCreature().getName() + " attacked " + getCreature(point).get().getName() + " for " + damageDealt + ". " + (beforeAmount-afterAmount) + " " + getCreature(point).get().getName() + " perish.";
-        System.out.println(getCreature(point).get().getName() + " counter attacked " + getCurrentCreature().getName() + " for " + getCurrentCreature().getLastCounterAttackDamage() + ".");
-        attackInformation = attackInformation + "\n" + getCreature(point).get().getName() + " counter attacked " + getCurrentCreature().getName() + " for " + getCurrentCreature().getLastCounterAttackDamage() + ".";
+        if(beforeAmount-afterAmount == 0){
+            System.out.println(getCurrentCreature().getName() + " attacked " + getCreature(point).get().getName() + " for " + damageDealt + ".");
+            attackInformation = getCurrentCreature().getName() + " attacked " + getCreature(point).get().getName() + " for " + damageDealt + ".";
+        }
+        else{
+            System.out.println(getCurrentCreature().getName() + " attacked " + getCreature(point).get().getName() + " for " + damageDealt + ". " + (beforeAmount-afterAmount) + " " + getCreature(point).get().getName() + " perish.");
+            attackInformation = getCurrentCreature().getName() + " attacked " + getCreature(point).get().getName() + " for " + damageDealt + ". " + (beforeAmount-afterAmount) + " " + getCreature(point).get().getName() + " perish.";
+        }
+        if(getCurrentCreature().getLastCounterAttackDamage() > 0){
+            System.out.println(getCreature(point).get().getName() + " counter attacked " + getCurrentCreature().getName() + " for " + getCurrentCreature().getLastCounterAttackDamage() + ".");
+            attackInformation = attackInformation + "\n" + getCreature(point).get().getName() + " counter attacked " + getCurrentCreature().getName() + " for " + (int)(getCurrentCreature().getLastCounterAttackDamage()) + ".";
+        }
         if(getCurrentCreature().getLastHealAmount() > 0){
             additionalInformation = getCurrentCreature().getName() + " healed for " + getCurrentCreature().getLastHealAmount();
         }

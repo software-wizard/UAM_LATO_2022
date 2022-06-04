@@ -36,6 +36,16 @@ public class AbstractCreature extends Creature {
     }
 
     @Override
+    public boolean getCanCounterAttack(){
+        return decorated.getCanCounterAttack();
+    }
+
+    @Override
+    public void setCanCounterAttack(final boolean value){
+        decorated.setCanCounterAttack(value);
+    }
+
+    @Override
     public DamageCalculatorIf getCalculator() {
         return decorated.getCalculator();
     }
@@ -58,11 +68,6 @@ public class AbstractCreature extends Creature {
     @Override
     public double getLastCounterAttackDamage() {
         return decorated.getLastCounterAttackDamage();
-    }
-
-    @Override
-    public void setLastCounterAttackDamage( final double damage) {
-        decorated.setLastCounterAttackDamage(damage);
     }
     
     @Override

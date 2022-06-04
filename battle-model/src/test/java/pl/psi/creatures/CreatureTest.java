@@ -291,10 +291,11 @@ public class CreatureTest {
                 .amount(10)
                 .build();
 
-        final HealFromAttackCreature healFromAttackCreature = new HealFromAttackCreature(decorated);
+        final NoCounterCreature noCounterCreature = new NoCounterCreature(decorated);
+        final HealFromAttackCreature healFromAttackCreature = new HealFromAttackCreature(noCounterCreature);
 
         final Creature defender = new Creature.Builder().statistic(CreatureStats.builder()
-                .maxHp(NOT_IMPORTANT)
+                .maxHp(100)
                 .damage(NOT_IMPORTANT_DMG)
                 .type(CreatureStatistic.CreatureType.ALIVE)
                 .build())
@@ -304,6 +305,38 @@ public class CreatureTest {
         assertThat(healFromAttackCreature.getAmount()).isEqualTo(12);
         assertThat(healFromAttackCreature.getCurrentHp()).isEqualTo(10);
     }
+
+    @Test
+    void decoratedCreatureShouldCounterAttackProperly() {
+        final Creature decorated = new Creature.Builder().statistic(CreatureStats.builder()
+                .maxHp(40)
+                .damage(Range.closed(5, 5))
+                .build())
+                .amount(1)
+                .build();
+
+        final NoCounterCreature noCounterCreature = new NoCounterCreature(decorated);
+        final HealFromAttackCreature healFromAttackCreature = new HealFromAttackCreature(noCounterCreature);
+
+        final Creature defender = new Creature.Builder().statistic(CreatureStats.builder()
+                .maxHp(100)
+                .damage(NOT_IMPORTANT_DMG)
+                .type(CreatureStatistic.CreatureType.ALIVE)
+                .build())
+                .build();
+
+        final TurnQueue turnQueue = new TurnQueue(List.of(healFromAttackCreature), List.of(defender));
+
+        defender.attack( healFromAttackCreature );
+        defender.attack( healFromAttackCreature );
+        turnQueue.next();
+        turnQueue.next();
+        turnQueue.next();
+        turnQueue.next();
+        defender.attack( healFromAttackCreature );
+        assertThat(defender.getCurrentHp()).isEqualTo(90);
+    }
+
 
     @Test
     void vampireCreatureTest() {

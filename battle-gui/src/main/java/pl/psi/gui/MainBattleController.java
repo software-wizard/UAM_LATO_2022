@@ -97,15 +97,18 @@ public class MainBattleController {
                 final int x1 = x;
                 final int y1 = y;
                 final MapTile mapTile = new MapTile("");
+
                 if (gameEngine.isCurrentCreature(new Point(x,y)) && gameEngine.isCurrentCreatureAlive()) {
                     mapTile.setBackground(Color.GREEN);
                 }
+
                 if (gameEngine.canMove(new Point(x, y))) {
                     mapTile.setBackground(Color.GREY);
 
                     mapTile.addEventHandler(MouseEvent.MOUSE_CLICKED,
                             e -> gameEngine.move(new Point(x1, y1)));
                 }
+
                 if (gameEngine.canAttack(new Point(x, y))) {
                     mapTile.setBackground(Color.RED);
 
