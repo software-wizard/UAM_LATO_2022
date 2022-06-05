@@ -10,11 +10,13 @@ import com.google.common.collect.Range;
 import lombok.Getter;
 import lombok.Setter;
 import pl.psi.TurnQueue;
+import pl.psi.spells.BuffDebuffSpell;
 import pl.psi.spells.Spell;
 import pl.psi.spells.SpellRang;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -42,6 +44,7 @@ public class Creature implements PropertyChangeListener, Comparable<Creature> {
     private double lastHealAmount;
     private double lastAttackDamage;
     private double lastCounterAttackDamage;
+    private List<Spell> runningSpells;
 
     Creature() {
     }
@@ -55,6 +58,7 @@ public class Creature implements PropertyChangeListener, Comparable<Creature> {
         calculator = aCalculator;
         alignment = aAlignment;
         luck = aLuck;
+        runningSpells = new ArrayList<>();
     }
 
     public void attack(final Creature aDefender) {
@@ -102,8 +106,10 @@ public class Creature implements PropertyChangeListener, Comparable<Creature> {
 
 
     public void castSpell(final Creature aDefender, Spell spell) {
-        if (isAlive())
+        if (isAlive()){
+            if(spell.getClass() == BuffDebuffSpell.class) runningSpells.add(spell);
             spell.castSpell(aDefender);
+        }
     }
 
     public void castSpell(final List<Creature> aDefender, Spell spell) {

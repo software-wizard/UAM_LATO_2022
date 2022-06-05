@@ -6,9 +6,13 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import pl.psi.Hero;
 import pl.psi.hero.HeroStatistics;
+import pl.psi.spells.SpellFactory;
 
 import java.io.IOException;
 import java.util.List;
+
+import static pl.psi.spells.SpellRang.ADVANCED;
+import static pl.psi.spells.SpellRang.BASIC;
 
 public class Start extends Application {
 
@@ -66,6 +70,5 @@ public class Start extends Application {
         ret.getCreatures().forEach(creature -> creature.setHeroNumber(2));
         return ret;
     }
-
 
 }

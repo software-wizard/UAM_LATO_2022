@@ -12,7 +12,7 @@ public class SpellFactory {
     public Spell<?> create(String name, SpellRang rang, int spellPower) {
 
         switch (name) {
-            case "LightingBolt":
+            case "Magic Arrow":
                 switch (rang) {
                     case BASIC:
                         return new DamageSpell(FIELD, name, BASIC, 10, (spellPower * 25) + 10);
@@ -50,17 +50,17 @@ public class SpellFactory {
                     case BASIC:
                         return new AreaDamageSpell(AREA, name, BASIC, 25,
                                 new boolean[][]{{false, false, true, false, false},
-                                        {false, true, true, true, false},
-                                        {true, true, true, true, true},
-                                        {false, true, true, true, false},
-                                        {false, false, true, false, false}}, spellPower + 10);
+                                                {false, true, true, true, false},
+                                                {true, true, true, true, true},
+                                                {false, true, true, true, false},
+                                                {false, false, true, false, false}}, spellPower + 10);
                     case ADVANCED:
                         return new AreaDamageSpell(AREA, name, ADVANCED, 30,
                                 new boolean[][]{{false, false, true, false, false},
-                                        {false, true, true, true, false},
-                                        {true, true, true, true, true},
-                                        {false, true, true, true, false},
-                                        {false, false, true, false, false}}, spellPower + 10);
+                                                {false, true, true, true, false},
+                                                {true, true, true, true, true},
+                                                {false, true, true, true, false},
+                                                {false, false, true, false, false}}, spellPower + 10);
                     case EXPERT:
                         return new AreaDamageSpell(AREA, name, EXPERT, 45,
                                 new boolean[][]{{false, false, true, false, false},

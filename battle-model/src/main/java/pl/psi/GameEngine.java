@@ -4,6 +4,7 @@ import lombok.Getter;
 import pl.psi.creatures.Creature;
 import pl.psi.creatures.FirstAidTent;
 import pl.psi.spells.AreaDamageSpell;
+import pl.psi.spells.BuffDebuffSpell;
 import pl.psi.spells.Spell;
 import pl.psi.spells.SpellFactory;
 
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.lang.Math.ceil;
+import static pl.psi.TurnQueue.END_OF_TURN;
 
 /**
  * TODO: Describe this class (The first line - until the first dot - will interpret as the brief description).
@@ -286,50 +288,52 @@ public class GameEngine {
                 .isPresent();
     }
 
+    private Hero getCurrentHero() {
+        return (hero1.getCreatures().contains(turnQueue.getCurrentCreature())) ? hero1 : hero2;
+    }
+
+    private Hero getEnemyHero() {
+        return (hero1.getCreatures().contains(turnQueue.getCurrentCreature())) ? hero2 : hero1;
+    }
+
     public void castSpell(final Point point, Spell spell) {
         switch (spell.getCategory()) {
             case FIELD:
                 board.getCreature(point)
                         .ifPresent(defender -> {
-                            turnQueue.getCurrentCreature()
-                                    .castSpell(defender, spell);
+                            if(spell.getClass() == BuffDebuffSpell.class){
+                                BuffDebuffSpell buffDebuffSpell = new BuffDebuffSpell((BuffDebuffSpell) spell, defender);
+                                turnQueue.addObserver(END_OF_TURN, (buffDebuffSpell.getRoundTimer()));
+                                turnQueue.getCurrentCreature().castSpell(defender, buffDebuffSpell);
+                            }else {
+                                turnQueue.getCurrentCreature()
+                                        .castSpell(defender, spell);
+                            }
                         });
                 break;
             case AREA:
                 List<Creature> creatureList = getCreaturesFromArea(point, (AreaDamageSpell) spell);
                 turnQueue.getCurrentCreature().castSpell(creatureList, spell);
                 break;
-            default:
-                throw new IllegalArgumentException("Not supported category.");
-        }
-    }
-
-    public void castSpell(Spell spell) {
-        //I can't cast for all heroes creatures
-        Hero currentHero = (hero1.getCreatures().contains(turnQueue.getCurrentCreature())) ? hero2 : hero1;
-        Hero enemyHero = (hero1.getCreatures().contains(turnQueue.getCurrentCreature())) ? hero1 : hero2;
-
-        switch (spell.getCategory()) {
             case FOR_ALL_ENEMY_CREATURES:
-                currentHero.getCreatures().forEach(creature ->
-                        board.getPoint(creature).ifPresent(creatureFromBoard ->
-                                castSpell(creatureFromBoard, spell)));
+                getEnemyHero().getCreatures().forEach(creature -> {
+                    creature.castSpell(creature, spell);
+                });
                 break;
             case FOR_ALL_ALLIED_CREATURES:
-                enemyHero.getCreatures().forEach(creature ->
-                        board.getPoint(creature).ifPresent(creatureFromBoard ->
-                                castSpell(creatureFromBoard, spell)));
+                getCurrentHero().getCreatures().forEach(creature -> {
+                    creature.castSpell(creature, spell);
+                });
                 break;
             case FOR_ALL_CREATURES:
-                Stream.concat(currentHero.getCreatures().stream(), enemyHero.getCreatures().stream())
-                        .forEach(creature ->
-                                board.getPoint(creature).ifPresent(creatureFromBoard ->
-                                        castSpell(creatureFromBoard, spell)));
+                Stream.concat(getCurrentHero().getCreatures().stream(), getEnemyHero().getCreatures().stream())
+                        .forEach(creature -> {
+                            creature.castSpell(creature, spell);
+                        });
                 break;
             default:
                 throw new IllegalArgumentException("Not supported category.");
         }
-
     }
 
     //ToDO: In the future think about better solution and refactor this
@@ -345,7 +349,7 @@ public class GameEngine {
 
         for (int i = startY; i < endY; i++) {
             for (int j = startX; j < endX; j++) {
-                if (board.getCreature(new Point(j, i)).isPresent()) {
+                if (board.getCreature(new Point(j, i)).isPresent() && areaDamageSpell.getArea()[i - startY][j - startX]) {
                     board.getCreature(new Point(j, i)).ifPresent(creatures::add);
                 }
             }

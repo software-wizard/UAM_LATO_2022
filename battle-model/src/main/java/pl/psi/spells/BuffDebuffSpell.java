@@ -1,25 +1,28 @@
 package pl.psi.spells;
 
-import pl.psi.TurnQueue;
+import lombok.Getter;
 import pl.psi.creatures.Creature;
 import pl.psi.creatures.CreatureStats;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.HashMap;
-import java.util.Map;
 
-
-public class BuffDebuffSpell extends Spell<Creature> implements PropertyChangeListener {
+public class BuffDebuffSpell extends Spell<Creature> {
 
     private final CreatureStats creatureStats;
-    private final int timer;
-    private final Map<Creature, Integer> spellTimer = new HashMap<>();
+    private final int time;
+    @Getter
+    private RoundTimer roundTimer;
 
-    public BuffDebuffSpell(SpellTypes category, String name, SpellRang rang, int manaCost, CreatureStats creatureStats, int timer) {
+    public BuffDebuffSpell(SpellTypes category, String name, SpellRang rang, int manaCost, CreatureStats creatureStats, int time) {
         super(category, name, rang, manaCost);
         this.creatureStats = creatureStats;
-        this.timer = timer;
+        this.time = time;
+    }
+
+    public BuffDebuffSpell(BuffDebuffSpell buffDebuffSpell, Creature creature) {
+        super(buffDebuffSpell.getCategory(), buffDebuffSpell.getName(), buffDebuffSpell.getRang(), buffDebuffSpell.getManaCost());
+        this.creatureStats = buffDebuffSpell.creatureStats;
+        this.time = buffDebuffSpell.time;
+        this.roundTimer = new RoundTimer(buffDebuffSpell.time, this, creature);
     }
 
     @Override
@@ -38,21 +41,5 @@ public class BuffDebuffSpell extends Spell<Creature> implements PropertyChangeLi
 
     public void unCastSpell(Creature creature) {
         creature.applyStatsWithSpells(convertToNegative(creatureStats));
-    }
-
-    @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        if (TurnQueue.END_OF_TURN.equals(evt.getPropertyName())) {
-            spellTimer.forEach(((creature, currentTimer) -> {
-                currentTimer = currentTimer - 1;
-                spellTimer.put(creature, currentTimer);
-            }));
-
-            spellTimer.forEach(((creature, currentTimer) -> {
-                if (currentTimer == 0) unCastSpell(creature);
-            }));
-
-            spellTimer.values().removeIf(currentTimer -> (currentTimer == 0));
-        }
     }
 }

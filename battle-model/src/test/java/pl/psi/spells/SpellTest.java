@@ -15,8 +15,8 @@ import static pl.psi.spells.SpellRang.*;
 
 public class SpellTest {
 
-    private static final Spell LIGHTING_BOLT_RANG_1 = new SpellFactory().create("LightingBolt", BASIC, 1);
-    private static final Spell LIGHTING_BOLT_RANG_2 = new SpellFactory().create("LightingBolt", ADVANCED, 1);
+    private static final Spell MAGIC_ARROW_RANG_1 = new SpellFactory().create("Magic Arrow", BASIC, 1);
+    private static final Spell MAGIC_ARROW_RANG_2 = new SpellFactory().create("Magic Arrow", ADVANCED, 1);
     private static final Spell HASTE_BASIC = new SpellFactory().create("Haste", BASIC, 1);
     private static final Spell HASTE_EXPERT = new SpellFactory().create("Haste", EXPERT, 1);
     private static final Spell SLOW_EXPERT = new SpellFactory().create("Slow", EXPERT, 1);
@@ -39,21 +39,21 @@ public class SpellTest {
             .build();
 
     @Test
-    void shouldCastLightningBoltAndTakeDamage() {
+    void shouldCastMagicArrowAndTakeDamage() {
         //given
         List<Creature> firstHeroCreatures = List.of(EXAMPLE_CREATURE_1);
         List<Creature> secondHeroCreatures = List.of(EXAMPLE_CREATURE_2);
 
         final GameEngine gameEngine =
-                new GameEngine(new Hero(firstHeroCreatures, List.of(LIGHTING_BOLT_RANG_1)),
-                        new Hero(secondHeroCreatures, List.of(LIGHTING_BOLT_RANG_1)));
+                new GameEngine(new Hero(firstHeroCreatures, List.of(MAGIC_ARROW_RANG_1)),
+                        new Hero(secondHeroCreatures, List.of(MAGIC_ARROW_RANG_1)));
 
         Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
                 .isPresent()).isTrue();
 
 
         //when
-        gameEngine.castSpell(new Point(14, 1), LIGHTING_BOLT_RANG_1);
+        gameEngine.castSpell(new Point(14, 1), MAGIC_ARROW_RANG_1);
 
 
         //then
@@ -70,7 +70,7 @@ public class SpellTest {
 
         final GameEngine gameEngine =
                 new GameEngine(new Hero(firstHeroCreatures, List.of(HASTE_BASIC)),
-                        new Hero(secondHeroCreatures, List.of(LIGHTING_BOLT_RANG_1)));
+                        new Hero(secondHeroCreatures, List.of(MAGIC_ARROW_RANG_1)));
 
         Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
                 .isPresent()).isTrue();
@@ -100,7 +100,7 @@ public class SpellTest {
 
         final GameEngine gameEngine =
                 new GameEngine(new Hero(secondHeroCreatures, List.of(FIREBALL)),
-                        new Hero(firstHeroCreatures, List.of(LIGHTING_BOLT_RANG_1)));
+                        new Hero(firstHeroCreatures, List.of(MAGIC_ARROW_RANG_1)));
 
         gameEngine.pass();
         gameEngine.move(new Point(14, 2));
@@ -136,8 +136,8 @@ public class SpellTest {
         List<Creature> secondHeroCreatures = List.of(EXAMPLE_CREATURE_2);
 
         final GameEngine gameEngine =
-                new GameEngine(new Hero(secondHeroCreatures, List.of(LIGHTING_BOLT_RANG_1, LIGHTING_BOLT_RANG_2)),
-                        new Hero(firstHeroCreatures, List.of(LIGHTING_BOLT_RANG_1)));
+                new GameEngine(new Hero(secondHeroCreatures, List.of(MAGIC_ARROW_RANG_1, MAGIC_ARROW_RANG_2)),
+                        new Hero(firstHeroCreatures, List.of(MAGIC_ARROW_RANG_1)));
 
         gameEngine.pass();
         gameEngine.move(new Point(14, 2));
@@ -150,8 +150,8 @@ public class SpellTest {
 
 
         //when
-        gameEngine.castSpell(new Point(14, 2), LIGHTING_BOLT_RANG_1);
-        gameEngine.castSpell(new Point(14, 3), LIGHTING_BOLT_RANG_2);
+        gameEngine.castSpell(new Point(14, 2), MAGIC_ARROW_RANG_1);
+        gameEngine.castSpell(new Point(14, 3), MAGIC_ARROW_RANG_2);
 
 
         //then
@@ -161,7 +161,7 @@ public class SpellTest {
 
 
     @Test
-    void shouldCastHasteForAllAlliedCreatures() {
+    void shouldCastHasteForAllAlliedCreaturesOnly() {
         //given
         List<Creature> firstHeroCreatures = List.of(EXAMPLE_CREATURE_1);
         List<Creature> secondHeroCreatures = List.of(EXAMPLE_CREATURE_2);
@@ -169,46 +169,25 @@ public class SpellTest {
 
         final GameEngine gameEngine =
                 new GameEngine(new Hero(firstHeroCreatures, List.of(HASTE_EXPERT)),
-                        new Hero(secondHeroCreatures, List.of(LIGHTING_BOLT_RANG_1)));
+                        new Hero(secondHeroCreatures, List.of(MAGIC_ARROW_RANG_1)));
 
         Assertions.assertThat(gameEngine.getCreature(new Point(0, 1))
                 .isPresent()).isTrue();
 
         //when
-        gameEngine.castSpell(HASTE_EXPERT);
+        gameEngine.castSpell(null, HASTE_EXPERT);
 
 
         //then
         Assertions.assertThat(gameEngine.getCreature(new Point(0, 1))
                 .get().getBuffedStats().getMoveRange()).isEqualTo(30); // ToDo: change to checking get summed up stats
+
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
+                .get().getBuffedStats().getMoveRange()).isEqualTo(0);
     }
 
     @Test
-    void whenCastHasteForAllEnemyCreaturesEnemyCreaturesShouldHaveSameStats() {
-        //given
-        List<Creature> firstHeroCreatures = List.of(EXAMPLE_CREATURE_1);
-        List<Creature> secondHeroCreatures = List.of(EXAMPLE_CREATURE_2);
-
-
-        final GameEngine gameEngine =
-                new GameEngine(new Hero(firstHeroCreatures, List.of(HASTE_EXPERT)),
-                        new Hero(secondHeroCreatures, List.of(LIGHTING_BOLT_RANG_1)));
-
-        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
-                .isPresent()).isTrue();
-
-        //when
-        gameEngine.castSpell(HASTE_EXPERT);
-
-
-        //then
-        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
-                .get().getBuffedStats().getMoveRange()).isEqualTo(0); // ToDo: change to checking get summed up stats
-    }
-
-
-    @Test
-    void shouldCastSlowForAllEnemyCreatures() {
+    void shouldCastSlowForAllEnemyCreaturesOnly() {
         //given
         List<Creature> firstHeroCreatures = List.of(EXAMPLE_CREATURE_1);
         List<Creature> secondHeroCreatures = List.of(EXAMPLE_CREATURE_2);
@@ -216,42 +195,23 @@ public class SpellTest {
 
         final GameEngine gameEngine =
                 new GameEngine(new Hero(firstHeroCreatures, List.of(SLOW_EXPERT)),
-                        new Hero(secondHeroCreatures, List.of(LIGHTING_BOLT_RANG_1)));
+                        new Hero(secondHeroCreatures, List.of(MAGIC_ARROW_RANG_1)));
 
         Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
                 .isPresent()).isTrue();
 
         //when
-        gameEngine.castSpell(SLOW_EXPERT);
+        gameEngine.castSpell(null, SLOW_EXPERT);
 
 
         //then
         Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
-                .get().getBuffedStats().getMoveRange()).isEqualTo(-30); // ToDo: change to checking get summed up stats
-    }
-
-    @Test
-    void whenCastSlowForAllEnemyCreaturesAlliedCreaturesShouldHaveSameStats() {
-        //given
-        List<Creature> firstHeroCreatures = List.of(EXAMPLE_CREATURE_1);
-        List<Creature> secondHeroCreatures = List.of(EXAMPLE_CREATURE_2);
-
-
-        final GameEngine gameEngine =
-                new GameEngine(new Hero(firstHeroCreatures, List.of(SLOW_EXPERT)),
-                        new Hero(secondHeroCreatures, List.of(LIGHTING_BOLT_RANG_1)));
+                .get().getBuffedStats().getMoveRange()).isEqualTo(-30);
 
         Assertions.assertThat(gameEngine.getCreature(new Point(0, 1))
-                .isPresent()).isTrue();
-
-        //when
-        gameEngine.castSpell(SLOW_EXPERT);
-
-
-        //then
-        Assertions.assertThat(gameEngine.getCreature(new Point(0, 1))
-                .get().getBuffedStats().getMoveRange()).isEqualTo(0); // ToDo: change to checking get summed up stats
+                .get().getBuffedStats().getMoveRange()).isEqualTo(0);
     }
+
 
     @Test
     void shouldCastDeathRippleForAllCreatures() {
@@ -263,7 +223,7 @@ public class SpellTest {
 
         final GameEngine gameEngine =
                 new GameEngine(new Hero(firstHeroCreatures, List.of(deathRipple)),
-                        new Hero(secondHeroCreatures, List.of(LIGHTING_BOLT_RANG_1)));
+                        new Hero(secondHeroCreatures, List.of(MAGIC_ARROW_RANG_1)));
 
         Assertions.assertThat(gameEngine.getCreature(new Point(0, 1))
                 .isPresent()).isTrue();
@@ -271,13 +231,59 @@ public class SpellTest {
                 .isPresent()).isTrue();
 
         //when
-        gameEngine.castSpell(deathRipple);
+        gameEngine.castSpell(null, deathRipple);
+
+
+        //then
+        Assertions.assertThat(gameEngine.getCreature(new Point(0, 1))
+                .get().getCurrentHp()).isEqualTo(85);
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
+                .get().getCurrentHp()).isEqualTo(85);
+    }
+
+    @Test
+    void shouldRunningForSpecificAmountOfRounds() {
+        //given
+        List<Creature> firstHeroCreatures = List.of(EXAMPLE_CREATURE_1);
+        List<Creature> secondHeroCreatures = List.of(EXAMPLE_CREATURE_2);
+
+
+        final GameEngine gameEngine =
+                new GameEngine(new Hero(firstHeroCreatures, List.of(HASTE_BASIC)),
+                        new Hero(secondHeroCreatures, List.of(MAGIC_ARROW_RANG_1)));
+
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
+                .isPresent()).isTrue();
+
+        //when
+        gameEngine.castSpell(new Point(14, 1), HASTE_BASIC);
 
 
         //then
         Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
-                .get().getCurrentHp()).isEqualTo(85);
-        Assertions.assertThat(gameEngine.getCreature(new Point(0, 1))
-                .get().getCurrentHp()).isEqualTo(85);
+                .get().getBuffedStats().getMoveRange()).isEqualTo(10);
+        gameEngine.pass();
+        gameEngine.pass();
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
+                .get().getBuffedStats().getMoveRange()).isEqualTo(10);
+        gameEngine.pass();
+        gameEngine.pass();
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
+                .get().getBuffedStats().getMoveRange()).isEqualTo(0);
+    }
+
+    @Test
+    void shouldDamageOnlySpecificFieldsInRange() {
+
+    }
+
+    @Test
+    void shouldUnCastHasteAndCastSlow(){
+
+    }
+
+    @Test
+    void creatureShouldOnlyHaveThreeRunningSpells(){
+
     }
 }
