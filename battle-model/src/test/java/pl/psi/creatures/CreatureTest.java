@@ -611,6 +611,42 @@ public class CreatureTest {
     }
 
     @Test
+    void creatureShouldHaveInfiniteCounters() {
+        final Creature decorated = new Creature.Builder().statistic(CreatureStats.builder()
+                        .maxHp(100)
+                        .damage(Range.closed(5, 5))
+                        .build())
+                .build();
+
+        final MoreCounterAttacksCreature moreCounterAttacksCreature = new MoreCounterAttacksCreature(decorated,Integer.MAX_VALUE);
+
+        final Creature attacker1 = new Creature.Builder().statistic(CreatureStats.builder()
+                        .maxHp(100)
+                        .damage(NOT_IMPORTANT_DMG)
+                        .build())
+                .build();
+
+        final Creature attacker2 = new Creature.Builder().statistic(CreatureStats.builder()
+                        .maxHp(100)
+                        .damage(NOT_IMPORTANT_DMG)
+                        .build())
+                .build();
+
+        attacker1.attack(moreCounterAttacksCreature);
+        attacker1.attack(moreCounterAttacksCreature);
+        attacker1.attack(moreCounterAttacksCreature);
+        attacker1.attack(moreCounterAttacksCreature);
+
+        assertThat(attacker1.getCurrentHp()).isEqualTo(80);
+
+        attacker2.attack(moreCounterAttacksCreature);
+        attacker2.attack(moreCounterAttacksCreature);
+
+        assertThat(attacker2.getCurrentHp()).isEqualTo(90);
+
+    }
+
+    @Test
     void creatureShouldAttackWithThunderbolt() {
         final Creature decorated = new Creature.Builder().statistic(CreatureStats.builder()
                 .damage(Range.closed(5, 5))
