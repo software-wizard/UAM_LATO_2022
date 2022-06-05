@@ -538,9 +538,10 @@ public class CreatureTest {
     @Test
     void creatureShouldAttackTwice() {
         final Creature decorated = new Creature.Builder().statistic(CreatureStats.builder()
-                .maxHp(100)
+                .maxHp(6)
                 .damage(Range.closed(10, 10))
                 .build())
+                .amount(2)
                 .build();
 
         final DoubleAttackCreature doubleAttackCreature = new DoubleAttackCreature(decorated);
@@ -552,8 +553,9 @@ public class CreatureTest {
                 .build();
 
         doubleAttackCreature.attack(defender);
-        assertThat(defender.getCurrentHp()).isEqualTo(80);
-        assertThat(doubleAttackCreature.getCurrentHp()).isEqualTo(90);
+
+        assertThat(defender.getCurrentHp()).isEqualTo(70);
+        assertThat(doubleAttackCreature.getCurrentHp()).isEqualTo(2);
     }
 
     @Test
