@@ -95,22 +95,28 @@ public enum CreatureStatistic implements CreatureStatisticIf {
     //CASTLE FRACTION
     PIKEMAN("Pikeman", 4, 5, 10, 4, Range.closed(1, 3), 1,
             "\n",
-            true, CreatureType.ALIVE, true, 1),
+            false, CreatureType.ALIVE, true, 1),
     HALBERDIER("Halberdier", 6, 5, 10, 5, Range.closed(2, 3), 1,
             "\n",
+            true, CreatureType.ALIVE, true, 1),
+    ARCHER("Archer", 6, 5, 10, 4, Range.closed(2, 3), 2,
+            "\n",
             false, CreatureType.ALIVE, true, 1),
-    GRIFFIN("Griffin", 8, 8, 25, 5, Range.closed(3, 6), 1,
-            "\n",
-            true, CreatureType.ALIVE, false, 2),
-    ROYAL_GRIFFIN("Halberdier", 9, 9, 25, 9, Range.closed(3, 6), 1,
-            "\n",
-            false, CreatureType.ALIVE, false, 1),
-    SWORDSMAN("Swordsman", 10, 12, 35, 5, Range.closed(6, 9), 1,
+    MARKSMAN("Marksman", 6, 5, 10, 6, Range.closed(2, 3), 2,
             "\n",
             true, CreatureType.ALIVE, true, 1),
+    GRIFFIN("Griffin", 8, 8, 25, 5, Range.closed(3, 6), 3,
+            "\n",
+            false, CreatureType.ALIVE, false, 2),
+    ROYAL_GRIFFIN("Halberdier", 9, 9, 25, 9, Range.closed(3, 6), 3,
+            "\n",
+            true, CreatureType.ALIVE, false, 1),
+    SWORDSMAN("Swordsman", 10, 12, 35, 5, Range.closed(6, 9), 4,
+            "\n",
+            false, CreatureType.ALIVE, true, 1),
     CRUSADER("Crusader", 12, 12, 35, 6, Range.closed(7, 10), 4,
             "Good upgrade, but still lacks speed. Seem undefeatable in large numbers.\n",
-            false, CreatureType.ALIVE, true, 1);
+            true, CreatureType.ALIVE, true, 1);
 
     private final String name;
     private final double attack;
