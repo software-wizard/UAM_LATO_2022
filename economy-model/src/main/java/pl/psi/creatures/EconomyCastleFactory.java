@@ -17,6 +17,8 @@ public class EconomyCastleFactory {
                     return new EconomyCreature(CreatureStatistic.GRIFFIN, aAmount, new Money(200));
                 case 4:
                     return new EconomyCreature(CreatureStatistic.SWORDSMAN, aAmount, new Money(300));
+                case 5:
+                    return new EconomyCreature(CreatureStatistic.MONK, aAmount, new Money(400));
                 default:
                     throw new IllegalArgumentException(EXCEPTION_MESSAGE);
             }
@@ -30,6 +32,8 @@ public class EconomyCastleFactory {
                     return new EconomyCreature(CreatureStatistic.ROYAL_GRIFFIN, aAmount, new Money(240));
                 case 4:
                     return new EconomyCreature(CreatureStatistic.CRUSADER, aAmount, new Money(400));
+                case 5:
+                    return new EconomyCreature(CreatureStatistic.ZEALOT, aAmount, new Money(450));
                 default:
                     throw new IllegalArgumentException(EXCEPTION_MESSAGE);
             }
