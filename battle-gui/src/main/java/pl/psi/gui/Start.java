@@ -39,13 +39,23 @@ public class Start extends Application {
     }
 
     private Hero createP1() {
-        final Hero ret = new Hero(List.of(new NecropolisFactory().create(false, 5, 5), new NecropolisFactory().create(true, 4, 5)), HeroStatistics.NECROMANCER);
+        final Hero ret =
+                new Hero(List.of(
+                        new NecropolisFactory().create(true, 5, 5),
+                        new NecropolisFactory().create(true, 3, 5),
+                        new NecropolisFactory().create(true,6,5),
+                        new NecropolisFactory().create(true,7,5)
+                        ),HeroStatistics.NECROMANCER);
         ret.getCreatures().forEach(creature -> creature.setHeroNumber(1));
         return ret;
     }
 
     private Hero createP2() {
-        final Hero ret = new Hero(List.of(new StrongholdFactory().create(false, 1, 30), new StrongholdFactory().create(false, 1, 15), new StrongholdFactory().create(true, 1, 5)), HeroStatistics.KNIGHT);
+        final Hero ret = new Hero(List.of(
+                new StrongholdFactory().create(true, 3, 30),
+                new StrongholdFactory().create(true, 5, 15),
+                new StrongholdFactory().create(true, 7, 100)
+        ),HeroStatistics.KNIGHT);
         ret.getCreatures().forEach(creature -> creature.setHeroNumber(2));
         return ret;
     }

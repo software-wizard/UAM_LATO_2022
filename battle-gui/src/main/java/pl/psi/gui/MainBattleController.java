@@ -128,8 +128,16 @@ public class MainBattleController {
                 final int y1 = y;
                 final MapTile mapTile = new MapTile("");
 
-                if (gameEngine.isCurrentCreature(new Point(x,y)) && gameEngine.isCurrentCreatureAlive()) {
-                    mapTile.setBackground(Color.GREEN);
+                if(gameEngine.getCreature(new Point(x, y)).isPresent()) {
+                    if (gameEngine.getCreature(new Point(x, y)).get().isAlive()) {
+                        mapTile.setName("\n\n" + gameEngine.getCreature(new Point(x, y)).get().getAmount());
+                        var img = new Image(gameEngine.getCreature(new Point(x, y)).get().getBasicStats().getImagePath());
+                        mapTile.setBackground(img);
+                    }
+                    else{
+                        var img = new Image("/images/dead.jpg");
+                        mapTile.setBackground(img);
+                    }
                 }
 
                 if (gameEngine.canMove(new Point(x, y))) {
@@ -153,15 +161,16 @@ public class MainBattleController {
                 renderSpecialFields(mapTile, x, y);
 
                 if(gameEngine.getCreature(new Point(x, y)).isPresent()){
-                    if(gameEngine.getCreature(new Point(x, y)).get().isAlive()){
-                        mapTile.setName(gameEngine.getCreature(new Point(x, y)).get().getName() + "\n\n"
-                                + gameEngine.getCreature( new Point(x, y) ).get().getAmount());
-
-                    }
-                    else{
-                        var img = new Image("/images/dead.jpg");
-                        mapTile.setBackground(img);
-                    }
+//                    if(gameEngine.getCreature(new Point(x, y)).get().isAlive()){
+//                        mapTile.setStyle("-fx-font: 14 arial;-fx-font-weight: bold;");
+//                        mapTile.setName("\n\n\n" + gameEngine.getCreature( new Point(x, y) ).get().getAmount());
+//                        var img = new Image(gameEngine.getCreature(new Point(x,y)).get().getBasicStats().getImagePath());
+//                        mapTile.setBackground(img);
+//                    }
+//                    else{
+//                        var img = new Image("/images/dead.jpg");
+//                        mapTile.setBackground(img);
+//                    }
                     int finalX = x;
                     int finalY = y;
                     mapTile.setOnMouseClicked(e -> {
@@ -171,7 +180,8 @@ public class MainBattleController {
                     });
 
                     if (gameEngine.canAttack(new Point(x, y))) {
-                        mapTile.setBackground(Color.RED);
+                        var img = new Image(gameEngine.getCreature(new Point(x,y)).get().getBasicStats().getCanAttackImagePath());
+                        mapTile.setBackground(img);
 
                         mapTile.setOnMousePressed(
                                 e -> {
@@ -180,6 +190,11 @@ public class MainBattleController {
                                     }
                                 });
                     }
+                }
+
+                if (gameEngine.isCurrentCreature(new Point(x,y)) && gameEngine.isCurrentCreatureAlive()) {
+                    var img = new Image(gameEngine.getCreature(new Point(x,y)).get().getBasicStats().getCurrentImagePath());
+                    mapTile.setBackground(img);
                 }
 
                 console.setText(gameEngine.getAttackInformation());

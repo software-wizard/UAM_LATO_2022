@@ -27,6 +27,9 @@ public class CreatureStats implements CreatureStatisticIf {
     private final CreatureStatistic.CreatureType type;
     private final boolean isGround;
     private final int size;
+    private final String imagePath;
+    private final String canAttackImagePath;
+    private final String currentImagePath;
 
     @Override
     public CreatureStatistic.CreatureType getType() {
@@ -35,6 +38,16 @@ public class CreatureStats implements CreatureStatisticIf {
 
     public boolean isGround() {
         return isGround;
+    }
+
+    @Override
+    public String getCanAttackImagePath() {
+        return canAttackImagePath;
+    }
+
+    @Override
+    public String getCurrentImagePath() {
+        return currentImagePath;
     }
 
     @Override

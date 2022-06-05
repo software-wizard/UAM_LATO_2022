@@ -30,4 +30,10 @@ public interface CreatureStatisticIf {
     default boolean isGoodAligned() {
         return false;
     }
+
+    String getImagePath();
+
+    String getCanAttackImagePath();
+
+    String getCurrentImagePath();
 }

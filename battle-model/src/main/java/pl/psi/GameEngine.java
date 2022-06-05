@@ -63,7 +63,8 @@ public class GameEngine {
         additionalAttackInformation = "";
         int afterAmount = getCreature(point).get().getAmount();
         double afterCurrentHp = getCreature(point).get().getCurrentHp();
-        int damageDealt = (int) calculateDamageDealt(maxHp, beforeAmount, beforeCurrentHp, afterAmount, afterCurrentHp );
+        //int damageDealt = (int) calculateDamageDealt(maxHp, beforeAmount, beforeCurrentHp, afterAmount, afterCurrentHp );
+        int damageDealt = (int) getCurrentCreature().getLastAttackDamage();
         if(beforeAmount-afterAmount == 0){
             System.out.println(getCurrentCreature().getName() + " attacked " + getCreature(point).get().getName() + " for " + damageDealt + ".");
             attackInformation = getCurrentCreature().getName() + " attacked " + getCreature(point).get().getName() + " for " + damageDealt + ".";

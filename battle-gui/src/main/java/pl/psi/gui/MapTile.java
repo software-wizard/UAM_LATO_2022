@@ -19,6 +19,7 @@ class MapTile extends StackPane {
         getChildren().add(rect);
         label = new Label(aName);
         getChildren().add(label);
+        label.setStyle("-fx-text-fill: white;-fx-font-weight: bold;-fx-font: 14 arial;");
     }
 
     void setName(final String aName) {
