@@ -12,14 +12,14 @@ public class BuffDebuffSpell extends Spell<Creature> {
     @Getter
     private RoundTimer roundTimer;
 
-    public BuffDebuffSpell(SpellTypes category, String name, SpellRang rang, int manaCost, CreatureStats creatureStats, int time) {
-        super(category, name, rang, manaCost);
+    public BuffDebuffSpell(SpellTypes category, SpellNames name, SpellMagicClass spellMagicClass, SpellRang rang, int manaCost, CreatureStats creatureStats, int time) {
+        super(category, name, spellMagicClass, rang, manaCost);
         this.creatureStats = creatureStats;
         this.time = time;
     }
 
     public BuffDebuffSpell(BuffDebuffSpell buffDebuffSpell, Creature creature) {
-        super(buffDebuffSpell.getCategory(), buffDebuffSpell.getName(), buffDebuffSpell.getRang(), buffDebuffSpell.getManaCost());
+        super(buffDebuffSpell.getCategory(), buffDebuffSpell.getName(), buffDebuffSpell.getSpellMagicClass(), buffDebuffSpell.getRang(), buffDebuffSpell.getManaCost());
         this.creatureStats = buffDebuffSpell.creatureStats;
         this.time = buffDebuffSpell.time;
         this.roundTimer = new RoundTimer(buffDebuffSpell.time, this, creature);

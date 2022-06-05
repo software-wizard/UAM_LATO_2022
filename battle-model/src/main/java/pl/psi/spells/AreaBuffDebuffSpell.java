@@ -9,8 +9,8 @@ public class AreaBuffDebuffSpell extends Spell<List<Creature>> {
 
     private final CreatureStats creatureStats;
 
-    public AreaBuffDebuffSpell(SpellTypes category, String name, SpellRang rang, int manaCost, CreatureStats creatureStats) {
-        super(category, name, rang, manaCost);
+    public AreaBuffDebuffSpell(SpellTypes category, SpellNames name, SpellMagicClass spellMagicClass, SpellRang rang, int manaCost, CreatureStats creatureStats) {
+        super(category, name, spellMagicClass, rang, manaCost);
         this.creatureStats = creatureStats;
     }
 
