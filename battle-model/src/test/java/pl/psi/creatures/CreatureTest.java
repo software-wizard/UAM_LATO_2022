@@ -559,6 +559,31 @@ public class CreatureTest {
     }
 
     @Test
+    void shooterCreatureShouldAttackTwice() {
+        final Creature decorated = new Creature.Builder().statistic(CreatureStats.builder()
+                        .maxHp(6)
+                        .damage(Range.closed(5, 5))
+                        .build())
+                .amount(2)
+                .build();
+
+        final ShooterCreature shooterCreature = new ShooterCreature(decorated,12);
+        final DoubleAttackCreature doubleAttackCreature = new DoubleAttackCreature(shooterCreature);
+
+
+        final Creature defender = new Creature.Builder().statistic(CreatureStats.builder()
+                        .maxHp(100)
+                        .damage(Range.closed(10, 10))
+                        .build())
+                .build();
+
+        doubleAttackCreature.attack(defender);
+
+        assertThat(defender.getCurrentHp()).isEqualTo(80);
+        assertThat(doubleAttackCreature.getCurrentHp()).isEqualTo(6);
+    }
+
+    @Test
     void creatureShouldAttackWithThunderbolt() {
         final Creature decorated = new Creature.Builder().statistic(CreatureStats.builder()
                 .damage(Range.closed(5, 5))
