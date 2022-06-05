@@ -11,6 +11,9 @@ import pl.psi.spells.SpellFactory;
 import java.io.IOException;
 import java.util.List;
 
+import static pl.psi.spells.SpellRang.ADVANCED;
+import static pl.psi.spells.SpellRang.BASIC;
+
 import static pl.psi.spells.SpellNames.*;
 import static pl.psi.spells.SpellRang.BASIC;
 

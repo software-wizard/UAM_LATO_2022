@@ -34,10 +34,6 @@ public class Creature implements PropertyChangeListener, Comparable<Creature> {
     private boolean canCounterAttack = true;
     private DamageCalculatorIf calculator;
     private int heroNumber;
-    /**
-     * REMEMBER TO DELETE ANY USAGE OF THIS
-     */
-    private double DEFENCE_MULTIPLIER = 0.2;
     private double spellDamageReduction = 1;
     private int morale = 1; // range = < -3;3 >
     private int luck;
@@ -63,6 +59,11 @@ public class Creature implements PropertyChangeListener, Comparable<Creature> {
         alignment = aAlignment;
         luck = aLuck;
         runningSpells = new ArrayList<>();
+        runningSpells = new ArrayList<>();
+    }
+
+    public void increaseStats(CreatureStatisticIf statIncrease) {
+        externalStats.addStats(statIncrease);
     }
 
     public void attack(final Creature aDefender) {
@@ -109,7 +110,6 @@ public class Creature implements PropertyChangeListener, Comparable<Creature> {
     public void castSpell(final Creature aDefender, Spell spell) {
         if (isAlive()) {
             if (spell.getClass() == BuffDebuffSpell.class) runningSpells.add(spell);
-
             spell.castSpell(aDefender);
         }
     }

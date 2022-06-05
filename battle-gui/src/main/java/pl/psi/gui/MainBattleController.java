@@ -2,6 +2,8 @@ package pl.psi.gui;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -13,11 +15,17 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import pl.psi.GameEngine;
 import pl.psi.Hero;
 import pl.psi.Point;
+import pl.psi.spells.SpellFactory;
+
+import java.io.IOException;
+
+import static pl.psi.spells.SpellRang.BASIC;
 import pl.psi.TurnQueue;
 import pl.psi.spells.Spell;
 

@@ -3,6 +3,9 @@ package pl.psi;
 import lombok.Getter;
 import pl.psi.creatures.Creature;
 import pl.psi.creatures.FirstAidTent;
+import pl.psi.spells.AreaDamageSpell;
+import pl.psi.spells.BuffDebuffSpell;
+import pl.psi.spells.Spell;
 import pl.psi.spells.*;
 
 import java.beans.PropertyChangeListener;
@@ -285,9 +288,6 @@ public class GameEngine {
     public void castSpell(final Point point, Spell spell) {
         switch (spell.getCategory()) {
             case FIELD:
-            case FOR_ALL_ENEMY_CREATURES:
-            case FOR_ALL_ALLIED_CREATURES:
-            case FOR_ALL_CREATURES:
                 board.getCreature(point)
                         .ifPresent(defender -> {
                             if (spell instanceof BuffDebuffSpell) {
