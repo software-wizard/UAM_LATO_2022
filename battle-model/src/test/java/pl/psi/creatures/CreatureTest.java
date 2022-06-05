@@ -643,7 +643,29 @@ public class CreatureTest {
         attacker2.attack(moreCounterAttacksCreature);
 
         assertThat(attacker2.getCurrentHp()).isEqualTo(90);
+    }
 
+    @Test
+    void creatureShouldNotHaveMeleePenalty() {
+        final Creature decorated = new Creature.Builder().statistic(CreatureStats.builder()
+                        .maxHp(100)
+                        .damage(Range.closed(10, 10))
+                        .build())
+                .build();
+
+        final NoMeleePenaltyShooterCreature zealot = new NoMeleePenaltyShooterCreature(decorated, 1);
+
+        final Creature defender = new Creature.Builder()
+                .statistic(CreatureStats.builder()
+                        .maxHp(100)
+                        .damage(Range.closed(10,10))
+                        .build())
+                .build();
+
+        zealot.setInMelee(true);
+        zealot.attack(defender);
+        assertThat(defender.getCurrentHp()).isEqualTo(90);
+        assertThat(zealot.getCurrentHp()).isEqualTo(90);
     }
 
     @Test
