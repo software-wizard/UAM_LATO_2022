@@ -584,6 +584,33 @@ public class CreatureTest {
     }
 
     @Test
+    void creatureShouldHaveTwoCounters() {
+        final Creature decorated = new Creature.Builder().statistic(CreatureStats.builder()
+                        .maxHp(100)
+                        .damage(Range.closed(5, 5))
+                        .build())
+                .build();
+
+        final MoreCounterAttacksCreature moreCounterAttacksCreature = new MoreCounterAttacksCreature(decorated,2);
+
+        final Creature attacker = new Creature.Builder().statistic(CreatureStats.builder()
+                        .maxHp(100)
+                        .damage(Range.closed(10, 10))
+                        .build())
+                .build();
+
+        attacker.attack(moreCounterAttacksCreature);
+        attacker.attack(moreCounterAttacksCreature);
+
+        assertThat(moreCounterAttacksCreature.getCurrentHp()).isEqualTo(80);
+        assertThat(attacker.getCurrentHp()).isEqualTo(90);
+
+        attacker.attack(moreCounterAttacksCreature);
+
+        assertThat(attacker.getCurrentHp()).isEqualTo(90);
+    }
+
+    @Test
     void creatureShouldAttackWithThunderbolt() {
         final Creature decorated = new Creature.Builder().statistic(CreatureStats.builder()
                 .damage(Range.closed(5, 5))
