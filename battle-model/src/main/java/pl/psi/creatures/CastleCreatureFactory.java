@@ -24,6 +24,11 @@ public class CastleCreatureFactory {
                     return new Creature.Builder().statistic(CreatureStatistic.SWORDSMAN)
                             .amount(aAmount)
                             .build();
+                case 5:
+                    Creature creature2 = new Creature.Builder().statistic(CreatureStatistic.MONK)
+                            .amount(aAmount)
+                            .build();
+                    return new ShooterCreature( creature2, 12 );
             }
         } else {
             switch (aTier) {
@@ -44,6 +49,11 @@ public class CastleCreatureFactory {
                     return new Creature.Builder().statistic(CreatureStatistic.CRUSADER)
                             .amount(aAmount)
                             .build();
+                case 5:
+                    Creature creature2 = new Creature.Builder().statistic(CreatureStatistic.MONK)
+                            .amount(aAmount)
+                            .build();
+                    return new ShooterCreature( creature2, 24 );
             }
         }
         throw new IllegalArgumentException("Cannot recognize creature by tier and upgrade or not.");
