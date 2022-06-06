@@ -22,7 +22,7 @@ public class Board {
 
     public boolean canCreatureAttackAnyone( Creature creature ){
         for(int x = 0; x<15; x++){
-            for(int y = 0; y<9; y++){
+            for(int y = 0; y<10; y++){
                 Point point = new Point(x,y);
                 if(getCreature(point).isPresent() && !getCreature(point).get().getName().equals(creature.getName()) && canAttack( creature, point ) && getCreature(point).get().isAlive()){
                     return true;

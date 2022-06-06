@@ -129,17 +129,8 @@ public class GameEngine {
                 .ifPresent(firstAidTent::healCreature);
     }
 
-    public boolean anyActionLeft(){
-        return currentCreatureCanAttack || currentCreatureCanMove;
-    }
-
     public String getAttackInformation(){
         return attackInformation + "\n" + additionalAttackInformation;
-    }
-
-    public void clearAttackInformation(){
-        attackInformation = "";
-        additionalAttackInformation = "";
     }
 
     public boolean allActionLeft(){
