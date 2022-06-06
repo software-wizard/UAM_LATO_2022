@@ -60,6 +60,12 @@ public class Creature implements PropertyChangeListener {
         externalStats.addStats(statIncrease);
     }
 
+    public boolean[][] getSplashDamageRange(){
+        boolean[][] range = new boolean[1][1];
+        range[0][0] = true;
+        return range;
+    }
+
     public void attack(final Creature aDefender) {
         if (isAlive()) {
             final double damage = getCalculator().calculateDamage(this, aDefender);

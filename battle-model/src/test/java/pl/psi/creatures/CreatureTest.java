@@ -752,4 +752,17 @@ public class CreatureTest {
         assertThat( creature.getArmor() ).isEqualTo(11);
     }
 
+    @Test
+    void creatureShouldHaveSplashDamageRange(){
+        final Creature creature = new Creature.Builder().statistic(CreatureStats.builder()
+                .maxHp(NOT_IMPORTANT)
+                .armor(11)
+                .build())
+                .build();
+
+        boolean[][] range = new boolean[1][1];
+        range[0][0] = true;
+        assertThat(creature.getSplashDamageRange()).isEqualTo(range);
+    }
+
 }
