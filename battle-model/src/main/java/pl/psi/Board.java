@@ -24,7 +24,7 @@ public class Board {
         for(int x = 0; x<15; x++){
             for(int y = 0; y<9; y++){
                 Point point = new Point(x,y);
-                if(getCreature(point).isPresent() && !getCreature(point).get().getName().equals(creature.getName()) && canAttack( creature, point )){
+                if(getCreature(point).isPresent() && !getCreature(point).get().getName().equals(creature.getName()) && canAttack( creature, point ) && getCreature(point).get().isAlive()){
                     return true;
                 }
             }
@@ -113,6 +113,19 @@ public class Board {
         positionsList.add(adjacentPoint6);
         positionsList.add(adjacentPoint7);
         positionsList.add(adjacentPoint8);
+        return positionsList;
+    }
+
+    public List<Point> getCreatureSplashDamagePointsList(Creature creature, Point defender) {
+        Integer[][] area = creature.getSplashDamageRange();
+        List<Point> positionsList = new ArrayList<>();
+        for(int i = 0; i<3;i++){
+            for(int j = 0; j<3;j++){
+                if(area[i][j] == 1){
+                    positionsList.add(new Point(defender.getX()-1+j,defender.getY()+1-i));
+                }
+            }
+        }
         return positionsList;
     }
 }

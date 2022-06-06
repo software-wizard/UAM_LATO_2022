@@ -146,6 +146,11 @@ public class AbstractCreature extends Creature {
     }
 
     @Override
+    public void addShots(int i) {
+        decorated.addShots(i);
+    }
+
+    @Override
     protected void restoreCurrentHpToMax() {
         decorated.restoreCurrentHpToMax();
     }
@@ -153,5 +158,10 @@ public class AbstractCreature extends Creature {
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
         decorated.propertyChange(evt);
+    }
+
+    @Override
+    public Integer[][] getSplashDamageRange(){
+        return decorated.getSplashDamageRange();
     }
 }

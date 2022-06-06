@@ -9,8 +9,10 @@ import pl.psi.spells.Spell;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import static java.lang.Math.abs;
@@ -45,25 +47,23 @@ public class GameEngine {
         if(turnQueue.getCurrentCreature().isDefending()){
             turnQueue.getCurrentCreature().defend(false);
         }
+        System.out.println(Arrays.deepToString(turnQueue.getCurrentCreature().getSplashDamageRange()));
         AttackAndPrintAttackInformation(point);
         currentCreatureCanMove = false;
         currentCreatureCanAttack = false;
         pass();
         observerSupport.firePropertyChange(CREATURE_MOVED, null, null);
+    }
 
+    public List<Point> getCurrentCreatureSplashDamagePointsList(Point point){
+        return board.getCreatureSplashDamagePointsList(getCurrentCreature(), point);
     }
 
     private void AttackAndPrintAttackInformation(final Point point) {
-        double maxHp = getCreature(point).get().getStats().getMaxHp();
         int beforeAmount = getCreature(point).get().getAmount();
-        double beforeCurrentHp = getCreature(point).get().getCurrentHp();
-        board.getCreature(point)
-                .ifPresent(defender -> turnQueue.getCurrentCreature()
-                        .attack(defender));
+        applyAttackLogic(point);
         additionalAttackInformation = "";
         int afterAmount = getCreature(point).get().getAmount();
-        double afterCurrentHp = getCreature(point).get().getCurrentHp();
-        //int damageDealt = (int) calculateDamageDealt(maxHp, beforeAmount, beforeCurrentHp, afterAmount, afterCurrentHp );
         int damageDealt = (int) getCurrentCreature().getLastAttackDamage();
         if(beforeAmount-afterAmount == 0){
             System.out.println(getCurrentCreature().getName() + " attacked " + getCreature(point).get().getName() + " for " + damageDealt + ".");
@@ -80,13 +80,25 @@ public class GameEngine {
         if(getCurrentCreature().getLastHealAmount() > 0){
             additionalAttackInformation = getCurrentCreature().getName() + " healed for " + getCurrentCreature().getLastHealAmount();
         }
+
+        System.out.println(getCurrentCreature().getShots());
     }
 
-    private double calculateDamageDealt(double maxHp, int beforeAmount, double beforeCurrentHp, int afterAmount, double afterCurrentHp) {
-        if(afterAmount == 0){
-            return (beforeAmount - 1) * maxHp + beforeCurrentHp;
-        }
-        return (beforeAmount - afterAmount) * maxHp + abs(beforeCurrentHp - afterCurrentHp);
+    private void applyAttackLogic(Point point) {
+        List<Point> pointsToAttackList = getCurrentCreatureSplashDamagePointsList(point);
+        AtomicInteger counter = new AtomicInteger();
+        pointsToAttackList.forEach(point1 -> board.getCreature(point1)
+                .ifPresent(defender -> {
+                    if(defender.isAlive() && defender.getHeroNumber() != getCurrentCreature().getHeroNumber()){
+                        turnQueue.getCurrentCreature()
+                                .attack(defender);
+                        counter.addAndGet(1);
+                    }
+                }));
+//              board.getCreature(point)
+//                .ifPresent(defender -> turnQueue.getCurrentCreature()
+//                        .attack(defender));
+        getCurrentCreature().addShots(counter.addAndGet(-1));
     }
 
     public boolean canAttack(final Point point) {

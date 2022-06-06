@@ -12,10 +12,21 @@ public class CastleCreatureFactory {
                             .amount(aAmount)
                             .build();
                 case 2:
-                    Creature creature = new Creature.Builder().statistic(CreatureStatistic.ARCHER)
-                        .amount(aAmount)
-                        .build();
-                    return new ShooterCreature( creature, 12 );
+//                    Creature creature = new Creature.Builder().statistic(CreatureStatistic.ARCHER)
+//                        .amount(aAmount)
+//                        .build();
+//                    return new ShooterCreature( creature, 12 );
+                    Creature creature = new Creature.Builder().statistic( CreatureStatistic.LICH )
+                            .amount( aAmount )
+                            .build();
+                    Integer[][] area = new Integer[3][3];
+                    for(int i = 0; i<3;i++){
+                        for(int j = 0; j<3;j++){
+                            area[i][j] = 1;
+                        }
+                    }
+                    AreaDamageOnAttackCreature areaDamageOnAttackCreature = new AreaDamageOnAttackCreature( creature,area );
+                    return new ShooterCreature( areaDamageOnAttackCreature, 24 );
                 case 3:
                     return new Creature.Builder().statistic(CreatureStatistic.GRIFFIN)
                             .amount(aAmount)

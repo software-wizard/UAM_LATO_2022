@@ -760,9 +760,8 @@ public class CreatureTest {
                 .build())
                 .build();
 
-        boolean[][] range = new boolean[1][1];
-        range[0][0] = true;
-        assertThat(creature.getSplashDamageRange()).isEqualTo(range);
+        assertThat(creature.getSplashDamageRange()[1][1]).isEqualTo(1);
+        assertThat(creature.getSplashDamageRange()[0][1]).isEqualTo(0);
     }
 
 }

@@ -7,6 +7,7 @@ import pl.psi.creatures.DefaultDamageCalculator;
 import pl.psi.creatures.ReducedDamageCalculator;
 import pl.psi.hero.HeroStatistics;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.as;
@@ -87,4 +88,22 @@ public class GameEngineTest {
         gameEngine.attack( new Point(2,3) );
         assertThat( gameEngine.getCurrentCreature().isDefending() ).isEqualTo( false );
     }*/
+    @Test
+    void splashDamageTest(){
+        final CastleCreatureFactory creatureFactory = new CastleCreatureFactory();
+        final GameEngine gameEngine =
+                new GameEngine(new Hero(List.of(creatureFactory.create(2, false, 5)), HeroStatistics.NECROMANCER),
+                        new Hero(List.of(creatureFactory.create(1, false, 5)), HeroStatistics.NECROMANCER));
+
+        List<Point> pointList = new ArrayList<>();
+        pointList.add(new Point(2,3));
+
+        assertThat(gameEngine.getCurrentCreatureSplashDamagePointsList(new Point(2,2)).get(1)).isEqualTo(pointList.get(0));
+
+        gameEngine.pass();
+
+        assertThat(gameEngine.getCurrentCreatureSplashDamagePointsList(new Point(2,2)).get(0)).isEqualTo(new Point(2,2));
+    }
+
 }
+

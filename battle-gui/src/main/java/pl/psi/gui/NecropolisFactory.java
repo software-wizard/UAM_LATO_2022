@@ -35,7 +35,14 @@ public class NecropolisFactory
                     Creature creature = new Creature.Builder().statistic( CreatureStatistic.LICH )
                             .amount( aAmount )
                             .build();
-                    return new ShooterCreature( creature, 12 );
+                    Integer[][] area = new Integer[3][3];
+                    for(int i = 0; i<3;i++){
+                        for(int j = 0; j<3;j++){
+                            area[i][j] = 1;
+                        }
+                    }
+                    AreaDamageOnAttackCreature areaDamageOnAttackCreature = new AreaDamageOnAttackCreature( creature,area );
+                    return new Lich( areaDamageOnAttackCreature,12);
                 case 6:
                     Creature blackKnight = new Creature.Builder().statistic( CreatureStatistic.BLACK_KNIGHT )
                             .amount( aAmount )
@@ -74,10 +81,17 @@ public class NecropolisFactory
                     Creature decoratedNoCounter = new NoCounterCreature( decorated );
                     return new HealFromAttackCreature( decoratedNoCounter );
                 case 5:
-                    Creature creature = new Creature.Builder().statistic( CreatureStatistic.LICH )
+                    Creature creature = new Creature.Builder().statistic( CreatureStatistic.POWER_LICH )
                             .amount( aAmount )
                             .build();
-                    return new ShooterCreature( creature, 24 );
+                    Integer[][] area = new Integer[3][3];
+                    for(int i = 0; i<3;i++){
+                        for(int j = 0; j<3;j++){
+                            area[i][j] = 1;
+                        }
+                    }
+                    AreaDamageOnAttackCreature areaDamageOnAttackCreature = new AreaDamageOnAttackCreature( creature,area );
+                    return new Lich( areaDamageOnAttackCreature,24);
                 case 6:
                     Creature blackKnight = new Creature.Builder().statistic( CreatureStatistic.DREAD_KNIGHT )  // if making dread knight by hand remember to first do double damage then curse on hit
                             .amount( aAmount )

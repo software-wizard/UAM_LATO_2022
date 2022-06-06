@@ -60,10 +60,15 @@ public class Creature implements PropertyChangeListener {
         externalStats.addStats(statIncrease);
     }
 
-    public boolean[][] getSplashDamageRange(){
-        boolean[][] range = new boolean[1][1];
-        range[0][0] = true;
-        return range;
+    public Integer[][] getSplashDamageRange(){
+        Integer[][] splashDamageArea = new Integer[3][3];
+        for(int i = 0; i<3;i++){
+            for(int j = 0; j<3;j++){
+                splashDamageArea[i][j] = 0;
+            }
+        }
+        splashDamageArea[1][1] = 1;
+        return splashDamageArea;
     }
 
     public void attack(final Creature aDefender) {
@@ -349,6 +354,9 @@ public class Creature implements PropertyChangeListener {
             setCanCounterAttack(true);
             defend(false);
         }
+    }
+
+    public void addShots(int i) {
     }
 
     public static class Builder {
