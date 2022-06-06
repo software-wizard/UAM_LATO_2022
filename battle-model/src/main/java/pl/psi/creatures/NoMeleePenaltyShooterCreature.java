@@ -48,10 +48,9 @@ public class NoMeleePenaltyShooterCreature extends AbstractCreature{
     }
 
     @Override
-    public String getShots(){
+    public String  getShotsAmount(){
         return "" + shots;
     }
-
 
     @Override
     public boolean isRange(){

@@ -81,7 +81,7 @@ public class GameEngine {
             additionalAttackInformation = getCurrentCreature().getName() + " healed for " + getCurrentCreature().getLastHealAmount();
         }
 
-        System.out.println(getCurrentCreature().getShots());
+        System.out.println(getCurrentCreature().getShotsAmount());
     }
 
     private void applyAttackLogic(Point point) {
@@ -102,7 +102,7 @@ public class GameEngine {
     }
 
     public boolean canAttack(final Point point) {
-        return board.canAttack( turnQueue.getCurrentCreature(), point )  && board.getCreature( point ).isPresent() && board.getCreature(point).get().isAlive() && board.getCreature( point ).get().getHeroNumber() != turnQueue.getCurrentCreature().getHeroNumber() && currentCreatureCanAttack;
+        return board.canAttack( turnQueue.getCurrentCreature(), point )  && board.getCreature( point ).isPresent() && board.getCreature(point).get().isAlive() && board.getCreature( point ).get().getHeroNumber() != turnQueue.getCurrentCreature().getHeroNumber() && currentCreatureCanAttack && getCurrentCreature().getShots()>0;
     }
 
     public void move(final Point aPoint) {

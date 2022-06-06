@@ -56,7 +56,7 @@ public class Lich extends AbstractCreature {
     }
 
     @Override
-    public String getShots(){
+    public String getShotsAmount(){
         return "" + shots;
     }
 

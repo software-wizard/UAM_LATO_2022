@@ -61,7 +61,7 @@ public class Start extends Application {
                 new StrongholdFactory().create(true, 4, 15),
                 new StrongholdFactory().create(false, 5, 10),
                 new StrongholdFactory().create(true, 6, 5),
-                new StrongholdFactory().create(false, 7, 10)
+                new StrongholdFactory().create(false, 7, 100)
         ),HeroStatistics.KNIGHT);
         ret.getCreatures().forEach(creature -> creature.setHeroNumber(2));
         return ret;
