@@ -28,7 +28,7 @@ public class ThunderboltOnHitCreature extends AbstractCreature {
             applyDamage(aDefender, damage);
             thunderbolt(aDefender);
             if (canCounterAttack(aDefender)) {
-                counterAttack(aDefender);
+                aDefender.counterAttack(this);
             }
         }
     }

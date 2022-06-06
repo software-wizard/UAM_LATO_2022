@@ -69,7 +69,12 @@ public class AbstractCreature extends Creature {
     public double getLastCounterAttackDamage() {
         return decorated.getLastCounterAttackDamage();
     }
-    
+
+    @Override
+    public void clearLastCounterAttackDamage(){
+        decorated.clearLastCounterAttackDamage();
+    }
+
     @Override
     public boolean isAlive() {
         return decorated.isAlive();

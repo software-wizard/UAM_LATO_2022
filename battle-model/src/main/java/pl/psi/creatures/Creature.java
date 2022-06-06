@@ -76,7 +76,7 @@ public class Creature implements PropertyChangeListener {
             final double damage = getCalculator().calculateDamage(this, aDefender);
             applyDamage(aDefender, damage);
             if (canCounterAttack(aDefender)) {
-                counterAttack(aDefender);
+                aDefender.counterAttack(this);
             }
         }
     }
@@ -106,13 +106,11 @@ public class Creature implements PropertyChangeListener {
 
     protected void applyDamage(final Creature aDefender, final double aDamage) {
         aDefender.setCurrentHp( ((aDefender.getAmount()-1) * aDefender.getMaxHp()) + aDefender.getCurrentHp() - aDamage );
-        if(!aDefender.equals(this)){
-            if(aDefender.getCurrentHp() < 0){
-                setLastAttackDamage(aDamage + aDefender.getCurrentHp());
-            }
-            else{
-                setLastAttackDamage(aDamage);
-            }
+        if(aDefender.getCurrentHp() < 0){
+            setLastAttackDamage(aDamage + aDefender.getCurrentHp());
+        }
+        else{
+            setLastAttackDamage(aDamage);
         }
         aDefender.setAmount( calculateUnits( aDefender ) );
         aDefender.setCurrentHp( calculateCurrentHp( aDefender ) );
@@ -237,11 +235,11 @@ public class Creature implements PropertyChangeListener {
     }
 
     protected void counterAttack(final Creature aAttacker) {
-        final int damage = aAttacker.getCalculator()
-                .calculateDamage(aAttacker, this);
-        applyDamage(this, damage);
-        aAttacker.setLastCounterAttackDamage(damage);
-        aAttacker.setCanCounterAttack(false);
+        final int damage = getCalculator()
+                .calculateDamage(this, aAttacker);
+        applyDamage(aAttacker, damage);
+        setLastCounterAttackDamage(damage);
+        setCanCounterAttack(false);
     }
 
     public String getCreatureInformation(){
@@ -280,6 +278,10 @@ public class Creature implements PropertyChangeListener {
 
     public double getLastCounterAttackDamage(){
         return lastAttackDamage;
+    }
+
+    public void clearLastCounterAttackDamage(){
+        lastAttackDamage = 0;
     }
 
     public void setInMelee(final boolean value){}

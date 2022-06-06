@@ -9,7 +9,6 @@ import pl.psi.spells.Spell;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -47,7 +46,6 @@ public class GameEngine {
         if(turnQueue.getCurrentCreature().isDefending()){
             turnQueue.getCurrentCreature().defend(false);
         }
-        System.out.println(Arrays.deepToString(turnQueue.getCurrentCreature().getSplashDamageRange()));
         AttackAndPrintAttackInformation(point);
         currentCreatureCanMove = false;
         currentCreatureCanAttack = false;
@@ -60,27 +58,8 @@ public class GameEngine {
     }
 
     private void AttackAndPrintAttackInformation(final Point point) {
-        int beforeAmount = getCreature(point).get().getAmount();
-        applyAttackLogic(point);
         additionalAttackInformation = "";
-        int afterAmount = getCreature(point).get().getAmount();
-        int damageDealt = (int) getCurrentCreature().getLastAttackDamage();
-        if(beforeAmount-afterAmount == 0){
-            System.out.println(getCurrentCreature().getName() + " attacked " + getCreature(point).get().getName() + " for " + damageDealt + ".");
-            attackInformation = getCurrentCreature().getName() + " attacked " + getCreature(point).get().getName() + " for " + damageDealt + ".";
-        }
-        else{
-            System.out.println(getCurrentCreature().getName() + " attacked " + getCreature(point).get().getName() + " for " + damageDealt + ". " + (beforeAmount-afterAmount) + " " + getCreature(point).get().getName() + " perish.");
-            attackInformation = getCurrentCreature().getName() + " attacked " + getCreature(point).get().getName() + " for " + damageDealt + ". " + (beforeAmount-afterAmount) + " " + getCreature(point).get().getName() + " perish.";
-        }
-        if(getCreature(point).get().getLastCounterAttackDamage() > 0){
-            System.out.println(getCreature(point).get().getName() + " counter attacked " + getCurrentCreature().getName() + " for " + getCreature(point).get().getLastCounterAttackDamage() + ".");
-            attackInformation = attackInformation + "\n" + getCreature(point).get().getName() + " counter attacked " + getCurrentCreature().getName() + " for " + (int)(getCreature(point).get().getLastCounterAttackDamage()) + ".";
-        }
-        if(getCurrentCreature().getLastHealAmount() > 0){
-            additionalAttackInformation = getCurrentCreature().getName() + " healed for " + getCurrentCreature().getLastHealAmount();
-        }
-
+        applyAttackLogic(point);
     }
 
     private void applyAttackLogic(Point point) {
@@ -88,12 +67,28 @@ public class GameEngine {
         AtomicInteger counter = new AtomicInteger();
         pointsToAttackList.forEach(point1 -> board.getCreature(point1)
                 .ifPresent(defender -> {
+                    int beforeAmount = defender.getAmount();
                     if(defender.isAlive() && defender.getHeroNumber() != getCurrentCreature().getHeroNumber()){
                         turnQueue.getCurrentCreature()
                                 .attack(defender);
                         counter.addAndGet(1);
+                        int afterAmount = defender.getAmount();
                         if(counter.get()>1){
                             getCurrentCreature().addShots(1);
+                        }
+                        if(beforeAmount == afterAmount){
+                            attackInformation = getCurrentCreature().getName() + " attacked " + defender.getName() + " for " + (int)(getCurrentCreature().getLastAttackDamage()) + ".\n" + attackInformation;
+
+                        }
+                        else{
+                            attackInformation = getCurrentCreature().getName() + " attacked " + defender.getName() + " for " + (int)(getCurrentCreature().getLastAttackDamage()) + ". " + (beforeAmount-afterAmount) + " " + defender.getName() + " perish.\n" + attackInformation;
+                        }
+                        if(defender.getLastCounterAttackDamage() > 0){
+                            attackInformation = defender.getName() + " counter attacked " + getCurrentCreature().getName() + " for " + (int)(defender.getLastCounterAttackDamage()) + ".\n" + attackInformation;
+                            defender.clearLastCounterAttackDamage();
+                        }
+                        if(getCurrentCreature().getLastHealAmount() > 0){
+                            additionalAttackInformation = getCurrentCreature().getName() + " healed for " + getCurrentCreature().getLastHealAmount();
                         }
                     }
                 }));
@@ -142,6 +137,11 @@ public class GameEngine {
         return attackInformation + "\n" + additionalAttackInformation;
     }
 
+    public void clearAttackInformation(){
+        attackInformation = "";
+        additionalAttackInformation = "";
+    }
+
     public boolean allActionLeft(){
         return currentCreatureCanAttack && currentCreatureCanMove;
     }
@@ -153,7 +153,7 @@ public class GameEngine {
     private void creatureInMeleeRange( final Creature creature ){
         Point position = board.getCreaturePosition( creature );
         List<Point> adjacentPositionsList = board.getAdjacentPositions( position );
-        List<Optional<Creature>> creaturesOnAdjacentPositions = adjacentPositionsList.stream().map(this::getEnemyCreature).collect( Collectors.toList() );
+        List<Optional<Creature>> creaturesOnAdjacentPositions = adjacentPositionsList.stream().map(this::getAliveEnemyCreature).collect( Collectors.toList() );
         while (creaturesOnAdjacentPositions.remove(Optional.empty())) {  // remove every instance of "Optional.empty null" from list
         }
         creature.setInMelee( !creaturesOnAdjacentPositions.isEmpty() );
@@ -176,9 +176,9 @@ public class GameEngine {
         return turnQueue.getCurrentCreature().isAlive();
     }
 
-    private Optional<Creature> getEnemyCreature(final Point aPoint) {
+    private Optional<Creature> getAliveEnemyCreature(final Point aPoint) {
         if( board.getCreature( aPoint ).isPresent() ){
-            if( board.getCreature(aPoint).get().getHeroNumber() != turnQueue.getCurrentCreature().getHeroNumber()){
+            if( board.getCreature(aPoint).get().getHeroNumber() != turnQueue.getCurrentCreature().getHeroNumber() && board.getCreature(aPoint).get().isAlive()){
                 return board.getCreature(aPoint);
             }
         }
@@ -194,6 +194,7 @@ public class GameEngine {
         currentCreatureCanMove = true;
         currentCreatureCanAttack = true;
         turnQueue.next();
+
     }
 
     public void pushCurrentCreatureToEndOfQueue(){

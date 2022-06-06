@@ -29,7 +29,7 @@ public class AgeOnHitCreature extends AbstractCreature {
         applyDamage(aDefender, damage);
         aDefender.age();
         if (canCounterAttack(aDefender)) {
-            decorated.counterAttack(aDefender);
+            aDefender.counterAttack(this);
         }
     }
 }
