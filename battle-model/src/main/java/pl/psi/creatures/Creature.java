@@ -95,11 +95,13 @@ public class Creature implements PropertyChangeListener {
 
     protected void applyDamage(final Creature aDefender, final double aDamage) {
         aDefender.setCurrentHp( ((aDefender.getAmount()-1) * aDefender.getMaxHp()) + aDefender.getCurrentHp() - aDamage );
-        if(aDefender.getCurrentHp() < 0){
-            setLastAttackDamage(aDamage + aDefender.getCurrentHp());
-        }
-        else{
-            setLastAttackDamage(aDamage);
+        if(!aDefender.equals(this)){
+            if(aDefender.getCurrentHp() < 0){
+                setLastAttackDamage(aDamage + aDefender.getCurrentHp());
+            }
+            else{
+                setLastAttackDamage(aDamage);
+            }
         }
         aDefender.setAmount( calculateUnits( aDefender ) );
         aDefender.setCurrentHp( calculateCurrentHp( aDefender ) );
@@ -227,7 +229,7 @@ public class Creature implements PropertyChangeListener {
         final int damage = aAttacker.getCalculator()
                 .calculateDamage(aAttacker, this);
         applyDamage(this, damage);
-        setLastCounterAttackDamage(damage);
+        aAttacker.setLastCounterAttackDamage(damage);
         aAttacker.setCanCounterAttack(false);
     }
 

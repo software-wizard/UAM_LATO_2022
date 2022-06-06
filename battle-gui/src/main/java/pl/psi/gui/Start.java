@@ -41,9 +41,12 @@ public class Start extends Application {
     private Hero createP1() {
         final Hero ret =
                 new Hero(List.of(
-                        new NecropolisFactory().create(true, 5, 5),
-                        new NecropolisFactory().create(true, 3, 5),
-                        new NecropolisFactory().create(true,6,5),
+                        new NecropolisFactory().create(false, 1, 5),
+                        new NecropolisFactory().create(true, 2, 5),
+                        new NecropolisFactory().create(false,3,5),
+                        new NecropolisFactory().create(true,4,5),
+                        new NecropolisFactory().create(false, 5, 100),
+                        new NecropolisFactory().create(true, 6, 5),
                         new NecropolisFactory().create(true,7,5)
                         ),HeroStatistics.NECROMANCER);
         ret.getCreatures().forEach(creature -> creature.setHeroNumber(1));
@@ -52,9 +55,13 @@ public class Start extends Application {
 
     private Hero createP2() {
         final Hero ret = new Hero(List.of(
-                new StrongholdFactory().create(true, 3, 30),
-                new StrongholdFactory().create(true, 5, 15),
-                new StrongholdFactory().create(true, 7, 100)
+                new StrongholdFactory().create(true, 1, 100),
+                new StrongholdFactory().create(true, 2, 50),
+                new StrongholdFactory().create(false, 3, 25),
+                new StrongholdFactory().create(true, 4, 15),
+                new StrongholdFactory().create(false, 5, 10),
+                new StrongholdFactory().create(true, 6, 5),
+                new StrongholdFactory().create(false, 7, 10)
         ),HeroStatistics.KNIGHT);
         ret.getCreatures().forEach(creature -> creature.setHeroNumber(2));
         return ret;
