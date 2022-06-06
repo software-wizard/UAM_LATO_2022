@@ -263,7 +263,7 @@ public class Creature implements PropertyChangeListener {
     }
 
     public int getShots(){
-        return 0;
+        return 1;
     }
 
     public void setCanCounterAttack(boolean value) {
@@ -276,6 +276,10 @@ public class Creature implements PropertyChangeListener {
 
     private void setLastCounterAttackDamage( final double damage ) {
         lastCounterAttackDamage = damage;
+    }
+
+    public double getLastCounterAttackDamage(){
+        return lastAttackDamage;
     }
 
     public void setInMelee(final boolean value){}

@@ -151,6 +151,11 @@ public class AbstractCreature extends Creature {
     }
 
     @Override
+    public int getShots(){
+        return decorated.getShots();
+    }
+
+    @Override
     protected void restoreCurrentHpToMax() {
         decorated.restoreCurrentHpToMax();
     }

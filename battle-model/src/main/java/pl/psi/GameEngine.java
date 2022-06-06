@@ -73,15 +73,14 @@ public class GameEngine {
             System.out.println(getCurrentCreature().getName() + " attacked " + getCreature(point).get().getName() + " for " + damageDealt + ". " + (beforeAmount-afterAmount) + " " + getCreature(point).get().getName() + " perish.");
             attackInformation = getCurrentCreature().getName() + " attacked " + getCreature(point).get().getName() + " for " + damageDealt + ". " + (beforeAmount-afterAmount) + " " + getCreature(point).get().getName() + " perish.";
         }
-        if(getCurrentCreature().getLastCounterAttackDamage() > 0){
-            System.out.println(getCreature(point).get().getName() + " counter attacked " + getCurrentCreature().getName() + " for " + getCurrentCreature().getLastCounterAttackDamage() + ".");
-            attackInformation = attackInformation + "\n" + getCreature(point).get().getName() + " counter attacked " + getCurrentCreature().getName() + " for " + (int)(getCurrentCreature().getLastCounterAttackDamage()) + ".";
+        if(getCreature(point).get().getLastCounterAttackDamage() > 0){
+            System.out.println(getCreature(point).get().getName() + " counter attacked " + getCurrentCreature().getName() + " for " + getCreature(point).get().getLastCounterAttackDamage() + ".");
+            attackInformation = attackInformation + "\n" + getCreature(point).get().getName() + " counter attacked " + getCurrentCreature().getName() + " for " + (int)(getCreature(point).get().getLastCounterAttackDamage()) + ".";
         }
         if(getCurrentCreature().getLastHealAmount() > 0){
             additionalAttackInformation = getCurrentCreature().getName() + " healed for " + getCurrentCreature().getLastHealAmount();
         }
 
-        System.out.println(getCurrentCreature().getShotsAmount());
     }
 
     private void applyAttackLogic(Point point) {
@@ -93,12 +92,11 @@ public class GameEngine {
                         turnQueue.getCurrentCreature()
                                 .attack(defender);
                         counter.addAndGet(1);
+                        if(counter.get()>1){
+                            getCurrentCreature().addShots(1);
+                        }
                     }
                 }));
-//              board.getCreature(point)
-//                .ifPresent(defender -> turnQueue.getCurrentCreature()
-//                        .attack(defender));
-        getCurrentCreature().addShots(counter.addAndGet(-1));
     }
 
     public boolean canAttack(final Point point) {
