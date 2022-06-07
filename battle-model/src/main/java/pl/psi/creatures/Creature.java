@@ -22,7 +22,7 @@ import java.util.Random;
  */
 @Getter
 @Setter
-public class Creature implements PropertyChangeListener {
+public class Creature implements PropertyChangeListener, Comparable<Creature> {
     private CreatureStatisticIf basicStats;
     private CreatureStats externalStats = new CreatureStats.CreatureStatsBuilder().build();
     private CreatureStats buffedStats = new CreatureStats.CreatureStatsBuilder().build();
@@ -399,6 +399,11 @@ public class Creature implements PropertyChangeListener {
 
     protected void restoreCurrentHpToMax() {
         currentHp = getStats().getMaxHp();
+    }
+
+    @Override
+    public int compareTo(Creature c) {
+        return Double.compare(c.getMoveRange(), getMoveRange());
     }
 
     public void addShots(int i) {

@@ -17,7 +17,8 @@ public class TurnQueue {
 
     public static final String END_OF_TURN = "END_OF_TURN";
     private Collection<Creature> creatures;
-    private final Queue<Creature> creaturesQueue;
+    private final LinkedList<Creature> creaturesQueue;
+//    private final Queue<Creature> creaturesQueue; ???
     private final PropertyChangeSupport observerSupport = new PropertyChangeSupport(this);
     private Creature currentCreature;
     private int roundNumber;
@@ -38,6 +39,7 @@ public class TurnQueue {
 
     private void initQueue() {
         creaturesQueue.addAll(creatures);
+        Collections.sort(creaturesQueue);
     }
 
     public void pushCurrentCreatureToEndOfQueue(){
