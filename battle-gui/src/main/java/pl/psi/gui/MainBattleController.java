@@ -189,6 +189,9 @@ public class MainBattleController {
 
                 console.setText(gameEngine.getAttackInformation());
 
+                waitButton.setDisable(!gameEngine.allActionLeft());
+                defendButton.setDisable(!gameEngine.allActionLeft());
+
                 gridMap.add(mapTile, x, y);
             }
         }
