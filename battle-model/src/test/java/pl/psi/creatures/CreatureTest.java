@@ -449,12 +449,13 @@ public class CreatureTest {
 
     @Test
     void buffingWorksProperly() {
-        final Creature creature = new Creature.Builder().statistic(CreatureStats.builder()
+        final Creature creatureToDecorate = new Creature.Builder().statistic(CreatureStats.builder()
                 .maxHp(100)
                 .damage(Range.closed(5, 5))
                 .attack(5)
                 .build())
                 .build();
+        final NoCounterCreature creature = new NoCounterCreature(creatureToDecorate);
 
         final CreatureStats stats = new CreatureStats.CreatureStatsBuilder()
                 .attack(5)
@@ -756,12 +757,39 @@ public class CreatureTest {
     void creatureShouldHaveSplashDamageRange(){
         final Creature creature = new Creature.Builder().statistic(CreatureStats.builder()
                 .maxHp(NOT_IMPORTANT)
-                .armor(11)
                 .build())
                 .build();
 
         assertThat(creature.getSplashDamageRange()[1][1]).isEqualTo(1);
         assertThat(creature.getSplashDamageRange()[0][1]).isEqualTo(0);
+    }
+
+    @Test
+    void creatureShouldHaveInformationAboutLastAttack(){
+        final Creature attackerToDecorate = new Creature.Builder().statistic(CreatureStats.builder()
+                .maxHp(100)
+                .damage(Range.closed(11,20))
+                .build())
+                .build();
+        final NoCounterCreature attackerToDecorate2 = new NoCounterCreature(attackerToDecorate);
+        final HealFromAttackCreature attacker = new HealFromAttackCreature(attackerToDecorate2);
+        attacker.setCurrentHp(50); // the point of this is so attacker doesn't heal over his max HP and increases amount to 2.
+
+        final Creature defender = new Creature.Builder().statistic(CreatureStats.builder()
+                .maxHp(100)
+                .damage(Range.closed(1,10))
+                .type(CreatureStatistic.CreatureType.ALIVE)
+                .build())
+                .build();
+        
+        attacker.attack(defender);
+        assertThat(attacker.getLastAttackDamage()).isBetween(11.0,20.0);
+        assertThat(attacker.getLastHealAmount()).isEqualTo(attacker.getLastAttackDamage());
+        assertThat(defender.getLastCounterAttackDamage()).isEqualTo(0);
+
+        defender.attack(attacker);
+        assertThat(defender.getLastAttackDamage()).isBetween(1.0,10.0);
+        assertThat(attacker.getLastCounterAttackDamage()).isBetween(11.0,20.0);
     }
 
 }

@@ -67,24 +67,30 @@ public class GameEngine {
         AtomicInteger counter = new AtomicInteger();
         pointsToAttackList.forEach(point1 -> board.getCreature(point1)
                 .ifPresent(defender -> {
-                    int beforeAmount = defender.getAmount();
+                    int defenderBeforeAmount = defender.getAmount();
+                    int attackerBeforeAmount = getCurrentCreature().getAmount();
                     if(defender.isAlive() && defender.getHeroNumber() != getCurrentCreature().getHeroNumber()){
                         turnQueue.getCurrentCreature()
                                 .attack(defender);
                         counter.addAndGet(1);
-                        int afterAmount = defender.getAmount();
+                        int defenderAfterAmount = defender.getAmount();
+                        int attackerAfterAmount = getCurrentCreature().getAmount();
                         if(counter.get()>1){
                             getCurrentCreature().addShots(1);
                         }
-                        if(beforeAmount == afterAmount){
+                        if(defenderBeforeAmount == defenderAfterAmount){
                             attackInformation = getCurrentCreature().getName() + " attacked " + defender.getName() + " for " + (int)(getCurrentCreature().getLastAttackDamage()) + ".\n" + attackInformation;
-
                         }
                         else{
-                            attackInformation = getCurrentCreature().getName() + " attacked " + defender.getName() + " for " + (int)(getCurrentCreature().getLastAttackDamage()) + ". " + (beforeAmount-afterAmount) + " " + defender.getName() + " perish.\n" + attackInformation;
+                            attackInformation = getCurrentCreature().getName() + " attacked " + defender.getName() + " for " + (int)(getCurrentCreature().getLastAttackDamage()) + ". " + (defenderBeforeAmount-defenderAfterAmount) + " " + defender.getName() + " perish.\n" + attackInformation;
                         }
                         if(defender.getLastCounterAttackDamage() > 0){
-                            attackInformation = defender.getName() + " counter attacked " + getCurrentCreature().getName() + " for " + (int)(defender.getLastCounterAttackDamage()) + ".\n" + attackInformation;
+                            if(attackerBeforeAmount == attackerAfterAmount){
+                                attackInformation = defender.getName() + " counter attacked " + getCurrentCreature().getName() + " for " + (int)(defender.getLastCounterAttackDamage()) + ".\n" + attackInformation;
+                            }
+                            else{
+                                attackInformation = defender.getName() + " counter attacked " + getCurrentCreature().getName() + " for " + (int)(defender.getLastCounterAttackDamage()) + ". " + (attackerBeforeAmount-attackerAfterAmount) + " " + getCurrentCreature().getName() + " perish.\n" + attackInformation;
+                            }
                             defender.clearLastCounterAttackDamage();
                         }
                         if(getCurrentCreature().getLastHealAmount() > 0){

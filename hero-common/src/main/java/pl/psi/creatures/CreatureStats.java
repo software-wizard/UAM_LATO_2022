@@ -36,18 +36,9 @@ public class CreatureStats implements CreatureStatisticIf {
         return type;
     }
 
+    @Override
     public boolean isGround() {
         return isGround;
-    }
-
-    @Override
-    public String getCanAttackImagePath() {
-        return canAttackImagePath;
-    }
-
-    @Override
-    public String getCurrentImagePath() {
-        return currentImagePath;
     }
 
     @Override

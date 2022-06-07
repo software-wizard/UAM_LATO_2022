@@ -56,13 +56,28 @@ public class AbstractCreature extends Creature {
     }
 
     @Override
+    protected void applyCounterAttackDamage(final Creature aDefender, final double aDamage){
+        decorated.applyCounterAttackDamage(aDefender,aDamage);
+    }
+
+    @Override
     public void attack(final Creature aDefender) {
         decorated.attack(aDefender);
     }
 
     @Override
+    protected void setLastAttackDamage(double damage){
+        decorated.setLastAttackDamage(damage);
+    }
+
+    @Override
     public double getLastAttackDamage() {
         return decorated.getLastAttackDamage();
+    }
+
+    @Override
+    protected void setLastCounterAttackDamage(final double damage) {
+        decorated.setLastCounterAttackDamage(damage);
     }
 
     @Override
@@ -83,6 +98,11 @@ public class AbstractCreature extends Creature {
     @Override
     public void age() {
         decorated.age();
+    }
+
+    @Override
+    protected void setLastHealAmount(final double healAmount){
+        decorated.setLastHealAmount(healAmount);
     }
 
     @Override
@@ -121,17 +141,17 @@ public class AbstractCreature extends Creature {
     }
 
     @Override
-    Range<Integer> getDamage() {
+    public Range<Integer> getDamage() {
         return decorated.getDamage();
     }
 
     @Override
-    double getMaxHp() {
+    public double getMaxHp() {
         return decorated.getMaxHp();
     }
 
     @Override
-    double getAttack() {
+    public double getAttack() {
         return decorated.getAttack();
     }
 
