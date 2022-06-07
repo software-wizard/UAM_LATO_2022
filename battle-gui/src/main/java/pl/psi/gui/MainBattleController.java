@@ -1,10 +1,10 @@
 package pl.psi.gui;
 
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.OverrunStyle;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -40,8 +40,8 @@ public class MainBattleController {
     private void initialize() {
         refreshGui();
 
-        console.setText("");
-        console.setAlignment(Pos.BOTTOM_LEFT);
+        console.setTextOverrun(OverrunStyle.LEADING_ELLIPSIS);
+        console.setEllipsisString("");
 
         passButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
             gameEngine.pass();

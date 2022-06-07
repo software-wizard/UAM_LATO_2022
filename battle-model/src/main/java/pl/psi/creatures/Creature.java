@@ -375,11 +375,6 @@ public class Creature implements PropertyChangeListener {
         currentHp = aCurrentHp;
     }
 
-
-
-
-
-
     public void applyStatsWithSpells(CreatureStats aCreatureStats) {
         setStatsWithSpells(CreatureStats.builder()
                 .attack((buffedStats == null) ? aCreatureStats.getAttack() : buffedStats.getAttack() + aCreatureStats.getAttack() )

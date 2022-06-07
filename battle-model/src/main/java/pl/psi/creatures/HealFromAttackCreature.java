@@ -15,4 +15,10 @@ public class HealFromAttackCreature extends AbstractCreature {
             decorated.heal(decorated.getLastAttackDamage());
         }
     }
+
+    @Override
+    protected void counterAttack(final Creature aAttacker){
+        decorated.counterAttack(aAttacker);
+        decorated.heal(decorated.getLastCounterAttackDamage());
+    }
 }

@@ -40,7 +40,7 @@
     <bottom>
         <HBox alignment="TOP_RIGHT" prefHeight="1.0" prefWidth="600.0" BorderPane.alignment="CENTER">
             <children>
-                <Label fx:id="console" alignment="BOTTOM_LEFT" layoutX="94.0" layoutY="10.0" style="-fx-padding: 0 0 0 200;"
+                <Label fx:id="console" alignment="CENTER" layoutX="194.0" layoutY="10.0" style="-fx-padding: 0 0 0 0;"
                        text=" ">
                     <font>
                         <Font size="14.0"/>

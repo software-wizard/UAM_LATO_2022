@@ -94,7 +94,7 @@ public class GameEngine {
                             defender.clearLastCounterAttackDamage();
                         }
                         if(getCurrentCreature().getLastHealAmount() > 0){
-                            additionalAttackInformation = getCurrentCreature().getName() + " healed for " + getCurrentCreature().getLastHealAmount();
+                            attackInformation = getCurrentCreature().getName() + " healed for " + getCurrentCreature().getLastHealAmount() + ".\n" + attackInformation;
                         }
                     }
                 }));

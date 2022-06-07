@@ -317,6 +317,7 @@ public class CreatureTest {
 
         final NoCounterCreature noCounterCreature = new NoCounterCreature(decorated);
         final HealFromAttackCreature healFromAttackCreature = new HealFromAttackCreature(noCounterCreature);
+        healFromAttackCreature.setCurrentHp(1); // this is here so creature cant resurrect units and mess up the math
 
         final Creature defender = new Creature.Builder().statistic(CreatureStats.builder()
                 .maxHp(100)
@@ -773,7 +774,7 @@ public class CreatureTest {
                 .build();
         final NoCounterCreature attackerToDecorate2 = new NoCounterCreature(attackerToDecorate);
         final HealFromAttackCreature attacker = new HealFromAttackCreature(attackerToDecorate2);
-        attacker.setCurrentHp(50); // the point of this is so attacker doesn't heal over his max HP and increases amount to 2.
+        attacker.setCurrentHp(50); // // this is here so creature cant resurrect units and mess up the math
 
         final Creature defender = new Creature.Builder().statistic(CreatureStats.builder()
                 .maxHp(100)
