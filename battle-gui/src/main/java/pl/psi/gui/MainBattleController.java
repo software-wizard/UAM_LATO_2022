@@ -161,16 +161,6 @@ public class MainBattleController {
                 renderSpecialFields(mapTile, x, y);
 
                 if(gameEngine.getCreature(new Point(x, y)).isPresent()){
-//                    if(gameEngine.getCreature(new Point(x, y)).get().isAlive()){
-//                        mapTile.setStyle("-fx-font: 14 arial;-fx-font-weight: bold;");
-//                        mapTile.setName("\n\n\n" + gameEngine.getCreature( new Point(x, y) ).get().getAmount());
-//                        var img = new Image(gameEngine.getCreature(new Point(x,y)).get().getBasicStats().getImagePath());
-//                        mapTile.setBackground(img);
-//                    }
-//                    else{
-//                        var img = new Image("/images/dead.jpg");
-//                        mapTile.setBackground(img);
-//                    }
                     int finalX = x;
                     int finalY = y;
                     mapTile.setOnMouseClicked(e -> {
