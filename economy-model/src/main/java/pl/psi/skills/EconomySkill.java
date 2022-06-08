@@ -36,7 +36,7 @@ public class EconomySkill {
     }
 
     public void apply(EconomyHero aHero) {
-        this.upgradeCalculator.calculate(aHero);
+       aHero.updateHeroStats(this.upgradeCalculator.calculate(aHero));
     }
 
     // method that will take spell as an argument

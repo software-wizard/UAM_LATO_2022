@@ -5,6 +5,9 @@ import pl.psi.creatures.Creature;
 import pl.psi.creatures.CreatureStats;
 import pl.psi.creatures.ShooterCreature;
 import pl.psi.hero.EconomyHero;
+import pl.psi.hero.HeroStatistics;
+import pl.psi.hero.HeroStats;
+import pl.psi.hero.HeroStatsFieldType;
 
 /**
  * Class that represents changing creature stats based on current skill
@@ -53,15 +56,21 @@ public class UpgradeCalculator {
         return statsToApply;
     }
 
-    public void calculate(EconomyHero aHero) {
-        double changedStat;
+    public HeroStats calculate(EconomyHero aHero) {
+        HeroStats changedStats;
+        int newEffect;
         switch (this.skillName) {
             case LEADERSHIP:
-                // update hero's morale
+                newEffect = (int) (Math.round(this.skillEffect) + aHero.getHeroStats().getMorale());
+                changedStats = new HeroStats(aHero.getHeroStats(), HeroStatsFieldType.MORALE, newEffect);
                 break;
             case LUCK:
-                // update hero's luck
+                newEffect = (int) (Math.round(this.skillEffect) + aHero.getHeroStats().getLuck());
+                changedStats = new HeroStats(aHero.getHeroStats(), HeroStatsFieldType.LUCK, newEffect);
                 break;
+            default:
+                changedStats = (HeroStats) aHero.getHeroStats();
         }
+        return changedStats;
     }
 }

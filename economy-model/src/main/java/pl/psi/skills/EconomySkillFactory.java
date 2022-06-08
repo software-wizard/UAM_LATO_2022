@@ -15,6 +15,7 @@ public class EconomySkillFactory {
                     case RESISTANCE:
                         return new EconomySkill(aSkillType, 100, 0.05);
                     case LUCK:
+                    case LEADERSHIP:
                         return new EconomySkill(aSkillType, 100, 1);
                     case FIRST_AID:
                         return new EconomySkill(aSkillType, 100, 50);
@@ -32,6 +33,7 @@ public class EconomySkillFactory {
                     case RESISTANCE:
                         return new EconomySkill(aSkillType, 200, 0.1);
                     case LUCK:
+                    case LEADERSHIP:
                         return new EconomySkill(aSkillType, 200, 2);
                     case FIRST_AID:
                         return new EconomySkill(aSkillType, 200, 75);
@@ -49,6 +51,7 @@ public class EconomySkillFactory {
                     case RESISTANCE:
                         return new EconomySkill(aSkillType, 300, 0.2);
                     case LUCK:
+                    case LEADERSHIP:
                         return new EconomySkill(aSkillType, 300, 3);
                     case FIRST_AID:
                         return new EconomySkill(aSkillType, 300, 100);

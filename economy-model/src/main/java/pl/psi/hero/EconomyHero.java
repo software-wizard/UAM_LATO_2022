@@ -22,7 +22,7 @@ public class EconomyHero {
     private final List<EconomySpell> spellsList;
     private final Equipment equipment;
     private final Backpack backpack;
-    private final HeroStatistics heroStats;
+    private HeroStatisticsIf heroStats;
     private final int heroNumber;
     // start amount of gold
     private int gold = 10000;
@@ -100,6 +100,10 @@ public class EconomyHero {
         }
 
         return true;
+    }
+
+    public void updateHeroStats( HeroStatisticsIf aStats ) {
+        this.heroStats = aStats;
     }
 
     public boolean canAddArtifact(ArtifactPlacement placement) {
