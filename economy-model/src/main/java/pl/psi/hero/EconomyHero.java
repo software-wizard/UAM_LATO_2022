@@ -4,6 +4,7 @@ import lombok.Getter;
 import pl.psi.artifacts.Artifact;
 import pl.psi.artifacts.ArtifactPlacement;
 import pl.psi.creatures.EconomyCreature;
+import pl.psi.shop.Money;
 import pl.psi.skills.EconomySkill;
 import pl.psi.spells.EconomySpell;
 
@@ -26,7 +27,8 @@ public class EconomyHero {
     private final HeroStatistics heroStats;
     private final int heroNumber;
     // start amount of gold
-    private int gold = 10000;
+    // TODO - MOney zamiast int !!
+    private Money gold = new Money(10000);
 
     public EconomyHero(final Fraction aFraction) {
         this(aFraction, HeroStatistics.NECROMANCER);
@@ -46,7 +48,7 @@ public class EconomyHero {
     }
 
     // konstruktor samokopiujący
-    public EconomyHero(Fraction fraction, List<EconomyCreature> creatureList, List<Artifact> artifactList, List<EconomySkill> skillsList, List<EconomySpell> spellsList, int gold, int heroNumber,HeroStatistics aClass) {
+    public EconomyHero(Fraction fraction, List<EconomyCreature> creatureList, List<Artifact> artifactList, List<EconomySkill> skillsList, List<EconomySpell> spellsList, Money gold, int heroNumber, HeroStatistics aClass) {
         this.fraction = fraction;
         this.creatureList = creatureList;
         this.artifactList = artifactList;
@@ -127,7 +129,7 @@ public class EconomyHero {
     }
 
     public void substractGold(final int aAmount) {
-        gold -= aAmount;
+        this.gold = new Money(gold.getPrice() - aAmount);
     }
 
     public void addItem(final Artifact aItem) {

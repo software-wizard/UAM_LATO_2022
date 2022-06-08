@@ -4,20 +4,26 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import pl.psi.ProductType;
 import pl.psi.skills.EconomySkill;
+import pl.psi.skills.SkillLevel;
+
+import java.util.function.BiConsumer;
 
 public class SkillButton extends AbstractButton<EconomySkill> {
 
-    public SkillButton(EcoController ecoController, EconomySkill skill, boolean canBuy) {
-        super(ecoController, skill, canBuy);
+
+    public SkillButton(BiConsumer<ProductType, EconomySkill> ecoController, EconomySkill economySkill, boolean canBuy, SkillLevel level) {
+        super(ecoController, economySkill, canBuy);
+        PATH = "/skills/" + economySkill.getSkillType().name() + ".png";
+        DESCRIPTION = level + " " + economySkill.getSkillType() + " | " + economySkill.getGoldCost().getPrice();
     }
 
     @Override
-    void buyProductiNController(EconomySkill skill,EcoController controller) {
-        controller.buy(ProductType.SKILL,skill);
+    void acceptProduct(BiConsumer<ProductType, EconomySkill> buy) {
+        buy.accept(ProductType.SKILL,product);
     }
 
     @Override
-     void prepareTop(final FlowPane aTopPane) {
+    void prepareTop(final FlowPane aTopPane) {
         aTopPane.getChildren().add(new Label("Single Cost: " + product.getGoldCost().getPrice()));
         aTopPane.getChildren().add(new Label("FACTOR : " + product.getFactor()));
     }

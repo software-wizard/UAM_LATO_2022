@@ -23,7 +23,7 @@ class EconomyEngineTest {
         h2 = new EconomyHero(EconomyHero.Fraction.NECROPOLIS, HeroStatistics.NECROMANCER);
         economyEngine = new EconomyEngine(h1, h2);
         economyNecropolisFactory = new EconomyNecropolisFactory();
-        startGold = h1.getGold();
+        startGold = h1.getGold().getPrice();
     }
 
     @Test

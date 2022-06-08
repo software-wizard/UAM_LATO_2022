@@ -5,15 +5,20 @@ import javafx.scene.layout.*;
 import pl.psi.ProductType;
 import pl.psi.artifacts.Artifact;
 
+import java.util.function.BiConsumer;
+
 public class ArtifactButton extends AbstractButton<Artifact>{
 
-    public ArtifactButton(EcoController ecoController, Artifact artifact, boolean canBuy) {
+
+    public ArtifactButton(BiConsumer<ProductType, Artifact> ecoController, Artifact artifact, boolean canBuy) {
         super(ecoController, artifact, canBuy);
+        PATH = "/artifacts/" + artifact.getName() + ".png";
+        DESCRIPTION = artifact.getName() + " | " + artifact.getGoldCost().getPrice();
     }
 
     @Override
-    void buyProductiNController(Artifact artifact,EcoController controller) {
-        controller.buy(ProductType.ARTIFACT,product);
+    void acceptProduct(BiConsumer<ProductType,Artifact > buy) {
+        buy.accept(ProductType.ARTIFACT,product);
     }
 
     @Override

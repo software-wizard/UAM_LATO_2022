@@ -11,14 +11,19 @@ import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import pl.psi.ProductType;
 import pl.psi.shop.BuyProductInterface;
+
+import java.util.function.BiConsumer;
 
 
 public abstract class AbstractButton <T extends BuyProductInterface> extends Button {
 
     protected final T product;
+    protected String PATH;
+    protected String DESCRIPTION;
 
-    public AbstractButton(EcoController ecoController, T t, boolean canBuy) {
+    public AbstractButton(BiConsumer<ProductType,T> ecoController, T t, boolean canBuy) {
         this.product = t;
 
         addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
@@ -26,7 +31,7 @@ public abstract class AbstractButton <T extends BuyProductInterface> extends But
         });
     }
 
-    private void startDialog(EcoController ecoController, boolean canBuy) {
+    private void startDialog(BiConsumer<ProductType,T> ecoController, boolean canBuy) {
 
         Stage dialogWindow = new Stage();
         // OK and Close buttons
@@ -64,7 +69,7 @@ public abstract class AbstractButton <T extends BuyProductInterface> extends But
         return dialog;
     }
 
-    private void prepareConfirmAndCancelButton(final VBox aBottomPane, EcoController ecoController, Stage dialog, boolean canBuy) {
+    private void prepareConfirmAndCancelButton(final VBox aBottomPane, BiConsumer<ProductType,T> ecoController, Stage dialog, boolean canBuy) {
         final HBox hBox = new HBox();
         Button okButton = null;
 
@@ -72,7 +77,7 @@ public abstract class AbstractButton <T extends BuyProductInterface> extends But
             okButton = new Button("OK");
             hBox.setAlignment(Pos.CENTER);
             okButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
-                buyProductiNController(product,ecoController);
+                acceptProduct(ecoController);
                 dialog.close();
             });
             okButton.setPrefWidth(200);
@@ -93,7 +98,7 @@ public abstract class AbstractButton <T extends BuyProductInterface> extends But
 
     }
 
-    abstract void buyProductiNController(T product, EcoController ecoController);
+    abstract void acceptProduct(BiConsumer<ProductType,T > buy);
 
     abstract void prepareTop(final FlowPane aTopPane);
 

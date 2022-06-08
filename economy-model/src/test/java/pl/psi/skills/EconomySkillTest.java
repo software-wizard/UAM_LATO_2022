@@ -26,7 +26,7 @@ public class EconomySkillTest {
 
     @Test
     public void heroDoesNotHaveEnoughMoneyToBuySkill() {
-        int moneyBeforeBuyingSkill = hero1.getGold();
+        int moneyBeforeBuyingSkill = hero1.getGold().getPrice();
 
     }
 

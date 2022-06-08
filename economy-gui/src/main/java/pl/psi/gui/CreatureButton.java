@@ -17,11 +17,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import pl.psi.ProductType;
-import pl.psi.creatures.EconomyCastleFactory;
 import pl.psi.creatures.EconomyCreature;
-import pl.psi.creatures.EconomyNecropolisFactory;
-import pl.psi.creatures.EconomyStrongholdFactory;
-import pl.psi.hero.EconomyHero;
 
 // TODO createConfirm - Stage and Top - nie
 // TODO &&

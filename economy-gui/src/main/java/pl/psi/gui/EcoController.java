@@ -2,10 +2,7 @@ package pl.psi.gui;
 
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
-import javafx.scene.control.ContentDisplay;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -16,100 +13,80 @@ import javafx.stage.Stage;
 import lombok.SneakyThrows;
 import pl.psi.EconomyEngine;
 import pl.psi.ProductType;
-import pl.psi.artifacts.Artifact;
-import pl.psi.artifacts.ArtifactPlacement;
-import pl.psi.artifacts.EconomyArtifactFactory;
+import pl.psi.artifacts.*;
+import pl.psi.creatures.*;
+import pl.psi.skills.*;
+import pl.psi.spells.*;
 import pl.psi.converter.EcoBattleConverter;
-import pl.psi.creatures.EconomyCastleFactory;
-import pl.psi.creatures.EconomyCreature;
-import pl.psi.creatures.EconomyNecropolisFactory;
-import pl.psi.creatures.EconomyStrongholdFactory;
 import pl.psi.hero.EconomyHero;
 import pl.psi.shop.BuyProductInterface;
-import pl.psi.shop.SpellShop;
-import pl.psi.skills.EconomySkill;
-import pl.psi.skills.EconomySkillFactory;
-import pl.psi.skills.SkillLevel;
-import pl.psi.skills.SkillType;
-import pl.psi.spells.EconomySpell;
-import pl.psi.spells.EconomySpellFactory;
-import pl.psi.spells.SpellRang;
-import pl.psi.spells.SpellStats;
-
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static javafx.scene.layout.BackgroundRepeat.NO_REPEAT;
 
 public class EcoController implements PropertyChangeListener {
+
     private final EconomyEngine economyEngine;
     @FXML
-    ScrollPane heroBoughtScrollPane;
+    private ScrollPane heroBoughtScrollPane;
     @FXML
-    ScrollPane skillsScrollPane;
+    private ScrollPane skillsScrollPane;
     @FXML
-    HBox spellsScrollPaneHBox;
+    private HBox spellsScrollPaneHBox;
     @FXML
-    HBox skillsScrollPaneHBox;
+    private HBox skillsScrollPaneHBox;
     @FXML
-    ScrollPane spellsScrollPane;
+    private ScrollPane spellsScrollPane;
     @FXML
-    StackPane heroBoughtPane;
-
+    private StackPane heroBoughtPane;
     @FXML
-    HBox shopsBox;
+    private HBox shopsBox;
     @FXML
-    Button readyButton;
+    private Button readyButton;
     @FXML
-    Label playerLabel;
+    private Label playerLabel;
     @FXML
-    Label fraction;
+    private Label fraction;
     @FXML
-    Label currentGoldLabel;
+    private Label currentGoldLabel;
     @FXML
-    Label GoldImage;
+    private Label GoldImage;
     @FXML
-    Label roundNumberLabel;
+    private Label roundNumberLabel;
     @FXML
-    ScrollPane scrollPane;
-
+    private ScrollPane scrollPane;
     @FXML
-    VBox VBoxHero;
-
+    private VBox VBoxHero;
     @FXML
-    Button creaturete1;
+    private Button creaturete1;
     @FXML
-    Button creaturete2;
+    private Button creaturete2;
     @FXML
-    Button creaturete3;
+    private Button creaturete3;
     @FXML
-    Button creaturete4;
+    private Button creaturete4;
     @FXML
-    Button creaturete5;
+    private Button creaturete5;
     @FXML
-    Button creaturete6;
+    private Button creaturete6;
     @FXML
-    Button creaturete7;
-
-
+    private Button creaturete7;
     @FXML
-    Button HEAD;
+    private Button HEAD;
     @FXML
-    Button TORSO;
+    private Button TORSO;
     @FXML
-    Button NECK;
+    private Button NECK;
     @FXML
-    Button FEET;
+    private Button FEET;
     @FXML
-    Button RIGHT_HAND;
+    private Button RIGHT_HAND;
     @FXML
-    Button LEFT_HAND;
+    private Button LEFT_HAND;
     @FXML
-    Button SHOULDERS;
-
+    private Button SHOULDERS;
 
     private ProductType shopChoose;
     private HashMap<ArtifactPlacement, Button> artifactPlacementButtonHashMap;
@@ -119,9 +96,7 @@ public class EcoController implements PropertyChangeListener {
 
     public EcoController(final EconomyHero aHero1, final EconomyHero aHero2) {
         economyEngine = new EconomyEngine(aHero1, aHero2);
-        // default choose creatures
         shopChoose = ProductType.CREATURE;
-
 
     }
 
@@ -141,10 +116,6 @@ public class EcoController implements PropertyChangeListener {
         artifactButtons = List.of(HEAD, RIGHT_HAND, LEFT_HAND, FEET, NECK, TORSO, SHOULDERS);
 
         VBoxHero.setBackground(new Background(new BackgroundFill(Color.BROWN, CornerRadii.EMPTY, Insets.EMPTY)));
-//        VBoxHero.setBackground(new Background(
-//                new BackgroundImage(new Image("fraction/"+economyEngine.getActiveHero().getFraction().name()+".png"),
-//                BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
-//                new BackgroundSize(200,300,false,false,false,false))));
 
         Image imageGold = new Image("GOLD.png");
         ImageView imageViewGold = new ImageView(imageGold);
@@ -161,7 +132,6 @@ public class EcoController implements PropertyChangeListener {
         scrollPane.setHmin(300);
 
         Image imageHero = new Image("HERO.png");
-
         heroBoughtPane.setBackground(new Background(new BackgroundImage(imageHero, NO_REPEAT, NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
 
         refreshStartGui();
@@ -173,12 +143,10 @@ public class EcoController implements PropertyChangeListener {
         economyEngine.addObserver(EconomyEngine.NEXT_ROUND, this);
         economyEngine.addObserver(EconomyEngine.END_SHOPPING, this);
 
-
         playerLabel.setText(economyEngine.getActiveHero().toString());
-        currentGoldLabel.setText(String.valueOf(economyEngine.getActiveHero().getGold()));
+        currentGoldLabel.setText(String.valueOf(economyEngine.getActiveHero().getGold().getPrice()));
         roundNumberLabel.setText(String.valueOf(economyEngine.getRoundNumber()));
         fraction.setText("Fraction : " + economyEngine.getActiveHero().getFraction().name());
-
 
         readyButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
             if (economyEngine.getRoundNumber() == 1) {
@@ -220,7 +188,6 @@ public class EcoController implements PropertyChangeListener {
     }
 
     void refreshShopDependsOnWhatHasChose(){
-
         if (shopChoose.equals(ProductType.ARTIFACT)) {
             fillShopWithArtifacts();
         } else if (shopChoose.equals(ProductType.CREATURE)) {
@@ -236,25 +203,19 @@ public class EcoController implements PropertyChangeListener {
 
 
     void refreshStartGui() {
-
-        // refresh top of the scene - activeHero , Gold , RoundNumber
         playerLabel.setText(economyEngine.getActiveHero().toString());
-        currentGoldLabel.setText(String.valueOf(economyEngine.getActiveHero().getGold()));
+        currentGoldLabel.setText(String.valueOf(economyEngine.getActiveHero().getGold().getPrice()));
         roundNumberLabel.setText(String.valueOf(economyEngine.getRoundNumber()));
         fraction.setText("Fraction : " + economyEngine.getActiveHero().getFraction().name());
-
         fillShopWithCreatures();
 
     }
 
     void refreshGuiHeroBoughtCreature() {
-
-        currentGoldLabel.setText(String.valueOf(economyEngine.getActiveHero().getGold()));
+        currentGoldLabel.setText(String.valueOf(economyEngine.getActiveHero().getGold().getPrice()));
         shopsBox.getChildren().clear();
-
         refreshShopDependsOnWhatHasChose();
 
-        //refresh boughtCreatures
         List<EconomyCreature> creatureList = economyEngine.getActiveHero().getCreatures();
         int numberOfBoughtCreatures = creatureList.size();
         for (int i = 0; i < numberOfBoughtCreatures; i++) {
@@ -263,11 +224,7 @@ public class EcoController implements PropertyChangeListener {
             Button button = creatureButtons.get(i);
             int amount = creature.getAmount();
             int tier = creature.getTier();
-            String upgrated = null;
-            if (creature.isUpgraded())
-                upgrated = "1";
-            else
-                upgrated = "0";
+            String upgrated = creature.isUpgraded() ? "1" : "0";
             String picture = tier + upgrated;
 
             button.setText(amount + "");
@@ -277,20 +234,16 @@ public class EcoController implements PropertyChangeListener {
             imageView.setFitWidth(24);
             button.setGraphic(imageView);
             button.setContentDisplay(ContentDisplay.LEFT);
-
         }
-
     }
 
 
     void refreshGuiHeroBoughtSkill(){
-
         skillsScrollPaneHBox.getChildren().clear();
-        currentGoldLabel.setText(String.valueOf(economyEngine.getActiveHero().getGold()));
+        currentGoldLabel.setText(String.valueOf(economyEngine.getActiveHero().getGold().getPrice()));
         shopsBox.getChildren().clear();
         refreshShopDependsOnWhatHasChose();
 
-        //refresh boughtSkills
         List<EconomySkill> economySkills = economyEngine.getActiveHero().getSkills();
 
         final HBox skills = new HBox();
@@ -307,17 +260,15 @@ public class EcoController implements PropertyChangeListener {
             button.getStyleClass().add("BoxSkills");
             skills.getChildren().add(button);
         }
-
         skillsScrollPaneHBox.getChildren().add(skills);
-
     }
 
     void refreshGuiHeroBoughtSpell(){
         spellsScrollPaneHBox.getChildren().clear();
-        currentGoldLabel.setText(String.valueOf(economyEngine.getActiveHero().getGold()));
+        currentGoldLabel.setText(String.valueOf(economyEngine.getActiveHero().getGold().getPrice()));
         shopsBox.getChildren().clear();
         refreshShopDependsOnWhatHasChose();
-        //refresh bought Spells
+
         List<EconomySpell> economySpells = economyEngine.getActiveHero().getSpells();
         final HBox spells = new HBox();
         for (int i=0;i<economySpells.size();i++) {
@@ -338,12 +289,9 @@ public class EcoController implements PropertyChangeListener {
 
 
     void refreshGuiHeroBoughtArtefact() {
-
-        currentGoldLabel.setText(String.valueOf(economyEngine.getActiveHero().getGold()));
+        currentGoldLabel.setText(String.valueOf(economyEngine.getActiveHero().getGold().getPrice()));
         shopsBox.getChildren().clear();
-
         refreshShopDependsOnWhatHasChose();
-
         //refresh boughtArtifacts
         List<Artifact> artifacts = economyEngine.getActiveHero().getArtifacts();
         for (Map.Entry<ArtifactPlacement, Button> b : artifactPlacementButtonHashMap.entrySet()) {
@@ -365,42 +313,35 @@ public class EcoController implements PropertyChangeListener {
 
     void refreshGuiHeroChanged() {
 
-        // refresh top of the scene - activeHero , Gold , RoundNumber
         playerLabel.setText(economyEngine.getActiveHero().toString());
-        currentGoldLabel.setText(String.valueOf(economyEngine.getActiveHero().getGold()));
+        currentGoldLabel.setText(String.valueOf(economyEngine.getActiveHero().getGold().getPrice()));
         roundNumberLabel.setText(String.valueOf(economyEngine.getRoundNumber()));
         fraction.setText("Fraction : " + economyEngine.getActiveHero().getFraction().name());
 
         // refresh buttons of creatures for the hero2 - without it  hero2 can see what hero1 bought
         for (int i = 0; i < 7; i++) {
-            Button button = creatureButtons.get(i);
             Image image = new Image("CLEAR.png");
             ImageView imageView = new ImageView(image);
+
+            Button button = creatureButtons.get(i);
             imageView.setFitWidth(30);
             imageView.setFitHeight(30);
             button.setGraphic(imageView);
             button.setText("");
-        }
 
-        for (int i = 0; i < 7; i++) {
-            Button button = artifactButtons.get(i);
-            Image image = new Image("CLEAR.png");
-            ImageView imageView = new ImageView(image);
-            imageView.setFitWidth(40);
-            imageView.setFitHeight(40);
-            button.setGraphic(imageView);
-
+            Button button2 = artifactButtons.get(i);
+            ImageView imageView2 = new ImageView(image);
+            imageView2.setFitWidth(40);
+            imageView2.setFitHeight(40);
+            button2.setGraphic(imageView2);
         }
 
         shopsBox.getChildren().clear();
         skillsScrollPaneHBox.getChildren().clear();
         spellsScrollPaneHBox.getChildren().clear();
         refreshShopDependsOnWhatHasChose();
-
     }
 
-
-    // Clicked section of Shop
     @FXML
     private void CreatureShopClicked(MouseEvent event) {
         shopsBox.getChildren().clear();
@@ -432,87 +373,36 @@ public class EcoController implements PropertyChangeListener {
 
 
     private void fillShopWithCreatures() {
-
         if (economyEngine.getActiveHero().getFraction().equals(EconomyHero.Fraction.NECROPOLIS))
-            fillShopWithNecropolisCreatures();
+            fillShopWithCreaturesOfFraction(EconomyHero.Fraction.NECROPOLIS,new EconomyNecropolisFactory());
         else if(economyEngine.getActiveHero().getFraction().equals(EconomyHero.Fraction.CASTLE))
-            fillShopWithCastleCreatures();
+            fillShopWithCreaturesOfFraction(EconomyHero.Fraction.CASTLE,new EconomyCastleFactory());
         else if(economyEngine.getActiveHero().getFraction().equals(EconomyHero.Fraction.STRONGHOLD))
-            fillShopWithNStrongholdCreatures();
+            fillShopWithCreaturesOfFraction(EconomyHero.Fraction.STRONGHOLD,new EconomyStrongholdFactory());
 
     }
 
-    private void fillShopWithCastleCreatures() {
-        int gold = economyEngine.getActiveHero().getGold();
+    private void fillShopWithCreaturesOfFraction(EconomyHero.Fraction fraction, FactoryInterface factory){
         final VBox creatureShop = new VBox();
         Text label = new Text("Here you can buy creatures for your Hero.There are\ndifferent types of creatures,these types depend on \nchosen fraction.You can buy only 7 types of creatures.\nCreature of one type you can buy as many as gold \nyou have.");
         label.getStyleClass().add("labelShop");
         creatureShop.getChildren().add(label);
-        // refresh creatures
-        final EconomyCastleFactory factory = new EconomyCastleFactory();
-        for (int i = 1; i < 4; i++) {
-            EconomyCreature creature = factory.create(false, i, 1);
-            int costOfCreature = creature.getGoldCost().getPrice();
-            int maxCreaturesHeroCanBuy = gold / costOfCreature;
-            boolean canBuy = gold >= costOfCreature;
-            boolean canBuyMore = economyEngine.getActiveHero().canAddCreature(creature);
-            CreatureButton button = new CreatureButton(this, creature, maxCreaturesHeroCanBuy, canBuy, canBuyMore);
-            String name = i + "0";
-            Image image = new Image("/creatures/CASTLE/" + name + ".png");
-            ImageView imageView = new ImageView(image);
-            imageView.setFitHeight(40);
-            imageView.setFitWidth(40);
-            button.setGraphic(imageView);
-            button.setText(creature.getName() + " | " + "Price : " + creature.getGoldCost().getPrice());
-            if (canBuy && canBuyMore)
-                button.getStyleClass().add("centerHBoxRight");
-            else
-                button.getStyleClass().add("centerHBoxGrey");
-            creatureShop.getChildren().add(button);
-
-
-            EconomyCreature creature2 = factory.create(true, i, 1);
-            int costOfCreature2 = creature2.getGoldCost().getPrice();
-            maxCreaturesHeroCanBuy = gold / costOfCreature2;
-            boolean canBuy2 = gold >= costOfCreature2;
-            boolean canBuyMore2 = economyEngine.getActiveHero().canAddCreature(creature2);
-            CreatureButton button2 = new CreatureButton(this, creature2, maxCreaturesHeroCanBuy, canBuy2, canBuyMore2);
-            String name2 = i + "1";
-            Image image2 = new Image("/creatures/CASTLE/" + name2 + ".png");
-            ImageView imageView2 = new ImageView(image2);
-            imageView2.setFitHeight(40);
-            imageView2.setFitWidth(40);
-            button2.setGraphic(imageView2);
-            button2.setText(creature2.getName() + " | " + "Price : " + creature2.getGoldCost().getPrice());
-            button2.setContentDisplay(ContentDisplay.LEFT);
-            if (canBuy2 && canBuyMore2)
-                button2.getStyleClass().add("centerHBoxRight");
-            else
-                button2.getStyleClass().add("centerHBoxGrey");
-
-            creatureShop.getChildren().add(button2);
-        }
+        fillShopWithCreaturesDependsOnUpgrated(fraction,factory,false,creatureShop);
+        fillShopWithCreaturesDependsOnUpgrated(fraction,factory,true,creatureShop);
         shopsBox.getChildren().add(creatureShop);
     }
 
-
-    private void fillShopWithNecropolisCreatures() {
-        int gold = economyEngine.getActiveHero().getGold();
-        final VBox creatureShop = new VBox();
-        Text label = new Text("Here you can buy creatures for your Hero.There are\ndifferent types of creatures,these types depend on \nchosen fraction.You can buy only 7 types of creatures.\nCreature of one type you can buy as many as gold \nyou have.");
-        label.getStyleClass().add("labelShop");
-        creatureShop.getChildren().add(label);
-        // refresh creatures
-        final EconomyNecropolisFactory factory = new EconomyNecropolisFactory();
+    private void fillShopWithCreaturesDependsOnUpgrated(EconomyHero.Fraction fraction, FactoryInterface factory, boolean upgrated, VBox creatureShop){
         for (int i = 1; i < 8; i++) {
-            EconomyCreature creature = factory.create(false, i, 1);
+            EconomyCreature creature = (EconomyCreature) factory.create(upgrated, i, 1);
             int costOfCreature = creature.getGoldCost().getPrice();
-            int maxCreaturesHeroCanBuy = gold / costOfCreature;
-            boolean canBuy = gold >= costOfCreature;
+            int maxCreaturesHeroCanBuy = economyEngine.getActiveHero().getGold().getPrice() / costOfCreature;
             boolean canBuyMore = economyEngine.getActiveHero().canAddCreature(creature);
+            boolean canBuy = economyEngine.getActiveHero().getGold().haveEnoghMoney(creature.getGoldCost());
             CreatureButton button = new CreatureButton(this, creature, maxCreaturesHeroCanBuy, canBuy, canBuyMore);
-            String name = i + "0";
-            Image image = new Image("/creatures/NECROPOLIS/" + name + ".png");
+            String up = upgrated ? "1" : "0";
+            String name = i + "" + up ;
+            Image image = new Image("/creatures/" + fraction.name() + "/" + name + ".png");
             ImageView imageView = new ImageView(image);
             imageView.setFitHeight(40);
             imageView.setFitWidth(40);
@@ -523,87 +413,15 @@ public class EcoController implements PropertyChangeListener {
             else
                 button.getStyleClass().add("centerHBoxGrey");
             creatureShop.getChildren().add(button);
-
-
-            EconomyCreature creature2 = factory.create(true, i, 1);
-            int costOfCreature2 = creature2.getGoldCost().getPrice();
-            maxCreaturesHeroCanBuy = gold / costOfCreature2;
-            boolean canBuy2 = gold >= costOfCreature2;
-            boolean canBuyMore2 = economyEngine.getActiveHero().canAddCreature(creature2);
-            CreatureButton button2 = new CreatureButton(this, creature2, maxCreaturesHeroCanBuy, canBuy2, canBuyMore2);
-            String name2 = i + "1";
-            Image image2 = new Image("/creatures/NECROPOLIS/" + name2 + ".png");
-            ImageView imageView2 = new ImageView(image2);
-            imageView2.setFitHeight(40);
-            imageView2.setFitWidth(40);
-            button2.setGraphic(imageView2);
-            button2.setText(creature2.getName() + " | " + "Price : " + creature2.getGoldCost().getPrice());
-            button2.setContentDisplay(ContentDisplay.LEFT);
-            if (canBuy2 && canBuyMore2)
-                button2.getStyleClass().add("centerHBoxRight");
-            else
-                button2.getStyleClass().add("centerHBoxGrey");
-
-            creatureShop.getChildren().add(button2);
         }
-        shopsBox.getChildren().add(creatureShop);
     }
-
-    private void fillShopWithNStrongholdCreatures() {
-        int gold = economyEngine.getActiveHero().getGold();
-        final VBox creatureShop = new VBox();
-        Text label = new Text("Here you can buy creatures for your Hero.There are\ndifferent types of creatures,these types depend on \nchosen fraction.You can buy only 7 types of creatures.\nCreature of one type you can buy as many as gold \nyou have.");
-        label.getStyleClass().add("labelShop");
-        creatureShop.getChildren().add(label);
-
-        // refresh creatures
-        final EconomyStrongholdFactory factory = new EconomyStrongholdFactory();
-        for (int i = 1; i < 8; i++) {
-            EconomyCreature creature = factory.create(false, i, 1);
-            int costOfCreature = creature.getGoldCost().getPrice();
-            int maxCreaturesHeroCanBuy = gold / costOfCreature;
-            boolean canBuy = gold >= costOfCreature;
-            boolean canBuyMore = economyEngine.getActiveHero().canAddCreature(creature);
-            CreatureButton button = new CreatureButton(this, creature, maxCreaturesHeroCanBuy, canBuy, canBuyMore);
-            String name = i + "0";
-            Image image = new Image("/creatures/STRONGHOLD/" + name + ".png");
-            ImageView imageView = new ImageView(image);
-            imageView.setFitHeight(40);
-            imageView.setFitWidth(40);
-            button.setGraphic(imageView);
-            button.setText(creature.getName() + " | " + "Price : " + creature.getGoldCost().getPrice());
-            if (canBuy && canBuyMore)
-                button.getStyleClass().add("centerHBoxRight");
-            else
-                button.getStyleClass().add("centerHBoxGrey");
-            creatureShop.getChildren().add(button);
+    // TODO - one method , Factory - interface and factory has String with the path of images i getter na to  !!!!
+    // TODO CreateCreaterPreFactory
+    // TODO interface dla fabryki EcoCreaterIf ...
 
 
-            EconomyCreature creature2 = factory.create(true, i, 1);
-            int costOfCreature2 = creature2.getGoldCost().getPrice();
-            maxCreaturesHeroCanBuy = gold / costOfCreature2;
-            boolean canBuy2 = gold >= costOfCreature2;
-            boolean canBuyMore2 = economyEngine.getActiveHero().canAddCreature(creature2);
-            CreatureButton button2 = new CreatureButton(this, creature2, maxCreaturesHeroCanBuy, canBuy2, canBuyMore2);
-            String name2 = i + "1";
-            Image image2 = new Image("/creatures/STRONGHOLD/" + name2 + ".png");
-            ImageView imageView2 = new ImageView(image2);
-            imageView2.setFitHeight(40);
-            imageView2.setFitWidth(40);
-            button2.setGraphic(imageView2);
-            button2.setText(creature2.getName() + " | " + "Price : " + creature2.getGoldCost().getPrice());
-            button2.setContentDisplay(ContentDisplay.LEFT);
-            if (canBuy2 && canBuyMore2)
-                button2.getStyleClass().add("centerHBoxRight");
-            else
-                button2.getStyleClass().add("centerHBoxGrey");
 
-            creatureShop.getChildren().add(button2);
-        }
-        shopsBox.getChildren().add(creatureShop);
-    }
-
-
+    // TODO w otdzielną metodę Images
     private void fillShopWithArtifacts() {
         final VBox artifactShop = new VBox();
         Text label = new Text("Here you can buy artifacts for your Hero. There are \ndifferent types of artifacts, these types don't depend\non chosen fraction. Each artifact has placement. One part\nof body can have only one artifact, that's why\nyou can buy all types of artifacts, but artifact \nof one type you can buy only once.");
@@ -616,58 +434,30 @@ public class EcoController implements PropertyChangeListener {
             String name = namesOfArtifacts.get(i);
             Artifact artifact = economyArtifactFactory.create(name);
             if(economyEngine.getActiveHero().canAddArtifact(artifact.getPlacement())) {
-
-                boolean canBuy = economyEngine.getActiveHero().getGold()>=artifact.getGoldCost().getPrice();
-                ArtifactButton button = new ArtifactButton(this, artifact,canBuy);
-
-                Image image = new Image("/artifacts/" + name + ".png");
-                ImageView imageView = new ImageView(image);
-                imageView.setFitHeight(40);
-                imageView.setFitWidth(40);
-                button.setGraphic(imageView);
-                button.setText(name);
-                artifactShop.getChildren().add(button);
-
-                if(canBuy){
-                        button.getStyleClass().add("centerHBoxRight");
-                }else{
-                        button.getStyleClass().add("centerHBoxGrey");
-                }
+                boolean canBuy = economyEngine.getActiveHero().getGold().haveEnoghMoney(artifact.getGoldCost());
+                ArtifactButton button = new ArtifactButton(this::buy, artifact,canBuy);
+                setImageToProducts(button,artifactShop,canBuy);
             }
         }
         shopsBox.getChildren().add(artifactShop);
     }
 
     private void fillShopWithSkills(){
-
         shopsBox.getChildren().clear();
         final VBox skillShop  = new VBox();
         Text label = new Text("Here you can buy skills for your Hero. There are \ndifferent types of skills, these types don't depend on \nchosen fraction.You can buy all types of skills, \nbut skill of one type you can buy only once.");
         label.getStyleClass().add("labelShop");
         skillShop.getChildren().add(label);
-
         List<SkillLevel> skillLevels = List.of(SkillLevel.BASIC,SkillLevel.ADVANCED,SkillLevel.EXPERT);
         List<SkillType> skillTypes = List.of(SkillType.ARCHERY,SkillType.OFFENCE,SkillType.ARMOURER,SkillType.RESISTANCE,SkillType.LUCK,SkillType.FIRST_AID);
         final EconomySkillFactory factory = new EconomySkillFactory();
-
         for(int i = 0; i<skillLevels.size(); i++){
             for(int j=0; j<skillTypes.size(); j++) {
                 EconomySkill skill = factory.create(skillTypes.get(j), skillLevels.get(i));
                 if (economyEngine.getActiveHero().canAddSkill(skill)) {
-                    boolean canBuy = economyEngine.getActiveHero().getGold() >= skill.getGoldCost().getPrice();
-                    SkillButton button = new SkillButton(this, skill, canBuy);
-                    Image image = new Image("/skills/" + skill.getSkillType().name() + ".png");
-                    ImageView imageView = new ImageView(image);
-                    imageView.setFitHeight(40);
-                    imageView.setFitWidth(40);
-                    button.setGraphic(imageView);
-                    button.setText(skillLevels.get(i) + " " + skill.getSkillType() + " | " + skill.getGoldCost().getPrice());
-                    skillShop.getChildren().add(button);
-                    if(canBuy){
-                        button.getStyleClass().add("centerHBoxRight");
-                    }else{
-                        button.getStyleClass().add("centerHBoxGrey");
-                    }
+                    boolean canBuy = economyEngine.getActiveHero().getGold().haveEnoghMoney(skill.getGoldCost());
+                    SkillButton button = new SkillButton(this::buy, skill, canBuy, skillLevels.get(i));
+                    setImageToProducts(button,skillShop,canBuy);
                 }
             }
         }
@@ -676,43 +466,42 @@ public class EcoController implements PropertyChangeListener {
 
 
     private void fillShopWithSpells(){
-
         shopsBox.getChildren().clear();
-
         final VBox spellShop  = new VBox();
         Text label = new Text("Here you can buy spells for your Hero. There are\ndifferent types of spells, these types don't depend on\nchosen fraction. You can buy all types of spells,\nbut spell of one type you can buy only once.");
         label.getStyleClass().add("labelShop");
         spellShop.getChildren().add(label);
-
-        // TODO now we can buy only spells with requiredMagicGuildLevel
+        // TODO we can buy only spells with requiredMagicGuildLevel
         List<SpellStats> spellStats = List.of(SpellStats.HASTE,SpellStats.MAGIC_ARROW);
         List<SpellRang> spellRangs = List.of(SpellRang.BASIC,SpellRang.ADVANCED,SpellRang.EXPERT);
         final EconomySpellFactory factory = new EconomySpellFactory();
-
         for(int i = 0; i<spellStats.size(); i++){
             for(int j=0; j<spellRangs.size(); j++) {
                 EconomySpell spell = factory.create(spellStats.get(i),spellRangs.get(j),1);
                 if (economyEngine.getActiveHero().canAddSpell(spell)) {
-
-                    boolean canBuy = economyEngine.getActiveHero().getGold() >= spell.getGoldCost().getPrice();
-                    SpellButton button = new SpellButton(this, spell,canBuy );
-                    Image image = new Image("/spells/" + spell.getSpellStats().name() + ".png");
-                    ImageView imageView = new ImageView(image);
-                    imageView.setFitHeight(40);
-                    imageView.setFitWidth(40);
-                    button.setGraphic(imageView);
-                    button.setText(spell.getSpellRang() + " " + spell.getSpellStats().name() + " | " + spell.getGoldCost().getPrice());
-                    button.getStyleClass().add("centerHBoxRight");
-                    spellShop.getChildren().add(button);
-                    if(canBuy){
-                        button.getStyleClass().add("centerHBoxRight");
-                    }else{
-                        button.getStyleClass().add("centerHBoxGrey");
-                    }
+                    boolean canBuy = economyEngine.getActiveHero().getGold().haveEnoghMoney(spell.getGoldCost());
+                    SpellButton button = new SpellButton(this::buy, spell,canBuy );
+                    setImageToProducts(button,spellShop,canBuy);
                 }
             }
         }
         shopsBox.getChildren().add(spellShop);
+    }
+
+    private void setImageToProducts(AbstractButton button, VBox shop, boolean canBuy){
+        Image image = new Image(button.PATH);
+        ImageView imageView = new ImageView(image);
+        imageView.setFitHeight(40);
+        imageView.setFitWidth(40);
+        button.setGraphic(imageView);
+        button.setText(button.DESCRIPTION);
+        button.getStyleClass().add("centerHBoxRight");
+        shop.getChildren().add(button);
+        if(canBuy){
+            button.getStyleClass().add("centerHBoxRight");
+        }else{
+            button.getStyleClass().add("centerHBoxGrey");
+        }
     }
 
 }

@@ -2,7 +2,7 @@ package pl.psi.creatures;
 
 import pl.psi.shop.Money;
 
-public class EconomyStrongholdFactory {
+public class EconomyStrongholdFactory implements FactoryInterface  {
 
     private static final String EXCEPTION_MESSAGE = "We support tiers from 1 to 7";
 
