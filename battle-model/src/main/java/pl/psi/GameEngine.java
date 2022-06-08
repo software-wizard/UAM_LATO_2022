@@ -268,6 +268,13 @@ public class GameEngine {
         turnQueue.addObserver(aEventType, aObserver);
     }
 
+
+    public boolean canAttack(final Point point) {
+        return false;
+    public void addObserverToTurnQueue(final String aEventType, final PropertyChangeListener aObserver) {
+        turnQueue.addObserver(aEventType, aObserver);
+    }
+
     public boolean canHeal(final Point aPoint) {
         Creature currentCreature = turnQueue.getCurrentCreature();
 

@@ -59,7 +59,6 @@ public class Creature implements PropertyChangeListener, Comparable<Creature> {
         alignment = aAlignment;
         luck = aLuck;
         runningSpells = new ArrayList<>();
-        runningSpells = new ArrayList<>();
     }
 
     public void increaseStats(CreatureStatisticIf statIncrease) {
@@ -110,6 +109,7 @@ public class Creature implements PropertyChangeListener, Comparable<Creature> {
     public void castSpell(final Creature aDefender, Spell spell) {
         if (isAlive()) {
             if (spell.getClass() == BuffDebuffSpell.class) runningSpells.add(spell);
+
             spell.castSpell(aDefender);
         }
     }

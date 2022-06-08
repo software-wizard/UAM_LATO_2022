@@ -2,6 +2,7 @@ package pl.psi.gui;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
@@ -21,10 +22,12 @@ import javafx.stage.Stage;
 import pl.psi.GameEngine;
 import pl.psi.Hero;
 import pl.psi.Point;
-import pl.psi.spells.SpellFactory;
+import pl.psi.TurnQueue;
+import pl.psi.spells.Spell;
 
 import java.io.IOException;
 
+import static pl.psi.gui.SpellBattleController.SPELL_SELECTED;
 import static pl.psi.spells.SpellRang.BASIC;
 import pl.psi.TurnQueue;
 import pl.psi.spells.Spell;
@@ -49,7 +52,7 @@ public class MainBattleController {
     private Button spellButton;
 
     Spell selectedSpell;
-
+    
     @FXML
     private Label console;
     @FXML
