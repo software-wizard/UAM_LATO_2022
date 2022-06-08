@@ -145,12 +145,31 @@ public class MainBattleController {
                 }
 
                 if (gameEngine.canMove(new Point(x, y))) {
-                    mapTile.setBackground(Color.GREY);
+                    mapTile.setBackground(Color.DARKGREY);
+                    List<Point> path = gameEngine.getPath(new Point(x1,y1));
+                    mapTile.setOnMouseEntered(mouseEvent -> {
+                            mapTile.setBackground(Color.GREY);
+                    });
+
+                    mapTile.setOnMouseExited(mouseEvent -> {
+                        mapTile.setBackground(Color.DARKGREY);
+                        renderSpecialFields(mapTile,x1,y1);
+                    });
+
+
+//                    mapTile.setOnMouseExited(mouseEvent -> {
+//                        path.forEach(point -> {
+//                            MapTile mapTile1 = new MapTile("");
+//                            mapTile1.setBackground(Color.GREY);
+//                            gridMap.add(mapTile1,point.getX(),point.getY());
+//                        });
+//                    });
+
 
                     mapTile.setOnMouseClicked(
                             e -> {
                                 if(e.getButton() == MouseButton.PRIMARY){
-                                    List<Point> path = gameEngine.getPath(new Point(x1,y1));
+//                                    List<Point> path = gameEngine.getPath(new Point(x1,y1));
                                     path.forEach(point -> {
                                         if(gameEngine.getCreature(point).isEmpty()){
                                             if(!point.equals(path.get(path.size()-1))){
@@ -185,10 +204,8 @@ public class MainBattleController {
                     });
 
                     if (gameEngine.canAttack(new Point(x, y))) {
-
-                        List<Point> attackList = gameEngine.getCurrentCreatureSplashDamagePointsList(new Point(x,y));
-                        List<Optional<Creature>> creatureList = gameEngine.getCreaturesOnPointList(attackList);
-
+//                        List<Point> attackList = gameEngine.getCurrentCreatureSplashDamagePointsList(new Point(x,y));
+//                        List<Optional<Creature>> creatureList = gameEngine.getCreaturesOnPointList(attackList);
 //                        mapTile.setOnMouseEntered(e -> {
 //                            creatureList.forEach(creature -> {
 //                                if(creature.isPresent()){
@@ -212,6 +229,7 @@ public class MainBattleController {
 //                                }
 //                            });
 //                        });
+
 
                         mapTile.setOnMouseEntered(e -> {
                             var img = new Image(gameEngine.getCreature(new Point(x1,y1)).get().getBasicStats().getCanAttackImagePath());
@@ -244,22 +262,5 @@ public class MainBattleController {
                 gridMap.add(mapTile, x, y);
             }
         }
-    }
-
-    private void refreshGuiWithoutLogic(Point point) {
-        final MapTile mapTile = new MapTile("");
-        if (gameEngine.getCreature(point).isPresent()) {
-            if (gameEngine.getCreature(point).get().isAlive()) {
-                mapTile.setName("\n\n" + gameEngine.getCreature(point).get().getAmount());
-                var img = new Image(gameEngine.getCreature(point).get().getBasicStats().getImagePath());
-                mapTile.setBackground(img);
-                System.out.println("I have set background image");
-            } else {
-                var img = new Image("/images/dead.jpg");
-                mapTile.setBackground(img);
-            }
-            gridMap.add(mapTile, point.getX(), point.getY());
-        }
-
     }
 }
