@@ -2,6 +2,7 @@ package pl.psi.gui;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -17,11 +18,20 @@ import javafx.stage.Stage;
 import pl.psi.GameEngine;
 import pl.psi.Hero;
 import pl.psi.Point;
+import pl.psi.TurnQueue;
+import pl.psi.spells.Spell;
 
 import java.io.IOException;
+
+import static pl.psi.gui.SpellBattleController.SPELL_SELECTED;
+import static pl.psi.spells.SpellRang.BASIC;
+
+import pl.psi.creatures.Creature;
+
 import java.util.List;
 
 public class MainBattleController {
+
     private final GameEngine gameEngine;
     @FXML
     private GridPane gridMap;
@@ -33,6 +43,9 @@ public class MainBattleController {
     private Button passButton;
     @FXML
     private Button spellButton;
+
+    Spell selectedSpell;
+
     @FXML
     private Label console;
     @FXML
@@ -55,27 +68,39 @@ public class MainBattleController {
         });
 
         spellButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
-                    Scene scene = null;
-                    Stage stage = null;
-                    try {
-                        final FXMLLoader loader = new FXMLLoader();
-                        loader.setLocation(Start.class.getClassLoader()
-                                .getResource("fxml/spell-battle.fxml"));
-                        loader.setController(new SpellBattleController());
-                        scene = new Scene(loader.load());
-                        stage = new Stage();
-                        stage.setScene(scene);
-                        stage.show();
-                    } catch (final IOException aE) {
-                        aE.printStackTrace();
-                    }
-                }
-        );
+            Scene scene = null;
+            final Stage stage = new Stage();
+            SpellBattleController spellBattleController = new SpellBattleController(gameEngine);
+            try {
+                final FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(Start.class.getClassLoader()
+                        .getResource("fxml/spell-battle.fxml"));
+                loader.setController(spellBattleController);
+                scene = new Scene(loader.load());
+                stage.setScene(scene);
+                stage.show();
+            } catch (final IOException aE) {
+                aE.printStackTrace();
+            }
+            spellBattleController.addObserver(SPELL_SELECTED, (f) -> {
+                refreshGui();
+                selectedSpell = (Spell) f.getNewValue();
+                stage.close();
+            });
+        });
 
         waitButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
-            if (gameEngine.allActionsLeft()) {
+            if (gameEngine.allActionLeft()) {
                 gameEngine.waitAction();
-            } else {
+                gameEngine.pass();
+            }
+            
+        });
+
+        gameEngine.addObserverToTurnQueue(TurnQueue.END_OF_TURN, (f) -> {
+            gameEngine.getHero1().setHeroCastedSpell(false);
+            gameEngine.getHero2().setHeroCastedSpell(false);
+            else{
                 throw new RuntimeException("Action already performed.");
             }
             refreshGui();
@@ -90,7 +115,14 @@ public class MainBattleController {
             refreshGui();
         });
 
-        gameEngine.addObserver(GameEngine.CREATURE_MOVED, (e) -> refreshGui());
+        gameEngine.addObserverToTurnQueue(TurnQueue.NEXT_CREATURE, (g) ->{
+            spellButton.setDisable(gameEngine.getCurrentHero().isHeroCastedSpell());
+        });
+
+        gameEngine.addObserver(GameEngine.CREATURE_MOVED, (e) -> {
+            refreshGui();
+        });
+
     }
 
     private void renderSpecialFields(MapTile mapTile, int x, int y) {
@@ -201,6 +233,33 @@ public class MainBattleController {
                             e -> gameEngine.heal(new Point(x1, y1)));
                 }
 
+                if (gameEngine.canCastSpell()) {
+                    mapTile.addEventHandler(MouseEvent.MOUSE_ENTERED,
+                            mouseEvent -> {
+                                if (gameEngine.getCreature(new Point(x1, y1)).isPresent()) {
+                                    mapTile.getScene().setCursor(Cursor.CROSSHAIR);
+                                } else {
+                                    mapTile.getScene().setCursor(Cursor.DEFAULT);
+                                }
+                            });
+
+                    mapTile.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                            e -> {
+                                gameEngine.getCreature(new Point(x1, y1)).ifPresent(
+                                        creature -> {
+                                            gameEngine.getCurrentHero().setHeroCastingSpell(false);
+                                            if (selectedSpell != null) {
+                                                gameEngine.castSpell(new Point(x1, y1), selectedSpell);
+                                                spellButton.setDisable(true);
+                                                gameEngine.getCurrentHero().setHeroCastedSpell(true);
+                                            }
+                                            mapTile.getScene().setCursor(Cursor.DEFAULT);
+                                            refreshGui();
+                                        });
+                            });
+                }
+
+                renderSpecialFields(mapTile, x, y);
 
                 renderSpecialFields(mapTile, x1, y1);
 

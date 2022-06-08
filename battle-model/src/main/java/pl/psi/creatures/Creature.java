@@ -106,8 +106,9 @@ public class Creature implements PropertyChangeListener, Comparable<Creature> {
 
 
     public void castSpell(final Creature aDefender, Spell spell) {
-        if (isAlive()){
-            if(spell.getClass() == BuffDebuffSpell.class) runningSpells.add(spell);
+        if (isAlive()) {
+            if (spell.getClass() == BuffDebuffSpell.class) runningSpells.add(spell);
+
             spell.castSpell(aDefender);
         }
     }
@@ -392,9 +393,9 @@ public class Creature implements PropertyChangeListener, Comparable<Creature> {
 
     public void applyStatsWithSpells(CreatureStats aCreatureStats) {
         setStatsWithSpells(CreatureStats.builder()
-                .attack((buffedStats == null) ? aCreatureStats.getAttack() : buffedStats.getAttack() + aCreatureStats.getAttack() )
-                .armor((buffedStats == null) ? aCreatureStats.getArmor() : buffedStats.getArmor() + aCreatureStats.getArmor() )
-                .moveRange((buffedStats == null) ? aCreatureStats.getMoveRange() : buffedStats.getMoveRange() + aCreatureStats.getMoveRange() )
+                .attack((buffedStats == null) ? aCreatureStats.getAttack() : buffedStats.getAttack() + aCreatureStats.getAttack())
+                .armor((buffedStats == null) ? aCreatureStats.getArmor() : buffedStats.getArmor() + aCreatureStats.getArmor())
+                .moveRange((buffedStats == null) ? aCreatureStats.getMoveRange() : buffedStats.getMoveRange() + aCreatureStats.getMoveRange())
                 .build());
     }
 

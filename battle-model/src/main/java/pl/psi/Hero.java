@@ -1,6 +1,7 @@
 package pl.psi;
 
 import lombok.Getter;
+import lombok.Setter;
 import pl.psi.creatures.Creature;
 import pl.psi.hero.HeroStatistics;
 import pl.psi.hero.HeroStatisticsIf;
@@ -17,6 +18,11 @@ public class Hero {
     private final List<Creature> creatures;
     private final HeroStatisticsIf stats;
     private final List<? extends Spell> spells;
+    @Setter
+    private boolean isHeroCastingSpell = false;
+    @Setter
+    private boolean isHeroCastedSpell = false;
+
 
     public Hero(List<Creature> aCreatures, HeroStatistics aStats) {
         this(aCreatures, aStats, new ArrayList<>());

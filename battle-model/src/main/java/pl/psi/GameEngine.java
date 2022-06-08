@@ -147,13 +147,6 @@ public class GameEngine {
         observerSupport.firePropertyChange(CREATURE_MOVED, null, aPoint);
     }
 
-
-    public void move(final Point aPoint) {
-        if(getCreature(aPoint).isEmpty() || !getCreature(aPoint).get().isAlive()){
-            board.move(turnQueue.getCurrentCreature(), aPoint);
-        }
-    }
-
     public boolean canMove(final Point aPoint) {
         if(turnQueue.getCurrentCreature().isRange()){
             turnQueue.getRangeCreatures().forEach(this::creatureInMeleeRange);
@@ -190,6 +183,12 @@ public class GameEngine {
         return currentCreatureCanAttack && currentCreatureCanMove;
     }
 
+    public void move(final Point aPoint) {
+        board.move(turnQueue.getCurrentCreature(), aPoint);
+        turnQueue.next();
+        observerSupport.firePropertyChange(CREATURE_MOVED, null, aPoint);
+    }
+    
     public void waitAction(){
         turnQueue.pushCurrentCreatureToEndOfQueue();
         pass();
@@ -248,16 +247,7 @@ public class GameEngine {
     public boolean canCastSpell(final Point aPoint){
         return board.getCreature(aPoint).isPresent() && getCurrentCreature().getSpellCastCounter()>0 && !isEnemy(getCreature(aPoint).get()) && getCreature(aPoint).get().isAlive();
     }
-
-    public void castCurrentCreatureSpell(final Point aPoint){
-        final Spell spell = new SpellFactory().create(getCurrentCreature().getSpellName(), getCurrentCreature().getSpellRang(), getCurrentCreature().getSpellPower());
-        castSpell(aPoint,spell);
-        getCurrentCreature().reduceNumberOfSpellCasts();
-        spellCastInformation = getCurrentCreature().getName() + " casted " + spell.getName() + " on " + getCreature(aPoint).get().getName();
-        pass();
-        observerSupport.firePropertyChange(CREATURE_MOVED, null, null);
-    }
-
+    
     public String getSpellCastInformation(){
         return spellCastInformation;
     }
@@ -278,6 +268,9 @@ public class GameEngine {
         observerSupport.addPropertyChangeListener(aEventType, aObserver);
     }
 
+    public void addObserverToTurnQueue(final String aEventType, final PropertyChangeListener aObserver) {
+        turnQueue.addObserver(aEventType, aObserver);
+    }
 
     public boolean canHeal(final Point aPoint) {
         Creature currentCreature = turnQueue.getCurrentCreature();
@@ -288,7 +281,7 @@ public class GameEngine {
                 .isPresent();
     }
 
-    private Hero getCurrentHero() {
+    public Hero getCurrentHero() {
         return (hero1.getCreatures().contains(turnQueue.getCurrentCreature())) ? hero1 : hero2;
     }
 
@@ -301,19 +294,22 @@ public class GameEngine {
             case FIELD:
                 board.getCreature(point)
                         .ifPresent(defender -> {
-                            if(spell.getClass() == BuffDebuffSpell.class){
+                            if (spell.getClass() == BuffDebuffSpell.class) {
                                 BuffDebuffSpell buffDebuffSpell = new BuffDebuffSpell((BuffDebuffSpell) spell, defender);
                                 turnQueue.addObserver(END_OF_TURN, (buffDebuffSpell.getRoundTimer()));
                                 turnQueue.getCurrentCreature().castSpell(defender, buffDebuffSpell);
-                            }else {
+                            } else {
                                 turnQueue.getCurrentCreature()
                                         .castSpell(defender, spell);
                             }
                         });
                 break;
             case AREA:
-                List<Creature> creatureList = getCreaturesFromArea(point, (AreaDamageSpell) spell);
-                turnQueue.getCurrentCreature().castSpell(creatureList, spell);
+                board.getCreature(point)
+                        .ifPresent(defender -> {
+                            List<Creature> creatureList = getCreaturesFromArea(point, (AreaDamageSpell) spell);
+                            turnQueue.getCurrentCreature().castSpell(creatureList, spell);
+                        });
                 break;
             case FOR_ALL_ENEMY_CREATURES:
                 getEnemyHero().getCreatures().forEach(creature -> {
@@ -356,6 +352,10 @@ public class GameEngine {
         }
 
         return creatures;
+    }
+
+    public boolean canCastSpell() {
+        return getCurrentHero().isHeroCastingSpell();
     }
 
     public void defendAction() {
