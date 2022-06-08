@@ -128,4 +128,22 @@ public class Board {
         }
         return positionsList;
     }
+
+    public List<Point> getPathToPoint(Point startingPoint, Point endPoint){
+        Point difference;
+        int currentX = startingPoint.getX();
+        int currentY = startingPoint.getY();
+        List<Point> path = new ArrayList<>();
+        while(true){
+            difference = new Point(currentX - endPoint.getX(), currentY - endPoint.getY());
+            difference = difference.normalize();
+            if(currentX == endPoint.getX() && currentY == endPoint.getY()){
+                break;
+            }
+            currentX = currentX + difference.getX();
+            currentY = currentY + difference.getY();
+            path.add(new Point(currentX,currentY));
+        }
+        return path;
+    }
 }

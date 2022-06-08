@@ -62,4 +62,21 @@ class BoardTest {
         assertThat(pointList.get(7)).isEqualTo( new Point(2,0) );
     }
 
+    @Test
+    void pathFinderTest(){
+        final List<Creature> c1 = List.of();
+        final List<Creature> c2 = List.of();
+        final Board board = new Board(c1, c2);
+
+        final Point startPoint = new Point(1,2);
+        final Point endPoint = new Point(5,0);
+        final List<Point> path = new ArrayList<>();
+        path.add(new Point(2, 1));
+        path.add(new Point(3, 0));
+        path.add(new Point(4, 0));
+        path.add(new Point(5, 0));
+
+        assertThat(board.getPathToPoint(startPoint,endPoint)).isEqualTo(path);  //"path" is path from 1,2 to 5,0
+    }
+
 }

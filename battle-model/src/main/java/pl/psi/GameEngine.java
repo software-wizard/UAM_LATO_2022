@@ -104,17 +104,28 @@ public class GameEngine {
         return board.canAttack( turnQueue.getCurrentCreature(), point )  && board.getCreature( point ).isPresent() && board.getCreature(point).get().isAlive() && board.getCreature( point ).get().getHeroNumber() != turnQueue.getCurrentCreature().getHeroNumber() && currentCreatureCanAttack && getCurrentCreature().getShots()>0;
     }
 
-    public void move(final Point aPoint) {
+    public void lastMove(final Point aPoint){
         currentCreatureCanMove = false;
         if(turnQueue.getCurrentCreature().isDefending()){
             turnQueue.getCurrentCreature().defend(false);
         }
-        board.move(turnQueue.getCurrentCreature(), aPoint);
+        List<Point> path = board.getPathToPoint(board.getCreaturePosition(getCurrentCreature()),aPoint);
+        path.forEach(point -> {
+            if(getCreature(point).isEmpty()){
+                board.move(turnQueue.getCurrentCreature(), point);
+                observerSupport.firePropertyChange(CREATURE_MOVED, null, point);
+            }
+        });
         turnQueue.getRangeCreatures().forEach(this::creatureInMeleeRange); // dont ask me why its setting this again, i dont know either
         if((turnQueue.getCurrentCreature().isRange() && turnQueue.getCurrentCreature().getAttackRange() > 2 ) || !board.canCreatureAttackAnyone( turnQueue.getCurrentCreature() )){
             pass();
         }
         observerSupport.firePropertyChange(CREATURE_MOVED, null, aPoint);
+    }
+
+
+    public void move(final Point aPoint) {
+        board.move(turnQueue.getCurrentCreature(), aPoint);
     }
 
     public boolean canMove(final Point aPoint) {
@@ -127,6 +138,10 @@ public class GameEngine {
 //            return board.canMove(turnQueue.getCurrentCreature(), aPoint) && currentCreatureCanMove && turnQueue.getCurrentCreature().canAttack();
 //        }
         return board.getCreature(aPoint).isEmpty() && board.canMove(turnQueue.getCurrentCreature(), aPoint) && currentCreatureCanMove;
+    }
+
+    public List<Point> getPath(Point aPoint){
+        return board.getPathToPoint(board.getCreaturePosition(getCurrentCreature()),aPoint);
     }
 
     public void heal(final Point point) {
@@ -154,6 +169,13 @@ public class GameEngine {
         while (creaturesOnAdjacentPositions.remove(Optional.empty())) {  // remove every instance of "Optional.empty null" from list
         }
         creature.setInMelee( !creaturesOnAdjacentPositions.isEmpty() );
+    }
+
+    public List<Optional<Creature>> getCreaturesOnPointList( final List<Point> pointList ){
+        List<Optional<Creature>> creaturesOnAdjacentPositions = pointList.stream().map(this::getAliveEnemyCreature).collect( Collectors.toList() );
+        while (creaturesOnAdjacentPositions.remove(Optional.empty())) {  // remove every instance of "Optional.empty null" from list
+        }
+        return creaturesOnAdjacentPositions;
     }
 
 
