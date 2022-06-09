@@ -55,7 +55,8 @@ public class Start extends Application {
                         new NecropolisFactory().create(false, 5, 100),
                         new NecropolisFactory().create(true, 6, 1000),
                         new NecropolisFactory().create(true,7,5)
-                        ),HeroStatistics.NECROMANCER);
+                        ),HeroStatistics.NECROMANCER,
+                        List.of(new SpellFactory().create(HASTE, BASIC, 1), new SpellFactory().create(MAGIC_ARROW, BASIC, 1)));
         ret.getCreatures().forEach(creature -> creature.setHeroNumber(1));
         return ret;
     }
@@ -69,7 +70,8 @@ public class Start extends Application {
                 new StrongholdFactory().create(false, 5, 10),
                 new StrongholdFactory().create(true, 6, 5),
                 new StrongholdFactory().create(false, 7, 100)
-        ),HeroStatistics.KNIGHT);
+        ),HeroStatistics.KNIGHT,
+                List.of(new SpellFactory().create(SLOW, BASIC, 1), new SpellFactory().create(DEATH_RIPPLE, BASIC, 1)));
         ret.getCreatures().forEach(creature -> creature.setHeroNumber(2));
         return ret;
     }

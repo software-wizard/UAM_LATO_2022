@@ -52,7 +52,7 @@ public class MainBattleController {
     private Button spellButton;
 
     Spell selectedSpell;
-    
+
     @FXML
     private Label console;
     @FXML
