@@ -145,31 +145,36 @@ public class MainBattleController {
                 if (gameEngine.canMove(new Point(x, y))) {
                     mapTile.setBackground(Color.DARKGREY);
                     List<Point> path = gameEngine.getPath(new Point(x1,y1));
-                    mapTile.setOnMouseEntered(mouseEvent -> {
-                            mapTile.setBackground(Color.GREY);
-                    });
 
-                    mapTile.setOnMouseExited(mouseEvent -> {
-                        mapTile.setBackground(Color.DARKGREY);
-                        renderSpecialFields(mapTile,x1,y1);
-                    });
+                    if(gameEngine.getCreature(new Point(x1,y1)).isEmpty() || gameEngine.getCreature(new Point(x1,y1)).isPresent() && !gameEngine.getCreature(new Point(x1,y1)).get().isAlive()){
+                        mapTile.setOnMouseEntered(mouseEvent -> {
+                            if(gameEngine.getCreature(new Point(x1,y1)).isEmpty()){
+                                mapTile.setBackground(Color.GREY);
+                                System.out.println("siemano");
+                            }
+                        });
+
+                        mapTile.setOnMouseExited(mouseEvent -> {
+                            mapTile.setBackground(Color.DARKGREY);
+                            renderSpecialFields(mapTile,x1,y1);
+                        });
+                    }
 
                     mapTile.setOnMouseClicked(
                             e -> {
                                 if(e.getButton() == MouseButton.PRIMARY){
                                     path.forEach(point -> {
-                                        if(gameEngine.getCreature(point).isEmpty()){
                                             if(!point.equals(path.get(path.size()-1))){
                                                 gameEngine.move(point);
                                             }
                                             else{
                                                 gameEngine.lastMove(point);
                                             }
-                                        }
                                     });
                                 }
                             });
                 }
+
 
                 if (gameEngine.canHeal(new Point(x, y))) {
                     mapTile.setBackground(Color.YELLOW);
@@ -177,6 +182,7 @@ public class MainBattleController {
                     mapTile.addEventHandler(MouseEvent.MOUSE_CLICKED,
                             e -> gameEngine.heal(new Point(x1, y1)));
                 }
+
 
                 renderSpecialFields(mapTile, x, y);
 
@@ -186,6 +192,7 @@ public class MainBattleController {
                     mapTile.setOnMouseClicked(e -> {
                         if (e.getButton() == MouseButton.SECONDARY) {
                             showStage(gameEngine.getCreatureInformation(new Point(finalX, finalY)), gameEngine.getCreature(new Point(finalX, finalY)).get().hasSpecial());
+                            System.out.println(gameEngine.canMove(new Point(x1,y1)));
                         }
                     });
                 }
@@ -236,6 +243,11 @@ public class MainBattleController {
                     var img = new Image(gameEngine.getCreature(new Point(x,y)).get().getBasicStats().getCurrentImagePath());
                     mapTile.setBackground(img);
                 }
+
+//                if(gameEngine.checkIfDeadCreatureOnThisPoint(new Point(x1,y1))){
+//                    var img = new Image("/images/dead.jpg");
+//                    mapTile.setBackground(img);
+//                }
 
 //                console.setText(gameEngine.getAttackInformation());
 

@@ -95,4 +95,8 @@ public class TurnQueue {
             currentCreature = creaturesQueue.poll();
         }
     }
+
+    public List<Creature> getDeadCreatures() {
+        return creatures.stream().filter(creature -> !creature.isAlive()).collect(Collectors.toList());
+    }
 }

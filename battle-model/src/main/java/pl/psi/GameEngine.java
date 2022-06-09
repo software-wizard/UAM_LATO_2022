@@ -36,6 +36,7 @@ public class GameEngine {
     private String additionalInformation = "";
     private String spellCastInformation = "";
     private int turnNumber = 0;
+    private List<Pair> deadCreaturesList = new ArrayList<>();
 
     public GameEngine(final Hero aHero1, final Hero aHero2) {
         hero1 = aHero1;
@@ -51,8 +52,14 @@ public class GameEngine {
         AttackAndPrintAttackInformation(point);
         currentCreatureCanMove = false;
         currentCreatureCanAttack = false;
+        board.putDeadCreaturesOnBoard();
         pass();
         observerSupport.firePropertyChange(CREATURE_MOVED, null, null);
+    }
+
+    protected List<Pair> getDeadCreatures() {
+        List<Pair> deadCreatures = board.getDeadCreaturePositions();
+        return deadCreatures;
     }
 
     public List<Point> getCurrentCreatureSplashDamagePointsList(Point point){
@@ -110,13 +117,8 @@ public class GameEngine {
         if(turnQueue.getCurrentCreature().isDefending()){
             turnQueue.getCurrentCreature().defend(false);
         }
-        List<Point> path = board.getPathToPoint(board.getCreaturePosition(getCurrentCreature()),aPoint);
-        path.forEach(point -> {
-            if(getCreature(point).isEmpty()){
-                board.move(turnQueue.getCurrentCreature(), point);
-                observerSupport.firePropertyChange(CREATURE_MOVED, null, point);
-            }
-        });
+        move(aPoint);
+        board.putDeadCreaturesOnBoard();
         turnQueue.getRangeCreatures().forEach(this::creatureInMeleeRange); // dont ask me why its setting this again, i dont know either
         if((turnQueue.getCurrentCreature().isRange() && turnQueue.getCurrentCreature().getAttackRange() > 2 ) || !board.canCreatureAttackAnyone( turnQueue.getCurrentCreature() )){
             pass();
@@ -126,19 +128,20 @@ public class GameEngine {
 
 
     public void move(final Point aPoint) {
-        board.move(turnQueue.getCurrentCreature(), aPoint);
+        if(getCreature(aPoint).isEmpty() || !getCreature(aPoint).get().isAlive()){
+            board.move(turnQueue.getCurrentCreature(), aPoint);
+        }
+        board.putDeadCreaturesOnBoard();
     }
 
     public boolean canMove(final Point aPoint) {
         turnQueue.getRangeCreatures().forEach(this::creatureInMeleeRange); // setting inMelee for every range creature
-        /** in this version you can move to tile with dead creature on it, not ideal because board hash map cant store 2 creatures on the same field so if you move on it information about the creature is lost. Remember to ask spells about resurrection */
-//        if(board.getCreature(aPoint).isPresent()){
-//            return !board.getCreature(aPoint).get().isAlive() && board.canMove(turnQueue.getCurrentCreature(), aPoint) && currentCreatureCanMove && turnQueue.getCurrentCreature().canAttack();
-//        }
-//        else{
-//            return board.canMove(turnQueue.getCurrentCreature(), aPoint) && currentCreatureCanMove && turnQueue.getCurrentCreature().canAttack();
-//        }
-        return board.getCreature(aPoint).isEmpty() && board.canMove(turnQueue.getCurrentCreature(), aPoint) && currentCreatureCanMove;
+        if(board.getCreature(aPoint).isPresent()){
+            return !board.getCreature(aPoint).get().isAlive() && board.canMove(turnQueue.getCurrentCreature(), aPoint) && currentCreatureCanMove;
+        }
+        else{
+            return board.canMove(turnQueue.getCurrentCreature(), aPoint) && currentCreatureCanMove;
+        }
     }
 
     public List<Point> getPath(Point aPoint){

@@ -105,5 +105,24 @@ public class GameEngineTest {
         assertThat(gameEngine.getCurrentCreatureSplashDamagePointsList(new Point(2,2)).get(0)).isEqualTo(new Point(2,2));
     }
 
+    @Test
+    void deadCreaturesTest(){
+        final CastleCreatureFactory creatureFactory = new CastleCreatureFactory();
+        final GameEngine gameEngine =
+                new GameEngine(new Hero(List.of(creatureFactory.create(2, false, 5)), HeroStatistics.NECROMANCER),
+                        new Hero(List.of(creatureFactory.create(1, false, 1),creatureFactory.create(1, false, 1),creatureFactory.create(1, false, 1),creatureFactory.create(1, false, 1)), HeroStatistics.NECROMANCER));
+
+        gameEngine.getHero2().getCreatures().forEach(creature -> creature.setAmount(0));
+        gameEngine.getHero2().getCreatures().get(3).setAmount(10);
+
+        List<Pair> list;
+        list = gameEngine.getDeadCreatures();
+
+        assertThat(list.size()).isEqualTo(3);
+        assertThat(list.get(0).getCreature()).isEqualTo(gameEngine.getHero2().getCreatures().get(0));
+        assertThat(list.get(1).getCreature()).isEqualTo(gameEngine.getHero2().getCreatures().get(1));
+        assertThat(list.get(2).getCreature()).isEqualTo(gameEngine.getHero2().getCreatures().get(2));
+    }
+
 }
 
