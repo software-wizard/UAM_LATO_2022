@@ -1,28 +1,113 @@
-.button{
+.button1{
     -fx-background-color:
-        linear-gradient(#f2f2f2, #d6d6d6),
-        linear-gradient(#fcfcfc 0%, #d9d9d9 20%, #d6d6d6 100%),
-        linear-gradient(#dddddd 0%, #f6f6f6 50%);
+            linear-gradient(#f2f2f2, #d6d6d6),
+            linear-gradient(#fcfcfc 0%, #d9d9d9 20%, #d6d6d6 100%),
+            linear-gradient(#dddddd 0%, #f6f6f6 50%);
     -fx-text-fill: black;
+    -fx-alignment: LEFT;
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
-    -fx-font: bold 15pt "Arial";
+    -fx-font: bold 10pt "Arial";
+    -fx-pref-height: 60;
+    -fx-pref-width: 150;
 }
 
-.creatureButton {
-    -fx-max-width: infinity;
-    -fx-hgrow-policy:always;
+/*.combo-box{*/
+/*    -fx-background-color: #6f0404;*/
+/*    -fx-text-fill: BLACK;*/
+/*    -fx-border-color: #dcab00;*/
+/*}*/
+
+
+.combo-box .cell{
+    -fx-background-color: #6f0404;
+    -fx-text-fill: BLACK;
+    -fx-border-color: #dcab00;
 }
+
+
+.button_creature{
+    -fx-background-color: #301204;
+    -fx-text-fill: white;
+    -fx-min-height:48;
+    -fx-min-width: 53;
+    -fx-max-height: 48;
+    -fx-max-width: 53;
+    -fx-font: bold 6pt "Arial";
+}
+
+.DefaultFraction{
+    -fx-font: bold 10pt "Arial";
+    -fx-text-fill: WHITE;
+}
+
+
+.button_aritfact{
+    -fx-background-color: #301204;
+}
+
+
+
+.labelHero{
+    -fx-font: bold 12pt "Arial";
+    -fx-text-fill: black;
+}
+
+.labelFraction{
+    -fx-font-family: "Times New Roman";
+    -fx-text-fill: #c68900;
+}
+
+
+.ReadyButton{
+    -fx-background-color:
+            linear-gradient(#f2f2f2, #d6d6d6),
+            linear-gradient(#fcfcfc 0%, #d9d9d9 20%, #d6d6d6 100%),
+            linear-gradient(#dddddd 0%, #f6f6f6 50%);
+    -fx-text-fill: black;
+    -fx-alignment: CENTER;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+    -fx-font: bold 10pt "Arial";
+}
+
+/*.creatureButton {*/
+/*    -fx-max-width: infinity;*/
+/*    -fx-hgrow-policy:always;*/
+/*}*/
+
 
 .label {
-   -fx-font: bold 15pt "Arial";
-   -fx-padding: 5px
+    -fx-font: bold 15pt "Arial";
+    -fx-padding: 5px
 }
 
-.centerHBox {
+.centerHBoxLeft {
+    -fx-border-color: black;
+    /*-fx-background-image: url("HERO.png");*/
+    -fx-border-width: 1;
+    -fx-pref-width: 600;
+}
+
+.centerHBoxRight {
     -fx-border-color: black;
     -fx-border-width: 1;
-    -fx-pref-width: 800;
+    -fx-pref-width: 300;
+    -fx-pref-height: 200;
 }
+
+.centerHBoxGrey {
+    -fx-border-color: black;
+    -fx-border-width: 1;
+    -fx-pref-width: 300;
+    -fx-pref-height: 200;
+    -fx-background-color: GREY;
+}
+
+.centerHBox{
+    -fx-border-color: black;
+    -fx-border-width: 1;
+    -fx-pref-width: 700;
+}
+
 
 .slider {
     -fx-padding: 50 10 10 10;
@@ -39,4 +124,5 @@
 
 #readyButton{
     -fx-pref-width: 1600;
+    -fx-pref-height: 30;
 }

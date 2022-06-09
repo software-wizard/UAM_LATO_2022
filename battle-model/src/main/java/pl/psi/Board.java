@@ -1,54 +1,45 @@
 package pl.psi;
 
-import java.util.List;
-import java.util.Optional;
-
-import pl.psi.creatures.Creature;
-
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import pl.psi.creatures.Creature;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  * TODO: Describe this class (The first line - until the first dot - will interpret as the brief description).
  */
-public class Board
-{
+public class Board {
     private static final int MAX_WITDH = 14;
-    private final BiMap< Point, Creature > map = HashBiMap.create();
+    private final BiMap<Point, Creature> map = HashBiMap.create();
 
-    public Board( final List< Creature > aCreatures1, final List< Creature > aCreatures2 )
-    {
-        addCreatures( aCreatures1, 0 );
-        addCreatures( aCreatures2, MAX_WITDH );
+    public Board(final List<Creature> aCreatures1, final List<Creature> aCreatures2) {
+        addCreatures(aCreatures1, 0);
+        addCreatures(aCreatures2, MAX_WITDH);
     }
 
-    private void addCreatures( final List< Creature > aCreatures, final int aXPosition )
-    {
-        for( int i = 0; i < aCreatures.size(); i++ )
-        {
-            map.put( new Point( aXPosition, i * 2 + 1 ), aCreatures.get( i ) );
+    private void addCreatures(final List<Creature> aCreatures, final int aXPosition) {
+        for (int i = 0; i < aCreatures.size(); i++) {
+            map.put(new Point(aXPosition, i * 2 + 1), aCreatures.get(i));
         }
     }
 
-    Optional< Creature > getCreature( final Point aPoint )
-    {
-        return Optional.ofNullable( map.get( aPoint ) );
+    Optional<Creature> getCreature(final Point aPoint) {
+        return Optional.ofNullable(map.get(aPoint));
     }
 
-    void move( final Creature aCreature, final Point aPoint )
-    {
-        if( canMove( aCreature, aPoint ) )
-        {
+    void move(final Creature aCreature, final Point aPoint) {
+        if (canMove(aCreature, aPoint)) {
             map.inverse()
-                .remove( aCreature );
-            map.put( aPoint, aCreature );
+                    .remove(aCreature);
+            map.put(aPoint, aCreature);
         }
     }
 
-    boolean canMove( final Creature aCreature, final Point aPoint )
-    {
+    boolean canMove(final Creature aCreature, final Point aPoint) {
         final Point oldPosition = map.inverse()
-            .get( aCreature );
-        return aPoint.distance( oldPosition.getX(), oldPosition.getY() ) < aCreature.getMoveRange();
+                .get(aCreature);
+        return aPoint.distance(oldPosition.getX(), oldPosition.getY()) < aCreature.getMoveRange();
     }
 }

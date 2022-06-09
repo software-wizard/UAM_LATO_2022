@@ -1,41 +1,63 @@
 package pl.psi.creatures;
 
-public class EconomyCreature
-{
+import lombok.Getter;
+import lombok.Setter;
+import pl.psi.artifacts.ArtifactEffectApplicable;
+import pl.psi.artifacts.model.ArtifactEffect;
+import pl.psi.shop.BuyProductInterface;
+import pl.psi.shop.Money;
 
-    private final CreatureStatistic stats;
-    private final int amount;
-    private final int goldCost;
+@Getter
+@Setter
+public class EconomyCreature implements BuyProductInterface, ArtifactEffectApplicable {
 
-    EconomyCreature( final CreatureStatistic aStats, final int aAmount, final int aGoldCost )
-    {
-        stats = aStats;
+    private final CreatureStatisticIf baseStats;
+    private final Money goldCost;
+    private final ArtifactApplier artifactApplier;
+    private CreatureStatisticIf upgradedStats;
+    private int amount;
+
+    public EconomyCreature(final CreatureStatisticIf aStats, final int aAmount, final Money aGoldCost) {
+        baseStats = aStats;
         amount = aAmount;
         goldCost = aGoldCost;
+
+        upgradedStats = CreatureStats.builder().build().addStats(aStats);
+        artifactApplier = new ArtifactApplier();
     }
 
-    public int getAmount()
-    {
+    public int getAmount() {
         return amount;
     }
 
-    public int getGoldCost()
-    {
+    public void increaseAmount(int aAmount) {
+        amount = amount + aAmount;
+    }
+
+    public Money getGoldCost() {
         return goldCost;
     }
 
-    public String getName()
-    {
-        return stats.getTranslatedName();
+    public CreatureStatisticIf getStats() {
+        return baseStats;
     }
 
-    public boolean isUpgraded()
-    {
-        return stats.isUpgraded();
+    public String getName() {
+        return baseStats.getName();
     }
 
-    public int getTier()
-    {
-        return stats.getTier();
+    public boolean isUpgraded() {
+        return baseStats.isUpgraded();
     }
+
+    public int getTier() {
+        return baseStats.getTier();
+    }
+
+    @Override
+    public void applyArtifactEffect(final ArtifactEffect<? extends ArtifactEffectApplicable> aArtifactEffect) {
+        upgradedStats = artifactApplier.calculateCreatureUpgradedStatisticAfterApplyingArtifact(aArtifactEffect, baseStats, upgradedStats);
+    }
+
+
 }

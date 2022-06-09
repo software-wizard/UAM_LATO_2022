@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+            minWidth="-Infinity" xmlns="http://javafx.com/javafx/11.0.1">
+    <top>
+        <HBox BorderPane.alignment="CENTER">
+            <children>
+                <VBox>
+                    <children>
+                        <Label styleClass="labelFraction" text="                    Choose Fraction"/>
+                        <Label styleClass="DefaultFraction" text="           Default Fraction is Necropolis"/>
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+
+    </top>
+    <center>
+        <HBox>
+            <ComboBox fx:id="boxFractionPlayer1" promptText="Player1" styleClass="combo-box" translateX="50"
+                      translateY="50"/>
+            <ComboBox fx:id="boxFractionPlayer2" promptText="Player2" styleClass="combo-box" translateX="90"
+                      translateY="50"/>
+        </HBox>
+    </center>
+
+    <bottom>
+        <HBox BorderPane.alignment="CENTER">
+            <children>
+                <VBox>
+                    <children>
+                        <Button fx:id="ready" mnemonicParsing="false" onMouseClicked="#goToEconomy" prefWidth="400"
+                                styleClass="ReadyButton" text="Ready"/>
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+    </bottom>
+
+    <stylesheets>
+        <URL value="@main.css"/>
+    </stylesheets>
+</BorderPane>

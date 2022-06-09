@@ -1,7 +1,6 @@
 package pl.psi.gui;
 
-import pl.psi.creatures.EconomyNecropolisFactory;
-
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -9,116 +8,164 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import pl.psi.ProductType;
+import pl.psi.creatures.EconomyCastleFactory;
+import pl.psi.creatures.EconomyCreature;
+import pl.psi.creatures.EconomyNecropolisFactory;
+import pl.psi.hero.EconomyHero;
 
-public class CreatureButton extends Button
-{
+public class CreatureButton extends Button {
+    private final EconomyCreature creature;
 
-    private final String creatureName;
-    private Stage dialog;
+    public CreatureButton(final EcoController aEcoController, EconomyCreature creature, final int maxSliderValue, boolean canBuy, boolean canBuyMore, EconomyHero.Fraction fraction) {
+        this.creature = creature;
 
-    public CreatureButton( final EcoController aEcoController, final EconomyNecropolisFactory aFactory,
-        final boolean aUpgraded, final int aTier )
-    {
-        super( aFactory.create( aUpgraded, aTier, 1 )
-            .getName() );
-        creatureName = aFactory.create( aUpgraded, aTier, 1 )
-            .getName();
-        getStyleClass().add( "creatureButton" );
-
-        addEventHandler( MouseEvent.MOUSE_CLICKED, ( e ) -> {
-            final int amount = startDialogAndGetCreatureAmount();
-            if( amount != 0 )
-            {
-                aEcoController.buy( aFactory.create( aUpgraded, aTier, amount ) );
+        addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
+            final int amount = startDialogAndGetCreatureAmount(maxSliderValue, canBuy, canBuyMore);
+            if (amount != 0) {
+                boolean aUpgraded = creature.isUpgraded();
+                int aTier = creature.getTier();
+                if (fraction.equals(EconomyHero.Fraction.NECROPOLIS))
+                    aEcoController.buy(ProductType.CREATURE, new EconomyNecropolisFactory().create(aUpgraded, aTier, amount));
+                else
+                    aEcoController.buy(ProductType.CREATURE, new EconomyCastleFactory().create(aUpgraded, aTier, amount));
             }
-            aEcoController.refreshGui();
-        } );
+
+//            try {
+//                aEcoController.refreshStartGui();
+//            } catch (FileNotFoundException fileNotFoundException) {
+//                fileNotFoundException.printStackTrace();
+//            }
+
+        });
     }
 
-    private int startDialogAndGetCreatureAmount()
-    {
+    private int startDialogAndGetCreatureAmount(final int maxSliderValue, boolean canBuy, boolean canBuyMore) {
+        // Slider
         final VBox centerPane = new VBox();
+        // OK and Close Bottoms
         final HBox bottomPane = new HBox();
-        final HBox topPane = new HBox();
-        final Stage dialog = prepareWindow( centerPane, bottomPane, topPane );
-        final Slider slider = createSlider();
-        prepareConfirmAndCancelButton( bottomPane, slider );
-        prepareTop( topPane, slider );
-        centerPane.getChildren()
-            .add( slider );
+        // Pane for cost and info about item
+        final FlowPane topPane = new FlowPane(Orientation.HORIZONTAL, 0, 5);
+
+
+        final Slider slider = createSlider(maxSliderValue);
+        slider.setMaxWidth(610);
+
+        // if hero cannot buy centerPane instead of Slider show Label , because to do delete Slider a lot of code can be changed
+        if (canBuy && canBuyMore)
+            centerPane.getChildren().add(slider);
+        else if (!canBuy)
+            centerPane.getChildren().add(new Label("You don't have enought money to buy " + creature.getName()));
+        else if (!canBuyMore)
+            centerPane.getChildren().add(new Label("You already have bought 7 types of creatures"));
+
+        prepareTop(topPane, slider);
+
+        final Stage dialogWindow = new Stage();
+        final Stage dialog = prepareWindow(centerPane, bottomPane, topPane, dialogWindow);
+
+        prepareConfirmAndCancelButton(bottomPane, slider, dialogWindow);
 
         dialog.showAndWait();
 
-        return (int)slider.getValue();
+        return (int) slider.getValue();
     }
 
-    private void prepareTop( final HBox aTopPane, final Slider aSlider )
-    {
-        // TODO creature cops should be visible here
-        aTopPane.getChildren()
-            .add( new Label( "Single Cost: " + "0" ) );
-        final Label slideValueLabel = new Label( "0" );
-        aSlider.valueProperty()
-            .addListener(
-                ( slider, aOld, aNew ) -> slideValueLabel.setText( String.valueOf( aNew.intValue() ) ) );
-        aTopPane.getChildren()
-            .add( slideValueLabel );
-        aTopPane.getChildren()
-            .add( new Label( "Purchase Cost: " ) );
-    }
-
-    private Stage prepareWindow( final Pane aCenter, final Pane aBottom, final Pane aTop )
-    {
-        dialog = new Stage();
+    private Stage prepareWindow(final Pane aCenter, final Pane aBottom, final Pane aTop, final Stage dialog) {
         final BorderPane pane = new BorderPane();
-        final Scene scene = new Scene( pane, 500, 300 );
-        scene.getStylesheets()
-            .add( "fxml/main.css" );
-        dialog.setScene( scene );
-        dialog.initOwner( this.getScene()
-            .getWindow() );
-        dialog.initModality( Modality.APPLICATION_MODAL );
-        dialog.setTitle( "Buying " + creatureName );
+        pane.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+        final Scene scene = new Scene(pane, 620, 300);
+        scene.getStylesheets().add("fxml/main.css");
+        dialog.setScene(scene);
+        dialog.initOwner(this.getScene().getWindow());
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initStyle(StageStyle.UNDECORATED);
 
-        pane.setTop( aTop );
-        pane.setCenter( aCenter );
-        pane.setBottom( aBottom );
+        pane.setTop(aTop);
+        pane.setCenter(aCenter);
+        pane.setBottom(aBottom);
         return dialog;
     }
 
-    private void prepareConfirmAndCancelButton( final HBox aBottomPane, final Slider aSlider )
-    {
-        final Button okButton = new Button( "OK" );
-        aBottomPane.setAlignment( Pos.CENTER );
-        okButton.addEventHandler( MouseEvent.MOUSE_CLICKED, ( e ) -> dialog.close() );
-        okButton.setPrefWidth( 200 );
-        final Button cancelButton = new Button( "CLOSE" );
-        cancelButton.addEventHandler( MouseEvent.MOUSE_CLICKED, ( e ) -> {
-            aSlider.setValue( 0 );
-            dialog.close();
-        } );
-        cancelButton.setPrefWidth( 200 );
-        HBox.setHgrow( okButton, Priority.ALWAYS );
-        HBox.setHgrow( cancelButton, Priority.ALWAYS );
-        aBottomPane.getChildren()
-            .add( okButton );
-        aBottomPane.getChildren()
-            .add( cancelButton );
+
+    // Top of window of buying
+    private void prepareTop(final FlowPane aTopPane, final Slider aSlider) {
+
+        aTopPane.getChildren().add(new Label("Single Cost: " + creature.getGoldCost().getPrice()));
+
+        aTopPane.getChildren().add(new Label("Amount:"));
+        final Label slideValueLabel = new Label("0");
+        aTopPane.getChildren().add(slideValueLabel);
+
+        aTopPane.getChildren().add(new Label("Purchase Cost: "));
+        final Label purchaseCost = new Label("0");
+        aTopPane.getChildren().add(purchaseCost);
+
+
+        String upgraded = null;
+        if (creature.isUpgraded())
+            upgraded = " upgrated";
+        else
+            upgraded = " not upgrated";
+        String characteristics = "Tier : " + creature.getTier() + " , " + upgraded + " | Attack : " + creature.getStats().getAttack() +
+                " | Armor : " + creature.getStats().getArmor() + " | HP : " + creature.getStats().getMaxHp();
+
+        aTopPane.getChildren().add(new Label("             "));
+        aTopPane.getChildren().add(new Label(characteristics));
+        Text text = new Text();
+        text.setText(creature.getStats().getDescription());
+        aTopPane.getChildren().add(text);
+
+
+        aSlider.valueProperty().addListener((slider, aOld, aNew)
+                -> {
+            slideValueLabel.setText(String.valueOf(aNew.intValue()));
+            purchaseCost.setText(String.valueOf(aNew.intValue() * creature.getGoldCost().getPrice()));
+
+        });
+
+
     }
 
-    private Slider createSlider()
-    {
+
+    private void prepareConfirmAndCancelButton(final HBox aBottomPane, final Slider aSlider, final Stage dialog) {
+        aBottomPane.setAlignment(Pos.CENTER);
+        aBottomPane.setSpacing(30);
+        final Button okButton = new Button("OK");
+        okButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> dialog.close());
+        okButton.setPrefWidth(200);
+        aBottomPane.getChildren().add(okButton);
+
+
+        final Button cancelButton = new Button("CLOSE");
+        cancelButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
+            aSlider.setValue(0);
+            dialog.close();
+        });
+        cancelButton.setPrefWidth(200);
+        aBottomPane.getChildren().add(cancelButton);
+
+        HBox.setHgrow(okButton, Priority.ALWAYS);
+        HBox.setHgrow(cancelButton, Priority.ALWAYS);
+    }
+
+    private Slider createSlider(final int maxSliderValue) {
         final Slider slider = new Slider();
-        slider.setMin( 0 );
-        slider.setMax( 100 );
-        slider.setValue( 0 );
-        slider.setShowTickLabels( true );
-        slider.setShowTickMarks( true );
-        slider.setMajorTickUnit( 10 );
-        slider.setMinorTickCount( 5 );
-        slider.setBlockIncrement( 10 );
+        slider.setMin(0);
+        slider.setMax(maxSliderValue);
+        slider.setValue(0);
+        slider.setShowTickLabels(true);
+        slider.setShowTickMarks(true);
+        slider.setMajorTickUnit(10);
+        slider.setMinorTickCount(5);
+        slider.setBlockIncrement(5);
         return slider;
     }
+
 }

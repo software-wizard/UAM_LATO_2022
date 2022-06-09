@@ -4,13 +4,30 @@ import com.google.common.collect.Range;
 
 public interface CreatureStatisticIf {
     String getName();
-    int getAttack();
-    int getArmor();
-    int getMaxHp();
-    int getMoveRange();
-    Range< Integer > getDamage();
+
+    double getAttack();
+
+    double getArmor();
+
+    double getMaxHp();
+
+    double getMoveRange();
+
+    Range<Integer> getDamage();
+
     int getTier();
+
     String getDescription();
+
     boolean isUpgraded();
-    boolean isGoodAligned();
+
+    CreatureStatistic.CreatureType getType();
+
+    int getSize();
+
+    boolean isGround();
+
+    default boolean isGoodAligned() {
+        return false;
+    }
 }

@@ -1,35 +1,100 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import java.net.URL?>
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-            minWidth="-Infinity"
-            prefHeight="800.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/11.0.1">
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="600.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/16">
     <center>
         <HBox>
-            <HBox fx:id="heroStateHBox" styleClass="centerHBox" BorderPane.alignment="CENTER">
-            </HBox>
-            <HBox fx:id="shopsBox" styleClass="centerHBox" BorderPane.alignment="TOP_RIGHT">
-            </HBox>
+            <ScrollPane fx:id="heroBoughtScrollPane" styleClass="centerHBoxLeft" BorderPane.alignment="CENTER">
+                <VBox fx:id="VBoxHero">
+                    <Label text="                                             Hero" styleClass="labelHero"/>
+                    <StackPane fx:id="heroBoughtPane" styleClass="centerHBoxLeft" prefHeight="450" prefWidth="350">
+
+                        <!--                            Creature Buttons-->
+                        <Button fx:id="creaturete1" translateX="-116" translateY="140" styleClass="button_creature"/>
+                        <Button fx:id="creaturete2" translateX="-60" translateY="140" styleClass="button_creature"/>
+                        <Button fx:id="creaturete3" translateX="-4" translateY="140" styleClass="button_creature"/>
+                        <Button fx:id="creaturete4" translateX="52" translateY="140" styleClass="button_creature"/>
+                        <Button fx:id="creaturete5" translateX="108" translateY="140" styleClass="button_creature"/>
+                        <Button fx:id="creaturete6" translateX="-30" translateY="198" styleClass="button_creature"/>
+                        <Button fx:id="creaturete7" translateX="25" translateY="198" styleClass="button_creature"/>
+
+                        <!--                            Artifact Buttons-->
+                        <Button fx:id="HEAD" translateX="15" translateY="-200" prefWidth="53" prefHeight="48"
+                                styleClass="button_aritfact"/>
+                        <Button fx:id="NECK" translateX="15" translateY="-148" prefWidth="53" prefHeight="48"
+                                styleClass="button_aritfact"/>
+                        <Button fx:id="TORSO" translateX="15" translateY="-95" prefWidth="53" prefHeight="48"
+                                styleClass="button_aritfact"/>
+                        <Button fx:id="SHOULDERS" translateX="85" translateY="15" prefWidth="53" prefHeight="48"
+                                styleClass="button_aritfact"/>
+                        <Button fx:id="RIGHT_HAND" translateX="79" translateY="-45" prefWidth="53" prefHeight="48"
+                                styleClass="button_aritfact"/>
+                        <Button fx:id="LEFT_HAND" translateX="-140" translateY="-158" prefWidth="53" prefHeight="48"
+                                styleClass="button_aritfact"/>
+                        <Button fx:id="FEET" translateX="22" translateY="65" prefWidth="53" prefHeight="48"
+                                styleClass="button_aritfact"/>
+
+                    </StackPane>
+
+                    <Label text="                                          Spells" styleClass="labelHero"/>
+                    <ScrollPane fx:id="spellsScrollPane">
+                        <content>
+                            <HBox prefHeight="100" styleClass="centerHBox"/>
+                        </content>
+                    </ScrollPane>
+
+                    <Label text="                                          Skills" styleClass="labelHero"/>
+                    <ScrollPane fx:id="skillsScrollPane">
+                        <content>
+                            <HBox prefHeight="100" styleClass="centerHBox"/>
+                        </content>
+                    </ScrollPane>
+                </VBox>
+            </ScrollPane>
+
+            <ScrollPane fx:id="scrollPane">
+                <content>
+                    <VBox>
+                        <Label text="                  SHOP"/>
+                        <HBox>
+                            <Button fx:id="creatureShop" text="Creatures" prefWidth="80"
+                                    onMouseClicked="#CreatureShopClicked"/>
+                            <Button fx:id="artifactShop" text="Artifacts" prefWidth="80"
+                                    onMouseClicked="#ArtifactShopClicked"/>
+                            <Button fx:id="skillsShop" text="Skills" prefWidth="80"
+                                    onMouseClicked="#SkillsShopClicked"/>
+                            <Button fx:id="spellsShop" text="Spells" prefWidth="80"
+                                    onMouseClicked="#SpellsShopClicked"/>
+                        </HBox>
+                        <HBox fx:id="shopsBox" styleClass="centerHBoxRight"/>
+                    </VBox>
+                </content>
+            </ScrollPane>
         </HBox>
     </center>
+
     <top>
         <HBox BorderPane.alignment="CENTER">
             <children>
                 <Label fx:id="playerLabel" text="Player"/>
+                <Label fx:id="fraction" text="Fraction"/>
                 <Label fx:id="roundNumberStaticLabel" text="Round: "/>
                 <Label fx:id="roundNumberLabel" text="X"/>
                 <Label fx:id="currentStaticLabel" text="GOLD: "/>
                 <Label fx:id="currentGoldLabel" text="XXXX"/>
+                <Label fx:id="GoldImage"/>
             </children>
         </HBox>
     </top>
+
+
     <bottom>
         <HBox BorderPane.alignment="CENTER">
             <children>
-                <Button fx:id="readyButton" mnemonicParsing="false" text="READY"/>
+                <Button fx:id="readyButton" mnemonicParsing="false" styleClass="ReadyButton" text="READY"/>
             </children>
         </HBox>
     </bottom>
