@@ -34,6 +34,7 @@ public class GameEngine {
     private boolean currentCreatureCanAttack = true;
     private String attackInformation = "";
     private String additionalInformation = "";
+    private String spellCastInformation = "";
     private int turnNumber = 0;
 
     public GameEngine(final Hero aHero1, final Hero aHero2) {
@@ -225,14 +226,20 @@ public class GameEngine {
     }
 
     public boolean canCastSpell(Point aPoint){
-        return getCurrentCreature().canCastSpell() && !isEnemy(getCreature(aPoint).get());
+        return board.getCreature(aPoint).isPresent() && getCurrentCreature().getSpellCastCounter()>0 && !isEnemy(getCreature(aPoint).get()) && getCreature(aPoint).get().isAlive();
     }
 
     public void castCurrentCreatureSpell(Point aPoint){
         final Spell spell = new SpellFactory().create(getCurrentCreature().getSpellName(), getCurrentCreature().getSpellRang(), getCurrentCreature().getSpellPower());
-        System.out.println(spell.getName());
-        System.out.println(getCreature(aPoint).get().getName());
         castSpell(aPoint,spell);
+        getCurrentCreature().reduceNumberOfSpellCasts();
+        spellCastInformation = getCurrentCreature().getName() + " casted " + spell.getName() + " on " + getCreature(aPoint).get().getName();
+        pass();
+        observerSupport.firePropertyChange(CREATURE_MOVED, null, null);
+    }
+
+    public String getSpellCastInformation(){
+        return spellCastInformation;
     }
 
     public void pass() {

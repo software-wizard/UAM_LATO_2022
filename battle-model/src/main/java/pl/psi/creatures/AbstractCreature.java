@@ -202,6 +202,16 @@ public class AbstractCreature extends Creature {
     }
 
     @Override
+    public int getSpellCastCounter(){
+        return decorated.getSpellCastCounter();
+    }
+
+    @Override
+    public void reduceNumberOfSpellCasts(){
+        decorated.reduceNumberOfSpellCasts();
+    }
+
+    @Override
     protected void restoreCurrentHpToMax() {
         decorated.restoreCurrentHpToMax();
     }

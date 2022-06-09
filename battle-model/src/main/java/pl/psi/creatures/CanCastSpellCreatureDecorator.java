@@ -6,7 +6,7 @@ public class CanCastSpellCreatureDecorator extends AbstractCreature{
 
     private Creature decorated;
     private final String spellName;
-    private final int castCounter;
+    private int castCounter;
     private final int spellPower;
     private final SpellRang spellRang;
 
@@ -23,6 +23,17 @@ public class CanCastSpellCreatureDecorator extends AbstractCreature{
     @Override
     public boolean canCastSpell(){
         return castCounter > 0;
+    }
+
+    @Override
+    public int getSpellCastCounter(){
+        return castCounter;
+    }
+
+    @Override
+    public void reduceNumberOfSpellCasts(){
+        castCounter -= 1;
+        System.out.println(castCounter);
     }
 
     @Override

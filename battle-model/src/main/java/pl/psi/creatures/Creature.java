@@ -388,6 +388,13 @@ public class Creature implements PropertyChangeListener, Comparable<Creature> {
         buffedStats = aStatsWithSpells;
     }
 
+    public int getSpellCastCounter(){
+        return 0;
+    }
+
+    public void reduceNumberOfSpellCasts(){
+    }
+
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
         if (TurnQueue.END_OF_TURN.equals(evt.getPropertyName())) {
