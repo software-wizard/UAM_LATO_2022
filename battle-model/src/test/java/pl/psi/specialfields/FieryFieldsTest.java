@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class FieryFieldsTest {
 
-
+/*
     @Test
     void shouldGive3SpellPowerToFireSpells() {
 
@@ -62,5 +62,5 @@ public class FieryFieldsTest {
         assertEquals(1, differentSpell1.getRang());
         assertEquals(2, differentSpell2.getRang());
         assertEquals(1, differentSpell3.getRang());
-    }
+    }*/
 }

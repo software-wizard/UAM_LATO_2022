@@ -10,9 +10,9 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class FieryFields implements BuffSpellsIf {
+public class FieryFields /*implements BuffSpellsIf*/ {
 
-    @Override
+/*    @Override
     public void buffSpells(List<Spells> spells) {
 
 
@@ -21,7 +21,6 @@ public class FieryFields implements BuffSpellsIf {
                     spell.setRang(3);
                 }
             });
-    }
-    
-}
+    }*/
+
 }

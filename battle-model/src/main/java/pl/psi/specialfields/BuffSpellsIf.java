@@ -6,5 +6,5 @@ import pl.psi.creatures.Creature;
 import java.util.List;
 
 public interface BuffSpellsIf {
-    void buffSpells(List<Spells> spells);
+   // void buffSpells(List<Spells> spells);
 }
