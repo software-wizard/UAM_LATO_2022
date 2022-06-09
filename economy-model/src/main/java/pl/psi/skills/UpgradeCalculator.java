@@ -62,11 +62,11 @@ public class UpgradeCalculator {
         switch (this.skillName) {
             case LEADERSHIP:
                 newEffect = (int) (Math.round(this.skillEffect) + aHero.getHeroStats().getMorale());
-                changedStats = new HeroStats(aHero.getHeroStats(), HeroStatsFieldType.MORALE, newEffect);
+                changedStats = HeroStats.builder().morale(newEffect).build();
                 break;
             case LUCK:
                 newEffect = (int) (Math.round(this.skillEffect) + aHero.getHeroStats().getLuck());
-                changedStats = new HeroStats(aHero.getHeroStats(), HeroStatsFieldType.LUCK, newEffect);
+                changedStats = HeroStats.builder().luck(newEffect).build();
                 break;
             default:
                 changedStats = (HeroStats) aHero.getHeroStats();

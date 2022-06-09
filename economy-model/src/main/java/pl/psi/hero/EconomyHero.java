@@ -5,7 +5,6 @@ import pl.psi.artifacts.Artifact;
 import pl.psi.artifacts.ArtifactPlacement;
 import pl.psi.creatures.EconomyCreature;
 import pl.psi.skills.EconomySkill;
-import pl.psi.skills.EconomySkills;
 import pl.psi.spells.EconomySpell;
 
 import java.util.ArrayList;
@@ -102,8 +101,8 @@ public class EconomyHero {
         return true;
     }
 
-    public void updateHeroStats( HeroStatisticsIf aStats ) {
-        this.heroStats = aStats;
+    public void updateHeroStats( HeroStats aStats ) {
+        this.heroStats.updateStats(aStats);
     }
 
     public boolean canAddArtifact(ArtifactPlacement placement) {
