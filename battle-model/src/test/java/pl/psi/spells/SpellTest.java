@@ -287,4 +287,16 @@ public class SpellTest {
     void creatureShouldOnlyHaveThreeRunningSpells(){
 
     }
+
+    @Test
+    void shouldClearRunningSpellWhenDispelCasted(){
+
+    }
+
+    @Test
+    void shouldBlockCastingBasicDispelOnEnemyCreatureAndAllowForAllied(){
+
+    }
+
+
 }

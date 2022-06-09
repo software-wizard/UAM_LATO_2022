@@ -39,6 +39,7 @@ public class BuffDebuffSpell extends Spell<Creature> {
                 .build();
     }
 
+    @Override
     public void unCastSpell(Creature creature) {
         creature.applyStatsWithSpells(convertToNegative(creatureStats));
     }

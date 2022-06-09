@@ -5,7 +5,8 @@ public enum SpellNames {
     HASTE("Haste"),
     SLOW("Slow"),
     DEATH_RIPPLE("Death Ripple"),
-    FIRE_BALL("Fire Ball");
+    FIRE_BALL("Fire Ball"),
+    DISPEL("Dispel");
 
 
     private final String name;

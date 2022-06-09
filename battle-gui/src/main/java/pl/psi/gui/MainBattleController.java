@@ -22,13 +22,9 @@ import pl.psi.TurnQueue;
 import pl.psi.spells.Spell;
 
 import java.io.IOException;
+import java.util.List;
 
 import static pl.psi.gui.SpellBattleController.SPELL_SELECTED;
-import static pl.psi.spells.SpellRang.BASIC;
-
-import pl.psi.creatures.Creature;
-
-import java.util.List;
 
 public class MainBattleController {
 
@@ -94,15 +90,12 @@ public class MainBattleController {
                 gameEngine.waitAction();
                 gameEngine.pass();
             }
-            
+
         });
 
         gameEngine.addObserverToTurnQueue(TurnQueue.END_OF_TURN, (f) -> {
             gameEngine.getHero1().setHeroCastedSpell(false);
             gameEngine.getHero2().setHeroCastedSpell(false);
-            else{
-                throw new RuntimeException("Action already performed.");
-            }
             refreshGui();
         });
 
@@ -115,7 +108,7 @@ public class MainBattleController {
             refreshGui();
         });
 
-        gameEngine.addObserverToTurnQueue(TurnQueue.NEXT_CREATURE, (g) ->{
+        gameEngine.addObserverToTurnQueue(TurnQueue.NEXT_CREATURE, (g) -> {
             spellButton.setDisable(gameEngine.getCurrentHero().isHeroCastedSpell());
         });
 

@@ -21,4 +21,9 @@ public class AreaDamageSpell extends Spell<List<Creature>> {
     public void castSpell(List<Creature> aDefender) {
         aDefender.forEach(creature -> creature.applySpellDamage(creature, value));
     }
+
+    @Override
+    public void unCastSpell(List<Creature> aDefender) {
+
+    }
 }

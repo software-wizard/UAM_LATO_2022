@@ -26,4 +26,6 @@ public abstract class Spell<T> {
 
     public abstract void castSpell(T aDefender);
 
+    public abstract void unCastSpell(T aDefender);
+
 }

@@ -84,14 +84,14 @@ public class SpellFactory {
                     default:
                         throw new IllegalArgumentException(EXCEPTION_MESSAGE);
                 }
-            case "Bloodlust":
+            case DISPEL:
                 switch (rang) {
                     case BASIC:
-                        return new BuffDebuffSpell(FIELD, name, BASIC, 10, CreatureStats.builder().attack(6).build(), 2);
+                        return new Dispel(FIELD, name, WATER, BASIC, 10);
                     case ADVANCED:
-                        return new BuffDebuffSpell(FIELD, name, ADVANCED, 15, CreatureStats.builder().attack(6).build(), 3);
+                        return new Dispel(FIELD, name, WATER, ADVANCED, 15);
                     case EXPERT:
-                        return new BuffDebuffSpell(FIELD, name, EXPERT, 20, CreatureStats.builder().attack(6).build(), 2);
+                        return new Dispel(FOR_ALL_CREATURES, name, WATER, EXPERT, 20); // Add removing all non static special fields
                     default:
                         throw new IllegalArgumentException(EXCEPTION_MESSAGE);
                 }

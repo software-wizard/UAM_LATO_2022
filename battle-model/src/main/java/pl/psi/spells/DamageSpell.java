@@ -16,4 +16,9 @@ public class DamageSpell extends Spell<Creature> {
         aDefender.applySpellDamage(aDefender, value);
     }
 
+    @Override
+    public void unCastSpell(Creature aDefender) {
+
+    }
+
 }

@@ -18,4 +18,9 @@ public class AreaBuffDebuffSpell extends Spell<List<Creature>> {
     public void castSpell(List<Creature> aDefender) {
         aDefender.forEach(creature -> creature.applyStatsWithSpells(creatureStats));
     }
+
+    @Override
+    public void unCastSpell(List<Creature> aDefender) {
+
+    }
 }
