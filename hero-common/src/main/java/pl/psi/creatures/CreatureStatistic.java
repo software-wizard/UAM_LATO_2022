@@ -151,6 +151,7 @@ public enum CreatureStatistic implements CreatureStatisticIf {
     private final int size;
     private final String imagePath;
     private final String canAttackImagePath;
+    private final String canBuffImagePath;
     private final String currentImagePath;
 
     CreatureStatistic(final String aName, final int aAttack, final int aArmor, final int aMaxHp,
@@ -170,6 +171,7 @@ public enum CreatureStatistic implements CreatureStatisticIf {
         isGround = aIsGround;
         imagePath = "/images/creatures images/" + aName + ".png";
         canAttackImagePath = "/images/creatures images/" + aName + " canAttack.png";
+        canBuffImagePath = "/images/creatures images/" + aName + " canBuff.png";
         currentImagePath = "/images/creatures images/" + aName + " current.png";
 
 

@@ -23,7 +23,7 @@ public class BuffDebuffSpell extends Spell<Creature> {
 
     @Override
     public void castSpell(Creature aDefender) {
-        aDefender.applyStatsWithSpells(creatureStats);
+        aDefender.buff(creatureStats);
         spellTimer.put(aDefender, timer);
     }
 

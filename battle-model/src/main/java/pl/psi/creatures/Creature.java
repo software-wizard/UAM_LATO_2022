@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 import pl.psi.TurnQueue;
 import pl.psi.spells.Spell;
+import pl.psi.spells.SpellRang;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -30,7 +31,7 @@ public class Creature implements PropertyChangeListener, Comparable<Creature> {
     private double currentHp;
     private boolean canCounterAttack = true;
     private DamageCalculatorIf calculator;
-    private int heroNumber;
+    private int heroNumber; /** REMEMBER TO DELETE ANY USAGE OF THIS */
     private double DEFENCE_MULTIPLIER = 0.2;
     private double spellDamageReduction = 1;
     private int morale = 1; // range = < -3;3 >
@@ -408,6 +409,23 @@ public class Creature implements PropertyChangeListener, Comparable<Creature> {
 
     public void addShots(int i) {
     }
+
+    public boolean canCastSpell() {
+        return false;
+    }
+
+    public String getSpellName(){
+        return "";
+    }
+
+    public SpellRang getSpellRang(){
+        return null;
+    }
+
+    public int getSpellPower(){
+        return 0;
+    }
+
 
     public static class Builder {
         private int amount = 1;

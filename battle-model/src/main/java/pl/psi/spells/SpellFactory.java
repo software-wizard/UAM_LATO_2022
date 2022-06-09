@@ -61,6 +61,17 @@ public class SpellFactory {
                     default:
                         throw new IllegalArgumentException(EXCEPTION_MESSAGE);
                 }
+            case "Bloodlust":
+                switch (rang) {
+                    case BASIC:
+                        return new BuffDebuffSpell(FIELD, name, BASIC, 10, CreatureStats.builder().attack(6).build(), 2);
+                    case ADVANCED:
+                        return new BuffDebuffSpell(FIELD, name, ADVANCED, 15, CreatureStats.builder().attack(6).build(), 3);
+                    case EXPERT:
+                        return new BuffDebuffSpell(FIELD, name, EXPERT, 20, CreatureStats.builder().attack(6).build(), 2);
+                    default:
+                        throw new IllegalArgumentException(EXCEPTION_MESSAGE);
+                }
             default:
                 throw new IllegalArgumentException(EXCEPTION_MESSAGE);
         }

@@ -35,5 +35,7 @@ public interface CreatureStatisticIf {
 
     String getCanAttackImagePath();
 
+    String getCanBuffImagePath();
+
     String getCurrentImagePath();
 }

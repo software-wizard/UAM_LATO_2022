@@ -29,6 +29,7 @@ public class CreatureStats implements CreatureStatisticIf {
     private final int size;
     private final String imagePath;
     private final String canAttackImagePath;
+    private final String canBuffImagePath;
     private final String currentImagePath;
 
     @Override

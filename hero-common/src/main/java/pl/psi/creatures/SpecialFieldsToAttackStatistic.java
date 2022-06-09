@@ -30,6 +30,11 @@ public enum SpecialFieldsToAttackStatistic implements CreatureStatisticIf {
     }
 
     @Override
+    public String getCanBuffImagePath() {
+        return null;
+    }
+
+    @Override
     public String getCurrentImagePath() {
         return null;
     }

@@ -3,6 +3,7 @@ package pl.psi.creatures;
 import com.google.common.collect.Range;
 import lombok.AccessLevel;
 import lombok.Getter;
+import pl.psi.spells.SpellRang;
 
 import java.beans.PropertyChangeEvent;
 
@@ -178,6 +179,26 @@ public class AbstractCreature extends Creature {
     @Override
     public int getShots(){
         return decorated.getShots();
+    }
+
+    @Override
+    public boolean canCastSpell() {
+        return decorated.canCastSpell();
+    }
+
+    @Override
+    public String getSpellName(){
+        return decorated.getSpellName();
+    }
+
+    @Override
+    public int getSpellPower(){
+        return decorated.getSpellPower();
+    }
+
+    @Override
+    public SpellRang getSpellRang(){
+        return decorated.getSpellRang();
     }
 
     @Override

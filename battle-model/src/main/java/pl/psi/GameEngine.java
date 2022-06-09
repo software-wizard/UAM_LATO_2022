@@ -5,6 +5,7 @@ import pl.psi.creatures.Creature;
 import pl.psi.creatures.FirstAidTent;
 import pl.psi.spells.AreaDamageSpell;
 import pl.psi.spells.Spell;
+import pl.psi.spells.SpellFactory;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -14,7 +15,6 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-import static java.lang.Math.abs;
 import static java.lang.Math.ceil;
 
 /**
@@ -33,7 +33,8 @@ public class GameEngine {
     private boolean currentCreatureCanMove = true;
     private boolean currentCreatureCanAttack = true;
     private String attackInformation = "";
-    private String additionalAttackInformation = "";
+    private String additionalInformation = "";
+    private int turnNumber = 0;
 
     public GameEngine(final Hero aHero1, final Hero aHero2) {
         hero1 = aHero1;
@@ -58,7 +59,6 @@ public class GameEngine {
     }
 
     private void AttackAndPrintAttackInformation(final Point point) {
-        additionalAttackInformation = "";
         applyAttackLogic(point);
     }
 
@@ -69,7 +69,7 @@ public class GameEngine {
                 .ifPresent(defender -> {
                     int defenderBeforeAmount = defender.getAmount();
                     int attackerBeforeAmount = getCurrentCreature().getAmount();
-                    if(defender.isAlive() && defender.getHeroNumber() != getCurrentCreature().getHeroNumber()){
+                    if(defender.isAlive() && isEnemy(defender)){
                         turnQueue.getCurrentCreature()
                                 .attack(defender);
                         counter.addAndGet(1);
@@ -100,8 +100,8 @@ public class GameEngine {
                 }));
     }
 
-    public boolean canAttack(final Point point) {
-        return board.canAttack( turnQueue.getCurrentCreature(), point )  && board.getCreature( point ).isPresent() && board.getCreature(point).get().isAlive() && board.getCreature( point ).get().getHeroNumber() != turnQueue.getCurrentCreature().getHeroNumber() && currentCreatureCanAttack && getCurrentCreature().getShots()>0;
+    public boolean canAttack(final Point aPoint) {
+        return board.canAttack( turnQueue.getCurrentCreature(), aPoint )  && board.getCreature( aPoint ).isPresent() && board.getCreature(aPoint).get().isAlive() && isEnemy(board.getCreature(aPoint).get()) && currentCreatureCanAttack && getCurrentCreature().getShots()>0;
     }
 
     public void lastMove(final Point aPoint){
@@ -151,7 +151,12 @@ public class GameEngine {
     }
 
     public String getAttackInformation(){
-        return attackInformation + "\n" + additionalAttackInformation;
+        return attackInformation;
+    }
+
+    public String getAdditionalInformation(){
+        turnNumber = turnQueue.getRoundNumber();
+        return additionalInformation;
     }
 
     public boolean allActionLeft(){
@@ -197,22 +202,47 @@ public class GameEngine {
 
     private Optional<Creature> getAliveEnemyCreature(final Point aPoint) {
         if( board.getCreature( aPoint ).isPresent() ){
-            if( board.getCreature(aPoint).get().getHeroNumber() != turnQueue.getCurrentCreature().getHeroNumber() && board.getCreature(aPoint).get().isAlive()){
+            if( isEnemy(board.getCreature(aPoint).get()) && board.getCreature(aPoint).get().isAlive()){
                 return board.getCreature(aPoint);
             }
         }
         return Optional.empty();
     }
 
+    private Hero getCreatureHero(Creature creature){
+        if(hero1.getCreatures().contains(creature)){
+            return hero1;
+        }
+        return hero2;
+    }
+
+    private boolean isEnemy(Creature creature){
+        return !getCreatureHero(getCurrentCreature()).equals(getCreatureHero(creature));
+    }
+
     public String getCreatureInformation(Point point){
         return getCreature(point).get().getCreatureInformation();
     }
 
+    public boolean canCastSpell(Point aPoint){
+        return getCurrentCreature().canCastSpell() && !isEnemy(getCreature(aPoint).get());
+    }
+
+    public void castCurrentCreatureSpell(Point aPoint){
+        final Spell spell = new SpellFactory().create(getCurrentCreature().getSpellName(), getCurrentCreature().getSpellRang(), getCurrentCreature().getSpellPower());
+        System.out.println(spell.getName());
+        System.out.println(getCreature(aPoint).get().getName());
+        castSpell(aPoint,spell);
+    }
 
     public void pass() {
         currentCreatureCanMove = true;
         currentCreatureCanAttack = true;
         turnQueue.next();
+        additionalInformation = "";
+        if(turnNumber != turnQueue.getRoundNumber()){
+            additionalInformation = "TURN " + turnQueue.getRoundNumber();
+        }
 
     }
 

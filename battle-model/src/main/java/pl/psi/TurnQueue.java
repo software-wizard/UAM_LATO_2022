@@ -18,7 +18,7 @@ public class TurnQueue {
     public static final String END_OF_TURN = "END_OF_TURN";
     private Collection<Creature> creatures;
     private final LinkedList<Creature> creaturesQueue;
-//    private final Queue<Creature> creaturesQueue; ???
+//  private final Queue<Creature> creaturesQueue; ???
     private final PropertyChangeSupport observerSupport = new PropertyChangeSupport(this);
     private Creature currentCreature;
     private int roundNumber;
@@ -39,6 +39,10 @@ public class TurnQueue {
 
     private void initQueue() {
         creaturesQueue.addAll(creatures);
+        sortBySpeed();
+    }
+
+    private void sortBySpeed(){
         Collections.sort(creaturesQueue);
     }
 
@@ -76,6 +80,10 @@ public class TurnQueue {
         roundNumber++;
         initQueue();
         observerSupport.firePropertyChange(END_OF_TURN, roundNumber - 1, roundNumber);
+    }
+
+    public int getRoundNumber(){
+        return roundNumber;
     }
 
     private void handleWarMachineAction() {
