@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 public class TurnQueue {
 
     public static final String END_OF_TURN = "END_OF_TURN";
-    private Collection<Creature> creatures;
+    private final Collection<Creature> creatures;
     private final LinkedList<Creature> creaturesQueue;
 //  private final Queue<Creature> creaturesQueue; ???
     private final PropertyChangeSupport observerSupport = new PropertyChangeSupport(this);
@@ -64,6 +64,10 @@ public class TurnQueue {
         deadCreatures = creatures.stream().filter(creature -> !creature.isAlive()).collect(Collectors.toList());
     }
 
+    public void addDeadCreature( Creature creature ){
+        deadCreatures.add(creature);
+    }
+
     public List<Creature> getDeadCreatures(){
         return deadCreatures;
     }
@@ -72,12 +76,18 @@ public class TurnQueue {
         return deadCreaturePoints;
     }
 
-    public void appendDeadCreaturePoint(Point point){
+    public void addDeadCreaturePoint(Point point){
         if(deadCreaturePoints.contains(point)){
-            deadCreaturePoints.remove(point);
+            int i = deadCreaturePoints.indexOf(point);
+            deadCreaturePoints.remove(i);
+            deadCreatures.remove(i);
         }
         deadCreaturePoints.add(point);
     }
+
+//    public void removeRepeting(){
+//        deadCreatures.
+//    }
 
     public void next() {
         if (creaturesQueue.isEmpty()) {

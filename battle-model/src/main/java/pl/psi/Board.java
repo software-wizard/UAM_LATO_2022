@@ -92,22 +92,24 @@ public class Board {
 
     List<Point> getAdjacentPositions(final Point point) {
         List<Point> positionsList = new ArrayList<>();
-        Point adjacentPoint1 = new Point(point.getX() - 1, point.getY() + 1);
-        Point adjacentPoint2 = new Point(point.getX(), point.getY() + 1);
-        Point adjacentPoint3 = new Point(point.getX() + 1, point.getY() + 1);
-        Point adjacentPoint4 = new Point(point.getX() - 1, point.getY());
-        Point adjacentPoint5 = new Point(point.getX() + 1, point.getY());
-        Point adjacentPoint6 = new Point(point.getX() - 1, point.getY() - 1);
-        Point adjacentPoint7 = new Point(point.getX(), point.getY() - 1);
-        Point adjacentPoint8 = new Point(point.getX() + 1, point.getY() - 1);
-        positionsList.add(adjacentPoint1);
-        positionsList.add(adjacentPoint2);
-        positionsList.add(adjacentPoint3);
-        positionsList.add(adjacentPoint4);
-        positionsList.add(adjacentPoint5);
-        positionsList.add(adjacentPoint6);
-        positionsList.add(adjacentPoint7);
-        positionsList.add(adjacentPoint8);
+        if(point != null){
+            Point adjacentPoint1 = new Point(point.getX() - 1, point.getY() + 1);
+            Point adjacentPoint2 = new Point(point.getX(), point.getY() + 1);
+            Point adjacentPoint3 = new Point(point.getX() + 1, point.getY() + 1);
+            Point adjacentPoint4 = new Point(point.getX() - 1, point.getY());
+            Point adjacentPoint5 = new Point(point.getX() + 1, point.getY());
+            Point adjacentPoint6 = new Point(point.getX() - 1, point.getY() - 1);
+            Point adjacentPoint7 = new Point(point.getX(), point.getY() - 1);
+            Point adjacentPoint8 = new Point(point.getX() + 1, point.getY() - 1);
+            positionsList.add(adjacentPoint1);
+            positionsList.add(adjacentPoint2);
+            positionsList.add(adjacentPoint3);
+            positionsList.add(adjacentPoint4);
+            positionsList.add(adjacentPoint5);
+            positionsList.add(adjacentPoint6);
+            positionsList.add(adjacentPoint7);
+            positionsList.add(adjacentPoint8);
+        }
         return positionsList;
     }
 

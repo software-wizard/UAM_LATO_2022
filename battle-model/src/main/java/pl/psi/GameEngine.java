@@ -49,9 +49,17 @@ public class GameEngine {
             turnQueue.getCurrentCreature().defend(false);
         }
         AttackAndPrintAttackInformation(point);
-        updateDeadCreatureLists();
         currentCreatureCanMove = false;
         currentCreatureCanAttack = false;
+        if(!getCreature(point).get().isAlive()){
+            turnQueue.addDeadCreature(getCreature(point).get());
+            turnQueue.addDeadCreaturePoint(point);
+        }
+        if(!getCurrentCreature().isAlive()){
+            turnQueue.addDeadCreature(getCurrentCreature());
+            turnQueue.addDeadCreaturePoint(getCreaturePosition(getCurrentCreature()));
+        }
+//        updateDeadCreatureLists();
         pass();
         observerSupport.firePropertyChange(CREATURE_MOVED, null, null);
     }
@@ -112,7 +120,9 @@ public class GameEngine {
             turnQueue.getCurrentCreature().defend(false);
         }
         move(aPoint);
-        turnQueue.getRangeCreatures().forEach(this::creatureInMeleeRange); // dont ask me why its setting this again, i dont know either
+        if(getCurrentCreature().isRange()){
+            turnQueue.getRangeCreatures().forEach(this::creatureInMeleeRange); // dont ask me why its setting this again, i dont know either
+        }
         if((turnQueue.getCurrentCreature().isRange() && turnQueue.getCurrentCreature().getAttackRange() > 2 ) || !board.canCreatureAttackAnyone( turnQueue.getCurrentCreature() )){
             pass();
         }
@@ -127,7 +137,9 @@ public class GameEngine {
     }
 
     public boolean canMove(final Point aPoint) {
-        turnQueue.getRangeCreatures().forEach(this::creatureInMeleeRange); // setting inMelee for every range creature
+        if(turnQueue.getCurrentCreature().isRange()){
+            turnQueue.getRangeCreatures().forEach(this::creatureInMeleeRange); // setting inMelee for every range creature
+        }
         if(board.getCreature(aPoint).isPresent()){
             return !board.getCreature(aPoint).get().isAlive() && board.canMove(turnQueue.getCurrentCreature(), aPoint) && currentCreatureCanMove;
         }
@@ -175,15 +187,6 @@ public class GameEngine {
         return board.getCreature(aPoint);
     }
 
-    public void updateDeadCreatureLists(){
-        turnQueue.updateDeadCreatures();
-        final List<Creature> creatures = turnQueue.getDeadCreatures();
-        if(!creatures.isEmpty()){
-            creatures.forEach(creature -> {
-                turnQueue.appendDeadCreaturePoint(board.getCreaturePosition(creature));
-            });
-        }
-    }
 
     public Creature getCurrentCreature(){
         return turnQueue.getCurrentCreature();
@@ -320,4 +323,9 @@ public class GameEngine {
         return turnQueue.getDeadCreaturePoints();
     }
 
+    public void getDeadCreaturesInformation() {
+        for(int i = 0; i < turnQueue.getDeadCreaturePoints().size(); i++){
+            System.out.println("i=" + i + " Creature: " + turnQueue.getDeadCreatures().get(i).getName() + " Point: " + turnQueue.getDeadCreaturePoints().get(i) + "\n");
+        }
+    }
 }

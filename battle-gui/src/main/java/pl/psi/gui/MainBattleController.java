@@ -193,6 +193,7 @@ public class MainBattleController {
                     mapTile.setOnMouseClicked(e -> {
                         if (e.getButton() == MouseButton.SECONDARY) {
                             showStage(gameEngine.getCreatureInformation(new Point(finalX, finalY)), gameEngine.getCreature(new Point(finalX, finalY)).get().hasSpecial());
+                            gameEngine.getDeadCreaturesInformation();
                         }
                     });
                 }
