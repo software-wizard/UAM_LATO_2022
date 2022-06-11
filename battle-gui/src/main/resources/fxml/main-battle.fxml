@@ -30,6 +30,14 @@
                         <Font size="24.0"/>
                     </font>
                 </Label>
+                <Label fx:id="roundNumber" style="-fx-padding: 0 20 0 0;">
+                    <font>
+                        <Font size="24.0"/>
+                    </font>
+                    <opaqueInsets>
+                        <Insets/>
+                    </opaqueInsets>
+                </Label>
             </children>
         </HBox>
     </top>

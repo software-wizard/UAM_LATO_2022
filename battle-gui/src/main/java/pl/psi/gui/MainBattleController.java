@@ -33,6 +33,8 @@ public class MainBattleController {
     private Button windowButton;
     @FXML
     private Label console;
+    @FXML
+    private Label roundNumber;
 
     public MainBattleController(final Hero aHero1, final Hero aHero2) {
         gameEngine = new GameEngine(aHero1, aHero2);
@@ -57,9 +59,8 @@ public class MainBattleController {
         });
 
         waitButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
-            if(gameEngine.allActionLeft()){
+            if(gameEngine.allActionsLeft()){
                 gameEngine.waitAction();
-                gameEngine.pass();
             }
             else{
                 throw new RuntimeException("Action already performed.");
@@ -68,9 +69,8 @@ public class MainBattleController {
         });
 
         defendButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
-            if(gameEngine.allActionLeft()){
+            if(gameEngine.allActionsLeft()){
                 gameEngine.defendAction();
-                gameEngine.pass();
             }
             else{
                 throw new RuntimeException("Action already performed.");
@@ -124,13 +124,14 @@ public class MainBattleController {
     }
 
     private void refreshGui() {
+        roundNumber.setText(gameEngine.getRoundNumber());
         for (int x = 0; x < 15; x++) {
             for (int y = 0; y < 10; y++) {
                 final int x1 = x;
                 final int y1 = y;
                 final MapTile mapTile = new MapTile("");
 
-                if (gameEngine.canMove(new Point(x, y))) {
+                if (gameEngine.canMove(new Point(x1, y1))) {
                     mapTile.setBackground(Color.DARKGREY);
                     List<Point> path = gameEngine.getPath(new Point(x1,y1));
 
@@ -163,10 +164,10 @@ public class MainBattleController {
                             });
                 }
 
-                if(gameEngine.getCreature(new Point(x, y)).isPresent()) {
+                if(gameEngine.getCreature(new Point(x1, y1)).isPresent()) {
                     if (gameEngine.getCreature(new Point(x, y)).get().isAlive()) {
                         mapTile.setName("\n\n" + gameEngine.getCreature(new Point(x, y)).get().getAmount());
-                        var img = new Image(gameEngine.getCreature(new Point(x, y)).get().getBasicStats().getImagePath());
+                        var img = new Image(gameEngine.getCreature(new Point(x1, y1)).get().getBasicStats().getImagePath());
                         mapTile.setBackground(img);
                     }
                     else{
@@ -177,7 +178,7 @@ public class MainBattleController {
 
 
 
-                if (gameEngine.canHeal(new Point(x, y))) {
+                if (gameEngine.canHeal(new Point(x1, y1))) {
                     mapTile.setBackground(Color.YELLOW);
 
                     mapTile.addEventHandler(MouseEvent.MOUSE_CLICKED,
@@ -185,15 +186,12 @@ public class MainBattleController {
                 }
 
 
-                renderSpecialFields(mapTile, x, y);
+                renderSpecialFields(mapTile, x1, y1);
 
-                if(gameEngine.getCreature(new Point(x, y)).isPresent()) {
-                    int finalX = x;
-                    int finalY = y;
+                if(gameEngine.getCreature(new Point(x1, y1)).isPresent()) {
                     mapTile.setOnMouseClicked(e -> {
                         if (e.getButton() == MouseButton.SECONDARY) {
-                            showStage(gameEngine.getCreatureInformation(new Point(finalX, finalY)), gameEngine.getCreature(new Point(finalX, finalY)).get().hasSpecial());
-                            gameEngine.getDeadCreaturesInformation();
+                            showStage(gameEngine.getCreatureInformation(new Point(x1, y1)), gameEngine.getCreature(new Point(x1, y1)).get().hasSpecial());
                         }
                     });
                 }
@@ -211,7 +209,6 @@ public class MainBattleController {
                                 e -> {
                                     if(e.getButton() == MouseButton.PRIMARY){
                                         gameEngine.attack(new Point(x1, y1));
-                                        console.setText(gameEngine.getAttackInformation());
                                     }
                                 });
                     }
@@ -234,28 +231,21 @@ public class MainBattleController {
                                 e -> {
                                     if(e.getButton() == MouseButton.PRIMARY){
                                         gameEngine.castCurrentCreatureSpell(new Point(x1,y1));
-                                        console.setText(gameEngine.getSpellCastInformation());
                                     }
                                 });
                     }
-
 
                 if (gameEngine.isCurrentCreature(new Point(x,y)) && gameEngine.isCurrentCreatureAlive()) {
                     var img = new Image(gameEngine.getCreature(new Point(x,y)).get().getBasicStats().getCurrentImagePath());
                     mapTile.setBackground(img);
                 }
 
-//                if(gameEngine.checkIfDeadCreatureOnThisPoint(new Point(x1,y1))){
-//                    var img = new Image("/images/dead.jpg");
-//                    mapTile.setBackground(img);
-//                }
+                console.setText(gameEngine.getAttackInformation());
 
-//                console.setText(gameEngine.getAttackInformation());
+                waitButton.setDisable(!gameEngine.allActionsLeft());
+                defendButton.setDisable(!gameEngine.allActionsLeft());
 
-                waitButton.setDisable(!gameEngine.allActionLeft());
-                defendButton.setDisable(!gameEngine.allActionLeft());
-
-                gridMap.add(mapTile, x, y);
+                gridMap.add(mapTile, x1, y1);
             }
         }
     }

@@ -361,7 +361,7 @@ public class Creature implements PropertyChangeListener, Comparable<Creature> {
     }
 
     protected boolean canCounterAttack(final Creature aDefender) {
-        return aDefender.getCanCounterAttack() && aDefender.getCurrentHp() > 0;
+        return aDefender.getCanCounterAttack() && aDefender.isAlive();
     }
 
     public boolean hasSpecial(){

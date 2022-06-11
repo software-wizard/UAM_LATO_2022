@@ -70,7 +70,7 @@ public class Board {
     }
 
     boolean canAttack(final Creature aCreature, final Point aPoint) {
-        if (aCreature == null || !aCreature.isAlive()) {
+        if (aCreature == null  || !getCreature(aPoint).get().isAlive()) {
             return false;
         } else {
             final Point currentPosition = map.inverse()

@@ -18,6 +18,7 @@ public class TurnQueue {
     public static final String END_OF_TURN = "END_OF_TURN";
     private final Collection<Creature> creatures;
     private final LinkedList<Creature> creaturesQueue;
+    private final LinkedList<Creature> waitingCreaturesQueue;
 //  private final Queue<Creature> creaturesQueue; ???
     private final PropertyChangeSupport observerSupport = new PropertyChangeSupport(this);
     private Creature currentCreature;
@@ -30,6 +31,7 @@ public class TurnQueue {
         creatures = Stream.concat(aCreatureList.stream(), aCreatureList2.stream())
                 .collect(Collectors.toList());
         creaturesQueue = new LinkedList<>();
+        waitingCreaturesQueue = new LinkedList<>();
         initQueue();
         creatures.forEach(c -> observerSupport.addPropertyChangeListener(END_OF_TURN, c));
         next();
@@ -49,7 +51,7 @@ public class TurnQueue {
     }
 
     public void pushCurrentCreatureToEndOfQueue(){
-        creaturesQueue.add(currentCreature);
+        waitingCreaturesQueue.add(currentCreature);
     }
 
     public Creature getCurrentCreature() {
@@ -60,11 +62,7 @@ public class TurnQueue {
         return creatures.stream().filter(Creature::isRange).collect( Collectors.toList() );
     }
 
-    public void updateDeadCreatures() {
-        deadCreatures = creatures.stream().filter(creature -> !creature.isAlive()).collect(Collectors.toList());
-    }
-
-    public void addDeadCreature( Creature creature ){
+    public void addDeadCreature( final Creature creature ){
         deadCreatures.add(creature);
     }
 
@@ -76,7 +74,7 @@ public class TurnQueue {
         return deadCreaturePoints;
     }
 
-    public void addDeadCreaturePoint(Point point){
+    public void addDeadCreaturePoint(final Point point){
         if(deadCreaturePoints.contains(point)){
             int i = deadCreaturePoints.indexOf(point);
             deadCreaturePoints.remove(i);
@@ -86,10 +84,20 @@ public class TurnQueue {
     }
 
     public void next() {
+        sortBySpeed();
         if (creaturesQueue.isEmpty()) {
-            endOfTurn();
+            if(waitingCreaturesQueue.isEmpty()){
+                endOfTurn();
+                next();
+            }
+            else{
+                currentCreature = waitingCreaturesQueue.poll();
+            }
         }
-        currentCreature = creaturesQueue.poll();
+        else{
+            currentCreature = creaturesQueue.poll();
+        }
+
         if(!currentCreature.isAlive()){
             next();
         }
@@ -106,7 +114,7 @@ public class TurnQueue {
     }
 
     public int getRoundNumber(){
-        return roundNumber;
+        return roundNumber+1;
     }
 
     private void handleWarMachineAction() {
