@@ -156,8 +156,14 @@ public class Board {
         return pairList;
     }
 
-    public void putDeadCreaturesOnBoard(){
+    public void putDeadCreaturesOnBoard() {
         List<Pair> pairList = getDeadCreaturePositions();
-        pairList.forEach(pair -> move(pair.getCreature(),pair.getPoint()));
+        for (Pair pair : pairList) {
+            {
+                if(!map.get(pair.getPoint()).isAlive()){
+                    map.put(pair.getPoint(), pair.getCreature());
+                }
+            }
+        }
     }
 }

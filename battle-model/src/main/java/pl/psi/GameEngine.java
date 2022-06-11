@@ -52,14 +52,8 @@ public class GameEngine {
         AttackAndPrintAttackInformation(point);
         currentCreatureCanMove = false;
         currentCreatureCanAttack = false;
-        board.putDeadCreaturesOnBoard();
         pass();
         observerSupport.firePropertyChange(CREATURE_MOVED, null, null);
-    }
-
-    protected List<Pair> getDeadCreatures() {
-        List<Pair> deadCreatures = board.getDeadCreaturePositions();
-        return deadCreatures;
     }
 
     public List<Point> getCurrentCreatureSplashDamagePointsList(Point point){
@@ -118,7 +112,6 @@ public class GameEngine {
             turnQueue.getCurrentCreature().defend(false);
         }
         move(aPoint);
-        board.putDeadCreaturesOnBoard();
         turnQueue.getRangeCreatures().forEach(this::creatureInMeleeRange); // dont ask me why its setting this again, i dont know either
         if((turnQueue.getCurrentCreature().isRange() && turnQueue.getCurrentCreature().getAttackRange() > 2 ) || !board.canCreatureAttackAnyone( turnQueue.getCurrentCreature() )){
             pass();
@@ -131,7 +124,19 @@ public class GameEngine {
         if(getCreature(aPoint).isEmpty() || !getCreature(aPoint).get().isAlive()){
             board.move(turnQueue.getCurrentCreature(), aPoint);
         }
+    }
+
+    public void putDeadCreatureOnBoard(){
         board.putDeadCreaturesOnBoard();
+    }
+
+    public void updateDeadCreaturesList() {
+        deadCreaturesList = board.getDeadCreaturePositions();
+    }
+
+    public List<Pair> getDeadCreaturesList(){
+        updateDeadCreaturesList();
+        return deadCreaturesList;
     }
 
     public boolean canMove(final Point aPoint) {
@@ -146,6 +151,10 @@ public class GameEngine {
 
     public List<Point> getPath(Point aPoint){
         return board.getPathToPoint(board.getCreaturePosition(getCurrentCreature()),aPoint);
+    }
+
+    public Point getCreaturePosition(final Creature creature){
+        return board.getCreaturePosition(creature);
     }
 
     public void heal(final Point point) {
@@ -250,6 +259,7 @@ public class GameEngine {
         currentCreatureCanAttack = true;
         turnQueue.next();
         additionalInformation = "";
+
         if(turnNumber != turnQueue.getRoundNumber()){
             additionalInformation = "TURN " + turnQueue.getRoundNumber();
         }

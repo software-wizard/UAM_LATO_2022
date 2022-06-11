@@ -2,15 +2,11 @@ package pl.psi;
 
 import org.junit.jupiter.api.Test;
 import pl.psi.creatures.CastleCreatureFactory;
-import pl.psi.creatures.DamageCalculatorIf;
-import pl.psi.creatures.DefaultDamageCalculator;
-import pl.psi.creatures.ReducedDamageCalculator;
 import pl.psi.hero.HeroStatistics;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -116,12 +112,16 @@ public class GameEngineTest {
         gameEngine.getHero2().getCreatures().get(3).setAmount(10);
 
         List<Pair> list;
-        list = gameEngine.getDeadCreatures();
+        gameEngine.updateDeadCreaturesList();
+        list = gameEngine.getDeadCreaturesList();
 
         assertThat(list.size()).isEqualTo(3);
         assertThat(list.get(0).getCreature()).isEqualTo(gameEngine.getHero2().getCreatures().get(0));
+        assertThat(list.get(0).getPoint()).isEqualTo(gameEngine.getCreaturePosition(gameEngine.getHero2().getCreatures().get(0)));
         assertThat(list.get(1).getCreature()).isEqualTo(gameEngine.getHero2().getCreatures().get(1));
+        assertThat(list.get(1).getPoint()).isEqualTo(gameEngine.getCreaturePosition(gameEngine.getHero2().getCreatures().get(1)));
         assertThat(list.get(2).getCreature()).isEqualTo(gameEngine.getHero2().getCreatures().get(2));
+        assertThat(list.get(2).getPoint()).isEqualTo(gameEngine.getCreaturePosition(gameEngine.getHero2().getCreatures().get(2)));
     }
 
 }

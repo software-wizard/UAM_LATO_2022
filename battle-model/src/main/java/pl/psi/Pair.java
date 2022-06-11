@@ -2,9 +2,9 @@ package pl.psi;
 
 import pl.psi.creatures.Creature;
 
-class Pair {
-    private Creature creature;
-    private Point point;
+public class Pair {
+    private final Creature creature;
+    private final Point point;
     public Pair(Creature aCreature, Point aPoint){
         creature = aCreature;
         point = aPoint;
