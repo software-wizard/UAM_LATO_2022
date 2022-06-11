@@ -12,6 +12,8 @@ import lombok.Setter;
 import pl.psi.TurnQueue;
 import pl.psi.spells.BuffDebuffSpell;
 import pl.psi.spells.Spell;
+import pl.psi.spells.SpellCreatureList;
+import pl.psi.spells.SpellableIf;
 import pl.psi.spells.SpellRang;
 
 import java.beans.PropertyChangeEvent;
@@ -25,7 +27,7 @@ import java.util.Random;
  */
 @Getter
 @Setter
-public class Creature implements PropertyChangeListener, Comparable<Creature> {
+public class Creature implements PropertyChangeListener, Comparable<Creature>, SpellableIf {
     private CreatureStatisticIf basicStats;
     private CreatureStats externalStats = new CreatureStats.CreatureStatsBuilder().build();
     private CreatureStats buffedStats = new CreatureStats.CreatureStatsBuilder().build();
@@ -114,16 +116,11 @@ public class Creature implements PropertyChangeListener, Comparable<Creature> {
         }
     }
 
-    public void castSpell(final List<Creature> aDefender, Spell spell) {
+    public void castSpell(final SpellCreatureList aDefender, Spell spell) {
         if (isAlive()) {
             spell.castSpell(aDefender);
         }
     }
-
-    public void increaseStats(final CreatureStatisticIf statIncrease) {
-        externalStats.addStats(statIncrease);
-    }
-
 
     private int addUnits(final Creature aDefender) {
         if (aDefender.getCurrentHp() > 0) {

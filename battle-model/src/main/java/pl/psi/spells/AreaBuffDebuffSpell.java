@@ -5,7 +5,7 @@ import pl.psi.creatures.CreatureStats;
 
 import java.util.List;
 
-public class AreaBuffDebuffSpell extends Spell<List<Creature>> {
+public class AreaBuffDebuffSpell extends Spell<SpellCreatureList> {
 
     private final CreatureStats creatureStats;
 
@@ -15,7 +15,12 @@ public class AreaBuffDebuffSpell extends Spell<List<Creature>> {
     }
 
     @Override
-    public void castSpell(List<Creature> aDefender) {
-        aDefender.forEach(creature -> creature.applyStatsWithSpells(creatureStats));
+    public void castSpell(SpellCreatureList spellCreatureList) {
+        spellCreatureList.getCreatureList().forEach(creature -> creature.applyStatsWithSpells(creatureStats));
+    }
+
+    @Override
+    public void unCastSpell(SpellCreatureList spellCreatureList) {
+
     }
 }

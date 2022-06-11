@@ -8,7 +8,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public abstract class Spell<T> {
+public abstract class Spell<T extends SpellableIf>{
 
     private final SpellTypes category;
     private final SpellNames name;

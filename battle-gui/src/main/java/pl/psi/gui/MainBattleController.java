@@ -31,6 +31,7 @@ import static pl.psi.gui.SpellBattleController.SPELL_SELECTED;
 import static pl.psi.spells.SpellRang.BASIC;
 import pl.psi.TurnQueue;
 import pl.psi.spells.Spell;
+import pl.psi.spells.SpellableIf;
 
 import java.io.IOException;
 import java.util.List;
@@ -51,7 +52,7 @@ public class MainBattleController {
     @FXML
     private Button spellButton;
 
-    Spell selectedSpell;
+    Spell<? extends SpellableIf> selectedSpell;
 
     @FXML
     private Label console;

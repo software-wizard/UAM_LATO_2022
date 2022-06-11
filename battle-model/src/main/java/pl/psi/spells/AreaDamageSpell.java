@@ -5,7 +5,7 @@ import pl.psi.creatures.Creature;
 
 import java.util.List;
 
-public class AreaDamageSpell extends Spell<List<Creature>> {
+public class AreaDamageSpell extends Spell<SpellCreatureList> {
 
     @Getter
     private final boolean[][] area;
@@ -18,7 +18,12 @@ public class AreaDamageSpell extends Spell<List<Creature>> {
     }
 
     @Override
-    public void castSpell(List<Creature> aDefender) {
-        aDefender.forEach(creature -> creature.applySpellDamage(creature, value));
+    public void castSpell(SpellCreatureList creatureList) {
+        creatureList.getCreatureList().forEach(creature -> creature.applySpellDamage(creature, value));
+    }
+
+    @Override
+    public void unCastSpell(SpellCreatureList creatureList) {
+
     }
 }

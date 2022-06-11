@@ -292,7 +292,7 @@ public class GameEngine {
         return (hero1.getCreatures().contains(turnQueue.getCurrentCreature())) ? hero2 : hero1;
     }
 
-    public void castSpell(final Point point, Spell spell) {
+    public void castSpell(final Point point, Spell<? extends SpellableIf> spell) {
         switch (spell.getCategory()) {
             case FIELD:
                 board.getCreature(point)
@@ -317,7 +317,7 @@ public class GameEngine {
             case AREA:
                 board.getCreature(point)
                         .ifPresent(defender -> {
-                            List<Creature> creatureList = getCreaturesFromArea(point, (AreaDamageSpell) spell);
+                            SpellCreatureList creatureList = new SpellCreatureList(getCreaturesFromArea(point, (AreaDamageSpell) spell));
                             turnQueue.getCurrentCreature().castSpell(creatureList, spell);
                         });
                 break;

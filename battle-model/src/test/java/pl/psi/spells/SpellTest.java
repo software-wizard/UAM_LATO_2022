@@ -16,12 +16,12 @@ import static pl.psi.spells.SpellRang.*;
 
 public class SpellTest {
 
-    private static final Spell MAGIC_ARROW_RANG_1 = new SpellFactory().create(MAGIC_ARROW, BASIC, 1);
-    private static final Spell MAGIC_ARROW_RANG_2 = new SpellFactory().create(MAGIC_ARROW, ADVANCED, 1);
-    private static final Spell HASTE_BASIC = new SpellFactory().create(HASTE, BASIC, 1);
-    private static final Spell HASTE_EXPERT = new SpellFactory().create(HASTE, EXPERT, 1);
-    private static final Spell SLOW_EXPERT = new SpellFactory().create(SLOW, EXPERT, 1);
-    private static final Spell FIREBALL = new SpellFactory().create(FIRE_BALL, BASIC, 1);
+    private static final Spell<? extends SpellableIf> MAGIC_ARROW_RANG_1 = new SpellFactory().create(MAGIC_ARROW, BASIC, 1);
+    private static final Spell<? extends SpellableIf> MAGIC_ARROW_RANG_2 = new SpellFactory().create(MAGIC_ARROW, ADVANCED, 1);
+    private static final Spell<? extends SpellableIf> HASTE_BASIC = new SpellFactory().create(HASTE, BASIC, 1);
+    private static final Spell<? extends SpellableIf> HASTE_EXPERT = new SpellFactory().create(HASTE, EXPERT, 1);
+    private static final Spell<? extends SpellableIf> SLOW_EXPERT = new SpellFactory().create(SLOW, EXPERT, 1);
+    private static final Spell<? extends SpellableIf> FIREBALL = new SpellFactory().create(FIRE_BALL, BASIC, 1);
 
     private final Creature EXAMPLE_CREATURE_1 = new Creature.Builder()
             .statistic(
@@ -217,7 +217,7 @@ public class SpellTest {
     @Test
     void shouldCastDeathRippleForAllCreatures() {
         //given
-        Spell deathRipple = new SpellFactory().create(DEATH_RIPPLE, BASIC, 1);
+        Spell<? extends SpellableIf> deathRipple = new SpellFactory().create(DEATH_RIPPLE, BASIC, 1);
         List<Creature> firstHeroCreatures = List.of(EXAMPLE_CREATURE_1);
         List<Creature> secondHeroCreatures = List.of(EXAMPLE_CREATURE_2);
 
