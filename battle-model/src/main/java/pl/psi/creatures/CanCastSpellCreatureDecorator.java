@@ -33,7 +33,6 @@ public class CanCastSpellCreatureDecorator extends AbstractCreature{
     @Override
     public void reduceNumberOfSpellCasts(){
         castCounter -= 1;
-        System.out.println(castCounter);
     }
 
     @Override

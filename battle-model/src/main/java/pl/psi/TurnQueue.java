@@ -85,10 +85,6 @@ public class TurnQueue {
         deadCreaturePoints.add(point);
     }
 
-//    public void removeRepeting(){
-//        deadCreatures.
-//    }
-
     public void next() {
         if (creaturesQueue.isEmpty()) {
             endOfTurn();

@@ -315,17 +315,10 @@ public class GameEngine {
         turnQueue.getCurrentCreature().defend(true);
     }
 
-    public List<Creature> getDeadCreatures(){
-        return turnQueue.getDeadCreatures();
-    }
-
-    public List<Point> getDeadCreaturesPoints(){
-        return turnQueue.getDeadCreaturePoints();
-    }
-
     public void getDeadCreaturesInformation() {
         for(int i = 0; i < turnQueue.getDeadCreaturePoints().size(); i++){
             System.out.println("i=" + i + " Creature: " + turnQueue.getDeadCreatures().get(i).getName() + " Point: " + turnQueue.getDeadCreaturePoints().get(i) + "\n");
         }
+        System.out.println("---------------------------------------------------------\n");
     }
 }
