@@ -22,6 +22,8 @@ public class TurnQueue {
     private final PropertyChangeSupport observerSupport = new PropertyChangeSupport(this);
     private Creature currentCreature;
     private int roundNumber;
+    private List<Creature> deadCreatures = new ArrayList<>();
+    private List<Point> deadCreaturePoints = new ArrayList<>();
 
     public TurnQueue(final Collection<Creature> aCreatureList,
                      final Collection<Creature> aCreatureList2) {
@@ -54,12 +56,27 @@ public class TurnQueue {
         return currentCreature;
     }
 
-    public void removeDeadCreatureFromQueue(){
-        creatures = creatures.stream().filter( creature -> creature.getCurrentHp() <= 0 ).collect(Collectors.toList());
-    }
-
     public Collection<Creature> getRangeCreatures(){
         return creatures.stream().filter(Creature::isRange).collect( Collectors.toList() );
+    }
+
+    public void updateDeadCreatures() {
+        deadCreatures = creatures.stream().filter(creature -> !creature.isAlive()).collect(Collectors.toList());
+    }
+
+    public List<Creature> getDeadCreatures(){
+        return deadCreatures;
+    }
+
+    public List<Point> getDeadCreaturePoints(){
+        return deadCreaturePoints;
+    }
+
+    public void appendDeadCreaturePoint(Point point){
+        if(deadCreaturePoints.contains(point)){
+            deadCreaturePoints.remove(point);
+        }
+        deadCreaturePoints.add(point);
     }
 
     public void next() {
@@ -94,9 +111,5 @@ public class TurnQueue {
             warMachine.performAction(creatureList);
             currentCreature = creaturesQueue.poll();
         }
-    }
-
-    public List<Creature> getDeadCreatures() {
-        return creatures.stream().filter(creature -> !creature.isAlive()).collect(Collectors.toList());
     }
 }

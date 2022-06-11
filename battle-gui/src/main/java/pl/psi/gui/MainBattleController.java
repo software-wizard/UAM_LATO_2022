@@ -193,9 +193,6 @@ public class MainBattleController {
                     mapTile.setOnMouseClicked(e -> {
                         if (e.getButton() == MouseButton.SECONDARY) {
                             showStage(gameEngine.getCreatureInformation(new Point(finalX, finalY)), gameEngine.getCreature(new Point(finalX, finalY)).get().hasSpecial());
-                            System.out.println(gameEngine.getDeadCreaturesList().get(0).getCreature().getName() + " on "
-                                    + gameEngine.getDeadCreaturesList().get(0).getPoint().getX() + ";"
-                                    + gameEngine.getDeadCreaturesList().get(0).getPoint().getY());
                         }
                     });
                 }
@@ -214,8 +211,6 @@ public class MainBattleController {
                                     if(e.getButton() == MouseButton.PRIMARY){
                                         gameEngine.attack(new Point(x1, y1));
                                         console.setText(gameEngine.getAttackInformation());
-                                        gameEngine.updateDeadCreaturesList();
-                                        gameEngine.putDeadCreatureOnBoard();
                                     }
                                 });
                     }
@@ -258,7 +253,6 @@ public class MainBattleController {
 
                 waitButton.setDisable(!gameEngine.allActionLeft());
                 defendButton.setDisable(!gameEngine.allActionLeft());
-                gameEngine.putDeadCreatureOnBoard();
 
                 gridMap.add(mapTile, x, y);
             }

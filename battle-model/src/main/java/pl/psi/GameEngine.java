@@ -36,7 +36,6 @@ public class GameEngine {
     private String additionalInformation = "";
     private String spellCastInformation = "";
     private int turnNumber = 0;
-    private List<Pair> deadCreaturesList = new ArrayList<>();
 
     public GameEngine(final Hero aHero1, final Hero aHero2) {
         hero1 = aHero1;
@@ -50,6 +49,7 @@ public class GameEngine {
             turnQueue.getCurrentCreature().defend(false);
         }
         AttackAndPrintAttackInformation(point);
+        updateDeadCreatureLists();
         currentCreatureCanMove = false;
         currentCreatureCanAttack = false;
         pass();
@@ -126,19 +126,6 @@ public class GameEngine {
         }
     }
 
-    public void putDeadCreatureOnBoard(){
-        board.putDeadCreaturesOnBoard();
-    }
-
-    public void updateDeadCreaturesList() {
-        deadCreaturesList = board.getDeadCreaturePositions();
-    }
-
-    public List<Pair> getDeadCreaturesList(){
-        updateDeadCreaturesList();
-        return deadCreaturesList;
-    }
-
     public boolean canMove(final Point aPoint) {
         turnQueue.getRangeCreatures().forEach(this::creatureInMeleeRange); // setting inMelee for every range creature
         if(board.getCreature(aPoint).isPresent()){
@@ -167,11 +154,6 @@ public class GameEngine {
         return attackInformation;
     }
 
-    public String getAdditionalInformation(){
-        turnNumber = turnQueue.getRoundNumber();
-        return additionalInformation;
-    }
-
     public boolean allActionLeft(){
         return currentCreatureCanAttack && currentCreatureCanMove;
     }
@@ -189,16 +171,18 @@ public class GameEngine {
         creature.setInMelee( !creaturesOnAdjacentPositions.isEmpty() );
     }
 
-    public List<Optional<Creature>> getCreaturesOnPointList( final List<Point> pointList ){
-        List<Optional<Creature>> creaturesOnAdjacentPositions = pointList.stream().map(this::getAliveEnemyCreature).collect( Collectors.toList() );
-        while (creaturesOnAdjacentPositions.remove(Optional.empty())) {  // remove every instance of "Optional.empty null" from list
-        }
-        return creaturesOnAdjacentPositions;
-    }
-
-
     public Optional<Creature> getCreature(final Point aPoint) {
         return board.getCreature(aPoint);
+    }
+
+    public void updateDeadCreatureLists(){
+        turnQueue.updateDeadCreatures();
+        final List<Creature> creatures = turnQueue.getDeadCreatures();
+        if(!creatures.isEmpty()){
+            creatures.forEach(creature -> {
+                turnQueue.appendDeadCreaturePoint(board.getCreaturePosition(creature));
+            });
+        }
     }
 
     public Creature getCurrentCreature(){
@@ -259,7 +243,7 @@ public class GameEngine {
         currentCreatureCanAttack = true;
         turnQueue.next();
         additionalInformation = "";
-
+        board.putDeadCreaturesOnBoard( turnQueue.getDeadCreatures(), turnQueue.getDeadCreaturePoints() );
         if(turnNumber != turnQueue.getRoundNumber()){
             additionalInformation = "TURN " + turnQueue.getRoundNumber();
         }
@@ -327,4 +311,13 @@ public class GameEngine {
     public void defendAction() {
         turnQueue.getCurrentCreature().defend(true);
     }
+
+    public List<Creature> getDeadCreatures(){
+        return turnQueue.getDeadCreatures();
+    }
+
+    public List<Point> getDeadCreaturesPoints(){
+        return turnQueue.getDeadCreaturePoints();
+    }
+
 }

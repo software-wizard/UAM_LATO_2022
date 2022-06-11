@@ -142,27 +142,10 @@ public class Board {
         return path;
     }
 
-    public List<Pair> getDeadCreaturePositions() {
-        List<Pair> pairList = new ArrayList<>();
-        for (int x = 0; x < 15; x++) {
-            for (int y = 0; y < 10; y++) {
-                Point point = new Point(x, y);
-                if (getCreature(point).isPresent() && !getCreature(point).get().isAlive()) {
-                        Pair pair = new Pair(map.get(point), point);
-                        pairList.add(pair);
-                    }
-            }
-        }
-        return pairList;
-    }
-
-    public void putDeadCreaturesOnBoard() {
-        List<Pair> pairList = getDeadCreaturePositions();
-        for (Pair pair : pairList) {
-            {
-                if(!map.get(pair.getPoint()).isAlive()){
-                    map.put(pair.getPoint(), pair.getCreature());
-                }
+    public void putDeadCreaturesOnBoard(List<Creature> creatureList, List<Point> pointList) {
+        for(int i = 0; i <creatureList.size(); i++){
+            if(map.get(pointList.get(i)) == null){
+                map.put(pointList.get(i), creatureList.get(i));
             }
         }
     }

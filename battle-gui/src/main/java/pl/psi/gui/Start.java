@@ -46,7 +46,7 @@ public class Start extends Application {
                         new NecropolisFactory().create(false,3,5),
                         new NecropolisFactory().create(true,4,5),
                         new NecropolisFactory().create(false, 5, 100),
-                        new NecropolisFactory().create(true, 6, 5),
+                        new NecropolisFactory().create(true, 6, 1000),
                         new NecropolisFactory().create(true,7,5)
                         ),HeroStatistics.NECROMANCER);
         ret.getCreatures().forEach(creature -> creature.setHeroNumber(1));
