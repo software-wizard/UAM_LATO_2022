@@ -43,16 +43,16 @@ public class GameEngine {
         board = new Board(aHero1.getCreatures(), aHero2.getCreatures());
     }
 
-    public void attack(final Point point) {
+    public void attack(final Point aPoint) {
         if(turnQueue.getCurrentCreature().isDefending()){
             turnQueue.getCurrentCreature().defend(false);
         }
-        AttackAndPrintAttackInformation(point);
+        AttackAndPrintAttackInformation(aPoint);
         currentCreatureCanMove = false;
         currentCreatureCanAttack = false;
-        if(!getCreature(point).get().isAlive()){
-            turnQueue.addDeadCreature(getCreature(point).get());
-            turnQueue.addDeadCreaturePoint(point);
+        if(!getCreature(aPoint).get().isAlive()){
+            turnQueue.addDeadCreature(getCreature(aPoint).get());
+            turnQueue.addDeadCreaturePoint(aPoint);
         }
         if(!getCurrentCreature().isAlive()){
             turnQueue.addDeadCreature(getCurrentCreature());
@@ -63,16 +63,16 @@ public class GameEngine {
         observerSupport.firePropertyChange(CREATURE_MOVED, null, null);
     }
 
-    public List<Point> getCurrentCreatureSplashDamagePointsList(final Point point){
-        return board.getCreatureSplashDamagePointsList(getCurrentCreature(), point);
+    public List<Point> getCurrentCreatureSplashDamagePointsList(final Point aPoint){
+        return board.getCreatureSplashDamagePointsList(getCurrentCreature(), aPoint);
     }
 
     private void AttackAndPrintAttackInformation(final Point pointToAttack) {
         applyAttackLogic(pointToAttack);
     }
 
-    private void applyAttackLogic(final Point pointToAttack) {
-        List<Point> pointsToAttackList = getCurrentCreatureSplashDamagePointsList(pointToAttack);
+    private void applyAttackLogic(final Point aPoint) {
+        List<Point> pointsToAttackList = getCurrentCreatureSplashDamagePointsList(aPoint);
         AtomicInteger counter = new AtomicInteger();
         pointsToAttackList.forEach(point -> board.getCreature(point)
                 .ifPresent(defender -> {
@@ -169,13 +169,13 @@ public class GameEngine {
         return board.getPathToPoint(board.getCreaturePosition(getCurrentCreature()),aPoint);
     }
 
-    public Point getCreaturePosition(final Creature creature){
-        return board.getCreaturePosition(creature);
+    public Point getCreaturePosition(final Creature aCreature){
+        return board.getCreaturePosition(aCreature);
     }
 
-    public void heal(final Point point) {
+    public void heal(final Point aPoint) {
         FirstAidTent firstAidTent = (FirstAidTent) turnQueue.getCurrentCreature();
-        board.getCreature(point)
+        board.getCreature(aPoint)
                 .ifPresent(firstAidTent::healCreature);
     }
 
@@ -192,13 +192,13 @@ public class GameEngine {
         pass();
     }
 
-    private void creatureInMeleeRange( final Creature creature ){
-        Point position = board.getCreaturePosition( creature );
+    private void creatureInMeleeRange( final Creature aCreature ){
+        Point position = board.getCreaturePosition( aCreature );
         List<Point> adjacentPositionsList = board.getAdjacentPositions( position );
         List<Optional<Creature>> creaturesOnAdjacentPositions = adjacentPositionsList.stream().map(this::getAliveEnemyCreature).collect( Collectors.toList() );
         while (creaturesOnAdjacentPositions.remove(Optional.empty())) {  // remove every instance of "Optional.empty null" from list
         }
-        creature.setInMelee( !creaturesOnAdjacentPositions.isEmpty() );
+        aCreature.setInMelee( !creaturesOnAdjacentPositions.isEmpty() );
     }
 
     public Optional<Creature> getCreature(final Point aPoint) {
@@ -227,19 +227,19 @@ public class GameEngine {
         return Optional.empty();
     }
 
-    private Hero getCreatureHero(final Creature creature){
-        if(hero1.getCreatures().contains(creature)){
+    private Hero getCreatureHero(final Creature aCreature){
+        if(hero1.getCreatures().contains(aCreature)){
             return hero1;
         }
         return hero2;
     }
 
-    private boolean isEnemy(final Creature creature){
-        return !getCreatureHero(getCurrentCreature()).equals(getCreatureHero(creature));
+    private boolean isEnemy(final Creature aCreature){
+        return !getCreatureHero(getCurrentCreature()).equals(getCreatureHero(aCreature));
     }
 
-    public String getCreatureInformation(final Point point){
-        return getCreature(point).get().getCreatureInformation();
+    public String getCreatureInformation(final Point aPoint){
+        return getCreature(aPoint).get().getCreatureInformation();
     }
 
     public boolean canCastSpell(final Point aPoint){
@@ -275,11 +275,12 @@ public class GameEngine {
         observerSupport.addPropertyChangeListener(aEventType, aObserver);
     }
 
-    public boolean canHeal(final Point point) {
+
+    public boolean canHeal(final Point aPoint) {
         Creature currentCreature = turnQueue.getCurrentCreature();
 
         return currentCreature instanceof FirstAidTent
-                && board.getCreature(point)
+                && board.getCreature(aPoint)
                 .filter(creature -> creature.getHeroNumber() == currentCreature.getHeroNumber())
                 .isPresent();
     }

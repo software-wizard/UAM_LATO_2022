@@ -23,67 +23,6 @@ public class GameEngineTest {
         gameEngine.attack(new Point(14, 1));
     }
 
-    /*@Test
-    void gameEngineShouldReturnTrueIfAdjacentCreature() {
-        /**
-         * whole point of this test is to make sure range creatures can't shoot when other creatures are in melee
-         * this is so needlessly complicated but i think it works, will be fixed i promise :(
-
-        final CastleCreatureFactory creatureFactory = new CastleCreatureFactory();
-        final GameEngine gameEngine =
-                new GameEngine(new Hero(List.of(creatureFactory.create(1, false, 5)), HeroStatistics.NECROMANCER),
-                        new Hero(List.of(creatureFactory.create(2, true, 5), creatureFactory.create(2, true, 5)), HeroStatistics.NECROMANCER));
-        gameEngine.getHero1().getCreatures().get(0).setHeroNumber(1);
-        gameEngine.getHero2().getCreatures().get(0).setHeroNumber(2);
-        gameEngine.getHero2().getCreatures().get(1).setHeroNumber(2);
-
-        //hero1 turn, creature moves to the center
-        gameEngine.move( new Point( 4,1 ) );
-        gameEngine.move( new Point( 7,1 ) );
-
-        gameEngine.pass();
-        //hero2 creature 1 turn
-
-        gameEngine.pass();
-        //hero2 creature 2 turn, second shooter creature moves next to the first
-        gameEngine.move( new Point( 14,2 ) );
-        //two shooter creatures from the same hero don't collide
-        assertThat( gameEngine.getHero2().getCreatures().get(0).getCalculator() ).isInstanceOf( DefaultDamageCalculator.class );
-        assertThat( gameEngine.getHero2().getCreatures().get(1).getCalculator() ).isInstanceOf( DefaultDamageCalculator.class );
-
-        gameEngine.pass();
-        //hero1 turn
-
-        gameEngine.pass();
-        //hero2 creature 1 turn, first shooter creature moves near enemy
-        gameEngine.move( new Point( 9,1 ) );
-        gameEngine.move( new Point( 8,1 ) );
-        //while near enemy, isInMelee == true so damage calculator changes
-        assertThat( gameEngine.getHero2().getCreatures().get(0).getCalculator() ).isInstanceOf( ReducedDamageCalculator.class );
-
-        gameEngine.move( new Point( 10, 5 ) );
-        //when shooter creature moves away from enemy damage calculator goes back to default
-        assertThat( gameEngine.getHero2().getCreatures().get(0).getCalculator() ).isInstanceOf( DefaultDamageCalculator.class );
-    }
-
-    @Test
-    void defenceShouldWorkProperly() {
-        final CastleCreatureFactory creatureFactory = new CastleCreatureFactory();
-        final GameEngine gameEngine =
-                new GameEngine(new Hero(List.of(creatureFactory.create(1, false, 5)), HeroStatistics.NECROMANCER),
-                        new Hero(List.of(creatureFactory.create(1, false, 5)), HeroStatistics.NECROMANCER));
-
-        gameEngine.defendAction();
-        assertThat( gameEngine.getCurrentCreature().isDefending() ).isEqualTo( true );
-
-        gameEngine.move( new Point(2,2) );
-        assertThat( gameEngine.getCurrentCreature().isDefending() ).isEqualTo( false );
-
-        gameEngine.defendAction();
-
-        gameEngine.attack( new Point(2,3) );
-        assertThat( gameEngine.getCurrentCreature().isDefending() ).isEqualTo( false );
-    }*/
     @Test
     void splashDamageTest(){
         final CastleCreatureFactory creatureFactory = new CastleCreatureFactory();
@@ -101,28 +40,6 @@ public class GameEngineTest {
         assertThat(gameEngine.getCurrentCreatureSplashDamagePointsList(new Point(2,2)).get(0)).isEqualTo(new Point(2,2));
     }
 
-//    @Test
-//    void deadCreaturesTest(){
-//        final CastleCreatureFactory creatureFactory = new CastleCreatureFactory();
-//        final GameEngine gameEngine =
-//                new GameEngine(new Hero(List.of(creatureFactory.create(2, false, 5)), HeroStatistics.NECROMANCER),
-//                        new Hero(List.of(creatureFactory.create(1, false, 1),creatureFactory.create(1, false, 1),creatureFactory.create(1, false, 1),creatureFactory.create(1, false, 1)), HeroStatistics.NECROMANCER));
-//
-//        gameEngine.getHero2().getCreatures().forEach(creature -> creature.setAmount(0));
-//        gameEngine.getHero2().getCreatures().get(3).setAmount(10);
-//
-//        List<Pair> list;
-//        gameEngine.updateDeadCreaturesList();
-//        list = gameEngine.getDeadCreaturesList();
-//
-//        assertThat(list.size()).isEqualTo(3);
-//        assertThat(list.get(0).getCreature()).isEqualTo(gameEngine.getHero2().getCreatures().get(0));
-//        assertThat(list.get(0).getPoint()).isEqualTo(gameEngine.getCreaturePosition(gameEngine.getHero2().getCreatures().get(0)));
-//        assertThat(list.get(1).getCreature()).isEqualTo(gameEngine.getHero2().getCreatures().get(1));
-//        assertThat(list.get(1).getPoint()).isEqualTo(gameEngine.getCreaturePosition(gameEngine.getHero2().getCreatures().get(1)));
-//        assertThat(list.get(2).getCreature()).isEqualTo(gameEngine.getHero2().getCreatures().get(2));
-//        assertThat(list.get(2).getPoint()).isEqualTo(gameEngine.getCreaturePosition(gameEngine.getHero2().getCreatures().get(2)));
-//    }
 
 }
 

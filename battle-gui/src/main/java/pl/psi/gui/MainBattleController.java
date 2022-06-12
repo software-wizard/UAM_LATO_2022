@@ -88,21 +88,21 @@ public class MainBattleController {
         }
 
         if (x == 4 && y == 8) {
-            var img = new Image("/images/evilFog.png");
+            Image img = new Image("/images/evilFog.png");
             mapTile.setBackground(img);
         }
 
         if (x == 5 && y == 5) {
-            var img = new Image("/images/holyGround.png");
+            Image img = new Image("/images/holyGround.png");
             mapTile.setBackground(img);
         }
     }
 
-    public static void showStage(final String information, final boolean hasSpecial){
-        int SMALL_WIDTH = 250;
-        int SMALL_HEIGHT = 225;
-        int BIG_WIDTH = 360;
-        int BIG_HEIGHT = 355;
+    private static void showStage(final String information, final boolean hasSpecial){
+        final int SMALL_WIDTH = 250;
+        final int SMALL_HEIGHT = 225;
+        final int BIG_WIDTH = 360;
+        final int BIG_HEIGHT = 355;
         Stage newStage = new Stage();
         VBox comp = new VBox();
         Text text = new Text(information);
@@ -167,11 +167,11 @@ public class MainBattleController {
                 if(gameEngine.getCreature(new Point(x1, y1)).isPresent()) {
                     if (gameEngine.getCreature(new Point(x, y)).get().isAlive()) {
                         mapTile.setName("\n\n" + gameEngine.getCreature(new Point(x, y)).get().getAmount());
-                        var img = new Image(gameEngine.getCreature(new Point(x1, y1)).get().getBasicStats().getImagePath());
+                        Image img = new Image(gameEngine.getCreature(new Point(x1, y1)).get().getBasicStats().getImagePath());
                         mapTile.setBackground(img);
                     }
                     else{
-                        var img = new Image("/images/dead.jpg");
+                        Image img = new Image("/images/dead.jpg");
                         mapTile.setBackground(img);
                     }
                 }
@@ -197,11 +197,11 @@ public class MainBattleController {
                 }
                     if (gameEngine.canAttack(new Point(x, y))) {
                         mapTile.setOnMouseEntered(e -> {
-                            var img = new Image(gameEngine.getCreature(new Point(x1,y1)).get().getBasicStats().getCanAttackImagePath());
+                            Image img = new Image(gameEngine.getCreature(new Point(x1,y1)).get().getBasicStats().getCanAttackImagePath());
                             mapTile.setBackground(img);
                         });
                         mapTile.setOnMouseExited(e -> {
-                            var img = new Image(gameEngine.getCreature(new Point(x1,y1)).get().getBasicStats().getImagePath());
+                            Image img = new Image(gameEngine.getCreature(new Point(x1,y1)).get().getBasicStats().getImagePath());
                             mapTile.setBackground(img);
                         });
 
@@ -215,12 +215,12 @@ public class MainBattleController {
 
                     if(gameEngine.canCastSpell(new Point(x,y))){
                         mapTile.setOnMouseEntered(e -> {
-                            var img = new Image(gameEngine.getCreature(new Point(x1,y1)).get().getBasicStats().getCanBuffImagePath());
+                            Image img = new Image(gameEngine.getCreature(new Point(x1,y1)).get().getBasicStats().getCanBuffImagePath());
                             mapTile.setBackground(img);
 
                         });
                         mapTile.setOnMouseExited(e -> {
-                            var img = new Image(gameEngine.getCreature(new Point(x1,y1)).get().getBasicStats().getImagePath());
+                            Image img = new Image(gameEngine.getCreature(new Point(x1,y1)).get().getBasicStats().getImagePath());
                             if(gameEngine.getCreature(new Point(x1,y1)).get().equals(gameEngine.getCurrentCreature())){
                                 img = new Image(gameEngine.getCreature(new Point(x1,y1)).get().getBasicStats().getCurrentImagePath());
                             }

@@ -2,12 +2,12 @@ package pl.psi.creatures;
 
 import java.util.Random;
 
-public class CurseOnHitCreature extends AbstractCreature {
+public class CurseOnHitCreatureDecorator extends AbstractCreature {
 
     private final Creature decorated;
     private final MinimalDamageCalculator minimalDamageCalculator = new MinimalDamageCalculator();
 
-    public CurseOnHitCreature(Creature aDecorated) {
+    public CurseOnHitCreatureDecorator(Creature aDecorated) {
         super(aDecorated);
         decorated = aDecorated;
     }

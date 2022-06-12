@@ -1,12 +1,12 @@
 package pl.psi.creatures;
 
-public class MoreCounterAttacksCreature extends AbstractCreature {
+public class MoreCounterAttacksCreatureDecorator extends AbstractCreature {
 
     private final Creature decorated;
     private int counterAttackCounter;
     private final int maxCounterAttackCounter;
 
-    public MoreCounterAttacksCreature(Creature aDecorated, final int counter) {
+    public MoreCounterAttacksCreatureDecorator(Creature aDecorated, final int counter) {
         super(aDecorated);
         decorated = aDecorated;
         counterAttackCounter = counter;

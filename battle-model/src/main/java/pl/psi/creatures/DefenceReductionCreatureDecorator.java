@@ -1,10 +1,10 @@
 package pl.psi.creatures;
 
-public class DefenceReductionCreature extends AbstractCreature {
+public class DefenceReductionCreatureDecorator extends AbstractCreature {
 
     private final Creature decorated;
 
-    public DefenceReductionCreature(Creature aDecorated, final double aFactor) {
+    public DefenceReductionCreatureDecorator(Creature aDecorated, final double aFactor) {
         super(aDecorated);
         decorated = aDecorated;
         decorated.setCalculator(new ReducedDefenceCalculator(aFactor));

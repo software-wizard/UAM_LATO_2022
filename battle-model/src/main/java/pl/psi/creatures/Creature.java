@@ -112,7 +112,7 @@ public class Creature implements PropertyChangeListener, Comparable<Creature> {
         }
     }
 
-    public void increaseStats(CreatureStatisticIf statIncrease) {
+    public void increaseStats(final CreatureStatisticIf statIncrease) {
         externalStats.addStats(statIncrease);
     }
 
@@ -182,7 +182,7 @@ public class Creature implements PropertyChangeListener, Comparable<Creature> {
         applyDamage(this, damage * spellDamageReduction);
     }
 
-    protected void heal(double healAmount) {
+    protected void heal(final double healAmount) {
         setCurrentHp((getCurrentHp() + healAmount));
         addUnits(calculateAmount());
         setCurrentHp(calculateCurrentHp());
@@ -228,7 +228,7 @@ public class Creature implements PropertyChangeListener, Comparable<Creature> {
 
     public void setInMelee(final boolean value){}
 
-    public void buff(CreatureStatisticIf statsToAdd) {
+    public void buff(final CreatureStatisticIf statsToAdd) {
         buffedStats.addStats(statsToAdd);
     }
 
@@ -273,6 +273,14 @@ public class Creature implements PropertyChangeListener, Comparable<Creature> {
 
     public double getMoveRange() {
         return getStats().getMoveRange();
+    }
+
+    public int getSize(){
+        return getBasicStats().getSize();
+    }
+
+    public boolean isGround(){
+        return getBasicStats().isGround();
     }
 
     public String getShotsAmount(){

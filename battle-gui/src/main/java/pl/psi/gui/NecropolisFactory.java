@@ -25,12 +25,12 @@ public class NecropolisFactory
                     Creature wight = new Creature.Builder().statistic( CreatureStatistic.WIGHT )
                             .amount( aAmount )
                             .build();
-                    return new SelfHealAfterTurnCreature( wight );
+                    return new SelfHealAfterTurnCreatureDecorator( wight );
                 case 4:
                     Creature decorated = new Creature.Builder().statistic( CreatureStatistic.VAMPIRE )
                             .amount( aAmount )
                             .build();
-                    return new NoCounterCreature( decorated );
+                    return new NoCounterCreatureDecorator( decorated );
                 case 5:
                     Creature creature = new Creature.Builder().statistic( CreatureStatistic.LICH )
                             .amount( aAmount )
@@ -41,13 +41,13 @@ public class NecropolisFactory
                             area[i][j] = 1;
                         }
                     }
-                    AreaDamageOnAttackCreature areaDamageOnAttackCreature = new AreaDamageOnAttackCreature( creature,area );
-                    return new Lich( areaDamageOnAttackCreature,12);
+                    AreaDamageOnAttackCreatureDecorator areaDamageOnAttackCreature = new AreaDamageOnAttackCreatureDecorator( creature,area );
+                    return new LichDecorator( areaDamageOnAttackCreature,12);
                 case 6:
                     Creature blackKnight = new Creature.Builder().statistic( CreatureStatistic.BLACK_KNIGHT )
                             .amount( aAmount )
                             .build();
-                    return new CurseOnHitCreature( blackKnight );
+                    return new CurseOnHitCreatureDecorator( blackKnight );
                 case 7:
                     return new Creature.Builder().statistic( CreatureStatistic.BONE_DRAGON )
                             .amount( aAmount )
@@ -68,18 +68,18 @@ public class NecropolisFactory
                     Creature zombie = new Creature.Builder().statistic( CreatureStatistic.ZOMBIE )
                             .amount( aAmount )
                             .build();
-                    return new DiseaseOnHitCreature( zombie );
+                    return new DiseaseOnHitCreatureDecorator( zombie );
                 case 3:
                     Creature wraith = new Creature.Builder().statistic( CreatureStatistic.WRAITH )
                             .amount( aAmount )
                             .build();
-                    return new SelfHealAfterTurnCreature( wraith );
+                    return new SelfHealAfterTurnCreatureDecorator( wraith );
                 case 4:
                     Creature decorated = new Creature.Builder().statistic( CreatureStatistic.VAMPIRE_LORD )
                             .amount( aAmount )
                             .build();
-                    Creature decoratedNoCounter = new NoCounterCreature( decorated );
-                    return new HealFromAttackCreature( decoratedNoCounter );
+                    Creature decoratedNoCounter = new NoCounterCreatureDecorator( decorated );
+                    return new HealFromAttackCreatureDecorator( decoratedNoCounter );
                 case 5:
                     Creature creature = new Creature.Builder().statistic( CreatureStatistic.POWER_LICH )
                             .amount( aAmount )
@@ -90,19 +90,19 @@ public class NecropolisFactory
                             area[i][j] = 1;
                         }
                     }
-                    AreaDamageOnAttackCreature areaDamageOnAttackCreature = new AreaDamageOnAttackCreature( creature,area );
-                    return new Lich( areaDamageOnAttackCreature,24);
+                    AreaDamageOnAttackCreatureDecorator areaDamageOnAttackCreature = new AreaDamageOnAttackCreatureDecorator( creature,area );
+                    return new LichDecorator( areaDamageOnAttackCreature,24);
                 case 6:
                     Creature blackKnight = new Creature.Builder().statistic( CreatureStatistic.DREAD_KNIGHT )  // if making dread knight by hand remember to first do double damage then curse on hit
                             .amount( aAmount )
                             .build();
-                    DoubleDamageOnHitCreature dreadKnight = new DoubleDamageOnHitCreature( blackKnight );
-                    return new CurseOnHitCreature( dreadKnight );
+                    DoubleDamageOnHitCreatureDecorator dreadKnight = new DoubleDamageOnHitCreatureDecorator( blackKnight );
+                    return new CurseOnHitCreatureDecorator( dreadKnight );
                 case 7:
                     Creature ghostDragon = new Creature.Builder().statistic( CreatureStatistic.GHOST_DRAGON )
                             .amount( aAmount )
                             .build();
-                    return new AgeOnHitCreature( ghostDragon );
+                    return new AgeOnHitCreatureDecorator( ghostDragon );
                 default:
                     throw new IllegalArgumentException( EXCEPTION_MESSAGE );
             }

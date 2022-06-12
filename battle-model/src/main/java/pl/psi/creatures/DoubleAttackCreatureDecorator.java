@@ -1,10 +1,10 @@
 package pl.psi.creatures;
 
 
-public class DoubleAttackCreature extends AbstractCreature {
+public class DoubleAttackCreatureDecorator extends AbstractCreature {
     private final Creature decorated;
 
-    public DoubleAttackCreature(Creature aDecorated) {
+    public DoubleAttackCreatureDecorator(Creature aDecorated) {
         super(aDecorated);
         decorated = aDecorated;
     }

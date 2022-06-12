@@ -20,11 +20,11 @@ public class Board {
         addCreatures(aCreatures2, MAX_WITDH);
     }
 
-    public boolean canCreatureAttackAnyone(Creature creature) {
+    public boolean canCreatureAttackAnyone(Creature aCreature) {
         for (int x = 0; x < 15; x++) {
             for (int y = 0; y < 10; y++) {
                 Point point = new Point(x, y);
-                if (getCreature(point).isPresent() && !getCreature(point).get().getName().equals(creature.getName()) && canAttack(creature, point) && getCreature(point).get().isAlive()) {
+                if (getCreature(point).isPresent() && !getCreature(point).get().getName().equals(aCreature.getName()) && canAttack(aCreature, point) && getCreature(point).get().isAlive()) {
                     return true;
                 }
             }
@@ -90,17 +90,17 @@ public class Board {
         return map.inverse().get(aCreature);
     }
 
-    List<Point> getAdjacentPositions(final Point point) {
+    List<Point> getAdjacentPositions(final Point aPoint) {
         List<Point> positionsList = new ArrayList<>();
-        if(point != null){
-            Point adjacentPoint1 = new Point(point.getX() - 1, point.getY() + 1);
-            Point adjacentPoint2 = new Point(point.getX(), point.getY() + 1);
-            Point adjacentPoint3 = new Point(point.getX() + 1, point.getY() + 1);
-            Point adjacentPoint4 = new Point(point.getX() - 1, point.getY());
-            Point adjacentPoint5 = new Point(point.getX() + 1, point.getY());
-            Point adjacentPoint6 = new Point(point.getX() - 1, point.getY() - 1);
-            Point adjacentPoint7 = new Point(point.getX(), point.getY() - 1);
-            Point adjacentPoint8 = new Point(point.getX() + 1, point.getY() - 1);
+        if(aPoint != null){
+            Point adjacentPoint1 = new Point(aPoint.getX() - 1, aPoint.getY() + 1);
+            Point adjacentPoint2 = new Point(aPoint.getX(), aPoint.getY() + 1);
+            Point adjacentPoint3 = new Point(aPoint.getX() + 1, aPoint.getY() + 1);
+            Point adjacentPoint4 = new Point(aPoint.getX() - 1, aPoint.getY());
+            Point adjacentPoint5 = new Point(aPoint.getX() + 1, aPoint.getY());
+            Point adjacentPoint6 = new Point(aPoint.getX() - 1, aPoint.getY() - 1);
+            Point adjacentPoint7 = new Point(aPoint.getX(), aPoint.getY() - 1);
+            Point adjacentPoint8 = new Point(aPoint.getX() + 1, aPoint.getY() - 1);
             positionsList.add(adjacentPoint1);
             positionsList.add(adjacentPoint2);
             positionsList.add(adjacentPoint3);
@@ -113,28 +113,28 @@ public class Board {
         return positionsList;
     }
 
-    public List<Point> getCreatureSplashDamagePointsList(Creature creature, Point defender) {
-        Integer[][] area = creature.getSplashDamageRange();
+    public List<Point> getCreatureSplashDamagePointsList(Creature aCreature, Point aDefender) {
+        Integer[][] area = aCreature.getSplashDamageRange();
         List<Point> positionsList = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 if (area[i][j] == 1) {
-                    positionsList.add(new Point(defender.getX() - 1 + j, defender.getY() + 1 - i));
+                    positionsList.add(new Point(aDefender.getX() - 1 + j, aDefender.getY() + 1 - i));
                 }
             }
         }
         return positionsList;
     }
 
-    public List<Point> getPathToPoint(Point startingPoint, Point endPoint) {
+    public List<Point> getPathToPoint(Point aStartingPoint, Point aEndPoint) {
         Point difference;
-        int currentX = startingPoint.getX();
-        int currentY = startingPoint.getY();
+        int currentX = aStartingPoint.getX();
+        int currentY = aStartingPoint.getY();
         List<Point> path = new ArrayList<>();
         while (true) {
-            difference = new Point(currentX - endPoint.getX(), currentY - endPoint.getY());
+            difference = new Point(currentX - aEndPoint.getX(), currentY - aEndPoint.getY());
             difference = difference.normalize();
-            if (currentX == endPoint.getX() && currentY == endPoint.getY()) {
+            if (currentX == aEndPoint.getX() && currentY == aEndPoint.getY()) {
                 break;
             }
             currentX = currentX + difference.getX();
@@ -144,11 +144,10 @@ public class Board {
         return path;
     }
 
-    public void putDeadCreaturesOnBoard(List<Creature> creatureList, List<Point> pointList) {
-        for(int i = 0; i <creatureList.size(); i++){
-            if(map.get(pointList.get(i)) == null){
-                map.put(pointList.get(i), creatureList.get(i));
-            }
+    public void putDeadCreaturesOnBoard(List<Creature> aCreaturesList, List<Point> aPointList) {
+        for(int i = 0; i <aCreaturesList.size(); i++){
+            int finalI = i;
+            map.computeIfAbsent(aPointList.get(i), k -> aCreaturesList.get(finalI));
         }
     }
 }

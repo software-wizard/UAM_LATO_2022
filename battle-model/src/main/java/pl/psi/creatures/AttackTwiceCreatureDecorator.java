@@ -3,9 +3,9 @@ package pl.psi.creatures;
 /**
  * TODO: Describe this class (The first line - until the first dot - will interpret as the brief description).
  */
-class AttackTwiceCreature extends AbstractCreature {
+class AttackTwiceCreatureDecorator extends AbstractCreature {
 
-    public AttackTwiceCreature(final Creature aDecorated) {
+    public AttackTwiceCreatureDecorator(final Creature aDecorated) {
         super(aDecorated);
     }
 

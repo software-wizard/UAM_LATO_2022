@@ -2,11 +2,11 @@ package pl.psi.creatures;
 
 import java.util.Random;
 
-public class AgeOnHitCreature extends AbstractCreature {
+public class AgeOnHitCreatureDecorator extends AbstractCreature {
 
     private final Creature decorated;
 
-    public AgeOnHitCreature(Creature aDecorated) {
+    public AgeOnHitCreatureDecorator(Creature aDecorated) {
         super(aDecorated);
         decorated = aDecorated;
     }

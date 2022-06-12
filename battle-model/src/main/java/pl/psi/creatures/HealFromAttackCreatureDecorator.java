@@ -1,9 +1,9 @@
 package pl.psi.creatures;
 
-public class HealFromAttackCreature extends AbstractCreature {
+public class HealFromAttackCreatureDecorator extends AbstractCreature {
     private final Creature decorated;
 
-    public HealFromAttackCreature(final Creature aDecorated) {
+    public HealFromAttackCreatureDecorator(final Creature aDecorated) {
         super(aDecorated);
         decorated = aDecorated;
     }

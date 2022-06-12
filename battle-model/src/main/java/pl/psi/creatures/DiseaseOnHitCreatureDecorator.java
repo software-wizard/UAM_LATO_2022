@@ -2,11 +2,11 @@ package pl.psi.creatures;
 
 import java.util.Random;
 
-public class DiseaseOnHitCreature extends AbstractCreature {
+public class DiseaseOnHitCreatureDecorator extends AbstractCreature {
 
     private final Creature decorated;
 
-    public DiseaseOnHitCreature(Creature aDecorated) {
+    public DiseaseOnHitCreatureDecorator(Creature aDecorated) {
         super(aDecorated);
         decorated = aDecorated;
     }

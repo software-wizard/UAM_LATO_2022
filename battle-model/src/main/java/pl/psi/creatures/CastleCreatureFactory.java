@@ -25,8 +25,8 @@ public class CastleCreatureFactory {
                             area[i][j] = 1;
                         }
                     }
-                    AreaDamageOnAttackCreature areaDamageOnAttackCreature = new AreaDamageOnAttackCreature( creature,area );
-                    return new ShooterCreature( areaDamageOnAttackCreature, 24 );
+                    AreaDamageOnAttackCreatureDecorator areaDamageOnAttackCreature = new AreaDamageOnAttackCreatureDecorator( creature,area );
+                    return new ShooterCreatureDecorator( areaDamageOnAttackCreature, 24 );
                 case 3:
                     return new Creature.Builder().statistic(CreatureStatistic.GRIFFIN)
                             .amount(aAmount)
@@ -39,7 +39,7 @@ public class CastleCreatureFactory {
                     Creature creature2 = new Creature.Builder().statistic(CreatureStatistic.MONK)
                             .amount(aAmount)
                             .build();
-                    return new ShooterCreature( creature2, 12 );
+                    return new ShooterCreatureDecorator( creature2, 12 );
             }
         } else {
             switch (aTier) {
@@ -51,7 +51,7 @@ public class CastleCreatureFactory {
                     Creature creature = new Creature.Builder().statistic(CreatureStatistic.MARKSMAN)
                             .amount(aAmount)
                             .build();
-                    return new ShooterCreature( creature, 24 );
+                    return new ShooterCreatureDecorator( creature, 24 );
                 case 3:
                     return new Creature.Builder().statistic(CreatureStatistic.ROYAL_GRIFFIN)
                             .amount(aAmount)
@@ -64,7 +64,7 @@ public class CastleCreatureFactory {
                     Creature creature2 = new Creature.Builder().statistic(CreatureStatistic.MONK)
                             .amount(aAmount)
                             .build();
-                    return new ShooterCreature( creature2, 24 );
+                    return new ShooterCreatureDecorator( creature2, 24 );
             }
         }
         throw new IllegalArgumentException("Cannot recognize creature by tier and upgrade or not.");

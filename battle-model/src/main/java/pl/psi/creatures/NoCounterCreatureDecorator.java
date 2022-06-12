@@ -4,10 +4,10 @@ package pl.psi.creatures;
  * This class should always decorate first
  */
 
-public class NoCounterCreature extends AbstractCreature {
+public class NoCounterCreatureDecorator extends AbstractCreature {
     private final Creature decorated;
 
-    public NoCounterCreature(final Creature aDecorated) {
+    public NoCounterCreatureDecorator(final Creature aDecorated) {
         super(aDecorated);
         decorated = aDecorated;
     }

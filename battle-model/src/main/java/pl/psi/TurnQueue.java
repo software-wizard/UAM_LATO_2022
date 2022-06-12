@@ -1,7 +1,6 @@
 package pl.psi;
 
 import pl.psi.creatures.Creature;
-import pl.psi.creatures.ShooterCreature;
 import pl.psi.creatures.WarMachinesAbstract;
 
 import java.beans.PropertyChangeListener;
