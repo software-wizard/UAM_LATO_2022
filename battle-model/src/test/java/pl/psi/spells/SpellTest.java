@@ -22,6 +22,7 @@ public class SpellTest {
     private static final Spell<? extends SpellableIf> MAGIC_ARROW_RANG_2 = new SpellFactory().create(MAGIC_ARROW, ADVANCED, 1);
     private static final Spell<? extends SpellableIf> HASTE_BASIC = new SpellFactory().create(HASTE, BASIC, 1);
     private static final Spell<? extends SpellableIf> HASTE_EXPERT = new SpellFactory().create(HASTE, EXPERT, 1);
+    private static final Spell<? extends SpellableIf> SLOW_BASIC = new SpellFactory().create(SLOW, BASIC, 1);
     private static final Spell<? extends SpellableIf> SLOW_EXPERT = new SpellFactory().create(SLOW, EXPERT, 1);
     private static final Spell<? extends SpellableIf> FIREBALL = new SpellFactory().create(FIRE_BALL, BASIC, 1);
     private static final Spell<? extends SpellableIf> DISPEL_RANG_1 = new SpellFactory().create(DISPEL, BASIC, 1);
@@ -177,6 +178,31 @@ public class SpellTest {
         Assertions.assertThat(gameEngine.getCreature(new Point(14, 2)).get().getCurrentHp()).isEqualTo(89);
     }
 
+    @Test
+    void creatureShouldOnlyHaveThreeRunningSpells() {
+        //given
+        List<Creature> firstHeroCreatures = List.of(EXAMPLE_CREATURE_1);
+        List<Creature> secondHeroCreatures = List.of(EXAMPLE_CREATURE_2);
+
+        final GameEngine gameEngine =
+                new GameEngine(new Hero(firstHeroCreatures, List.of(HASTE_BASIC)),
+                        new Hero(secondHeroCreatures, List.of(MAGIC_ARROW_RANG_1)));
+
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
+                .isPresent()).isTrue();
+
+        //when
+        gameEngine.castSpell(new Point(14, 1), HASTE_BASIC);
+        gameEngine.castSpell(new Point(14, 1), HASTE_BASIC);
+        gameEngine.castSpell(new Point(14, 1), HASTE_BASIC);
+        gameEngine.castSpell(new Point(14, 1), HASTE_BASIC);
+
+        //then
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
+                .get().getRunningSpells().size()).isLessThanOrEqualTo(3);
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
+                .get().getBuffedStats().getMoveRange()).isEqualTo(30);
+    }
 
     @Test
     void shouldTakeAppropriateDamageDependedOnRang() {
@@ -386,31 +412,6 @@ public class SpellTest {
         Assertions.assertThat(gameEngine.getCreature(new Point(14, 1)).get().getBuffedStats().getMoveRange()).isEqualTo(10);
     }
 
-    @Test
-    void creatureShouldOnlyHaveThreeRunningSpells() {
-        //given
-        List<Creature> firstHeroCreatures = List.of(EXAMPLE_CREATURE_1);
-        List<Creature> secondHeroCreatures = List.of(EXAMPLE_CREATURE_2);
-
-        final GameEngine gameEngine =
-                new GameEngine(new Hero(firstHeroCreatures, List.of(HASTE_BASIC)),
-                        new Hero(secondHeroCreatures, List.of(MAGIC_ARROW_RANG_1)));
-
-        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
-                .isPresent()).isTrue();
-
-        //when
-        gameEngine.castSpell(new Point(14, 1), HASTE_BASIC);
-        gameEngine.castSpell(new Point(14, 1), HASTE_BASIC);
-        gameEngine.castSpell(new Point(14, 1), HASTE_BASIC);
-        gameEngine.castSpell(new Point(14, 1), HASTE_BASIC);
-
-        //then
-        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
-                .get().getRunningSpells().size()).isLessThanOrEqualTo(3);
-        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
-                .get().getBuffedStats().getMoveRange()).isEqualTo(30);
-    }
 
     @Test
     void shouldUnCastTheOldestSpellAndCastNew() {
@@ -419,6 +420,30 @@ public class SpellTest {
 
     @Test
     void shouldUnCastHasteAndCastSlow() {
+        //given
+        List<Creature> firstHeroCreatures = List.of(EXAMPLE_CREATURE_1);
+        List<Creature> secondHeroCreatures = List.of(EXAMPLE_CREATURE_2);
+
+        final GameEngine gameEngine =
+                new GameEngine(new Hero(firstHeroCreatures, List.of(HASTE_BASIC, SLOW_BASIC)),
+                        new Hero(secondHeroCreatures, List.of(MAGIC_ARROW_RANG_1)));
+
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
+                .isPresent()).isTrue();
+
+        //when
+        gameEngine.castSpell(new Point(14, 1), HASTE_BASIC);
+        gameEngine.castSpell(new Point(14, 1), SLOW_BASIC);
+        System.out.println(gameEngine.getCreature(new Point(14, 1)).get().getRunningSpells());
+
+        //then
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1)).get().getBuffedStats().getMoveRange()).isEqualTo(-10);
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1)).get().getRunningSpells()).hasSize(1).isEqualTo(List.of(SLOW_BASIC));
+
+    }
+
+    @Test
+    void roundTimerShouldRemoveSpellFromRunningSpellsQueue() {
 
     }
 

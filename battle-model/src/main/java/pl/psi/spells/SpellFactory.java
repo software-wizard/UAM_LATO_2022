@@ -3,7 +3,7 @@ package pl.psi.spells;
 import pl.psi.creatures.CreatureStats;
 
 import static pl.psi.spells.SpellMagicClass.*;
-import static pl.psi.spells.SpellNames.MAGIC_ARROW;
+import static pl.psi.spells.SpellNames.*;
 import static pl.psi.spells.SpellRang.*;
 import static pl.psi.spells.SpellTypes.*;
 
@@ -28,22 +28,22 @@ public class SpellFactory {
             case HASTE:
                 switch (rang) {
                     case BASIC:
-                        return new BuffDebuffSpell(FIELD, name, AIR, BASIC, 10, CreatureStats.builder().moveRange(10).build(), 2);
+                        return new BuffDebuffSpell(FIELD, name, AIR, BASIC, 10, CreatureStats.builder().moveRange(10).build(), 2, SLOW);
                     case ADVANCED:
-                        return new BuffDebuffSpell(FIELD, name, AIR, ADVANCED, 15, CreatureStats.builder().moveRange(20).build(), 4);
+                        return new BuffDebuffSpell(FIELD, name, AIR, ADVANCED, 15, CreatureStats.builder().moveRange(20).build(), 4, SLOW);
                     case EXPERT:
-                        return new BuffDebuffSpell(FOR_ALL_ALLIED_CREATURES, name, AIR, EXPERT, 20, CreatureStats.builder().moveRange(30).build(), 2);
+                        return new BuffDebuffSpell(FOR_ALL_ALLIED_CREATURES, name, AIR, EXPERT, 20, CreatureStats.builder().moveRange(30).build(), 2, SLOW);
                     default:
                         throw new IllegalArgumentException(EXCEPTION_MESSAGE);
                 }
             case SLOW:
                 switch (rang) {
                     case BASIC:
-                        return new BuffDebuffSpell(FIELD, name, EARTH, BASIC, 10, CreatureStats.builder().moveRange(-10).build(), 2); // ToDo: change to procentage damage
+                        return new BuffDebuffSpell(FIELD, name, EARTH, BASIC, 10, CreatureStats.builder().moveRange(-10).build(), 2, HASTE); // ToDo: change to procentage damage
                     case ADVANCED:
-                        return new BuffDebuffSpell(FIELD, name, EARTH, ADVANCED,  15, CreatureStats.builder().moveRange(-20).build(), 4);
+                        return new BuffDebuffSpell(FIELD, name, EARTH, ADVANCED,  15, CreatureStats.builder().moveRange(-20).build(), 4, HASTE);
                     case EXPERT:
-                        return new BuffDebuffSpell(FOR_ALL_ENEMY_CREATURES, name, EARTH, EXPERT, 20, CreatureStats.builder().moveRange(-30).build(), 2);
+                        return new BuffDebuffSpell(FOR_ALL_ENEMY_CREATURES, name, EARTH, EXPERT, 20, CreatureStats.builder().moveRange(-30).build(), 2, HASTE);
                     default:
                         throw new IllegalArgumentException(EXCEPTION_MESSAGE);
                 }

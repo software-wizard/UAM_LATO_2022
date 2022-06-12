@@ -18,7 +18,7 @@ public class AreaBuffDebuffSpell extends Spell<SpellCreatureList> {
 
     @Override
     public void castSpell(SpellCreatureList spellCreatureList, BiConsumer<String, PropertyChangeListener> consumer) {
-        spellCreatureList.getCreatureList().forEach(creature -> creature.applyStatsWithSpells(creatureStats));
+        spellCreatureList.getCreatureList().forEach(creature -> creature.buff(creatureStats));
     }
 
     @Override

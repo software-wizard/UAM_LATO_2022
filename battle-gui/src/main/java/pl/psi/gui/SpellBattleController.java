@@ -2,8 +2,11 @@ package pl.psi.gui;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 import pl.psi.GameEngine;
 import pl.psi.spells.Spell;
 
@@ -32,6 +35,7 @@ public class SpellBattleController {
 
     @FXML
     private void initialize() {
+
         List<? extends Spell> spells = gameEngine.getCurrentHero().getSpells();
         for(int i = 0; i < spells.size(); i++){
             final int i1 = i;
@@ -42,9 +46,12 @@ public class SpellBattleController {
             button.setMaxHeight(Double.MAX_VALUE);
             GridPane.setFillHeight(button, true);
             button.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+                Stage stage = (Stage) panel.getScene().getWindow();
                 gameEngine.getCurrentHero().setHeroCastingSpell(true);
                 observerSupport.firePropertyChange(SPELL_SELECTED, null, spells.get(i1));
+                stage.close();
             });
+
             panel.add(button, i,0);
         }
     }

@@ -378,25 +378,6 @@ public class Creature implements PropertyChangeListener, Comparable<Creature>, S
         currentHp = aCurrentHp;
     }
 
-    public void applyStatsWithSpells(CreatureStats aCreatureStats) {
-        setStatsWithSpells(CreatureStats.builder()
-                .attack((buffedStats == null) ? aCreatureStats.getAttack() : buffedStats.getAttack() + aCreatureStats.getAttack())
-                .armor((buffedStats == null) ? aCreatureStats.getArmor() : buffedStats.getArmor() + aCreatureStats.getArmor())
-                .moveRange((buffedStats == null) ? aCreatureStats.getMoveRange() : buffedStats.getMoveRange() + aCreatureStats.getMoveRange())
-                .build());
-    }
-
-    private void setStatsWithSpells(CreatureStats aStatsWithSpells) {
-        buffedStats = aStatsWithSpells;
-    }
-
-    public int getSpellCastCounter() {
-        return 0;
-    }
-
-    public void reduceNumberOfSpellCasts() {
-    }
-
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
         if (TurnQueue.END_OF_TURN.equals(evt.getPropertyName())) {

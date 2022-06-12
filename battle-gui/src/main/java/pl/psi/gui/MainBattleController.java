@@ -11,6 +11,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.OverrunStyle;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
@@ -18,6 +20,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import pl.psi.GameEngine;
 import pl.psi.Hero;
@@ -31,6 +34,7 @@ import static pl.psi.gui.SpellBattleController.SPELL_SELECTED;
 import static pl.psi.spells.SpellRang.BASIC;
 import pl.psi.TurnQueue;
 import pl.psi.spells.Spell;
+import pl.psi.spells.SpellTypes;
 import pl.psi.spells.SpellableIf;
 
 import java.beans.PropertyChangeEvent;
@@ -39,6 +43,7 @@ import java.io.IOException;
 import java.util.List;
 
 import static pl.psi.gui.SpellBattleController.SPELL_SELECTED;
+import static pl.psi.spells.SpellTypes.FOR_ALL_CREATURES;
 
 public class MainBattleController implements PropertyChangeListener {
 
@@ -88,16 +93,14 @@ public class MainBattleController implements PropertyChangeListener {
                         .getResource("fxml/spell-battle.fxml"));
                 loader.setController(spellBattleController);
                 scene = new Scene(loader.load());
+                stage.initModality(Modality.WINDOW_MODAL);
+                stage.initOwner(gridMap.getScene().getWindow());
                 stage.setScene(scene);
                 stage.show();
             } catch (final IOException aE) {
                 aE.printStackTrace();
             }
-            spellBattleController.addObserver(SPELL_SELECTED, (f) -> {
-                refreshGui();
-                selectedSpell = (Spell) f.getNewValue();
-                stage.close();
-            });
+            spellBattleController.addObserver(SPELL_SELECTED, this);
         });
 
         waitButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
@@ -253,17 +256,14 @@ public class MainBattleController implements PropertyChangeListener {
 
                     mapTile.addEventHandler(MouseEvent.MOUSE_CLICKED,
                             e -> {
-                                gameEngine.getCreature(new Point(x1, y1)).ifPresent(
-                                        creature -> {
-                                            gameEngine.getCurrentHero().setHeroCastingSpell(false);
-                                            if (selectedSpell != null) {
-                                                gameEngine.castSpell(new Point(x1, y1), selectedSpell);
-                                                spellButton.setDisable(true);
-                                                gameEngine.getCurrentHero().setHeroCastedSpell(true);
-                                            }
-                                            mapTile.getScene().setCursor(Cursor.DEFAULT);
-                                            refreshGui();
-                                        });
+                                if (e.getButton() == MouseButton.PRIMARY) {
+                                    gameEngine.getCreature(new Point(x1, y1)).ifPresent(
+                                            creature -> {
+                                                castSpell(new Point(x1, y1));
+                                                mapTile.getScene().setCursor(Cursor.DEFAULT);
+                                                refreshGui();
+                                            });
+                                }
                             });
                 }
 
@@ -328,12 +328,19 @@ public class MainBattleController implements PropertyChangeListener {
                 waitButton.setDisable(!gameEngine.allActionsLeft());
                 defendButton.setDisable(!gameEngine.allActionsLeft());
 
+                gridMap.add(mapTile, x, y);
                 gridMap.add(mapTile, x1, y1);
             }
         }
     }
-}
 
+    private void castSpell(Point point) {
+        gameEngine.getCurrentHero().setHeroCastingSpell(false);
+        if (selectedSpell != null) {
+            gameEngine.castSpell(point, selectedSpell);
+            spellButton.setDisable(true);
+            gameEngine.getCurrentHero().setHeroCastedSpell(true);
+        }
     }
 
     @Override
@@ -342,8 +349,25 @@ public class MainBattleController implements PropertyChangeListener {
             gameEngine.getHero1().setHeroCastedSpell(false);
             gameEngine.getHero2().setHeroCastedSpell(false);
             refreshGui();
-        }else if (TurnQueue.NEXT_CREATURE.equals(evt.getPropertyName())){
+        } else if (TurnQueue.NEXT_CREATURE.equals(evt.getPropertyName())) {
             spellButton.setDisable(gameEngine.getCurrentHero().isHeroCastedSpell());
+        } else if (SPELL_SELECTED.equals(evt.getPropertyName())) {
+            selectedSpell = (Spell<? extends SpellableIf>) evt.getNewValue();
+
+            gridMap.getScene().addEventHandler(KeyEvent.KEY_PRESSED, f -> {
+                if (f.getCode() == KeyCode.ESCAPE) {
+                    System.out.println("ESC");
+                    gameEngine.getCurrentHero().setHeroCastingSpell(false);
+                    gridMap.getScene().setCursor(Cursor.DEFAULT);
+                    refreshGui();
+                }
+            });
+
+            if (selectedSpell.getCategory().equals(FOR_ALL_CREATURES)) {
+                castSpell(null);
+            } else {
+                refreshGui();
+            }
         }
     }
 }
