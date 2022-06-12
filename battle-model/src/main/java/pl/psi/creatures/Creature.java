@@ -10,7 +10,6 @@ import com.google.common.collect.Range;
 import lombok.Getter;
 import lombok.Setter;
 import pl.psi.TurnQueue;
-import pl.psi.spells.BuffDebuffSpell;
 import pl.psi.spells.Spell;
 import pl.psi.spells.SpellCreatureList;
 import pl.psi.spells.SpellableIf;
@@ -21,6 +20,7 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.function.BiConsumer;
 
 /**
  * TODO: Describe this class (The first line - until the first dot - will interpret as the brief description).
@@ -107,18 +107,15 @@ public class Creature implements PropertyChangeListener, Comparable<Creature>, S
         aDefender.setCurrentHp(calculateCurrentHp(aDefender));
     }
 
-
-    public void castSpell(final Creature aDefender, Spell spell) {
+    public void castSpell(final Creature aDefender, Spell spell, BiConsumer<String, PropertyChangeListener> consumer) {
         if (isAlive()) {
-            if (spell.getClass() == BuffDebuffSpell.class) runningSpells.add(spell);
-
-            spell.castSpell(aDefender);
+            spell.castSpell(aDefender, consumer);
         }
     }
 
-    public void castSpell(final SpellCreatureList aDefender, Spell spell) {
+    public void castSpell(final SpellCreatureList aDefender, Spell spell, BiConsumer<String, PropertyChangeListener> consumer) {
         if (isAlive()) {
-            spell.castSpell(aDefender);
+            spell.castSpell(aDefender, consumer);
         }
     }
 
@@ -420,6 +417,10 @@ public class Creature implements PropertyChangeListener, Comparable<Creature>, S
     }
 
     public void addShots(int i) {
+    }
+
+    public void addRunningSpell(Spell<? extends SpellableIf> spell) {
+        runningSpells.add(spell);
     }
 
     public boolean canCastSpell() {

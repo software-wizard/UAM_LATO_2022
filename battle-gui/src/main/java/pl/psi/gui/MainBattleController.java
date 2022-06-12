@@ -33,12 +33,14 @@ import pl.psi.TurnQueue;
 import pl.psi.spells.Spell;
 import pl.psi.spells.SpellableIf;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.List;
 
 import static pl.psi.gui.SpellBattleController.SPELL_SELECTED;
 
-public class MainBattleController {
+public class MainBattleController implements PropertyChangeListener {
 
     private final GameEngine gameEngine;
     @FXML
@@ -61,6 +63,7 @@ public class MainBattleController {
 
     public MainBattleController(final Hero aHero1, final Hero aHero2) {
         gameEngine = new GameEngine(aHero1, aHero2);
+        gameEngine.addObserverToTurnQueue(TurnQueue.END_OF_TURN, this);
     }
 
     @FXML
@@ -331,3 +334,16 @@ public class MainBattleController {
     }
 }
 
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        if (TurnQueue.END_OF_TURN.equals(evt.getPropertyName())) {
+            gameEngine.getHero1().setHeroCastedSpell(false);
+            gameEngine.getHero2().setHeroCastedSpell(false);
+            refreshGui();
+        }else if (TurnQueue.NEXT_CREATURE.equals(evt.getPropertyName())){
+            spellButton.setDisable(gameEngine.getCurrentHero().isHeroCastedSpell());
+        }
+    }
+}

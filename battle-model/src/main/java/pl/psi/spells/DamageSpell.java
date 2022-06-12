@@ -2,6 +2,9 @@ package pl.psi.spells;
 
 import pl.psi.creatures.Creature;
 
+import java.beans.PropertyChangeListener;
+import java.util.function.BiConsumer;
+
 public class DamageSpell extends Spell<Creature> {
 
     private final Integer value;
@@ -12,7 +15,7 @@ public class DamageSpell extends Spell<Creature> {
     }
 
     @Override
-    public void castSpell(Creature aDefender) {
+    public void castSpell(Creature aDefender, BiConsumer<String, PropertyChangeListener> consumer) {
         aDefender.applySpellDamage(aDefender, value);
     }
 

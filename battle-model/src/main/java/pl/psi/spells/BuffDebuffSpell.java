@@ -1,8 +1,12 @@
 package pl.psi.spells;
 
 import lombok.Getter;
+import pl.psi.TurnQueue;
 import pl.psi.creatures.Creature;
 import pl.psi.creatures.CreatureStats;
+
+import java.beans.PropertyChangeListener;
+import java.util.function.BiConsumer;
 
 
 public class BuffDebuffSpell extends Spell<Creature> {
@@ -18,7 +22,7 @@ public class BuffDebuffSpell extends Spell<Creature> {
         this.time = time;
     }
 
-    public BuffDebuffSpell(BuffDebuffSpell buffDebuffSpell, Creature creature) {
+    private BuffDebuffSpell(BuffDebuffSpell buffDebuffSpell, Creature creature) {
         super(buffDebuffSpell.getCategory(), buffDebuffSpell.getName(), buffDebuffSpell.getSpellMagicClass(), buffDebuffSpell.getRang(), buffDebuffSpell.getManaCost());
         this.creatureStats = buffDebuffSpell.creatureStats;
         this.time = buffDebuffSpell.time;
@@ -26,9 +30,12 @@ public class BuffDebuffSpell extends Spell<Creature> {
     }
 
     @Override
-    public void castSpell(Creature aDefender) {
-        aDefender.buff(creatureStats);
-        spellTimer.put(aDefender, timer);
+    public void castSpell(Creature aDefender, BiConsumer<String, PropertyChangeListener> consumer) {
+        if (aDefender.getRunningSpells().size() < 3) aDefender.addRunningSpell(this);
+        else return;
+        BuffDebuffSpell buffDebuffSpell = new BuffDebuffSpell(this, aDefender);
+        consumer.accept(TurnQueue.END_OF_TURN, buffDebuffSpell.getRoundTimer());
+        aDefender.applyStatsWithSpells(creatureStats);
     }
 
     private CreatureStats convertToNegative(CreatureStats creatureStats) { // ToDo: find better way to do this if it possible
@@ -43,4 +50,5 @@ public class BuffDebuffSpell extends Spell<Creature> {
     public void unCastSpell(Creature creature) {
         creature.applyStatsWithSpells(convertToNegative(creatureStats));
     }
+
 }

@@ -14,11 +14,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.lang.Math.ceil;
-import static pl.psi.TurnQueue.END_OF_TURN;
+import static pl.psi.spells.SpellRang.BASIC;
 
 /**
  * TODO: Describe this class (The first line - until the first dot - will interpret as the brief description).
@@ -292,49 +293,35 @@ public class GameEngine {
         return (hero1.getCreatures().contains(turnQueue.getCurrentCreature())) ? hero2 : hero1;
     }
 
+
     public void castSpell(final Point point, Spell<? extends SpellableIf> spell) {
+        BiConsumer<String, PropertyChangeListener> biConsumer = this::addObserverToTurnQueue;
         switch (spell.getCategory()) {
             case FIELD:
-                board.getCreature(point)
-                        .ifPresent(defender -> {
-                            if (spell instanceof BuffDebuffSpell) {
-                                BuffDebuffSpell buffDebuffSpell = new BuffDebuffSpell((BuffDebuffSpell) spell, defender);
-                                turnQueue.addObserver(END_OF_TURN, (buffDebuffSpell.getRoundTimer()));
-                                turnQueue.getCurrentCreature().castSpell(defender, buffDebuffSpell);
-                            } else if ((spell instanceof Dispel) && (spell.getRang() == SpellRang.BASIC)) {
-                                if (isCreatureAllied()) {
-                                    turnQueue.getCurrentCreature()
-                                            .castSpell(defender, spell);
-                                } else {
-                                    System.out.println("You can't cast basic dispel on this creature!"); // change to Sl4j
-                                }
-                            } else {
-                                turnQueue.getCurrentCreature()
-                                        .castSpell(defender, spell);
-                            }
-                        });
+                Optional<Creature> targetCreature = getCreatureFromField(point, spell);
+                targetCreature.ifPresent(creature ->
+                        turnQueue.getCurrentCreature()
+                                .castSpell(creature, spell, biConsumer)
+                );
                 break;
             case AREA:
-                board.getCreature(point)
-                        .ifPresent(defender -> {
-                            SpellCreatureList creatureList = new SpellCreatureList(getCreaturesFromArea(point, (AreaDamageSpell) spell));
-                            turnQueue.getCurrentCreature().castSpell(creatureList, spell);
-                        });
+                SpellCreatureList creatureList = new SpellCreatureList(getCreaturesFromArea(point, (AreaDamageSpell) spell));
+                turnQueue.getCurrentCreature().castSpell(creatureList, spell, biConsumer);
                 break;
             case FOR_ALL_ENEMY_CREATURES:
                 getEnemyHero().getCreatures().forEach(creature -> {
-                    creature.castSpell(creature, spell);
+                    creature.castSpell(creature, spell, biConsumer);
                 });
                 break;
             case FOR_ALL_ALLIED_CREATURES:
                 getCurrentHero().getCreatures().forEach(creature -> {
-                    creature.castSpell(creature, spell);
+                    creature.castSpell(creature, spell, biConsumer);
                 });
                 break;
             case FOR_ALL_CREATURES:
                 Stream.concat(getCurrentHero().getCreatures().stream(), getEnemyHero().getCreatures().stream())
                         .forEach(creature -> {
-                            creature.castSpell(creature, spell);
+                            creature.castSpell(creature, spell, biConsumer);
                         });
                 break;
             default:
@@ -342,11 +329,29 @@ public class GameEngine {
         }
     }
 
-    private boolean isCreatureAllied() {
-        return getCurrentHero().getCreatures().contains(turnQueue.getCurrentCreature());
+    private Optional<Creature> getCreatureFromField(Point point, Spell<? extends SpellableIf> spell) {
+        if (board.getCreature(point).isEmpty()) return Optional.empty();
+
+        Creature creature = null;
+        if ((spell instanceof Dispel) && (spell.getRang() == BASIC)) {
+            if (board.getCreature(point).isPresent()) {
+                if (isCreatureAllied(board.getCreature(point).get())) {
+                    creature = board.getCreature(point).get();
+                }
+            }
+
+        } else {
+            if (board.getCreature(point).isPresent()) {
+                creature = board.getCreature(point).get();
+            }
+        }
+        return Optional.ofNullable(creature);
     }
 
-    //ToDO: In the future think about better solution and refactor this
+    private boolean isCreatureAllied(Creature creature) {
+        return getCurrentHero().getCreatures().contains(creature);
+    }
+
     private List<Creature> getCreaturesFromArea(Point point, AreaDamageSpell areaDamageSpell) {
         List<Creature> creatures = new ArrayList<>();
 

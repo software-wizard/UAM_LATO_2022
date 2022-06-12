@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 public class TurnQueue {
 
     public static final String END_OF_TURN = "END_OF_TURN";
-    public static final String NEXT_CREATURE = "END_OF_TURN";
+    public static final String NEXT_CREATURE = "NEXT_CREATURE";
     private Collection<Creature> creatures;
     private final LinkedList<Creature> creaturesQueue;
     private final LinkedList<Creature> waitingCreaturesQueue;

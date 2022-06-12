@@ -1,9 +1,9 @@
 package pl.psi.spells;
 
 import lombok.Getter;
-import pl.psi.creatures.Creature;
 
-import java.util.List;
+import java.beans.PropertyChangeListener;
+import java.util.function.BiConsumer;
 
 public class AreaDamageSpell extends Spell<SpellCreatureList> {
 
@@ -18,7 +18,7 @@ public class AreaDamageSpell extends Spell<SpellCreatureList> {
     }
 
     @Override
-    public void castSpell(SpellCreatureList creatureList) {
+    public void castSpell(SpellCreatureList creatureList, BiConsumer<String, PropertyChangeListener> consumer) {
         creatureList.getCreatureList().forEach(creature -> creature.applySpellDamage(creature, value));
     }
 

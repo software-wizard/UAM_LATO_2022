@@ -4,6 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.beans.PropertyChangeListener;
+import java.util.function.BiConsumer;
+
 
 @Getter
 @Setter
@@ -24,7 +27,7 @@ public abstract class Spell<T extends SpellableIf>{
         this.manaCost = manaCost;
     }
 
-    public abstract void castSpell(T aDefender);
+    public abstract void castSpell(T aDefender, BiConsumer<String, PropertyChangeListener> consumer);
 
     public abstract void unCastSpell(T aDefender);
 
