@@ -2,7 +2,7 @@ package pl.psi.spells;
 
 public class EconomySpellFactory {
 
-    public EconomySpell create(SpellStats spellStats, SpellRang spellRang, int requiredMagicGuildLevel, int goldCost) {
+    public EconomySpell create(SpellStats spellStats, SpellRang spellRang, int requiredMagicGuildLevel) {
 
         switch (requiredMagicGuildLevel) {
             case 1:

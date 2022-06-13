@@ -36,7 +36,7 @@ public class SpellBattleController {
     @FXML
     private void initialize() {
 
-        List<? extends Spell> spells = gameEngine.getCurrentHero().getSpells();
+        List<? extends Spell> spells = gameEngine.getCurrentHero().getSpellBook().getSpells();
         for(int i = 0; i < spells.size(); i++){
             final int i1 = i;
             String spellName = spells.get(i).getName().getValue();
@@ -47,7 +47,7 @@ public class SpellBattleController {
             GridPane.setFillHeight(button, true);
             button.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
                 Stage stage = (Stage) panel.getScene().getWindow();
-                gameEngine.getCurrentHero().setHeroCastingSpell(true);
+                gameEngine.getCurrentHero().getSpellBook().setHeroCastingSpell(true);
                 observerSupport.firePropertyChange(SPELL_SELECTED, null, spells.get(i1));
                 stage.close();
             });

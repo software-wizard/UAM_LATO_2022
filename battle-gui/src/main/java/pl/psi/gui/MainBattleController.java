@@ -34,6 +34,7 @@ import static pl.psi.gui.SpellBattleController.SPELL_SELECTED;
 import static pl.psi.spells.SpellRang.BASIC;
 import pl.psi.TurnQueue;
 import pl.psi.spells.Spell;
+import pl.psi.spells.SpellRang;
 import pl.psi.spells.SpellTypes;
 import pl.psi.spells.SpellableIf;
 
@@ -43,7 +44,7 @@ import java.io.IOException;
 import java.util.List;
 
 import static pl.psi.gui.SpellBattleController.SPELL_SELECTED;
-import static pl.psi.spells.SpellTypes.FOR_ALL_CREATURES;
+import static pl.psi.spells.SpellTypes.*;
 
 public class MainBattleController implements PropertyChangeListener {
 
@@ -60,6 +61,8 @@ public class MainBattleController implements PropertyChangeListener {
     private Button spellButton;
 
     Spell<? extends SpellableIf> selectedSpell;
+
+    List<SpellTypes> spellNotRequiredPressingMouse = List.of(FOR_ALL_CREATURES, FOR_ALL_ALLIED_CREATURES, FOR_ALL_ENEMY_CREATURES);
 
     @FXML
     private Label console;
@@ -127,7 +130,7 @@ public class MainBattleController implements PropertyChangeListener {
         });
 
         gameEngine.addObserverToTurnQueue(TurnQueue.NEXT_CREATURE, (g) -> {
-            spellButton.setDisable(gameEngine.getCurrentHero().isHeroCastedSpell());
+            spellButton.setDisable(gameEngine.getCurrentHero().getSpellBook().isHeroCastedSpell());
         });
 
         gameEngine.addObserver(GameEngine.CREATURE_MOVED, (e) -> {
@@ -335,35 +338,35 @@ public class MainBattleController implements PropertyChangeListener {
     }
 
     private void castSpell(Point point) {
-        gameEngine.getCurrentHero().setHeroCastingSpell(false);
+        gameEngine.getCurrentHero().getSpellBook().setHeroCastingSpell(false);
         if (selectedSpell != null) {
             gameEngine.castSpell(point, selectedSpell);
             spellButton.setDisable(true);
-            gameEngine.getCurrentHero().setHeroCastedSpell(true);
+            gameEngine.getCurrentHero().getSpellBook().setHeroCastedSpell(true);
         }
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if (TurnQueue.END_OF_TURN.equals(evt.getPropertyName())) {
-            gameEngine.getHero1().setHeroCastedSpell(false);
-            gameEngine.getHero2().setHeroCastedSpell(false);
+            gameEngine.getHero1().getSpellBook().setHeroCastedSpell(false);
+            gameEngine.getHero2().getSpellBook().setHeroCastedSpell(false);
             refreshGui();
         } else if (TurnQueue.NEXT_CREATURE.equals(evt.getPropertyName())) {
-            spellButton.setDisable(gameEngine.getCurrentHero().isHeroCastedSpell());
+            spellButton.setDisable(gameEngine.getCurrentHero().getSpellBook().isHeroCastedSpell());
         } else if (SPELL_SELECTED.equals(evt.getPropertyName())) {
             selectedSpell = (Spell<? extends SpellableIf>) evt.getNewValue();
 
             gridMap.getScene().addEventHandler(KeyEvent.KEY_PRESSED, f -> {
                 if (f.getCode() == KeyCode.ESCAPE) {
                     System.out.println("ESC");
-                    gameEngine.getCurrentHero().setHeroCastingSpell(false);
+                    gameEngine.getCurrentHero().getSpellBook().setHeroCastingSpell(false);
                     gridMap.getScene().setCursor(Cursor.DEFAULT);
                     refreshGui();
                 }
             });
 
-            if (selectedSpell.getCategory().equals(FOR_ALL_CREATURES)) {
+            if (spellNotRequiredPressingMouse.contains(selectedSpell.getCategory())) {
                 castSpell(null);
             } else {
                 refreshGui();

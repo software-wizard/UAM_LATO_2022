@@ -9,6 +9,8 @@ package pl.psi.creatures;
 import com.google.common.collect.Range;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
+import pl.psi.SpellBook;
 import pl.psi.TurnQueue;
 import pl.psi.spells.Spell;
 import pl.psi.spells.SpellCreatureList;
@@ -17,9 +19,7 @@ import pl.psi.spells.SpellRang;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.function.BiConsumer;
 
 /**
@@ -27,13 +27,14 @@ import java.util.function.BiConsumer;
  */
 @Getter
 @Setter
+@ToString
 public class Creature implements PropertyChangeListener, Comparable<Creature>, SpellableIf {
     private CreatureStatisticIf basicStats;
     private CreatureStats externalStats = new CreatureStats.CreatureStatsBuilder().build();
     private CreatureStats buffedStats = new CreatureStats.CreatureStatsBuilder().build();
     private int amount;
     private double currentHp;
-    private boolean canCounterAttack = true;
+    private boolean canCounterAttack = false;
     private DamageCalculatorIf calculator;
     private int heroNumber;
     private double spellDamageReduction = 1;
@@ -41,14 +42,14 @@ public class Creature implements PropertyChangeListener, Comparable<Creature>, S
     private int luck;
     private Alignment alignment;
     private double defenceBonusArmor = 0;
-    private boolean isDefending = false;
+    private boolean isDefending = true;
     private double lastHealAmount;
     private double lastAttackDamage;
     private double lastCounterAttackDamage;
-    private List<Spell> runningSpells;
+    private Queue<Spell> runningSpells;
 
     Creature() {
-        runningSpells = new ArrayList<>();
+        runningSpells = new LinkedList<>();
     }
 
     private Creature(final CreatureStatisticIf aStats, final DamageCalculatorIf aCalculator,
@@ -60,7 +61,7 @@ public class Creature implements PropertyChangeListener, Comparable<Creature>, S
         calculator = aCalculator;
         alignment = aAlignment;
         luck = aLuck;
-        runningSpells = new ArrayList<>();
+        runningSpells = new LinkedList<>();
     }
 
     public void increaseStats(CreatureStatisticIf statIncrease) {
@@ -292,7 +293,7 @@ public class Creature implements PropertyChangeListener, Comparable<Creature>, S
         return canCounterAttack;
     }
 
-    protected void setCanCounterAttack(boolean value) {
+    public void setCanCounterAttack(boolean value) {
         canCounterAttack = value;
     }
 
@@ -419,6 +420,12 @@ public class Creature implements PropertyChangeListener, Comparable<Creature>, S
     public int getSpellPower() {
         return 0;
     }
+
+
+    public boolean isRunningSpellsSlotsFull(){
+        return getRunningSpells().size() < 3;
+    }
+
 
 
     public static class Builder {

@@ -1,5 +1,6 @@
 package pl.psi.spells;
 
+import com.google.common.collect.Range;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import pl.psi.GameEngine;
@@ -66,7 +67,7 @@ public class SpellTest {
 
         //then
         Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
-                .get().getCurrentHp()).isEqualTo(65);
+                .get().getCurrentHp()).isEqualTo(80);
     }
 
     @Test
@@ -90,6 +91,85 @@ public class SpellTest {
         //then
         Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
                 .get().getBuffedStats().getMoveRange()).isEqualTo(10); // ToDo: change to checking get summed up stats
+    }
+
+    @Test
+    void creatureShouldHaveSecondCounterAttackWhenCounterstrikeCasted() {
+        //when
+        Spell<? extends SpellableIf> counterstrike = new SpellFactory().create(COUNTERSTRIKE, BASIC, 1);
+
+        Creature creature1 = new Creature.Builder()
+                .statistic(
+                        CreatureStats.builder()
+                                .damage(Range.closed(10, 10))
+                                .attack(50)
+                                .moveRange(25)
+                                .maxHp(200)
+                                .build())
+                .build();
+        Creature creature2 = new Creature.Builder()
+                .statistic(
+                        CreatureStats.builder()
+                                .damage(Range.closed(10, 10))
+                                .attack(50)
+                                .moveRange(25)
+                                .maxHp(100)
+                                .build())
+                .build();
+        Creature creature3 = new Creature.Builder()
+                .statistic(
+                        CreatureStats.builder()
+                                .damage(Range.closed(10, 10))
+                                .attack(50)
+                                .moveRange(25)
+                                .maxHp(100)
+                                .build())
+                .build();
+        Creature creature4 = new Creature.Builder()
+                .statistic(
+                        CreatureStats.builder()
+                                .damage(Range.closed(10, 10))
+                                .attack(50)
+                                .moveRange(25)
+                                .maxHp(100)
+                                .build())
+                .build();
+
+        final GameEngine gameEngine =
+                new GameEngine(new Hero(List.of(creature1), List.of(counterstrike)),
+                        new Hero(List.of(creature2, creature3, creature4), List.of(MAGIC_ARROW_RANG_1)));
+
+        gameEngine.move(new Point(8, 2));
+        gameEngine.move(new Point(8, 1));
+        gameEngine.move(new Point(9, 2));
+        gameEngine.move(new Point(8, 3));
+
+        Assertions.assertThat(gameEngine.getCreature(new Point(8, 2))
+                .isPresent()).isTrue();
+        Assertions.assertThat(gameEngine.getCreature(new Point(8, 1))
+                .isPresent()).isTrue();
+        Assertions.assertThat(gameEngine.getCreature(new Point(9, 2))
+                .isPresent()).isTrue();
+        Assertions.assertThat(gameEngine.getCreature(new Point(8, 3))
+                .isPresent()).isTrue();
+
+
+        //when
+        gameEngine.castSpell(new Point(8, 2), counterstrike);
+
+        gameEngine.pass();
+        creature2.attack(creature1);
+        gameEngine.pass();
+        creature3.attack(creature1);// ?????
+        gameEngine.pass();
+        creature4.attack(creature1);
+
+        //then
+        Assertions.assertThat(gameEngine.getCreature(new Point(8, 2)).get().getCurrentHp()).isEqualTo(95);
+        Assertions.assertThat(gameEngine.getCreature(new Point(8, 1)).get().getCurrentHp()).isEqualTo(65);
+        Assertions.assertThat(gameEngine.getCreature(new Point(9, 2)).get().getCurrentHp()).isEqualTo(65);
+        Assertions.assertThat(gameEngine.getCreature(new Point(8, 3)).get().getCurrentHp()).isEqualTo(100);
+
     }
 
 
@@ -237,8 +317,8 @@ public class SpellTest {
 
 
         //then
-        Assertions.assertThat(gameEngine.getCreature(new Point(14, 2)).get().getCurrentHp()).isEqualTo(65);
-        Assertions.assertThat(gameEngine.getCreature(new Point(14, 3)).get().getCurrentHp()).isEqualTo(55);
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 2)).get().getCurrentHp()).isEqualTo(80);
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 3)).get().getCurrentHp()).isEqualTo(70);
     }
 
 
@@ -358,6 +438,36 @@ public class SpellTest {
     }
 
     @Test
+    void roundTimerShouldRemoveSpellFromRunningSpellsQueue() {
+        //given
+        List<Creature> firstHeroCreatures = List.of(EXAMPLE_CREATURE_1);
+        List<Creature> secondHeroCreatures = List.of(EXAMPLE_CREATURE_2);
+
+
+        final GameEngine gameEngine =
+                new GameEngine(new Hero(firstHeroCreatures, List.of(HASTE_BASIC)),
+                        new Hero(secondHeroCreatures, List.of(MAGIC_ARROW_RANG_1)));
+
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
+                .isPresent()).isTrue();
+
+        //when
+        gameEngine.castSpell(new Point(14, 1), HASTE_BASIC);
+
+        //then
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1)).get().getRunningSpells())
+                .hasSize(1)
+                .isEqualTo(List.of(HASTE_BASIC));
+
+        for (int i = 0; i < 4; i++) {
+            gameEngine.pass();
+        }
+
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1)).get().getRunningSpells())
+                .isEqualTo(Collections.emptyList());
+    }
+
+    @Test
     void shouldClearRunningSpellAndUnCastSpellsWhenDispelCasted() {
         //given
         List<Creature> firstHeroCreatures = List.of(EXAMPLE_CREATURE_1);
@@ -412,12 +522,6 @@ public class SpellTest {
         Assertions.assertThat(gameEngine.getCreature(new Point(14, 1)).get().getBuffedStats().getMoveRange()).isEqualTo(10);
     }
 
-
-    @Test
-    void shouldUnCastTheOldestSpellAndCastNew() {
-
-    }
-
     @Test
     void shouldUnCastHasteAndCastSlow() {
         //given
@@ -443,7 +547,7 @@ public class SpellTest {
     }
 
     @Test
-    void roundTimerShouldRemoveSpellFromRunningSpellsQueue() {
+    void shouldUnCastTheOldestSpellAndCastNew() {
 
     }
 

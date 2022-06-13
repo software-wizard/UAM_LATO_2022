@@ -10,9 +10,7 @@ import pl.psi.spells.*;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
@@ -305,7 +303,7 @@ public class GameEngine {
                 );
                 break;
             case AREA:
-                SpellCreatureList creatureList = new SpellCreatureList(getCreaturesFromArea(point, (AreaDamageSpell) spell));
+                SpellCreatureList creatureList = new SpellCreatureList(getCreaturesFromArea(point, spell));
                 turnQueue.getCurrentCreature().castSpell(creatureList, spell, biConsumer);
                 break;
             case FOR_ALL_ENEMY_CREATURES:
@@ -352,20 +350,51 @@ public class GameEngine {
         return getCurrentHero().getCreatures().contains(creature);
     }
 
-    private List<Creature> getCreaturesFromArea(Point point, AreaDamageSpell areaDamageSpell) {
+    private List<Creature> getCreaturesFromArea(Point point, Spell spell) {
         List<Creature> creatures = new ArrayList<>();
 
-        int centerOfArea = (int) ceil((float) areaDamageSpell.getArea().length / 2);
 
-        int startX = point.getX() - centerOfArea + 1;
-        int endX = startX + (centerOfArea * 2) - 1;
-        int startY = point.getY() - centerOfArea + 1;
-        int endY = startY + (centerOfArea * 2) - 1;
+        if (spell instanceof ChainLightning) {
+            List<Creature> pom = Stream.concat(hero1.getCreatures().stream(), hero2.getCreatures().stream())
+                    .collect(Collectors.toList());
+            List<Optional<Point>> creaturePoints = pom.stream().map(board::getPoint).collect(Collectors.toList());
 
-        for (int i = startY; i < endY; i++) {
-            for (int j = startX; j < endX; j++) {
-                if (board.getCreature(new Point(j, i)).isPresent() && areaDamageSpell.getArea()[i - startY][j - startX]) {
-                    board.getCreature(new Point(j, i)).ifPresent(creatures::add);
+            Map<Point, Double> distanceMap = new HashMap<>();
+            creaturePoints.forEach(point1 -> {
+                point1.ifPresent(point2 -> {
+                    double distance = Math.pow((point2.getX() - point.getX()), 2) + Math.pow((point2.getY() - point.getY()), 2);
+                    distanceMap.put(point2, distance);
+                });
+            });
+
+            Map<Point, Double> distanceMapSorted = new HashMap<>();
+
+            distanceMap.entrySet().stream()
+                    .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                    .forEachOrdered(x -> distanceMapSorted.put(x.getKey(), x.getValue()));
+
+            System.out.println(distanceMapSorted);
+
+            distanceMapSorted
+                    .forEach((k, v) -> board.getCreature(k).ifPresent(creature -> {
+                        if(creatures.size() < 3)
+                            creatures.add(creature);
+                    }));
+            System.out.println(creatures);
+        } else if (spell instanceof AreaDamageSpell) {
+            AreaDamageSpell areaDamageSpell = (AreaDamageSpell) spell;
+            int centerOfArea = (int) ceil((float) areaDamageSpell.getArea().length / 2);
+
+            int startX = point.getX() - centerOfArea + 1;
+            int endX = startX + (centerOfArea * 2) - 1;
+            int startY = point.getY() - centerOfArea + 1;
+            int endY = startY + (centerOfArea * 2) - 1;
+
+            for (int i = startY; i < endY; i++) {
+                for (int j = startX; j < endX; j++) {
+                    if (board.getCreature(new Point(j, i)).isPresent() && areaDamageSpell.getArea()[i - startY][j - startX]) {
+                        board.getCreature(new Point(j, i)).ifPresent(creatures::add);
+                    }
                 }
             }
         }
@@ -374,7 +403,7 @@ public class GameEngine {
     }
 
     public boolean canCastSpell() {
-        return getCurrentHero().isHeroCastingSpell();
+        return getCurrentHero().getSpellBook().isHeroCastingSpell();
     }
 
     public void defendAction() {

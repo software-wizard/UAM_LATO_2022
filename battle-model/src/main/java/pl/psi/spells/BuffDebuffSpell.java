@@ -43,8 +43,11 @@ public class BuffDebuffSpell extends Spell<Creature> {
             aDefender.getRunningSpells().removeIf(spell -> spell.getName().equals(counterSpell));
         }
 
-        if (aDefender.getRunningSpells().size() < 3) aDefender.addRunningSpell(this);
-        else return;
+        if (!aDefender.isRunningSpellsSlotsFull()){
+            aDefender.getRunningSpells().poll().unCastSpell(aDefender);
+        }
+
+        aDefender.addRunningSpell(this);
         BuffDebuffSpell buffDebuffSpell = new BuffDebuffSpell(this, aDefender);
         consumer.accept(TurnQueue.END_OF_TURN, buffDebuffSpell.getRoundTimer());
         aDefender.buff(creatureStats);

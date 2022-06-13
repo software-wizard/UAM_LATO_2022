@@ -15,12 +15,12 @@ public class RoundTimer implements PropertyChangeListener {
 
     private final int timer;
     private int currentTimer;
-    private final BuffDebuffSpell buffDebuffSpell;
+    private final Spell spell;
     private final Creature creature;
 
-    public RoundTimer(int timer, BuffDebuffSpell buffDebuffSpell, Creature creature) {
+    public RoundTimer(int timer, Spell spell, Creature creature) {
         this.timer = timer;
-        this.buffDebuffSpell = buffDebuffSpell;
+        this.spell = spell;
         currentTimer = timer;
         this.creature = creature;
     }
@@ -28,17 +28,15 @@ public class RoundTimer implements PropertyChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if (TurnQueue.END_OF_TURN.equals(evt.getPropertyName()) && isSpellOnRunningSpellList()) {
-            System.out.println(creature.getRunningSpells());
-            System.out.println(creature.getBuffedStats().toString());
             currentTimer = currentTimer - 1;
             if (currentTimer == 0) {
-                buffDebuffSpell.unCastSpell(creature);
-                creature.getRunningSpells().removeIf(spell -> spell.getName().equals(buffDebuffSpell.getName()));
+                spell.unCastSpell(creature);
+                creature.getRunningSpells().removeIf(spell -> spell.getName().equals(spell.getName()));
             }
         }
     }
 
     private boolean isSpellOnRunningSpellList() {
-        return creature.getRunningSpells().stream().map(Spell::getName).collect(Collectors.toList()).contains(buffDebuffSpell.getName());
+        return creature.getRunningSpells().stream().map(Spell::getName).collect(Collectors.toList()).contains(spell.getName());
     }
 }
