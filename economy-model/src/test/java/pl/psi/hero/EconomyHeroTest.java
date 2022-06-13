@@ -4,6 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import pl.psi.artifacts.Artifact;
 import pl.psi.artifacts.ArtifactPlacement;
+import pl.psi.artifacts.holder.ArtifactNamesHolder;
+import pl.psi.artifacts.holder.CreatureArtifactNamesHolder;
 import pl.psi.creatures.EconomyCreature;
 import pl.psi.creatures.EconomyNecropolisFactory;
 import pl.psi.shop.Money;
@@ -18,12 +20,13 @@ class EconomyHeroTest {
     private EconomyHero hero;
     private Artifact item1;
     private Artifact item2;
+    private CreatureArtifactNamesHolder ENUM_NOT_IMPORTANT = CreatureArtifactNamesHolder.RING_OF_LIFE;
 
     @BeforeEach
     void init() {
         hero = new EconomyHero(EconomyHero.Fraction.NECROPOLIS, HeroStatistics.NECROMANCER);
-        item1 = new Artifact(ArtifactPlacement.FEET, "item1", new Money(4));
-        item2 = new Artifact(ArtifactPlacement.HEAD, "item2", new Money(4));
+        item1 = new Artifact(ArtifactPlacement.FEET, "item1", new Money(4), ENUM_NOT_IMPORTANT);
+        item2 = new Artifact(ArtifactPlacement.HEAD, "item2", new Money(4), ENUM_NOT_IMPORTANT);
     }
 
     @Test

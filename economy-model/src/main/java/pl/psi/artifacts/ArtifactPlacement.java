@@ -8,6 +8,8 @@ public enum ArtifactPlacement {
     SHOULDERS,
     RIGHT_HAND,
     LEFT_HAND,
-    FEET;
+    FEET,
+    FINGERS,
+    MISC;
 
 }

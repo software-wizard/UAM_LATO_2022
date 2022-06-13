@@ -1,6 +1,6 @@
 package pl.psi.artifacts.holder;
 
-public enum SkillArtifactNamesHolder {
+public enum SkillArtifactNamesHolder implements ArtifactNamesHolder{
     CENTAURS_AX,
 
     BLACKSHARD_OF_THE_DEAD_KNIGHT,

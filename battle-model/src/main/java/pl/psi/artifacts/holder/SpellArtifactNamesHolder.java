@@ -1,6 +1,6 @@
 package pl.psi.artifacts.holder;
 
-public enum SpellArtifactNamesHolder {
+public enum SpellArtifactNamesHolder implements ArtifactNamesHolder{
     ORB_OF_THE_FIRMAMENT,
 
     ORB_OF_SILT,
