@@ -23,6 +23,8 @@ public interface CreatureStatisticIf {
 
     CreatureStatistic.CreatureType getType();
 
+    CreatureStatistic.CreatureGroup getGroup();
+
     int getSize();
 
     boolean isGround();

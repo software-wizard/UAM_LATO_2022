@@ -25,6 +25,7 @@ public class CreatureStats implements CreatureStatisticIf {
     private final String description;
     private final boolean isUpgraded;
     private final CreatureStatistic.CreatureType type;
+    private final CreatureStatistic.CreatureGroup group;
     private final boolean isGround;
     private final int size;
     private final String imagePath;
@@ -36,6 +37,9 @@ public class CreatureStats implements CreatureStatisticIf {
     public CreatureStatistic.CreatureType getType() {
         return type;
     }
+
+    @Override
+    public CreatureStatistic.CreatureGroup getGroup(){return group;}
 
     @Override
     public boolean isGround() {
