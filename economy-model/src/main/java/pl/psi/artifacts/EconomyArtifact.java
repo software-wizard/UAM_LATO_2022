@@ -8,12 +8,13 @@ import pl.psi.shop.Money;
 
 @Getter
 @AllArgsConstructor
-public class Artifact implements BuyProductInterface {
+public class EconomyArtifact implements BuyProductInterface {
 
     private final ArtifactPlacement placement;
     private final String displayName;
     private Money price;
     private final ArtifactNamesHolder nameHolder;
+    private final String description;
 
     @Override
     public Money getGoldCost() {

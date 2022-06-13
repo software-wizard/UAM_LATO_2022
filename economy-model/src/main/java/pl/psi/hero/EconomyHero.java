@@ -1,7 +1,7 @@
 package pl.psi.hero;
 
 import lombok.Getter;
-import pl.psi.artifacts.Artifact;
+import pl.psi.artifacts.EconomyArtifact;
 import pl.psi.artifacts.ArtifactPlacement;
 import pl.psi.creatures.EconomyCreature;
 import pl.psi.shop.Money;
@@ -19,7 +19,7 @@ public class EconomyHero {
     private static int heroCounter = 0;
     private final Fraction fraction;
     private final List<EconomyCreature> creatureList;
-    private final List<Artifact> artifactList;
+    private final List<EconomyArtifact> artifactList;
     private final List<EconomySkill> skillsList;
     private final List<EconomySpell> spellsList;
     private final Equipment equipment;
@@ -48,7 +48,7 @@ public class EconomyHero {
     }
 
     // konstruktor samokopiujący
-    public EconomyHero(Fraction fraction, List<EconomyCreature> creatureList, List<Artifact> artifactList, List<EconomySkill> skillsList, List<EconomySpell> spellsList, Money gold, int heroNumber, HeroStatistics aClass) {
+    public EconomyHero(Fraction fraction, List<EconomyCreature> creatureList, List<EconomyArtifact> artifactList, List<EconomySkill> skillsList, List<EconomySpell> spellsList, Money gold, int heroNumber, HeroStatistics aClass) {
         this.fraction = fraction;
         this.creatureList = creatureList;
         this.artifactList = artifactList;
@@ -88,7 +88,7 @@ public class EconomyHero {
 
     }
 
-    public void addArtifact(Artifact artifact) {
+    public void addArtifact(EconomyArtifact artifact) {
         this.artifactList.add(artifact);
     }
 
@@ -109,14 +109,14 @@ public class EconomyHero {
     }
 
     public boolean canAddArtifact(ArtifactPlacement placement) {
-        for (Artifact a : this.artifactList) {
+        for (EconomyArtifact a : this.artifactList) {
             if (a.getPlacement().equals(placement))
                 return false;
         }
         return true;
     }
 
-    public List<Artifact> getArtifacts() {
+    public List<EconomyArtifact> getArtifacts() {
         return List.copyOf(artifactList);
     }
 
@@ -132,35 +132,35 @@ public class EconomyHero {
         this.gold = new Money(gold.getPrice() - aAmount);
     }
 
-    public void addItem(final Artifact aItem) {
+    public void addItem(final EconomyArtifact aItem) {
         backpack.addItem(aItem);
     }
 
-    public void equipHead(Artifact aItem) {
+    public void equipHead(EconomyArtifact aItem) {
         equipment.setHead(aItem);
     }
 
-    public void equipNeck(Artifact aItem) {
+    public void equipNeck(EconomyArtifact aItem) {
         equipment.setNeck(aItem);
     }
 
-    public void equipTorso(Artifact aItem) {
+    public void equipTorso(EconomyArtifact aItem) {
         equipment.setTorso(aItem);
     }
 
-    public void equipShoulders(Artifact aItem) {
+    public void equipShoulders(EconomyArtifact aItem) {
         equipment.setShoulders(aItem);
     }
 
-    public void equipRightHand(Artifact aItem) {
+    public void equipRightHand(EconomyArtifact aItem) {
         equipment.setRightHand(aItem);
     }
 
-    public void equipLeftHand(Artifact aItem) {
+    public void equipLeftHand(EconomyArtifact aItem) {
         equipment.setLeftHand(aItem);
     }
 
-    public void equipFeet(Artifact aItem) {
+    public void equipFeet(EconomyArtifact aItem) {
         equipment.setFeet(aItem);
     }
 

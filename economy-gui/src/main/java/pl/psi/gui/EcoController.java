@@ -293,13 +293,13 @@ public class EcoController implements PropertyChangeListener {
         shopsBox.getChildren().clear();
         refreshShopDependsOnWhatHasChose();
         //refresh boughtArtifacts
-        List<Artifact> artifacts = economyEngine.getActiveHero().getArtifacts();
+        List<EconomyArtifact> artifacts = economyEngine.getActiveHero().getArtifacts();
         for (Map.Entry<ArtifactPlacement, Button> b : artifactPlacementButtonHashMap.entrySet()) {
             ArtifactPlacement placement = b.getKey();
-            for (Artifact a : artifacts) {
+            for (EconomyArtifact a : artifacts) {
                 if (a.getPlacement().equals(placement)) {
                     Button button = b.getValue();
-                    Image image = new Image("/artifacts/" + a.getName() + ".png");
+                    Image image = new Image("/artifacts/" + a.getDisplayName() + ".png");
                     ImageView imageView = new ImageView(image);
                     imageView.setFitHeight(39);
                     imageView.setFitWidth(39);
@@ -432,7 +432,7 @@ public class EcoController implements PropertyChangeListener {
         int size = namesOfArtifacts.size();
         for (int i = 0; i < size; i++) {
             String name = namesOfArtifacts.get(i);
-            Artifact artifact = economyArtifactFactory.create(name);
+            EconomyArtifact artifact = economyArtifactFactory.create(name);
             if(economyEngine.getActiveHero().canAddArtifact(artifact.getPlacement())) {
                 boolean canBuy = economyEngine.getActiveHero().getGold().haveEnoghMoney(artifact.getGoldCost());
                 ArtifactButton button = new ArtifactButton(this::buy, artifact,canBuy);

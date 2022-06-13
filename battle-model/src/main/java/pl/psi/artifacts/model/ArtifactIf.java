@@ -14,7 +14,5 @@ public interface ArtifactIf {
 
     String getName();
 
-    String getDescription();
-
     Set<ArtifactEffect<ArtifactEffectApplicable>> getEffects();
 }

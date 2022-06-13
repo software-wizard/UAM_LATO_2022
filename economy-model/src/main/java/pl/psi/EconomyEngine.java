@@ -1,6 +1,6 @@
 package pl.psi;
 
-import pl.psi.artifacts.Artifact;
+import pl.psi.artifacts.EconomyArtifact;
 import pl.psi.creatures.EconomyCreature;
 import pl.psi.hero.EconomyHero;
 import pl.psi.shop.*;
@@ -43,7 +43,7 @@ public class EconomyEngine {
             observerSupport.firePropertyChange(HERO_BOUGHT_CREATURE, null, null);
         } else if (product.equals(ProductType.ARTIFACT)) {
             ArtifactShop artifactShop = new ArtifactShop();
-            Artifact artifact = (Artifact) buyProduct;
+            EconomyArtifact artifact = (EconomyArtifact) buyProduct;
             artifactShop.addToHero(artifact, activeHero);
             observerSupport.firePropertyChange(HERO_BOUGHT_ARTIFACT, null, null);
         } else if (product.equals(ProductType.SKILL)) {

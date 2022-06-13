@@ -21,8 +21,6 @@ public class Artifact implements ArtifactIf {
 
     private final String name;
 
-    private final String description;
-
     private final Set<ArtifactEffect<ArtifactEffectApplicable>> effects;
 
     public void applyTo(final ArtifactEffectApplicable aArtifactEffectApplicable) {

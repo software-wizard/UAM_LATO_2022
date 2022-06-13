@@ -139,7 +139,6 @@ public class ArtifactFactory {
 
         return Artifact.builder()
                 .name("Ring of Life")
-                .description("Increases health of all your units by 1")
                 .placement(ArtifactPlacement.FINGERS)
                 .rank(ArtifactRank.MINOR)
                 .target(ArtifactTarget.CREATURES)
@@ -156,7 +155,6 @@ public class ArtifactFactory {
 
         return Artifact.builder()
                 .name("Ring of Vitality")
-                .description("Increases health of all your units by 1")
                 .placement(ArtifactPlacement.FINGERS)
                 .rank(ArtifactRank.TREASURE)
                 .target(ArtifactTarget.CREATURES)
@@ -173,7 +171,6 @@ public class ArtifactFactory {
 
         return Artifact.builder()
                 .name("Vial of Lifeblood")
-                .description("Increases health of all your units by 2")
                 .placement(ArtifactPlacement.MISC)
                 .rank(ArtifactRank.TREASURE)
                 .target(ArtifactTarget.CREATURES)
@@ -190,7 +187,6 @@ public class ArtifactFactory {
 
         return Artifact.builder()
                 .name("Centaur's Ax")
-                .description("+2 attack skill")
                 .placement(ArtifactPlacement.RIGHT_HAND)
                 .rank(ArtifactRank.TREASURE)
                 .target(ArtifactTarget.SKILL)
@@ -207,7 +203,6 @@ public class ArtifactFactory {
 
         return Artifact.builder()
                 .name("Blackshard of the Dead Knight")
-                .description("+3 attack skill")
                 .placement(ArtifactPlacement.RIGHT_HAND)
                 .rank(ArtifactRank.MINOR)
                 .target(ArtifactTarget.SKILL)
@@ -224,7 +219,6 @@ public class ArtifactFactory {
 
         return Artifact.builder()
                 .name("Greater Gnoll's Flail")
-                .description("+4 attack skill")
                 .placement(ArtifactPlacement.RIGHT_HAND)
                 .rank(ArtifactRank.MINOR)
                 .target(ArtifactTarget.SKILL)
@@ -241,7 +235,6 @@ public class ArtifactFactory {
 
         return Artifact.builder()
                 .name("Ogre's Club of Havoc")
-                .description("+5 attack skill")
                 .placement(ArtifactPlacement.RIGHT_HAND)
                 .rank(ArtifactRank.MAJOR)
                 .target(ArtifactTarget.SKILL)
@@ -258,7 +251,6 @@ public class ArtifactFactory {
 
         return Artifact.builder()
                 .name("Sword of Hellfire")
-                .description("+6 attack skill")
                 .placement(ArtifactPlacement.RIGHT_HAND)
                 .rank(ArtifactRank.MAJOR)
                 .target(ArtifactTarget.SKILL)
@@ -281,7 +273,6 @@ public class ArtifactFactory {
 
         return Artifact.builder()
                 .name("Titan's Gladius")
-                .description("+12 attack skill, -3 defence skill")
                 .placement(ArtifactPlacement.RIGHT_HAND)
                 .rank(ArtifactRank.RELIC)
                 .target(ArtifactTarget.SKILL)
@@ -298,7 +289,6 @@ public class ArtifactFactory {
 
         return Artifact.builder()
                 .name("Shield of the Dwarven Lords")
-                .description("+2 attack skill")
                 .placement(ArtifactPlacement.LEFT_HAND)
                 .rank(ArtifactRank.TREASURE)
                 .target(ArtifactTarget.SKILL)
@@ -315,7 +305,6 @@ public class ArtifactFactory {
 
         return Artifact.builder()
                 .name("Targ of the Rampaging Ogre")
-                .description("+5 attack skill")
                 .placement(ArtifactPlacement.LEFT_HAND)
                 .rank(ArtifactRank.MAJOR)
                 .target(ArtifactTarget.SKILL)
@@ -338,7 +327,6 @@ public class ArtifactFactory {
 
         return Artifact.builder()
                 .name("Titan's Gladius")
-                .description("+12  defence, -3 attack skill")
                 .placement(ArtifactPlacement.LEFT_HAND)
                 .rank(ArtifactRank.RELIC)
                 .target(ArtifactTarget.SKILL)
@@ -355,7 +343,6 @@ public class ArtifactFactory {
 
         return Artifact.builder()
                 .name("Rib Cage")
-                .description("+2 spell power")
                 .placement(ArtifactPlacement.TORSO)
                 .rank(ArtifactRank.MINOR)
                 .target(ArtifactTarget.SKILL)
@@ -372,7 +359,6 @@ public class ArtifactFactory {
 
         return Artifact.builder()
                 .name("Tunic of the Cyclops King")
-                .description("+4 spell power")
                 .placement(ArtifactPlacement.TORSO)
                 .rank(ArtifactRank.MAJOR)
                 .target(ArtifactTarget.SKILL)
@@ -395,7 +381,6 @@ public class ArtifactFactory {
 
         return Artifact.builder()
                 .name("Titan's Cuiras")
-                .description("+10 spell power, -2 knowledge")
                 .placement(ArtifactPlacement.TORSO)
                 .rank(ArtifactRank.RELIC)
                 .target(ArtifactTarget.SKILL)
@@ -412,7 +397,6 @@ public class ArtifactFactory {
 
         return Artifact.builder()
                 .name("Skull Helmet")
-                .description("+2 knowledge")
                 .placement(ArtifactPlacement.HEAD)
                 .rank(ArtifactRank.TREASURE)
                 .target(ArtifactTarget.SKILL)
@@ -429,7 +413,6 @@ public class ArtifactFactory {
 
         return Artifact.builder()
                 .name("rown of the Supreme Magi")
-                .description("+4 knowledge")
                 .placement(ArtifactPlacement.HEAD)
                 .rank(ArtifactRank.MINOR)
                 .target(ArtifactTarget.SKILL)
@@ -452,7 +435,6 @@ public class ArtifactFactory {
 
         return Artifact.builder()
                 .name("Thunder Helmet")
-                .description("+10 knowledge, -2 spell power")
                 .placement(ArtifactPlacement.TORSO)
                 .rank(ArtifactRank.RELIC)
                 .target(ArtifactTarget.SKILL)
@@ -469,7 +451,6 @@ public class ArtifactFactory {
 
         return Artifact.builder()
                 .name("Orb Of The Firmament")
-                .description("Hero's air spells do extra 50% damage")
                 .placement(ArtifactPlacement.MISC)
                 .rank(ArtifactRank.MAJOR)
                 .target(ArtifactTarget.SPELLS)
@@ -486,7 +467,6 @@ public class ArtifactFactory {
 
         return Artifact.builder()
                 .name("Orb Of Silt")
-                .description("Hero's earth spells do extra 50% damage")
                 .placement(ArtifactPlacement.MISC)
                 .rank(ArtifactRank.MAJOR)
                 .target(ArtifactTarget.SPELLS)
@@ -503,7 +483,6 @@ public class ArtifactFactory {
 
         return Artifact.builder()
                 .name("Orb Of Tempstuous Fire")
-                .description("Hero's fire spells do extra 50% damage")
                 .placement(ArtifactPlacement.MISC)
                 .rank(ArtifactRank.MAJOR)
                 .target(ArtifactTarget.SPELLS)
@@ -520,7 +499,6 @@ public class ArtifactFactory {
 
         return Artifact.builder()
                 .name("Orb Of Driving Rain")
-                .description("Hero's water spells do extra 50% damage")
                 .placement(ArtifactPlacement.MISC)
                 .rank(ArtifactRank.MAJOR)
                 .target(ArtifactTarget.SPELLS)

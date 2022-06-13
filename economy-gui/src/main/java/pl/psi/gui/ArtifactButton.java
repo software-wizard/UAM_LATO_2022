@@ -3,21 +3,21 @@ package pl.psi.gui;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import pl.psi.ProductType;
-import pl.psi.artifacts.Artifact;
+import pl.psi.artifacts.EconomyArtifact;
 
 import java.util.function.BiConsumer;
 
-public class ArtifactButton extends AbstractButton<Artifact>{
+public class ArtifactButton extends AbstractButton<EconomyArtifact>{
 
 
-    public ArtifactButton(BiConsumer<ProductType, Artifact> ecoController, Artifact artifact, boolean canBuy) {
+    public ArtifactButton(BiConsumer<ProductType, EconomyArtifact> ecoController, EconomyArtifact artifact, boolean canBuy) {
         super(ecoController, artifact, canBuy);
-        PATH = "/artifacts/" + artifact.getName() + ".png";
-        DESCRIPTION = artifact.getName() + " | " + artifact.getGoldCost().getPrice();
+        PATH = "/artifacts/" + artifact.getDisplayName() + ".png";
+        DESCRIPTION = artifact.getDisplayName() + " | " + artifact.getGoldCost().getPrice();
     }
 
     @Override
-    void acceptProduct(BiConsumer<ProductType,Artifact > buy) {
+    void acceptProduct(BiConsumer<ProductType, EconomyArtifact> buy) {
         buy.accept(ProductType.ARTIFACT,product);
     }
 
