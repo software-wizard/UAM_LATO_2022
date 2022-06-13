@@ -33,5 +33,4 @@ public enum SkillArtifactNamesHolder implements ArtifactNamesHolder{
     CROWN_OF_THE_SUPREME_MAGI,
 
     THUNDER_HELMET;
-    // TODO: define names for skill artifacts.
 }

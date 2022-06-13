@@ -23,8 +23,6 @@ public class Artifact implements ArtifactIf {
 
     private final String description;
 
-    private final BigDecimal price;
-
     private final Set<ArtifactEffect<ArtifactEffectApplicable>> effects;
 
     public void applyTo(final ArtifactEffectApplicable aArtifactEffectApplicable) {
@@ -43,12 +41,12 @@ public class Artifact implements ArtifactIf {
 
         final Artifact artifact = (Artifact) aObj;
 
-        return getRank() == artifact.getRank() && getPlacement() == artifact.getPlacement() &&
-                getPrice().equals(artifact.getPrice()) && Objects.equals(getEffects(), artifact.getEffects());
+        return getRank() == artifact.getRank() && getPlacement() == artifact.getPlacement()
+                && Objects.equals(getEffects(), artifact.getEffects());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getRank(), getPlacement(), getPrice(), getEffects());
+        return Objects.hash(getRank(), getPlacement(), getEffects());
     }
 }

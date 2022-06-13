@@ -16,7 +16,5 @@ public interface ArtifactIf {
 
     String getDescription();
 
-    BigDecimal getPrice();
-
     Set<ArtifactEffect<ArtifactEffectApplicable>> getEffects();
 }

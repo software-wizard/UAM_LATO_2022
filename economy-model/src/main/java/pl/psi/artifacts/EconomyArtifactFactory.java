@@ -10,20 +10,6 @@ public class EconomyArtifactFactory {
 
     private static final String NO_ARTIFACT_IMPLEMENTATION_EXCEPTION_MESSAGE = "We don't have artifact with this name. Try again.";
 
-//    public Artifact create(final ArtifactNamesHolder name) {
-//
-//
-//        switch (name) {
-//
-//            case RING:
-//                return new Artifact(ArtifactPlacement.SHOULDERS, name, new Money(300));
-//            case "Crown of Dragontooth":
-//                return new Artifact(ArtifactPlacement.HEAD, name, new Money(300));
-//            case "Blackshard of the Dead Knight":
-//                return new Artifact(ArtifactPlacement.RIGHT_HAND, name, new Money(300));
-//            default:
-//                throw new IllegalArgumentException(EXCEPTION_MESSAGE);
-//        }
     public Artifact create( @NonNull CreatureArtifactNamesHolder aArtifactName ) {
 
         switch ( aArtifactName ) {
