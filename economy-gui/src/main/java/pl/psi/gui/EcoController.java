@@ -14,6 +14,10 @@ import lombok.SneakyThrows;
 import pl.psi.EconomyEngine;
 import pl.psi.ProductType;
 import pl.psi.artifacts.*;
+import pl.psi.artifacts.holder.ArtifactNamesHolder;
+import pl.psi.artifacts.holder.CreatureArtifactNamesHolder;
+import pl.psi.artifacts.holder.SkillArtifactNamesHolder;
+import pl.psi.artifacts.holder.SpellArtifactNamesHolder;
 import pl.psi.creatures.*;
 import pl.psi.skills.*;
 import pl.psi.spells.*;
@@ -428,10 +432,9 @@ public class EcoController implements PropertyChangeListener {
         label.getStyleClass().add("labelShop");
         artifactShop.getChildren().add(label);
         final EconomyArtifactFactory economyArtifactFactory = new EconomyArtifactFactory();
-        List<String> namesOfArtifacts = List.of("Cape of Conjuring", "Crown of Dragontooth", "Blackshard of the Dead Knight");
-        int size = namesOfArtifacts.size();
-        for (int i = 0; i < size; i++) {
-            String name = namesOfArtifacts.get(i);
+
+
+        for (CreatureArtifactNamesHolder name : CreatureArtifactNamesHolder.values()) {
             EconomyArtifact artifact = economyArtifactFactory.create(name);
             if(economyEngine.getActiveHero().canAddArtifact(artifact.getPlacement())) {
                 boolean canBuy = economyEngine.getActiveHero().getGold().haveEnoghMoney(artifact.getGoldCost());
@@ -439,6 +442,25 @@ public class EcoController implements PropertyChangeListener {
                 setImageToProducts(button,artifactShop,canBuy);
             }
         }
+
+        for (SkillArtifactNamesHolder name : SkillArtifactNamesHolder.values()) {
+            EconomyArtifact artifact = economyArtifactFactory.create(name);
+            if(economyEngine.getActiveHero().canAddArtifact(artifact.getPlacement())) {
+                boolean canBuy = economyEngine.getActiveHero().getGold().haveEnoghMoney(artifact.getGoldCost());
+                ArtifactButton button = new ArtifactButton(this::buy, artifact,canBuy);
+                setImageToProducts(button,artifactShop,canBuy);
+            }
+        }
+
+        for (SpellArtifactNamesHolder name : SpellArtifactNamesHolder.values()) {
+            EconomyArtifact artifact = economyArtifactFactory.create(name);
+            if(economyEngine.getActiveHero().canAddArtifact(artifact.getPlacement())) {
+                boolean canBuy = economyEngine.getActiveHero().getGold().haveEnoghMoney(artifact.getGoldCost());
+                ArtifactButton button = new ArtifactButton(this::buy, artifact,canBuy);
+                setImageToProducts(button,artifactShop,canBuy);
+            }
+        }
+
         shopsBox.getChildren().add(artifactShop);
     }
 
