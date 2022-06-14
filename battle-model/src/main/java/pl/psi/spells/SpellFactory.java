@@ -170,11 +170,11 @@ public class SpellFactory {
             case STONESKIN:
                 switch (rang) {
                     case BASIC:
-                        return new BuffDebuffSpell(FIELD, name, EARTH, BASIC, 5, CreatureStats.builder().armor(3).build(), 2, HASTE);
+                        return new BuffDebuffSpell(FIELD, name, EARTH, BASIC, 5, CreatureStats.builder().armor(3).build(), 2, null);
                     case ADVANCED:
-                        return new BuffDebuffSpell(FIELD, name, EARTH, ADVANCED,  5, CreatureStats.builder().armor(6).build(), 4, HASTE);
+                        return new BuffDebuffSpell(FIELD, name, EARTH, ADVANCED,  5, CreatureStats.builder().armor(6).build(), 4, null);
                     case EXPERT:
-                        return new BuffDebuffSpell(FOR_ALL_ALLIED_CREATURES, name, EARTH, EXPERT, 5, CreatureStats.builder().armor(6).build(), 2, HASTE);
+                        return new BuffDebuffSpell(FOR_ALL_ALLIED_CREATURES, name, EARTH, EXPERT, 5, CreatureStats.builder().armor(6).build(), 2, null);
                     default:
                         throw new IllegalArgumentException(RANG_EXCEPTION_MESSAGE);
                 }
@@ -203,9 +203,9 @@ public class SpellFactory {
                                                 {false, true, false}}, (spellPower * 25) + 50 );
                     case EXPERT:
                         return new AreaDamageSpell(AREA, name, EARTH, EXPERT, 16,
-                                new boolean[][]{{false, true, false},
+                                new boolean[][]{{true, true, true},
                                                 {true, true, true},
-                                                {false, true, false}}, (spellPower * 25) + 100 );
+                                                {true, true, true}}, (spellPower * 25) + 100 );
                     default:
                         throw new IllegalArgumentException(RANG_EXCEPTION_MESSAGE);
                 }

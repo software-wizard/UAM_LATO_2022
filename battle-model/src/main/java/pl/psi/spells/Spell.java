@@ -18,6 +18,7 @@ public abstract class Spell<T extends SpellableIf>{
     private final SpellMagicClass spellMagicClass;
     private final SpellRang rang;
     private final int manaCost;
+    private final String imagePath;
 
     public Spell(SpellTypes category, SpellNames name, SpellMagicClass spellMagicClass, SpellRang rang, int manaCost) {
         this.category = category;
@@ -25,6 +26,7 @@ public abstract class Spell<T extends SpellableIf>{
         this.spellMagicClass = spellMagicClass;
         this.rang = rang;
         this.manaCost = manaCost;
+        this.imagePath = "/images/spells images/" + name.getValue() + ".png";
     }
 
     public abstract void castSpell(T aDefender, BiConsumer<String, PropertyChangeListener> consumer);

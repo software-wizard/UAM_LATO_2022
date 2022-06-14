@@ -96,6 +96,7 @@ public class MainBattleController implements PropertyChangeListener {
                 loader.setController(spellBattleController);
                 scene = new Scene(loader.load());
                 stage.initModality(Modality.WINDOW_MODAL);
+                stage.setTitle("Spell Book");
                 stage.initOwner(gridMap.getScene().getWindow());
                 stage.setScene(scene);
                 stage.show();

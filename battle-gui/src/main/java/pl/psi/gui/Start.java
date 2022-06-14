@@ -63,7 +63,8 @@ public class Start extends Application {
                                 new SpellFactory().create(STONESKIN, BASIC, 1),
                                 new SpellFactory().create(FIRE_BALL, BASIC, 1),
                                 new SpellFactory().create(MISFORTUNE, BASIC, 1),
-                                new SpellFactory().create(PRAYER, BASIC, 1)));
+                                new SpellFactory().create(PRAYER, BASIC, 1)
+                        ));
         ret.getCreatures().forEach(creature -> creature.setHeroNumber(1));
         return ret;
     }
