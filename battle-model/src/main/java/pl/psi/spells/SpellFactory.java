@@ -25,6 +25,17 @@ public class SpellFactory {
                     default:
                         throw new IllegalArgumentException(EXCEPTION_MESSAGE);
                 }
+            case FORTUNE:
+                switch (rang) {
+                    case BASIC:
+                        return new LuckBuffDebuffSpell(FIELD, name, AIR, BASIC, 7, 1, 2, MISFORTUNE);
+                    case ADVANCED:
+                        return new LuckBuffDebuffSpell(FIELD, name, AIR, ADVANCED, 7, 2 , 2, MISFORTUNE);
+                    case EXPERT:
+                        return new LuckBuffDebuffSpell(FOR_ALL_ALLIED_CREATURES, name, AIR, EXPERT, 7, 2, 4, MISFORTUNE);
+                    default:
+                        throw new IllegalArgumentException(EXCEPTION_MESSAGE);
+                }
             case HASTE:
                 switch (rang) {
                     case BASIC:
@@ -95,6 +106,17 @@ public class SpellFactory {
                     default:
                         throw new IllegalArgumentException(EXCEPTION_MESSAGE);
                 }
+            case MISFORTUNE:
+                switch (rang) {
+                    case BASIC:
+                        return new LuckBuffDebuffSpell(FIELD, name, FIRE, BASIC, 12, -1, 2, FORTUNE);
+                    case ADVANCED:
+                        return new LuckBuffDebuffSpell(FIELD, name, FIRE, ADVANCED, 12, -2 , 2, FORTUNE);
+                    case EXPERT:
+                        return new LuckBuffDebuffSpell(FOR_ALL_ENEMY_CREATURES, name, FIRE, EXPERT, 12, -2, 4, FORTUNE);
+                    default:
+                        throw new IllegalArgumentException(EXCEPTION_MESSAGE);
+                }
             case SLOW:
                 switch (rang) {
                     case BASIC:
@@ -117,6 +139,17 @@ public class SpellFactory {
                     default:
                         throw new IllegalArgumentException(EXCEPTION_MESSAGE);
                 }
+            case SORROW:
+                switch (rang) {
+                    case BASIC:
+                        return new MoralBuffDebuffSpell(FIELD, name, EARTH, BASIC, 16, -1, 2, MIRTH);
+                    case ADVANCED:
+                        return new MoralBuffDebuffSpell(FIELD, name, EARTH, ADVANCED, 16, -2 , 2, MIRTH);
+                    case EXPERT:
+                        return new MoralBuffDebuffSpell(FOR_ALL_ENEMY_CREATURES, name, EARTH, EXPERT, 16, -2, 4, MIRTH);
+                    default:
+                        throw new IllegalArgumentException(EXCEPTION_MESSAGE);
+                }
             case DISPEL:
                 switch (rang) {
                     case BASIC:
@@ -125,6 +158,17 @@ public class SpellFactory {
                         return new Dispel(FIELD, name, WATER, ADVANCED, 15);
                     case EXPERT:
                         return new Dispel(FOR_ALL_CREATURES, name, WATER, EXPERT, 20); // Add removing all non static special fields
+                    default:
+                        throw new IllegalArgumentException(EXCEPTION_MESSAGE);
+                }
+            case MIRTH:
+                switch (rang) {
+                    case BASIC:
+                        return new MoralBuffDebuffSpell(FIELD, name, WATER, BASIC, 12,1, 2, SORROW);
+                    case ADVANCED:
+                        return new MoralBuffDebuffSpell(FIELD, name, WATER, ADVANCED, 12, 2, 2, SORROW);
+                    case EXPERT:
+                        return new MoralBuffDebuffSpell(FOR_ALL_ALLIED_CREATURES, name, WATER, EXPERT, 12, 2, 4, SORROW); // Add removing all non static special fields
                     default:
                         throw new IllegalArgumentException(EXCEPTION_MESSAGE);
                 }

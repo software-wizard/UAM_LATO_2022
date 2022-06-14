@@ -426,7 +426,13 @@ public class Creature implements PropertyChangeListener, Comparable<Creature>, S
         return getRunningSpells().size() < 3;
     }
 
+    public void buffMorale(int moraleIncrease){
+        morale = morale + moraleIncrease;
+    }
 
+    public void buffLuck(int luckIncrease){
+        luck = luck + luckIncrease;
+    }
 
     public static class Builder {
         private int amount = 1;

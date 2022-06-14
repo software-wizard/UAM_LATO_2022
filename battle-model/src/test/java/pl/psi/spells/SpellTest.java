@@ -538,7 +538,6 @@ public class SpellTest {
         //when
         gameEngine.castSpell(new Point(14, 1), HASTE_BASIC);
         gameEngine.castSpell(new Point(14, 1), SLOW_BASIC);
-        System.out.println(gameEngine.getCreature(new Point(14, 1)).get().getRunningSpells());
 
         //then
         Assertions.assertThat(gameEngine.getCreature(new Point(14, 1)).get().getBuffedStats().getMoveRange()).isEqualTo(-10);
