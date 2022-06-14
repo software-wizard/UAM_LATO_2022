@@ -10,7 +10,6 @@ import com.google.common.collect.Range;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import pl.psi.SpellBook;
 import pl.psi.TurnQueue;
 import pl.psi.spells.Spell;
 import pl.psi.spells.SpellCreatureList;
@@ -19,7 +18,9 @@ import pl.psi.spells.SpellRang;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Random;
 import java.util.function.BiConsumer;
 
 /**
@@ -421,16 +422,15 @@ public class Creature implements PropertyChangeListener, Comparable<Creature>, S
         return 0;
     }
 
-
-    public boolean isRunningSpellsSlotsFull(){
+    public boolean isRunningSpellsSlotsFull() {
         return getRunningSpells().size() < 3;
     }
 
-    public void buffMorale(int moraleIncrease){
+    public void buffMorale(int moraleIncrease) {
         morale = morale + moraleIncrease;
     }
 
-    public void buffLuck(int luckIncrease){
+    public void buffLuck(int luckIncrease) {
         luck = luck + luckIncrease;
     }
 

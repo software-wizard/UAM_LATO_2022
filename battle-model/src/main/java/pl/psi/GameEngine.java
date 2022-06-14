@@ -294,6 +294,7 @@ public class GameEngine {
 
     public void castSpell(final Point point, Spell<? extends SpellableIf> spell) {
         BiConsumer<String, PropertyChangeListener> biConsumer = this::addObserverToTurnQueue;
+        System.out.println(spell.getName());
         switch (spell.getCategory()) {
             case FIELD:
                 Optional<Creature> targetCreature = getCreatureFromField(point, spell);
@@ -373,14 +374,11 @@ public class GameEngine {
                     .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
                     .forEachOrdered(x -> distanceMapSorted.put(x.getKey(), x.getValue()));
 
-            System.out.println(distanceMapSorted);
-
             distanceMapSorted
                     .forEach((k, v) -> board.getCreature(k).ifPresent(creature -> {
-                        if(creatures.size() < 3)
+                        if (creatures.size() < 3)
                             creatures.add(creature);
                     }));
-            System.out.println(creatures);
         } else if (spell instanceof AreaDamageSpell) {
             AreaDamageSpell areaDamageSpell = (AreaDamageSpell) spell;
             int centerOfArea = (int) ceil((float) areaDamageSpell.getArea().length / 2);

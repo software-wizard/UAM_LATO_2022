@@ -34,7 +34,6 @@ import static pl.psi.gui.SpellBattleController.SPELL_SELECTED;
 import static pl.psi.spells.SpellRang.BASIC;
 import pl.psi.TurnQueue;
 import pl.psi.spells.Spell;
-import pl.psi.spells.SpellRang;
 import pl.psi.spells.SpellTypes;
 import pl.psi.spells.SpellableIf;
 
@@ -359,7 +358,6 @@ public class MainBattleController implements PropertyChangeListener {
 
             gridMap.getScene().addEventHandler(KeyEvent.KEY_PRESSED, f -> {
                 if (f.getCode() == KeyCode.ESCAPE) {
-                    System.out.println("ESC");
                     gameEngine.getCurrentHero().getSpellBook().setHeroCastingSpell(false);
                     gridMap.getScene().setCursor(Cursor.DEFAULT);
                     refreshGui();
