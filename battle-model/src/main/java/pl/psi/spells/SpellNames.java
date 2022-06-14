@@ -12,6 +12,16 @@ public enum SpellNames {
     SORROW("Sorrow"),
     FIRE_BALL("Fire Ball"),
     MISFORTUNE("Misfortune"),
+    ARMAGEDDON("Armageddon"),
+    FRENZY("Frenzy"),
+    INFERNO("Inferno"),
+    STONESKIN("Stoneskin"),
+    METEOR_SHOWER("Meteor Shower"),
+    IMPLOSION("Implosion"),
+    ICE_BOLT("Ice Bolt"),
+    WEAKNESS("Weakness"),
+    FROST_RING("Frost Ring"),
+    PRAYER("Prayer"),
     DISPEL("Dispel"),
     MIRTH("Mirth");
 
