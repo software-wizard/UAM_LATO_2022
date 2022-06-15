@@ -7,6 +7,7 @@ public enum SpellNames {
     LIGHTNING_BOLT("Lightning Bolt"),
     CHAIN_LIGHTNING("Chain Lightning"),
     COUNTERSTRIKE("Counterstrike"),
+    BLOODLUST("Bloodlust"),
     FIRE_BALL("Fire Ball"),
     MISFORTUNE("Misfortune"),
     ARMAGEDDON("Armageddon"),

@@ -46,17 +46,17 @@ public class GameEngine {
     }
 
     public void attack(final Point aPoint) {
-        if (turnQueue.getCurrentCreature().isDefending()) {
+        if(turnQueue.getCurrentCreature().isDefending()){
             turnQueue.getCurrentCreature().defend(false);
         }
         AttackAndPrintAttackInformation(aPoint);
         currentCreatureCanMove = false;
         currentCreatureCanAttack = false;
-        if (!getCreature(aPoint).get().isAlive()) {
+        if(!getCreature(aPoint).get().isAlive()){
             turnQueue.addDeadCreature(getCreature(aPoint).get());
             turnQueue.addDeadCreaturePoint(aPoint);
         }
-        if (!getCurrentCreature().isAlive()) {
+        if(!getCurrentCreature().isAlive()){
             turnQueue.addDeadCreature(getCurrentCreature());
             turnQueue.addDeadCreaturePoint(getCreaturePosition(getCurrentCreature()));
         }
@@ -80,38 +80,40 @@ public class GameEngine {
                 .ifPresent(defender -> {
                     int defenderBeforeAmount = defender.getAmount();
                     int attackerBeforeAmount = getCurrentCreature().getAmount();
-                    if (defender.isAlive() && isEnemy(defender)) {
+                    if(defender.isAlive() && isEnemy(defender)){
                         turnQueue.getCurrentCreature()
                                 .attack(defender);
                         counter.addAndGet(1);
                         int defenderAfterAmount = defender.getAmount();
                         int attackerAfterAmount = getCurrentCreature().getAmount();
-                        if (counter.get() > 1) {
+                        if(counter.get()>1){
                             getCurrentCreature().addShots(1);
                         }
 
-                        if (defenderBeforeAmount == defenderAfterAmount) {
+                        if(defenderBeforeAmount == defenderAfterAmount){
                             attackInformation = getCurrentCreature().getName() + " attacked " + defender.getName() + " for "
-                                    + (int) (getCurrentCreature().getLastAttackDamage()) + ".\n" + attackInformation;
-                        } else {
+                                    + (int)(getCurrentCreature().getLastAttackDamage()) + ".\n" + attackInformation;
+                        }
+                        else{
                             attackInformation = getCurrentCreature().getName() + " attacked " + defender.getName() + " for "
-                                    + (int) (getCurrentCreature().getLastAttackDamage()) + ". " + (defenderBeforeAmount - defenderAfterAmount)
+                                    + (int)(getCurrentCreature().getLastAttackDamage()) + ". " + (defenderBeforeAmount-defenderAfterAmount)
                                     + " " + defender.getName() + " perish.\n" + attackInformation;
                         }
 
-                        if (defender.getLastCounterAttackDamage() > 0) {
-                            if (attackerBeforeAmount == attackerAfterAmount) {
+                        if(defender.getLastCounterAttackDamage() > 0){
+                            if(attackerBeforeAmount == attackerAfterAmount){
                                 attackInformation = defender.getName() + " counter attacked " + getCurrentCreature().getName() + " for "
-                                        + (int) (defender.getLastCounterAttackDamage()) + ".\n" + attackInformation;
-                            } else {
+                                        + (int)(defender.getLastCounterAttackDamage()) + ".\n" + attackInformation;
+                            }
+                            else{
                                 attackInformation = defender.getName() + " counter attacked " + getCurrentCreature().getName() + " for "
-                                        + (int) (defender.getLastCounterAttackDamage()) + ". " + (attackerBeforeAmount - attackerAfterAmount)
+                                        + (int)(defender.getLastCounterAttackDamage()) + ". " + (attackerBeforeAmount-attackerAfterAmount)
                                         + " " + getCurrentCreature().getName() + " perish.\n" + attackInformation;
                             }
                             defender.clearLastCounterAttackDamage();
                         }
 
-                        if (getCurrentCreature().getLastHealAmount() > 0) {
+                        if(getCurrentCreature().getLastHealAmount() > 0){
                             attackInformation = getCurrentCreature().getName() + " healed for " + getCurrentCreature().getLastHealAmount() + ".\n" + attackInformation;
                         }
                     }
@@ -119,49 +121,57 @@ public class GameEngine {
     }
 
     public boolean canAttack(final Point aPoint) {
-        return board.getCreature(aPoint).isPresent()
-                && board.canAttack(turnQueue.getCurrentCreature(), aPoint)
+        return board.getCreature( aPoint ).isPresent()
+                && board.canAttack( turnQueue.getCurrentCreature(), aPoint )
                 && isEnemy(board.getCreature(aPoint).get())
                 && currentCreatureCanAttack
-                && getCurrentCreature().getShots() > 0;
+                && getCurrentCreature().getShots()>0;
     }
 
-    public void lastMove(final Point aPoint) {
+    public void lastMove(final Point aPoint){
         currentCreatureCanMove = false;
-        if (turnQueue.getCurrentCreature().isDefending()) {
+        if(turnQueue.getCurrentCreature().isDefending()){
             turnQueue.getCurrentCreature().defend(false);
         }
 
         move(aPoint);
-        if (getCurrentCreature().isRange()) {
+        if(getCurrentCreature().isRange()){
             turnQueue.getRangeCreatures().forEach(this::creatureInMeleeRange);
         }
 
-        if ((turnQueue.getCurrentCreature().isRange() && turnQueue.getCurrentCreature().getAttackRange() > 2)
-                || !board.canCreatureAttackAnyone(turnQueue.getCurrentCreature())) {
+        if( (turnQueue.getCurrentCreature().isRange() && turnQueue.getCurrentCreature().getAttackRange() > 2 )
+                || !board.canCreatureAttackAnyone( turnQueue.getCurrentCreature() )){
             pass();
         }
         observerSupport.firePropertyChange(CREATURE_MOVED, null, aPoint);
     }
 
+
+    public void move(final Point aPoint) {
+        if(getCreature(aPoint).isEmpty() || !getCreature(aPoint).get().isAlive()){
+            board.move(turnQueue.getCurrentCreature(), aPoint);
+        }
+    }
+
     public boolean canMove(final Point aPoint) {
-        if (turnQueue.getCurrentCreature().isRange()) {
+        if(turnQueue.getCurrentCreature().isRange()){
             turnQueue.getRangeCreatures().forEach(this::creatureInMeleeRange);
         }
-        if (board.getCreature(aPoint).isPresent()) {
+        if(board.getCreature(aPoint).isPresent()){
             return !board.getCreature(aPoint).get().isAlive()
                     && board.canMove(turnQueue.getCurrentCreature(), aPoint)
                     && currentCreatureCanMove;
-        } else {
+        }
+        else{
             return board.canMove(turnQueue.getCurrentCreature(), aPoint) && currentCreatureCanMove;
         }
     }
 
-    public List<Point> getPath(final Point aPoint) {
-        return board.getPathToPoint(board.getCreaturePosition(getCurrentCreature()), aPoint);
+    public List<Point> getPath(final Point aPoint){
+        return board.getPathToPoint(board.getCreaturePosition(getCurrentCreature()),aPoint);
     }
 
-    public Point getCreaturePosition(final Creature aCreature) {
+    public Point getCreaturePosition(final Creature aCreature){
         return board.getCreaturePosition(aCreature);
     }
 
@@ -171,79 +181,82 @@ public class GameEngine {
                 .ifPresent(firstAidTent::healCreature);
     }
 
-    public String getAttackInformation() {
+    public String getAttackInformation(){
         return attackInformation;
     }
 
-    public boolean allActionsLeft() {
+    public boolean allActionsLeft(){
         return currentCreatureCanAttack && currentCreatureCanMove;
     }
 
-    public void move(final Point aPoint) {
-        board.move(turnQueue.getCurrentCreature(), aPoint);
-        turnQueue.next();
-        observerSupport.firePropertyChange(CREATURE_MOVED, null, aPoint);
-    }
-
-    public void waitAction() {
+    public void waitAction(){
         turnQueue.pushCurrentCreatureToEndOfQueue();
         pass();
     }
 
-    private void creatureInMeleeRange(final Creature aCreature) {
-        Point position = board.getCreaturePosition(aCreature);
-        List<Point> adjacentPositionsList = board.getAdjacentPositions(position);
-        List<Optional<Creature>> creaturesOnAdjacentPositions = adjacentPositionsList.stream().map(this::getAliveEnemyCreature).collect(Collectors.toList());
+    private void creatureInMeleeRange( final Creature aCreature ){
+        Point position = board.getCreaturePosition( aCreature );
+        List<Point> adjacentPositionsList = board.getAdjacentPositions( position );
+        List<Optional<Creature>> creaturesOnAdjacentPositions = adjacentPositionsList.stream().map(this::getAliveEnemyCreature).collect( Collectors.toList() );
         while (creaturesOnAdjacentPositions.remove(Optional.empty())) {  // remove every instance of "Optional.empty null" from list
         }
-        aCreature.setInMelee(!creaturesOnAdjacentPositions.isEmpty());
+        aCreature.setInMelee( !creaturesOnAdjacentPositions.isEmpty() );
     }
 
     public Optional<Creature> getCreature(final Point aPoint) {
         return board.getCreature(aPoint);
     }
 
-    public Creature getCurrentCreature() {
+    public Creature getCurrentCreature(){
         return turnQueue.getCurrentCreature();
     }
 
-    public boolean isCurrentCreature(final Point point) {
-        return point.getX() == board.getCreaturePosition(turnQueue.getCurrentCreature()).getX() && point.getY() == board.getCreaturePosition(turnQueue.getCurrentCreature()).getY();
+    public boolean isCurrentCreature( final Point point ){
+        return point.getX() == board.getCreaturePosition( turnQueue.getCurrentCreature() ).getX() && point.getY() == board.getCreaturePosition( turnQueue.getCurrentCreature() ).getY() ;
     }
 
-    public boolean isCurrentCreatureAlive() {
+    public boolean isCurrentCreatureAlive(){
         return turnQueue.getCurrentCreature().isAlive();
     }
 
     private Optional<Creature> getAliveEnemyCreature(final Point aPoint) {
-        if (board.getCreature(aPoint).isPresent()) {
-            if (isEnemy(board.getCreature(aPoint).get()) && board.getCreature(aPoint).get().isAlive()) {
+        if( board.getCreature( aPoint ).isPresent() ){
+            if( isEnemy(board.getCreature(aPoint).get()) && board.getCreature(aPoint).get().isAlive()){
                 return board.getCreature(aPoint);
             }
         }
         return Optional.empty();
     }
 
-    private Hero getCreatureHero(final Creature aCreature) {
-        if (hero1.getCreatures().contains(aCreature)) {
+    private Hero getCreatureHero(final Creature aCreature){
+        if(hero1.getCreatures().contains(aCreature)){
             return hero1;
         }
         return hero2;
     }
 
-    private boolean isEnemy(final Creature aCreature) {
+    private boolean isEnemy(final Creature aCreature){
         return !getCreatureHero(getCurrentCreature()).equals(getCreatureHero(aCreature));
     }
 
-    public String getCreatureInformation(final Point aPoint) {
+    public String getCreatureInformation(final Point aPoint){
         return getCreature(aPoint).get().getCreatureInformation();
     }
 
-    public boolean canCastSpell(final Point aPoint) {
-        return board.getCreature(aPoint).isPresent() && getCurrentCreature().getSpellCastCounter() > 0 && !isEnemy(getCreature(aPoint).get()) && getCreature(aPoint).get().isAlive();
+    public boolean canCastSpell(final Point aPoint){
+        return board.getCreature(aPoint).isPresent() && getCurrentCreature().getSpellCastCounter()>0 && !isEnemy(getCreature(aPoint).get()) && getCreature(aPoint).get().isAlive();
     }
 
-    public String getSpellCastInformation() {
+    public void castCurrentCreatureSpell(final Point aPoint){
+        final Spell spell = new SpellFactory().create(getCurrentCreature().getSpellName(), getCurrentCreature().getSpellRang(), getCurrentCreature().getSpellPower());
+        castSpell(aPoint,spell);
+        getCurrentCreature().reduceNumberOfSpellCasts();
+        spellCastInformation = getCurrentCreature().getName() + " casted " + spell.getName() + " on " + getCreature(aPoint).get().getName();
+        pass();
+        observerSupport.firePropertyChange(CREATURE_MOVED, null, null);
+    }
+
+    public String getSpellCastInformation(){
         return spellCastInformation;
     }
 
@@ -252,7 +265,7 @@ public class GameEngine {
         currentCreatureCanAttack = true;
         turnQueue.next();
         additionalInformation = "";
-        board.putDeadCreaturesOnBoard(turnQueue.getDeadCreatures(), turnQueue.getDeadCreaturePoints());
+        board.putDeadCreaturesOnBoard( turnQueue.getDeadCreatures(), turnQueue.getDeadCreaturePoints() );
     }
 
     public String getRoundNumber() {
@@ -267,13 +280,6 @@ public class GameEngine {
         turnQueue.addObserver(aEventType, aObserver);
     }
 
-
-    public boolean canAttack(final Point point) {
-        return false;
-    public void addObserverToTurnQueue(final String aEventType, final PropertyChangeListener aObserver) {
-        turnQueue.addObserver(aEventType, aObserver);
-    }
-
     public boolean canHeal(final Point aPoint) {
         Creature currentCreature = turnQueue.getCurrentCreature();
 
@@ -282,6 +288,7 @@ public class GameEngine {
                 .filter(creature -> creature.getHeroNumber() == currentCreature.getHeroNumber())
                 .isPresent();
     }
+
 
     public Hero getCurrentHero() {
         return (hero1.getCreatures().contains(turnQueue.getCurrentCreature())) ? hero1 : hero2;
@@ -409,7 +416,7 @@ public class GameEngine {
     }
 
     public void getDeadCreaturesInformation() {
-        for (int i = 0; i < turnQueue.getDeadCreaturePoints().size(); i++) {
+        for(int i = 0; i < turnQueue.getDeadCreaturePoints().size(); i++){
             System.out.println("i=" + i + " Creature: " + turnQueue.getDeadCreatures().get(i).getName() + " Point: " + turnQueue.getDeadCreaturePoints().get(i) + "\n");
         }
         System.out.println("---------------------------------------------------------\n");

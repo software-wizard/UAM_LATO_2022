@@ -4,9 +4,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Cursor;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.OverrunStyle;
@@ -18,20 +15,12 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.stage.Stage;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import pl.psi.GameEngine;
 import pl.psi.Hero;
 import pl.psi.Point;
-import pl.psi.TurnQueue;
-import pl.psi.spells.Spell;
-
-import java.io.IOException;
-
-import static pl.psi.gui.SpellBattleController.SPELL_SELECTED;
-import static pl.psi.spells.SpellRang.BASIC;
 import pl.psi.TurnQueue;
 import pl.psi.spells.Spell;
 import pl.psi.spells.SpellTypes;
@@ -58,15 +47,14 @@ public class MainBattleController implements PropertyChangeListener {
     private Button passButton;
     @FXML
     private Button spellButton;
-
-    Spell<? extends SpellableIf> selectedSpell;
-
-    List<SpellTypes> spellNotRequiredPressingMouse = List.of(FOR_ALL_CREATURES, FOR_ALL_ALLIED_CREATURES, FOR_ALL_ENEMY_CREATURES);
-
     @FXML
     private Label console;
     @FXML
     private Label roundNumber;
+
+    Spell<? extends SpellableIf> selectedSpell;
+
+    List<SpellTypes> spellNotRequiredPressingMouse = List.of(FOR_ALL_CREATURES, FOR_ALL_ALLIED_CREATURES, FOR_ALL_ENEMY_CREATURES);
 
     public MainBattleController(final Hero aHero1, final Hero aHero2) {
         gameEngine = new GameEngine(aHero1, aHero2);
@@ -107,16 +95,11 @@ public class MainBattleController implements PropertyChangeListener {
         });
 
         waitButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
-            if (gameEngine.allActionLeft()) {
+            if (gameEngine.allActionsLeft()) {
                 gameEngine.waitAction();
-                gameEngine.pass();
+            } else {
+                throw new RuntimeException("Action already performed.");
             }
-
-        });
-
-        gameEngine.addObserverToTurnQueue(TurnQueue.END_OF_TURN, (f) -> {
-            gameEngine.getHero1().setHeroCastedSpell(false);
-            gameEngine.getHero2().setHeroCastedSpell(false);
             refreshGui();
         });
 
@@ -247,6 +230,32 @@ public class MainBattleController implements PropertyChangeListener {
                             e -> gameEngine.heal(new Point(x1, y1)));
                 }
 
+                if (gameEngine.getCreature(new Point(x1, y1)).isPresent()) {
+                    mapTile.setOnMouseClicked(e -> {
+                        if (e.getButton() == MouseButton.SECONDARY) {
+                            showStage(gameEngine.getCreatureInformation(new Point(x1, y1)), gameEngine.getCreature(new Point(x1, y1)).get().hasSpecial());
+                        }
+                    });
+                }
+
+                if (gameEngine.canAttack(new Point(x, y))) {
+                    mapTile.setOnMouseEntered(e -> {
+                        Image img = new Image(gameEngine.getCreature(new Point(x1, y1)).get().getBasicStats().getCanAttackImagePath());
+                        mapTile.setBackground(img);
+                    });
+                    mapTile.setOnMouseExited(e -> {
+                        Image img = new Image(gameEngine.getCreature(new Point(x1, y1)).get().getBasicStats().getImagePath());
+                        mapTile.setBackground(img);
+                    });
+
+                    mapTile.setOnMousePressed(
+                            e -> {
+                                if (e.getButton() == MouseButton.PRIMARY) {
+                                    gameEngine.attack(new Point(x1, y1));
+                                }
+                            });
+                }
+
                 if (gameEngine.canCastSpell()) {
                     mapTile.addEventHandler(MouseEvent.MOUSE_ENTERED,
                             mouseEvent -> {
@@ -270,68 +279,14 @@ public class MainBattleController implements PropertyChangeListener {
                             });
                 }
 
-                renderSpecialFields(mapTile, x, y);
 
                 renderSpecialFields(mapTile, x1, y1);
-
-                if (gameEngine.getCreature(new Point(x1, y1)).isPresent()) {
-                    mapTile.setOnMouseClicked(e -> {
-                        if (e.getButton() == MouseButton.SECONDARY) {
-                            showStage(gameEngine.getCreatureInformation(new Point(x1, y1)), gameEngine.getCreature(new Point(x1, y1)).get().hasSpecial());
-                        }
-                    });
-                }
-                if (gameEngine.canAttack(new Point(x, y))) {
-                    mapTile.setOnMouseEntered(e -> {
-                        Image img = new Image(gameEngine.getCreature(new Point(x1, y1)).get().getBasicStats().getCanAttackImagePath());
-                        mapTile.setBackground(img);
-                    });
-                    mapTile.setOnMouseExited(e -> {
-                        Image img = new Image(gameEngine.getCreature(new Point(x1, y1)).get().getBasicStats().getImagePath());
-                        mapTile.setBackground(img);
-                    });
-
-                    mapTile.setOnMousePressed(
-                            e -> {
-                                if (e.getButton() == MouseButton.PRIMARY) {
-                                    gameEngine.attack(new Point(x1, y1));
-                                }
-                            });
-                }
-
-                if (gameEngine.canCastSpell(new Point(x, y))) {
-                    mapTile.setOnMouseEntered(e -> {
-                        Image img = new Image(gameEngine.getCreature(new Point(x1, y1)).get().getBasicStats().getCanBuffImagePath());
-                        mapTile.setBackground(img);
-
-                    });
-                    mapTile.setOnMouseExited(e -> {
-                        Image img = new Image(gameEngine.getCreature(new Point(x1, y1)).get().getBasicStats().getImagePath());
-                        if (gameEngine.getCreature(new Point(x1, y1)).get().equals(gameEngine.getCurrentCreature())) {
-                            img = new Image(gameEngine.getCreature(new Point(x1, y1)).get().getBasicStats().getCurrentImagePath());
-                        }
-                        mapTile.setBackground(img);
-                    });
-
-                    mapTile.setOnMousePressed(
-                            e -> {
-                                if (e.getButton() == MouseButton.PRIMARY) {
-                                    gameEngine.castCurrentCreatureSpell(new Point(x1, y1));
-                                }
-                            });
-                }
-
-                if (gameEngine.isCurrentCreature(new Point(x, y)) && gameEngine.isCurrentCreatureAlive()) {
-                    var img = new Image(gameEngine.getCreature(new Point(x, y)).get().getBasicStats().getCurrentImagePath());
-                    mapTile.setBackground(img);
-                }
 
                 console.setText(gameEngine.getAttackInformation());
 
                 waitButton.setDisable(!gameEngine.allActionsLeft());
                 defendButton.setDisable(!gameEngine.allActionsLeft());
 
-                gridMap.add(mapTile, x, y);
                 gridMap.add(mapTile, x1, y1);
             }
         }
