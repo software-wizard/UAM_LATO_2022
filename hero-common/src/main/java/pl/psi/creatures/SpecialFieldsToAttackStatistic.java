@@ -25,6 +25,11 @@ public enum SpecialFieldsToAttackStatistic implements CreatureStatisticIf {
     private final String imagePath;
 
     @Override
+    public CreatureStatistic.CreatureGroup getGroup() {
+        return null;
+    }
+
+    @Override
     public String getCanAttackImagePath() {
         return null;
     }
