@@ -28,6 +28,9 @@ public class SpellTest {
     private static final Spell<? extends SpellableIf> FIREBALL = new SpellFactory().create(FIRE_BALL, BASIC, 1);
     private static final Spell<? extends SpellableIf> DISPEL_RANG_1 = new SpellFactory().create(DISPEL, BASIC, 1);
     private static final Spell<? extends SpellableIf> DISPEL_RANG_2 = new SpellFactory().create(DISPEL, ADVANCED, 1);
+    private static final Spell<? extends SpellableIf> STONESKIN_RANG_1 = new SpellFactory().create(STONESKIN, BASIC, 1);
+    private static final Spell<? extends SpellableIf> MISFORTUNE_RANG_1 = new SpellFactory().create(MISFORTUNE, BASIC, 1);
+    private static final Spell<? extends SpellableIf> PRAYER_RANG_1 = new SpellFactory().create(PRAYER, BASIC, 1);
 
 
     private final Creature EXAMPLE_CREATURE_1 = new Creature.Builder()
@@ -265,7 +268,7 @@ public class SpellTest {
         List<Creature> secondHeroCreatures = List.of(EXAMPLE_CREATURE_2);
 
         final GameEngine gameEngine =
-                new GameEngine(new Hero(firstHeroCreatures, List.of(HASTE_BASIC)),
+                new GameEngine(new Hero(firstHeroCreatures, List.of(HASTE_BASIC, PRAYER_RANG_1, STONESKIN_RANG_1, MISFORTUNE_RANG_1)),
                         new Hero(secondHeroCreatures, List.of(MAGIC_ARROW_RANG_1)));
 
         Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
@@ -273,15 +276,18 @@ public class SpellTest {
 
         //when
         gameEngine.castSpell(new Point(14, 1), HASTE_BASIC);
-        gameEngine.castSpell(new Point(14, 1), HASTE_BASIC);
-        gameEngine.castSpell(new Point(14, 1), HASTE_BASIC);
-        gameEngine.castSpell(new Point(14, 1), HASTE_BASIC);
+        gameEngine.castSpell(new Point(14, 1), PRAYER_RANG_1);
+        gameEngine.castSpell(new Point(14, 1), STONESKIN_RANG_1);
+        gameEngine.castSpell(new Point(14, 1), MISFORTUNE_RANG_1);
 
         //then
         Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
                 .get().getRunningSpells().size()).isLessThanOrEqualTo(3);
-        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
-                .get().getBuffedStats().getMoveRange()).isEqualTo(30);
+
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1)).get().getBuffedStats().getArmor()).isEqualTo(7);
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1)).get().getBuffedStats().getAttack()).isEqualTo(4);
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1)).get().getBuffedStats().getMoveRange()).isEqualTo(4);
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1)).get().getLuck()).isEqualTo(9);
     }
 
     @Test

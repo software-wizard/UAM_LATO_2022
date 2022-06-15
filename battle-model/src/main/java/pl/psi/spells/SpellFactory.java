@@ -170,7 +170,7 @@ public class SpellFactory {
             case STONESKIN:
                 switch (rang) {
                     case BASIC:
-                        return new BuffDebuffSpell(FIELD, name, EARTH, BASIC, 5, CreatureStats.builder().armor(3).build(), 2, null);
+                        return new BuffDebuffSpell(FIELD, name, EARTH, BASIC, 5, CreatureStats.builder().armor(3).build(), 10, null);
                     case ADVANCED:
                         return new BuffDebuffSpell(FIELD, name, EARTH, ADVANCED,  5, CreatureStats.builder().armor(6).build(), 4, null);
                     case EXPERT:

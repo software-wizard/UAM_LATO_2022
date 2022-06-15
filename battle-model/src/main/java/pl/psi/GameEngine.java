@@ -294,7 +294,6 @@ public class GameEngine {
 
     public void castSpell(final Point point, Spell<? extends SpellableIf> spell) {
         BiConsumer<String, PropertyChangeListener> biConsumer = this::addObserverToTurnQueue;
-        System.out.println(spell.getName());
         switch (spell.getCategory()) {
             case FIELD:
                 Optional<Creature> targetCreature = getCreatureFromField(point, spell);

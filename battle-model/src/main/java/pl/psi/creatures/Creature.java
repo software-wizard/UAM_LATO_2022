@@ -423,7 +423,7 @@ public class Creature implements PropertyChangeListener, Comparable<Creature>, S
     }
 
     public boolean isRunningSpellsSlotsFull() {
-        return getRunningSpells().size() < 3;
+        return getRunningSpells().size() <= 3;
     }
 
     public void buffMorale(int moraleIncrease) {

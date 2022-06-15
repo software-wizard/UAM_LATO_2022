@@ -57,7 +57,7 @@ public class Start extends Application {
                         new NecropolisFactory().create(true,7,5)
                 ), HeroStatistics.NECROMANCER,
                         List.of(
-                                new SpellFactory().create(COUNTERSTRIKE, BASIC, 1),
+                                new SpellFactory().create(HASTE, BASIC, 1),
                                 new SpellFactory().create(MAGIC_ARROW, BASIC, 10),
                                 new SpellFactory().create(CHAIN_LIGHTNING, BASIC, 1),
                                 new SpellFactory().create(STONESKIN, BASIC, 1),

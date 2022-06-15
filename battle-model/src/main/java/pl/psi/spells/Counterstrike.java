@@ -29,7 +29,7 @@ public class Counterstrike extends Spell<Creature> implements PropertyChangeList
         super(counterstrike.getCategory(), counterstrike.getName(), counterstrike.getSpellMagicClass(), counterstrike.getRang(), counterstrike.getManaCost());
         this.counterstrikeCounter = counterstrike.counterstrikeCounter;
         this.time = counterstrike.time;
-        this.roundTimer = new RoundTimer(counterstrike.time, this, creature);
+        this.roundTimer = new RoundTimer(counterstrike.time, this, creature, null);
         this.creature = creature;
         currentCounterstrikeCounter = counterstrikeCounter;
         consumer.accept(TurnQueue.END_OF_TURN, counterstrike.getRoundTimer());

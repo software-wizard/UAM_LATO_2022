@@ -6,12 +6,15 @@ import pl.psi.creatures.Creature;
 import pl.psi.creatures.CreatureStats;
 
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.Optional;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 
 public class BuffDebuffSpell extends Spell<Creature> {
 
+    private final PropertyChangeSupport observerSupport = new PropertyChangeSupport(this);
     private final CreatureStats creatureStats;
     private final int time;
     @Getter
@@ -30,27 +33,22 @@ public class BuffDebuffSpell extends Spell<Creature> {
         this.creatureStats = buffDebuffSpell.creatureStats;
         this.time = buffDebuffSpell.time;
         this.counterSpell = buffDebuffSpell.counterSpell;
-        this.roundTimer = new RoundTimer(buffDebuffSpell.time, this, creature);
+        this.roundTimer = new RoundTimer(buffDebuffSpell.time, this, creature, buffDebuffSpell.counterSpell);
+
     }
 
     @Override
     public void castSpell(Creature aDefender, BiConsumer<String, PropertyChangeListener> consumer) {
-        Optional<Spell> any = aDefender.getRunningSpells().stream()
-                .filter(spell -> spell.getName().equals(counterSpell))
-                .findAny();
-        if (any.isPresent()) {
-            any.get().unCastSpell(aDefender);
-            aDefender.getRunningSpells().removeIf(spell -> spell.getName().equals(counterSpell));
+        if(aDefender.getRunningSpells().stream().map(Spell::getName).collect(Collectors.toList()).contains(this.getName())){
+            observerSupport.firePropertyChange(RoundTimer.RESET_TIMER, null, null);
+            return;
         }
-
-        if (!aDefender.isRunningSpellsSlotsFull()){
-            aDefender.getRunningSpells().poll().unCastSpell(aDefender);
-        }
-
         aDefender.addRunningSpell(this);
         BuffDebuffSpell buffDebuffSpell = new BuffDebuffSpell(this, aDefender);
         consumer.accept(TurnQueue.END_OF_TURN, buffDebuffSpell.getRoundTimer());
+        observerSupport.addPropertyChangeListener(RoundTimer.RESET_TIMER, buffDebuffSpell.getRoundTimer());
         aDefender.buff(creatureStats);
+        System.out.println(aDefender.getRunningSpells().stream().map(Spell::getName).collect(Collectors.toList()));
     }
 
     private CreatureStats convertToNegative(CreatureStats creatureStats) {

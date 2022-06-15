@@ -29,23 +29,11 @@ public class MoralBuffDebuffSpell extends Spell<Creature> {
         this.moral = moralBuffDebuffSpell.moral;
         this.time = moralBuffDebuffSpell.time;
         this.counterSpell = moralBuffDebuffSpell.counterSpell;
-        this.roundTimer = new RoundTimer(moralBuffDebuffSpell.time, this, creature);
+        this.roundTimer = new RoundTimer(moralBuffDebuffSpell.time, this, creature, moralBuffDebuffSpell.counterSpell);
     }
 
     @Override
     public void castSpell(Creature aDefender, BiConsumer<String, PropertyChangeListener> consumer) {
-        Optional<Spell> any = aDefender.getRunningSpells().stream()
-                .filter(spell -> spell.getName().equals(counterSpell))
-                .findAny();
-        if (any.isPresent()) {
-            any.get().unCastSpell(aDefender);
-            aDefender.getRunningSpells().removeIf(spell -> spell.getName().equals(counterSpell));
-        }
-
-        if (!aDefender.isRunningSpellsSlotsFull()){
-            aDefender.getRunningSpells().poll().unCastSpell(aDefender);
-        }
-
         aDefender.addRunningSpell(this);
         MoralBuffDebuffSpell moralBuffDebuffSpell = new MoralBuffDebuffSpell(this, aDefender);
         consumer.accept(TurnQueue.END_OF_TURN, moralBuffDebuffSpell.getRoundTimer());

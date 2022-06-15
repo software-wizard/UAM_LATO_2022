@@ -7,6 +7,7 @@ import pl.psi.creatures.Creature;
 import java.beans.PropertyChangeListener;
 import java.util.Optional;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 public class LuckBuffDebuffSpell extends Spell<Creature> {
 
@@ -28,23 +29,11 @@ public class LuckBuffDebuffSpell extends Spell<Creature> {
         this.luck = luckBuffDebuffSpell.luck;
         this.time = luckBuffDebuffSpell.time;
         this.counterSpell = luckBuffDebuffSpell.counterSpell;
-        this.roundTimer = new RoundTimer(luckBuffDebuffSpell.time, this, creature);
+        this.roundTimer = new RoundTimer(luckBuffDebuffSpell.time, this, creature, luckBuffDebuffSpell.counterSpell);
     }
 
     @Override
     public void castSpell(Creature aDefender, BiConsumer<String, PropertyChangeListener> consumer) {
-        Optional<Spell> any = aDefender.getRunningSpells().stream()
-                .filter(spell -> spell.getName().equals(counterSpell))
-                .findAny();
-        if (any.isPresent()) {
-            any.get().unCastSpell(aDefender);
-            aDefender.getRunningSpells().removeIf(spell -> spell.getName().equals(counterSpell));
-        }
-
-        if (!aDefender.isRunningSpellsSlotsFull()){
-            aDefender.getRunningSpells().poll().unCastSpell(aDefender);
-        }
-
         aDefender.addRunningSpell(this);
         LuckBuffDebuffSpell moralBuffDebuffSpell = new LuckBuffDebuffSpell(this, aDefender);
         consumer.accept(TurnQueue.END_OF_TURN, moralBuffDebuffSpell.getRoundTimer());
