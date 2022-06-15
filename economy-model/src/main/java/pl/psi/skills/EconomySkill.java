@@ -31,7 +31,7 @@ public class EconomySkill {
     public void apply(List<Creature> aCreatures) {
         aCreatures.forEach(aCreature -> {
             CreatureStats statsToApply = this.upgradeCalculator.calculate(aCreature);
-            aCreature.buff(statsToApply);
+            aCreature.increaseStats(statsToApply);
         });
     }
 

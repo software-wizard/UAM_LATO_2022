@@ -8,15 +8,16 @@ import pl.psi.artifacts.model.Artifact;
 import pl.psi.artifacts.model.ArtifactApplyingMode;
 import pl.psi.artifacts.model.ArtifactEffect;
 import pl.psi.converter.EcoBattleConverter;
-import pl.psi.creatures.Creature;
-import pl.psi.creatures.CreatureStatisticIf;
-import pl.psi.creatures.EconomyCreature;
-import pl.psi.creatures.EconomyNecropolisFactory;
+import pl.psi.creatures.*;
+import pl.psi.gui.NecropolisFactory;
+import pl.psi.skills.EconomySkill;
+import pl.psi.skills.EconomySkillFactory;
+import pl.psi.skills.SkillLevel;
+import pl.psi.skills.SkillType;
 
+import java.lang.reflect.Array;
 import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -196,5 +197,18 @@ class EcoBattleConverterTest {
         final CreatureStatisticIf baseStats = economyCreature.getBaseStats();
 
         assertEquals((int) (baseStats.getMaxHp() + (baseStats.getMaxHp() * 0.2) + 3), upgradedStats.getMaxHp());
+    }
+
+    @Test
+    void shouldHaveCorrectSkillsApplied() {
+        NecropolisFactory factory = new NecropolisFactory();
+        WarMachinesAbstract aidTent = new WarMachinesFactory().create(2, 1, null, 0);
+        Creature creature1 = factory.create(false, 1, 100);
+        Creature creature2 = factory.create(false, 2, 100);
+        List<Creature> creatureList = new LinkedList<>(List.of(aidTent, creature1, creature2));
+        EconomySkill skill = new EconomySkillFactory().create(SkillType.OFFENCE, SkillLevel.BASIC);
+        skill.apply(creatureList);
+        assertEquals(0, aidTent.getExternalStats().getAttack());
+        assertEquals(5.5, creature1.getExternalStats().getAttack());
     }
 }

@@ -8,5 +8,7 @@ public enum SkillType {
     RESISTANCE,
     LEADERSHIP,
     LUCK,
-    FIRST_AID
+    FIRST_AID,
+    ARTILLERY,
+    BALLISTICS
 }

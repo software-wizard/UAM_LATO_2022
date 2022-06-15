@@ -19,6 +19,10 @@ public class EconomySkillFactory {
                         return new EconomySkill(aSkillType, 100, 1);
                     case FIRST_AID:
                         return new EconomySkill(aSkillType, 100, 50);
+                    case ARTILLERY:
+                        return new EconomySkill(aSkillType, 250, 1);
+                    case BALLISTICS:
+                        return new EconomySkill(aSkillType, 200, 1);
                     default:
                         throw new IllegalArgumentException("Invalid skill type");
                 }
@@ -37,6 +41,10 @@ public class EconomySkillFactory {
                         return new EconomySkill(aSkillType, 200, 2);
                     case FIRST_AID:
                         return new EconomySkill(aSkillType, 200, 75);
+                    case ARTILLERY:
+                        return new EconomySkill(aSkillType, 350, 2);
+                    case BALLISTICS:
+                        return new EconomySkill(aSkillType, 300, 2);
                     default:
                         throw new IllegalArgumentException("Invalid skill type");
                 }
@@ -55,6 +63,10 @@ public class EconomySkillFactory {
                         return new EconomySkill(aSkillType, 300, 3);
                     case FIRST_AID:
                         return new EconomySkill(aSkillType, 300, 100);
+                    case ARTILLERY:
+                        return new EconomySkill(aSkillType, 450, 3);
+                    case BALLISTICS:
+                        return new EconomySkill(aSkillType, 400, 3);
                     default:
                         throw new IllegalArgumentException("Invalid skill type");
                 }

@@ -48,5 +48,10 @@ public abstract class WarMachinesAbstract extends Creature {
         return stats.getDamage();
     }
 
+    public void upgradeSkillLevel( int aNewLevel) {
+        if (aNewLevel < 4 && aNewLevel > 0) {
+            this.skillLevel = aNewLevel;
+        }
+    }
 
 }
