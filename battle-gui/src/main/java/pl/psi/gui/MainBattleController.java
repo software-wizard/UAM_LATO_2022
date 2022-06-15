@@ -63,6 +63,16 @@ public class MainBattleController {
             var img = new Image("/images/holyGround.png");
             mapTile.setBackground(img);
         }
+        if (x == 3 && y == 4)
+        {
+            Image img = new Image("/images/fields_of_Glory.png");
+            mapTile.setBackground(img);
+        }
+        if (x == 4 && y == 6)
+        {
+            Image img = new Image("/images/fiery_Fields.png");
+            mapTile.setBackground(img);
+        }
     }
 
     private void refreshGui() {
