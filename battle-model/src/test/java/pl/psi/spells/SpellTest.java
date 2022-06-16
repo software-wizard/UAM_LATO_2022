@@ -24,6 +24,7 @@ public class SpellTest {
 
     private static final Spell<? extends SpellableIf> MAGIC_ARROW_RANG_1 = new SpellFactory().create(MAGIC_ARROW, BASIC, 1);
     private static final Spell<? extends SpellableIf> MAGIC_ARROW_RANG_2 = new SpellFactory().create(MAGIC_ARROW, ADVANCED, 1);
+    private static final Spell<? extends SpellableIf> LIGHTNING_BOLT_RANG_1 = new SpellFactory().create(LIGHTNING_BOLT, BASIC, 1);
     private static final Spell<? extends SpellableIf> HASTE_BASIC = new SpellFactory().create(HASTE, BASIC, 1);
     private static final Spell<? extends SpellableIf> HASTE_EXPERT = new SpellFactory().create(HASTE, EXPERT, 1);
     private static final Spell<? extends SpellableIf> SLOW_BASIC = new SpellFactory().create(SLOW, BASIC, 1);
@@ -605,6 +606,60 @@ public class SpellTest {
         //then
         Assertions.assertThat(gameEngine.getCurrentHero()
                 .getSpellBook().getMana()).isEqualTo(5);
+    }
+
+    @Test
+    void shouldReduceLightningBoltDamageWhenCreatureHasAirProtection() {
+        //given
+        List<Creature> firstHeroCreatures = List.of(EXAMPLE_CREATURE_1);
+        List<Creature> secondHeroCreatures = List.of(EXAMPLE_CREATURE_2);
+
+        Spell<? extends SpellableIf> protectionFromAir = new SpellFactory().create(PROTECTION_FROM_AIR, BASIC, 1);
+
+        final GameEngine gameEngine =
+                new GameEngine(new Hero(firstHeroCreatures, SpellsBook.builder().spells(List.of(LIGHTNING_BOLT_RANG_1)).mana(NOT_IMPORTANT_MANA).build()),
+                        new Hero(secondHeroCreatures, SpellsBook.builder().spells(List.of(MAGIC_ARROW_RANG_1)).mana(NOT_IMPORTANT_MANA).build()));
+
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
+                .isPresent()).isTrue();
+
+        //when
+        gameEngine.castSpell(new Point(14, 1), protectionFromAir);
+        gameEngine.castSpell(new Point(14, 1), LIGHTNING_BOLT_RANG_1);
+
+
+        //then
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
+                .get().getRunningSpells()).contains(protectionFromAir);
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
+                .get().getCurrentHp()).isEqualTo(75.5);
+    }
+
+    @Test
+    void shouldSetGraterFactorProtectionWhenCastedProtectionWithAdvanceRang() {
+        //given
+        List<Creature> firstHeroCreatures = List.of(EXAMPLE_CREATURE_1);
+        List<Creature> secondHeroCreatures = List.of(EXAMPLE_CREATURE_2);
+
+        Spell<? extends SpellableIf> protectionFromAir = new SpellFactory().create(PROTECTION_FROM_AIR, ADVANCED, 1);
+
+        final GameEngine gameEngine =
+                new GameEngine(new Hero(firstHeroCreatures, SpellsBook.builder().spells(List.of(LIGHTNING_BOLT_RANG_1)).mana(NOT_IMPORTANT_MANA).build()),
+                        new Hero(secondHeroCreatures, SpellsBook.builder().spells(List.of(MAGIC_ARROW_RANG_1)).mana(NOT_IMPORTANT_MANA).build()));
+
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
+                .isPresent()).isTrue();
+
+        //when
+        gameEngine.castSpell(new Point(14, 1), protectionFromAir);
+        gameEngine.castSpell(new Point(14, 1), LIGHTNING_BOLT_RANG_1);
+
+
+        //then
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
+                .get().getRunningSpells()).contains(protectionFromAir);
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
+                .get().getCurrentHp()).isEqualTo(82.5);
     }
 
     @Test

@@ -60,6 +60,17 @@ public class SpellFactory {
                     default:
                         throw new IllegalArgumentException(RANG_EXCEPTION_MESSAGE);
                 }
+            case PROTECTION_FROM_AIR:
+                switch (rang) {
+                    case BASIC:
+                        return new BuffDebuffSpell(FIELD, name, AIR, BASIC, 6, CreatureStats.builder().build(), 2, null);
+                    case ADVANCED:
+                        return new BuffDebuffSpell(FIELD, name, AIR, ADVANCED, 6, CreatureStats.builder().build(), 4, null);
+                    case EXPERT:
+                        return new BuffDebuffSpell(FOR_ALL_ALLIED_CREATURES, name, AIR, EXPERT, 6, CreatureStats.builder().build(), 2, null);
+                    default:
+                        throw new IllegalArgumentException(RANG_EXCEPTION_MESSAGE);
+                }
             case CHAIN_LIGHTNING:
                 switch (rang) {
                     case BASIC:
@@ -90,6 +101,17 @@ public class SpellFactory {
                         return new BuffDebuffSpell(FIELD, name, FIRE, ADVANCED, 5, CreatureStats.builder().attack(6).build(), 4, null);
                     case EXPERT:
                         return new BuffDebuffSpell(FOR_ALL_ALLIED_CREATURES, name, FIRE, EXPERT, 5, CreatureStats.builder().attack(6).build(), 2, null);
+                    default:
+                        throw new IllegalArgumentException(RANG_EXCEPTION_MESSAGE);
+                }
+            case PROTECTION_FROM_FIRE:
+                switch (rang) {
+                    case BASIC:
+                        return new BuffDebuffSpell(FIELD, name, FIRE, BASIC, 6, CreatureStats.builder().build(), 2, null);
+                    case ADVANCED:
+                        return new BuffDebuffSpell(FIELD, name, FIRE, ADVANCED, 6, CreatureStats.builder().build(), 4, null);
+                    case EXPERT:
+                        return new BuffDebuffSpell(FOR_ALL_ALLIED_CREATURES, name, FIRE, EXPERT, 6, CreatureStats.builder().build(), 2, null);
                     default:
                         throw new IllegalArgumentException(RANG_EXCEPTION_MESSAGE);
                 }
@@ -200,6 +222,17 @@ public class SpellFactory {
                     default:
                         throw new IllegalArgumentException(RANG_EXCEPTION_MESSAGE);
                 }
+            case PROTECTION_FROM_EARTH:
+                switch (rang) {
+                    case BASIC:
+                        return new BuffDebuffSpell(FIELD, name, EARTH, BASIC, 6, CreatureStats.builder().build(), 2, null);
+                    case ADVANCED:
+                        return new BuffDebuffSpell(FIELD, name, EARTH, ADVANCED, 6, CreatureStats.builder().build(), 4, null);
+                    case EXPERT:
+                        return new BuffDebuffSpell(FOR_ALL_ALLIED_CREATURES, name, EARTH, EXPERT, 6, CreatureStats.builder().build(), 2, null);
+                    default:
+                        throw new IllegalArgumentException(RANG_EXCEPTION_MESSAGE);
+                }
             case METEOR_SHOWER:
                 switch (rang) {
                     case BASIC:
@@ -250,6 +283,17 @@ public class SpellFactory {
                         return new Dispel(FIELD, name, WATER, ADVANCED, 15);
                     case EXPERT:
                         return new Dispel(FOR_ALL_CREATURES, name, WATER, EXPERT, 20);
+                    default:
+                        throw new IllegalArgumentException(RANG_EXCEPTION_MESSAGE);
+                }
+            case PROTECTION_FROM_WATER:
+                switch (rang) {
+                    case BASIC:
+                        return new BuffDebuffSpell(FIELD, name, WATER, BASIC, 6, CreatureStats.builder().build(), 2, null);
+                    case ADVANCED:
+                        return new BuffDebuffSpell(FIELD, name, WATER, ADVANCED, 6, CreatureStats.builder().build(), 4, null);
+                    case EXPERT:
+                        return new BuffDebuffSpell(FOR_ALL_ALLIED_CREATURES, name, WATER, EXPERT, 6, CreatureStats.builder().build(), 2, null);
                     default:
                         throw new IllegalArgumentException(RANG_EXCEPTION_MESSAGE);
                 }

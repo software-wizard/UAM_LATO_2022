@@ -66,7 +66,7 @@ public class Creature implements PropertyChangeListener, Comparable<Creature>, S
 
     public void attack(final Creature aDefender) {
         if (isAlive()) {
-            final double damage = getCalculator().calculateDamage(this, aDefender);
+            double damage = getCalculator().calculateDamage(this, aDefender);
             applyDamage(aDefender, damage);
             if (canCounterAttack(aDefender)) {
                 aDefender.counterAttack(this);
@@ -150,7 +150,7 @@ public class Creature implements PropertyChangeListener, Comparable<Creature>, S
         }
     }
 
-    public void applySpellDamage(Creature aDefender, Integer damage) {
+    public void applySpellDamage(Creature aDefender, double damage) {
         aDefender.applyDamage(aDefender, damage);
     }
 

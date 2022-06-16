@@ -58,14 +58,17 @@ public class Start extends Application {
                                 new SpellFactory().create(MAGIC_ARROW, BASIC, 10),
                                 new SpellFactory().create(FORTUNE, BASIC, 1),
                                 new SpellFactory().create(LIGHTNING_BOLT, BASIC, 1),
+                                new SpellFactory().create(PROTECTION_FROM_AIR, BASIC, 1),
                                 new SpellFactory().create(CHAIN_LIGHTNING, BASIC, 1),
                                 new SpellFactory().create(COUNTERSTRIKE, BASIC, 1),
+                                new SpellFactory().create(PROTECTION_FROM_FIRE, BASIC, 1),
                                 new SpellFactory().create(FIRE_BALL, BASIC, 1),
                                 new SpellFactory().create(MISFORTUNE, BASIC, 10),
                                 new SpellFactory().create(ARMAGEDDON, BASIC, 1),
                                 new SpellFactory().create(INFERNO, BASIC, 1),
                                 new SpellFactory().create(SLOW, BASIC, 1),
                                 new SpellFactory().create(DEATH_RIPPLE, BASIC, 1),
+                                new SpellFactory().create(PROTECTION_FROM_EARTH, BASIC, 1),
                                 new SpellFactory().create(SORROW, BASIC, 1),
                                 new SpellFactory().create(STONESKIN, BASIC, 10),
                                 new SpellFactory().create(METEOR_SHOWER, BASIC, 1),
@@ -75,6 +78,7 @@ public class Start extends Application {
                                 new SpellFactory().create(FROST_RING, BASIC, 1),
                                 new SpellFactory().create(PRAYER, BASIC, 1),
                                 new SpellFactory().create(DISPEL, BASIC, 1),
+                                new SpellFactory().create(PROTECTION_FROM_WATER, BASIC, 1),
                                 new SpellFactory().create(MIRTH, BASIC, 1)
                         )).mana(100).build());
         ret.getCreatures().forEach(creature -> creature.setHeroNumber(1));
@@ -92,14 +96,17 @@ public class Start extends Application {
                         new SpellFactory().create(MAGIC_ARROW, BASIC, 10),
                         new SpellFactory().create(FORTUNE, BASIC, 1),
                         new SpellFactory().create(LIGHTNING_BOLT, BASIC, 1),
+                        new SpellFactory().create(PROTECTION_FROM_AIR, BASIC, 1),
                         new SpellFactory().create(CHAIN_LIGHTNING, BASIC, 1),
                         new SpellFactory().create(COUNTERSTRIKE, BASIC, 1),
+                        new SpellFactory().create(PROTECTION_FROM_FIRE, BASIC, 1),
                         new SpellFactory().create(FIRE_BALL, BASIC, 1),
                         new SpellFactory().create(MISFORTUNE, BASIC, 10),
                         new SpellFactory().create(ARMAGEDDON, BASIC, 1),
                         new SpellFactory().create(INFERNO, BASIC, 1),
                         new SpellFactory().create(SLOW, BASIC, 1),
                         new SpellFactory().create(DEATH_RIPPLE, BASIC, 1),
+                        new SpellFactory().create(PROTECTION_FROM_EARTH, BASIC, 1),
                         new SpellFactory().create(SORROW, BASIC, 1),
                         new SpellFactory().create(STONESKIN, BASIC, 10),
                         new SpellFactory().create(METEOR_SHOWER, BASIC, 1),
@@ -109,6 +116,7 @@ public class Start extends Application {
                         new SpellFactory().create(FROST_RING, BASIC, 1),
                         new SpellFactory().create(PRAYER, BASIC, 1),
                         new SpellFactory().create(DISPEL, BASIC, 1),
+                        new SpellFactory().create(PROTECTION_FROM_WATER, BASIC, 1),
                         new SpellFactory().create(MIRTH, BASIC, 1)
                 )).mana(50).build());
         ret.getCreatures().forEach(creature -> creature.setHeroNumber(2));
