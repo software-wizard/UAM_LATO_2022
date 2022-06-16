@@ -4,6 +4,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import pl.psi.Hero;
+import pl.psi.SpellsBook;
 import pl.psi.artifacts.model.Artifact;
 import pl.psi.creatures.Creature;
 import pl.psi.gui.MainBattleController;
@@ -72,7 +73,9 @@ public class EcoBattleConverter {
         aPlayer.getSpellList()
                 .forEach(economySpell -> spells.add(spellFactory.create(SpellNames.valueOf(economySpell.getSpellStats().getName()), economySpell.getSpellRang(), aPlayer.getSpellPower())));
 
-        return new Hero(creatures, spells);
+        SpellsBook spellsBook = SpellsBook.builder().spells(spells).mana(aPlayer.getHeroStats().getSpellPoints()).build();
+
+        return new Hero(creatures, spellsBook);
     }
 
 }

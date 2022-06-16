@@ -25,6 +25,7 @@ public class EconomyHero {
     private final int heroNumber;
     // start amount of gold
     private int gold = 10000;
+
     public EconomyHero(final Fraction aFraction) {
         this(aFraction, HeroStatistics.NECROMANCER);
     }
@@ -183,5 +184,4 @@ public class EconomyHero {
     public int getSpellPower() {
         return heroStats.getSpellPower();
     }
-
 }

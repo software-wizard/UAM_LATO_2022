@@ -38,6 +38,14 @@
                         <Insets/>
                     </opaqueInsets>
                 </Label>
+                <Label fx:id="manaLabel" style="-fx-padding: 0 20 0 0;">
+                    <font>
+                        <Font size="24.0"/>
+                    </font>
+                    <opaqueInsets>
+                        <Insets/>
+                    </opaqueInsets>
+                </Label>
             </children>
         </HBox>
     </top>

@@ -62,6 +62,8 @@ public class TurnQueue {
         return creatures.stream().filter(Creature::isRange).collect(Collectors.toList());
     }
 
+    public Collection<Creature> getCreatures() {return creatures; }
+
     public void addDeadCreature(final Creature creature) {
         deadCreatures.add(creature);
     }
@@ -84,6 +86,12 @@ public class TurnQueue {
     }
 
     public void next() {
+        List<Creature> collect = creatures.stream().filter(Creature::isAlive).collect(Collectors.toList());
+
+        if(collect.isEmpty()) {
+            return;
+        }
+
         sortBySpeed();
         if (creaturesQueue.isEmpty()) {
             if (waitingCreaturesQueue.isEmpty()) {

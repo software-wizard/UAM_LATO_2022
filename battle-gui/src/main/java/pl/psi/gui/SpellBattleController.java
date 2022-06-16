@@ -87,6 +87,8 @@ public class SpellBattleController {
             stage.close();
         });
 
+        if(!gameEngine.isEnoughMana(spell)) button.setDisable(true);
+
         return button;
     }
 

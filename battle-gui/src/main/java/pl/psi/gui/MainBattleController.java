@@ -51,6 +51,8 @@ public class MainBattleController implements PropertyChangeListener {
     private Label console;
     @FXML
     private Label roundNumber;
+    @FXML
+    private Label manaLabel;
 
     Spell<? extends SpellableIf> selectedSpell;
 
@@ -173,6 +175,7 @@ public class MainBattleController implements PropertyChangeListener {
 
     private void refreshGui() {
         roundNumber.setText(gameEngine.getRoundNumber());
+        manaLabel.setText("Mana: " + gameEngine.getCurrentHero().getSpellBook().getMana());
         for (int x = 0; x < 15; x++) {
             for (int y = 0; y < 10; y++) {
                 final int x1 = x;
@@ -230,6 +233,37 @@ public class MainBattleController implements PropertyChangeListener {
                             e -> gameEngine.heal(new Point(x1, y1)));
                 }
 
+                if (gameEngine.isHeroCastingSpell()) {
+                    mapTile.addEventHandler(MouseEvent.MOUSE_ENTERED,
+                            mouseEvent -> {
+                                if (gameEngine.getCreature(new Point(x1, y1)).isPresent()) {
+                                    if(gameEngine.canCastSpell(selectedSpell, gameEngine.getCreature(new Point(x1, y1)).get())) {
+                                        mapTile.getScene().setCursor(Cursor.CROSSHAIR);
+                                    }else {
+                                        mapTile.getScene().setCursor(Cursor.OPEN_HAND);
+                                    }
+                                } else {
+                                    mapTile.getScene().setCursor(Cursor.DEFAULT);
+                                }
+                            });
+
+                    mapTile.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                            e -> {
+                                if (e.getButton() == MouseButton.PRIMARY) {
+                                    gameEngine.getCreature(new Point(x1, y1)).ifPresent(
+                                            creature -> {
+                                                if(gameEngine.canCastSpell(selectedSpell, creature)){
+                                                    castSpell(new Point(x1, y1));
+                                                    mapTile.getScene().setCursor(Cursor.DEFAULT);
+                                                    refreshGui();
+                                                }
+                                            });
+                                }
+                            });
+                }
+
+                renderSpecialFields(mapTile, x1, y1);
+
                 if (gameEngine.getCreature(new Point(x1, y1)).isPresent()) {
                     mapTile.setOnMouseClicked(e -> {
                         if (e.getButton() == MouseButton.SECONDARY) {
@@ -237,7 +271,6 @@ public class MainBattleController implements PropertyChangeListener {
                         }
                     });
                 }
-
                 if (gameEngine.canAttack(new Point(x, y))) {
                     mapTile.setOnMouseEntered(e -> {
                         Image img = new Image(gameEngine.getCreature(new Point(x1, y1)).get().getBasicStats().getCanAttackImagePath());
@@ -256,31 +289,32 @@ public class MainBattleController implements PropertyChangeListener {
                             });
                 }
 
-                if (gameEngine.canCastSpell()) {
-                    mapTile.addEventHandler(MouseEvent.MOUSE_ENTERED,
-                            mouseEvent -> {
-                                if (gameEngine.getCreature(new Point(x1, y1)).isPresent()) {
-                                    mapTile.getScene().setCursor(Cursor.CROSSHAIR);
-                                } else {
-                                    mapTile.getScene().setCursor(Cursor.DEFAULT);
-                                }
-                            });
+                if(gameEngine.canCreatureCastSpell(new Point(x,y))){
+                    mapTile.setOnMouseEntered(e -> {
+                        Image img = new Image(gameEngine.getCreature(new Point(x1,y1)).get().getBasicStats().getCanBuffImagePath());
+                        mapTile.setBackground(img);
 
-                    mapTile.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                    });
+                    mapTile.setOnMouseExited(e -> {
+                        Image img = new Image(gameEngine.getCreature(new Point(x1,y1)).get().getBasicStats().getImagePath());
+                        if(gameEngine.getCreature(new Point(x1,y1)).get().equals(gameEngine.getCurrentCreature())){
+                            img = new Image(gameEngine.getCreature(new Point(x1,y1)).get().getBasicStats().getCurrentImagePath());
+                        }
+                        mapTile.setBackground(img);
+                    });
+
+                    mapTile.setOnMousePressed(
                             e -> {
-                                if (e.getButton() == MouseButton.PRIMARY) {
-                                    gameEngine.getCreature(new Point(x1, y1)).ifPresent(
-                                            creature -> {
-                                                castSpell(new Point(x1, y1));
-                                                mapTile.getScene().setCursor(Cursor.DEFAULT);
-                                                refreshGui();
-                                            });
+                                if(e.getButton() == MouseButton.PRIMARY){
+                                    gameEngine.castCurrentCreatureSpell(new Point(x1,y1));
                                 }
                             });
                 }
 
-
-                renderSpecialFields(mapTile, x1, y1);
+                if (gameEngine.isCurrentCreature(new Point(x, y)) && gameEngine.isCurrentCreatureAlive()) {
+                    var img = new Image(gameEngine.getCreature(new Point(x, y)).get().getBasicStats().getCurrentImagePath());
+                    mapTile.setBackground(img);
+                }
 
                 console.setText(gameEngine.getAttackInformation());
 
@@ -322,6 +356,7 @@ public class MainBattleController implements PropertyChangeListener {
 
             if (spellNotRequiredPressingMouse.contains(selectedSpell.getCategory())) {
                 castSpell(null);
+                refreshGui();
             } else {
                 refreshGui();
             }

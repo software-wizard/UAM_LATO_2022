@@ -23,7 +23,7 @@ public class SpellFactory {
                     case ADVANCED:
                         return new DamageSpell(FIELD, name, SHARED, ADVANCED, 5, (spellPower * 10) + 20);
                     case EXPERT:
-                        return new DamageSpell(FIELD, name, SHARED, EXPERT, 5, (spellPower * 19) + 30);
+                        return new DamageSpell(FIELD, name, SHARED, EXPERT, 5, (spellPower * 10) + 30);
                     default:
                         throw new IllegalArgumentException(RANG_EXCEPTION_MESSAGE);
                 }
@@ -85,11 +85,11 @@ public class SpellFactory {
             case BLOODLUST:
                 switch (rang) {
                     case BASIC:
-                        return new BuffDebuffSpell(FIELD, name, FIRE, BASIC, 5, CreatureStats.builder().attack(3).build(), 2, SLOW);
+                        return new BuffDebuffSpell(FIELD, name, FIRE, BASIC, 5, CreatureStats.builder().attack(3).build(), 2, null);
                     case ADVANCED:
-                        return new BuffDebuffSpell(FIELD, name, FIRE, ADVANCED, 5, CreatureStats.builder().moveRange(6).build(), 4, SLOW);
+                        return new BuffDebuffSpell(FIELD, name, FIRE, ADVANCED, 5, CreatureStats.builder().attack(6).build(), 4, null);
                     case EXPERT:
-                        return new BuffDebuffSpell(FOR_ALL_ALLIED_CREATURES, name, FIRE, EXPERT, 5, CreatureStats.builder().moveRange(6).build(), 2, SLOW);
+                        return new BuffDebuffSpell(FOR_ALL_ALLIED_CREATURES, name, FIRE, EXPERT, 5, CreatureStats.builder().attack(6).build(), 2, null);
                     default:
                         throw new IllegalArgumentException(RANG_EXCEPTION_MESSAGE);
                 }
@@ -181,7 +181,7 @@ public class SpellFactory {
             case STONESKIN:
                 switch (rang) {
                     case BASIC:
-                        return new BuffDebuffSpell(FIELD, name, EARTH, BASIC, 5, CreatureStats.builder().armor(3).build(), 10, null);
+                        return new BuffDebuffSpell(FIELD, name, EARTH, BASIC, 5, CreatureStats.builder().armor(3).build(), 2, null);
                     case ADVANCED:
                         return new BuffDebuffSpell(FIELD, name, EARTH, ADVANCED,  5, CreatureStats.builder().armor(6).build(), 4, null);
                     case EXPERT:

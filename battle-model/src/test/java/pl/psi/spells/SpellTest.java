@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import pl.psi.GameEngine;
 import pl.psi.Hero;
 import pl.psi.Point;
+import pl.psi.SpellsBook;
 import pl.psi.creatures.Creature;
 import pl.psi.creatures.CreatureStats;
 
@@ -18,6 +19,8 @@ import static pl.psi.spells.SpellRang.*;
 
 
 public class SpellTest {
+
+    private static final int NOT_IMPORTANT_MANA = Integer.MAX_VALUE;
 
     private static final Spell<? extends SpellableIf> MAGIC_ARROW_RANG_1 = new SpellFactory().create(MAGIC_ARROW, BASIC, 1);
     private static final Spell<? extends SpellableIf> MAGIC_ARROW_RANG_2 = new SpellFactory().create(MAGIC_ARROW, ADVANCED, 1);
@@ -57,8 +60,8 @@ public class SpellTest {
         List<Creature> secondHeroCreatures = List.of(EXAMPLE_CREATURE_2);
 
         final GameEngine gameEngine =
-                new GameEngine(new Hero(firstHeroCreatures, List.of(MAGIC_ARROW_RANG_1)),
-                        new Hero(secondHeroCreatures, List.of(MAGIC_ARROW_RANG_1)));
+                new GameEngine(new Hero(firstHeroCreatures, SpellsBook.builder().spells(List.of(MAGIC_ARROW_RANG_1)).mana(NOT_IMPORTANT_MANA).build()),
+                        new Hero(secondHeroCreatures, SpellsBook.builder().spells(List.of(MAGIC_ARROW_RANG_1)).mana(NOT_IMPORTANT_MANA).build()));
 
         Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
                 .isPresent()).isTrue();
@@ -81,8 +84,8 @@ public class SpellTest {
 
 
         final GameEngine gameEngine =
-                new GameEngine(new Hero(firstHeroCreatures, List.of(HASTE_BASIC)),
-                        new Hero(secondHeroCreatures, List.of(MAGIC_ARROW_RANG_1)));
+                new GameEngine(new Hero(firstHeroCreatures, SpellsBook.builder().spells(List.of(HASTE_BASIC)).mana(NOT_IMPORTANT_MANA).build()),
+                        new Hero(secondHeroCreatures, SpellsBook.builder().spells(List.of(MAGIC_ARROW_RANG_1)).mana(NOT_IMPORTANT_MANA).build()));
 
         Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
                 .isPresent()).isTrue();
@@ -139,13 +142,17 @@ public class SpellTest {
                 .build();
 
         final GameEngine gameEngine =
-                new GameEngine(new Hero(List.of(creature1), List.of(counterstrike)),
-                        new Hero(List.of(creature2, creature3, creature4), List.of(MAGIC_ARROW_RANG_1)));
+                new GameEngine(new Hero(List.of(creature1), SpellsBook.builder().spells(List.of(counterstrike)).mana(NOT_IMPORTANT_MANA).build()),
+                        new Hero(List.of(creature2, creature3, creature4), SpellsBook.builder().spells(List.of(MAGIC_ARROW_RANG_1)).mana(NOT_IMPORTANT_MANA).build()));
 
         gameEngine.move(new Point(8, 2));
+        gameEngine.pass();
         gameEngine.move(new Point(8, 1));
+        gameEngine.pass();
         gameEngine.move(new Point(9, 2));
+        gameEngine.pass();
         gameEngine.move(new Point(8, 3));
+        gameEngine.pass();
 
         Assertions.assertThat(gameEngine.getCreature(new Point(8, 2))
                 .isPresent()).isTrue();
@@ -198,8 +205,8 @@ public class SpellTest {
         List<Creature> secondHeroCreatures = List.of(EXAMPLE_CREATURE_2);
 
         final GameEngine gameEngine =
-                new GameEngine(new Hero(secondHeroCreatures, List.of(FIREBALL)),
-                        new Hero(firstHeroCreatures, List.of(MAGIC_ARROW_RANG_1)));
+                new GameEngine(new Hero(secondHeroCreatures, SpellsBook.builder().spells(List.of(FIREBALL)).mana(NOT_IMPORTANT_MANA).build()),
+                        new Hero(firstHeroCreatures, SpellsBook.builder().spells(List.of(MAGIC_ARROW_RANG_1)).mana(NOT_IMPORTANT_MANA).build()));
 
         gameEngine.pass();
         gameEngine.move(new Point(14, 2));
@@ -239,8 +246,8 @@ public class SpellTest {
         List<Creature> secondHeroCreatures = List.of(EXAMPLE_CREATURE_2);
 
         final GameEngine gameEngine =
-                new GameEngine(new Hero(secondHeroCreatures, List.of(FIREBALL)),
-                        new Hero(firstHeroCreatures, List.of(MAGIC_ARROW_RANG_1)));
+                new GameEngine(new Hero(secondHeroCreatures, SpellsBook.builder().spells(List.of(FIREBALL)).mana(NOT_IMPORTANT_MANA).build()),
+                        new Hero(firstHeroCreatures, SpellsBook.builder().spells(List.of(MAGIC_ARROW_RANG_1)).mana(NOT_IMPORTANT_MANA).build()));
 
         gameEngine.pass();
         gameEngine.move(new Point(14, 2));
@@ -268,8 +275,8 @@ public class SpellTest {
         List<Creature> secondHeroCreatures = List.of(EXAMPLE_CREATURE_2);
 
         final GameEngine gameEngine =
-                new GameEngine(new Hero(firstHeroCreatures, List.of(HASTE_BASIC, PRAYER_RANG_1, STONESKIN_RANG_1, MISFORTUNE_RANG_1)),
-                        new Hero(secondHeroCreatures, List.of(MAGIC_ARROW_RANG_1)));
+                new GameEngine(new Hero(firstHeroCreatures, SpellsBook.builder().spells(List.of(HASTE_BASIC, PRAYER_RANG_1, STONESKIN_RANG_1, MISFORTUNE_RANG_1)).mana(NOT_IMPORTANT_MANA).build()),
+                        new Hero(secondHeroCreatures, SpellsBook.builder().spells(List.of(MAGIC_ARROW_RANG_1)).mana(NOT_IMPORTANT_MANA).build()));
 
         Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
                 .isPresent()).isTrue();
@@ -304,8 +311,8 @@ public class SpellTest {
         List<Creature> secondHeroCreatures = List.of(EXAMPLE_CREATURE_2);
 
         final GameEngine gameEngine =
-                new GameEngine(new Hero(secondHeroCreatures, List.of(MAGIC_ARROW_RANG_1, MAGIC_ARROW_RANG_2)),
-                        new Hero(firstHeroCreatures, List.of(MAGIC_ARROW_RANG_1)));
+                new GameEngine(new Hero(secondHeroCreatures, SpellsBook.builder().spells(List.of(MAGIC_ARROW_RANG_1, MAGIC_ARROW_RANG_2)).mana(NOT_IMPORTANT_MANA).build()),
+                        new Hero(firstHeroCreatures, SpellsBook.builder().spells(List.of(MAGIC_ARROW_RANG_1)).mana(NOT_IMPORTANT_MANA).build()));
 
         gameEngine.pass();
         gameEngine.move(new Point(14, 2));
@@ -336,8 +343,8 @@ public class SpellTest {
 
 
         final GameEngine gameEngine =
-                new GameEngine(new Hero(firstHeroCreatures, List.of(HASTE_EXPERT)),
-                        new Hero(secondHeroCreatures, List.of(MAGIC_ARROW_RANG_1)));
+                new GameEngine(new Hero(firstHeroCreatures, SpellsBook.builder().spells(List.of(HASTE_EXPERT)).mana(NOT_IMPORTANT_MANA).build()),
+                        new Hero(secondHeroCreatures, SpellsBook.builder().spells(List.of(MAGIC_ARROW_RANG_1)).mana(NOT_IMPORTANT_MANA).build()));
 
         Assertions.assertThat(gameEngine.getCreature(new Point(0, 1))
                 .isPresent()).isTrue();
@@ -365,8 +372,8 @@ public class SpellTest {
 
 
         final GameEngine gameEngine =
-                new GameEngine(new Hero(firstHeroCreatures, List.of(SLOW_EXPERT)),
-                        new Hero(secondHeroCreatures, List.of(MAGIC_ARROW_RANG_1)));
+                new GameEngine(new Hero(firstHeroCreatures, SpellsBook.builder().spells(List.of(SLOW_EXPERT)).mana(NOT_IMPORTANT_MANA).build()),
+                        new Hero(secondHeroCreatures, SpellsBook.builder().spells(List.of(MAGIC_ARROW_RANG_1)).mana(NOT_IMPORTANT_MANA).build()));
 
         Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
                 .isPresent()).isTrue();
@@ -393,8 +400,8 @@ public class SpellTest {
 
 
         final GameEngine gameEngine =
-                new GameEngine(new Hero(firstHeroCreatures, List.of(deathRipple)),
-                        new Hero(secondHeroCreatures, List.of(MAGIC_ARROW_RANG_1)));
+                new GameEngine(new Hero(firstHeroCreatures, SpellsBook.builder().spells(List.of(deathRipple)).mana(NOT_IMPORTANT_MANA).build()),
+                        new Hero(secondHeroCreatures, SpellsBook.builder().spells(List.of(MAGIC_ARROW_RANG_1)).mana(NOT_IMPORTANT_MANA).build()));
 
         Assertions.assertThat(gameEngine.getCreature(new Point(0, 1))
                 .isPresent()).isTrue();
@@ -420,8 +427,8 @@ public class SpellTest {
 
 
         final GameEngine gameEngine =
-                new GameEngine(new Hero(firstHeroCreatures, List.of(HASTE_BASIC)),
-                        new Hero(secondHeroCreatures, List.of(MAGIC_ARROW_RANG_1)));
+                new GameEngine(new Hero(firstHeroCreatures, SpellsBook.builder().spells(List.of(HASTE_BASIC)).mana(NOT_IMPORTANT_MANA).build()),
+                        new Hero(secondHeroCreatures, SpellsBook.builder().spells(List.of(MAGIC_ARROW_RANG_1)).mana(NOT_IMPORTANT_MANA).build()));
 
         Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
                 .isPresent()).isTrue();
@@ -451,8 +458,8 @@ public class SpellTest {
 
 
         final GameEngine gameEngine =
-                new GameEngine(new Hero(firstHeroCreatures, List.of(HASTE_BASIC)),
-                        new Hero(secondHeroCreatures, List.of(MAGIC_ARROW_RANG_1)));
+                new GameEngine(new Hero(firstHeroCreatures, SpellsBook.builder().spells(List.of(HASTE_BASIC)).mana(NOT_IMPORTANT_MANA).build()),
+                        new Hero(secondHeroCreatures, SpellsBook.builder().spells(List.of(MAGIC_ARROW_RANG_1)).mana(NOT_IMPORTANT_MANA).build()));
 
         Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
                 .isPresent()).isTrue();
@@ -480,8 +487,8 @@ public class SpellTest {
         List<Creature> secondHeroCreatures = List.of(EXAMPLE_CREATURE_2);
 
         final GameEngine gameEngine =
-                new GameEngine(new Hero(firstHeroCreatures, List.of(DISPEL_RANG_2)),
-                        new Hero(secondHeroCreatures, List.of(MAGIC_ARROW_RANG_1)));
+                new GameEngine(new Hero(firstHeroCreatures, SpellsBook.builder().spells(List.of(DISPEL_RANG_2)).mana(NOT_IMPORTANT_MANA).build()),
+                        new Hero(secondHeroCreatures, SpellsBook.builder().spells(List.of(MAGIC_ARROW_RANG_1)).mana(NOT_IMPORTANT_MANA).build()));
 
         Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
                 .isPresent()).isTrue();
@@ -508,8 +515,8 @@ public class SpellTest {
         List<Creature> secondHeroCreatures = List.of(EXAMPLE_CREATURE_2);
 
         final GameEngine gameEngine =
-                new GameEngine(new Hero(firstHeroCreatures, List.of(HASTE_BASIC, DISPEL_RANG_1)),
-                        new Hero(secondHeroCreatures, List.of(MAGIC_ARROW_RANG_1)));
+                new GameEngine(new Hero(firstHeroCreatures, SpellsBook.builder().spells(List.of(HASTE_BASIC, DISPEL_RANG_1)).mana(NOT_IMPORTANT_MANA).build()),
+                        new Hero(secondHeroCreatures, SpellsBook.builder().spells(List.of(MAGIC_ARROW_RANG_1)).mana(NOT_IMPORTANT_MANA).build()));
 
         Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
                 .isPresent()).isTrue();
@@ -535,8 +542,8 @@ public class SpellTest {
         List<Creature> secondHeroCreatures = List.of(EXAMPLE_CREATURE_2);
 
         final GameEngine gameEngine =
-                new GameEngine(new Hero(firstHeroCreatures, List.of(HASTE_BASIC, SLOW_BASIC)),
-                        new Hero(secondHeroCreatures, List.of(MAGIC_ARROW_RANG_1)));
+                new GameEngine(new Hero(firstHeroCreatures, SpellsBook.builder().spells(List.of(HASTE_BASIC, SLOW_BASIC)).mana(NOT_IMPORTANT_MANA).build()),
+                        new Hero(secondHeroCreatures, SpellsBook.builder().spells(List.of(MAGIC_ARROW_RANG_1)).mana(NOT_IMPORTANT_MANA).build()));
 
         Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
                 .isPresent()).isTrue();
@@ -549,6 +556,55 @@ public class SpellTest {
         Assertions.assertThat(gameEngine.getCreature(new Point(14, 1)).get().getBuffedStats().getMoveRange()).isEqualTo(-10);
         Assertions.assertThat(gameEngine.getCreature(new Point(14, 1)).get().getRunningSpells()).hasSize(1).isEqualTo(List.of(SLOW_BASIC));
 
+    }
+
+    @Test
+    void shouldBlockCastingSpellWhenNotEnoughMana(){
+        //given
+        List<Creature> firstHeroCreatures = List.of(EXAMPLE_CREATURE_1);
+        List<Creature> secondHeroCreatures = List.of(EXAMPLE_CREATURE_2);
+
+        final GameEngine gameEngine =
+                new GameEngine(new Hero(firstHeroCreatures, SpellsBook.builder().spells(List.of(MAGIC_ARROW_RANG_1)).mana(3).build()),
+                        new Hero(secondHeroCreatures, SpellsBook.builder().spells(List.of(MAGIC_ARROW_RANG_1)).mana(NOT_IMPORTANT_MANA).build()));
+
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
+                .isPresent()).isTrue();
+
+
+        //when
+        gameEngine.castSpell(new Point(14, 1), MAGIC_ARROW_RANG_1);
+
+
+        //then
+
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
+                .get().getCurrentHp()).isEqualTo(100);
+        Assertions.assertThat(gameEngine.getCurrentHero()
+                .getSpellBook().getMana()).isEqualTo(3);
+    }
+
+    @Test
+    void shouldTakeAppropriateAmountOfMana(){
+        //given
+        List<Creature> firstHeroCreatures = List.of(EXAMPLE_CREATURE_1);
+        List<Creature> secondHeroCreatures = List.of(EXAMPLE_CREATURE_2);
+
+        final GameEngine gameEngine =
+                new GameEngine(new Hero(firstHeroCreatures, SpellsBook.builder().spells(List.of(MAGIC_ARROW_RANG_1)).mana(10).build()),
+                        new Hero(secondHeroCreatures, SpellsBook.builder().spells(List.of(MAGIC_ARROW_RANG_1)).mana(NOT_IMPORTANT_MANA).build()));
+
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
+                .isPresent()).isTrue();
+
+
+        //when
+        gameEngine.castSpell(new Point(14, 1), MAGIC_ARROW_RANG_1);
+
+
+        //then
+        Assertions.assertThat(gameEngine.getCurrentHero()
+                .getSpellBook().getMana()).isEqualTo(5);
     }
 
     @Test

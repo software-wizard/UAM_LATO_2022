@@ -151,7 +151,7 @@ public class Creature implements PropertyChangeListener, Comparable<Creature>, S
     }
 
     public void applySpellDamage(Creature aDefender, Integer damage) {
-        aDefender.setCurrentHp(aDefender.getCurrentHp() - damage); // ToDo: include magic resist
+        aDefender.applyDamage(aDefender, damage);
     }
 
     public void increaseLuckBy(int factor) {

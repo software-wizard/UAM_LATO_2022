@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import pl.psi.Hero;
+import pl.psi.SpellsBook;
 import pl.psi.hero.HeroStatistics;
 import pl.psi.spells.SpellFactory;
 
@@ -50,21 +51,32 @@ public class Start extends Application {
                 new Hero(List.of(
                         new NecropolisFactory().create(false, 1, 5),
                         new NecropolisFactory().create(true, 2, 5),
-                        new NecropolisFactory().create(false,3,5),
-                        new NecropolisFactory().create(true,4,5),
-                        new NecropolisFactory().create(false, 5, 100),
-                        new NecropolisFactory().create(true, 6, 1000),
-                        new NecropolisFactory().create(true,7,5)
+                        new NecropolisFactory().create(false, 3, 5)
                 ), HeroStatistics.NECROMANCER,
-                        List.of(
+                        SpellsBook.builder().spells(List.of(
                                 new SpellFactory().create(HASTE, BASIC, 1),
                                 new SpellFactory().create(MAGIC_ARROW, BASIC, 10),
+                                new SpellFactory().create(FORTUNE, BASIC, 1),
+                                new SpellFactory().create(LIGHTNING_BOLT, BASIC, 1),
                                 new SpellFactory().create(CHAIN_LIGHTNING, BASIC, 1),
-                                new SpellFactory().create(STONESKIN, BASIC, 1),
+                                new SpellFactory().create(COUNTERSTRIKE, BASIC, 1),
                                 new SpellFactory().create(FIRE_BALL, BASIC, 1),
-                                new SpellFactory().create(MISFORTUNE, BASIC, 1),
-                                new SpellFactory().create(PRAYER, BASIC, 1)
-                        ));
+                                new SpellFactory().create(MISFORTUNE, BASIC, 10),
+                                new SpellFactory().create(ARMAGEDDON, BASIC, 1),
+                                new SpellFactory().create(INFERNO, BASIC, 1),
+                                new SpellFactory().create(SLOW, BASIC, 1),
+                                new SpellFactory().create(DEATH_RIPPLE, BASIC, 1),
+                                new SpellFactory().create(SORROW, BASIC, 1),
+                                new SpellFactory().create(STONESKIN, BASIC, 10),
+                                new SpellFactory().create(METEOR_SHOWER, BASIC, 1),
+                                new SpellFactory().create(IMPLOSION, BASIC, 1),
+                                new SpellFactory().create(ICE_BOLT, BASIC, 1),
+                                new SpellFactory().create(WEAKNESS, BASIC, 1),
+                                new SpellFactory().create(FROST_RING, BASIC, 1),
+                                new SpellFactory().create(PRAYER, BASIC, 1),
+                                new SpellFactory().create(DISPEL, BASIC, 1),
+                                new SpellFactory().create(MIRTH, BASIC, 1)
+                        )).mana(100).build());
         ret.getCreatures().forEach(creature -> creature.setHeroNumber(1));
         return ret;
     }
@@ -72,16 +84,33 @@ public class Start extends Application {
     private Hero createP2() {
         final Hero ret = new Hero(List.of(
                 new StrongholdFactory().create(true, 1, 100),
-                new StrongholdFactory().create(true, 2, 50),
-                new StrongholdFactory().create(false, 3, 25),
-                new StrongholdFactory().create(true, 4, 15),
-                new StrongholdFactory().create(false, 5, 10),
-                new StrongholdFactory().create(true, 6, 5),
-                new StrongholdFactory().create(false, 7, 100)
+                new StrongholdFactory().create(true, 2, 3),
+                new StrongholdFactory().create(false, 3, 25)
         ), HeroStatistics.KNIGHT,
-                List.of(new SpellFactory().create(MAGIC_ARROW, BASIC, 1),
+                SpellsBook.builder().spells(List.of(
+                        new SpellFactory().create(HASTE, BASIC, 1),
+                        new SpellFactory().create(MAGIC_ARROW, BASIC, 10),
+                        new SpellFactory().create(FORTUNE, BASIC, 1),
+                        new SpellFactory().create(LIGHTNING_BOLT, BASIC, 1),
+                        new SpellFactory().create(CHAIN_LIGHTNING, BASIC, 1),
+                        new SpellFactory().create(COUNTERSTRIKE, BASIC, 1),
+                        new SpellFactory().create(FIRE_BALL, BASIC, 1),
+                        new SpellFactory().create(MISFORTUNE, BASIC, 10),
+                        new SpellFactory().create(ARMAGEDDON, BASIC, 1),
+                        new SpellFactory().create(INFERNO, BASIC, 1),
                         new SpellFactory().create(SLOW, BASIC, 1),
-                        new SpellFactory().create(DEATH_RIPPLE, BASIC, 1)));
+                        new SpellFactory().create(DEATH_RIPPLE, BASIC, 1),
+                        new SpellFactory().create(SORROW, BASIC, 1),
+                        new SpellFactory().create(STONESKIN, BASIC, 10),
+                        new SpellFactory().create(METEOR_SHOWER, BASIC, 1),
+                        new SpellFactory().create(IMPLOSION, BASIC, 1),
+                        new SpellFactory().create(ICE_BOLT, BASIC, 1),
+                        new SpellFactory().create(WEAKNESS, BASIC, 1),
+                        new SpellFactory().create(FROST_RING, BASIC, 1),
+                        new SpellFactory().create(PRAYER, BASIC, 1),
+                        new SpellFactory().create(DISPEL, BASIC, 1),
+                        new SpellFactory().create(MIRTH, BASIC, 1)
+                )).mana(50).build());
         ret.getCreatures().forEach(creature -> creature.setHeroNumber(2));
         return ret;
     }
