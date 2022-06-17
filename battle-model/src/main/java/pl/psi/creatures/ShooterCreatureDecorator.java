@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 
-public class ShooterCreature extends AbstractCreature {
+public class ShooterCreatureDecorator extends AbstractCreature {
     private final Creature decorated;
     private final int maxShots;
     private final double MELEE_PENALTY = 0.5;
@@ -14,7 +14,7 @@ public class ShooterCreature extends AbstractCreature {
     private boolean isInMelee = false;
     private int range = Integer.MAX_VALUE;
 
-    public ShooterCreature(final Creature aDecorated, final int aShots) {
+    public ShooterCreatureDecorator(final Creature aDecorated, final int aShots) {
         super(aDecorated);
         decorated = aDecorated;
         shots = aShots;

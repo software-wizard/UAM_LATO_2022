@@ -246,7 +246,7 @@ public class CreatureTest {
                 .build())
                 .build();
 
-        final ShooterCreature shooterCreature = new ShooterCreature(decorated, 1);
+        final ShooterCreatureDecorator shooterCreature = new ShooterCreatureDecorator(decorated, 1);
 
         final Creature defender = new Creature.Builder()
                 .statistic(CreatureStats.builder()
@@ -268,7 +268,7 @@ public class CreatureTest {
                 .build())
                 .build();
 
-        final ShooterCreature shooterCreature = new ShooterCreature(decorated, 0);
+        final ShooterCreatureDecorator shooterCreature = new ShooterCreatureDecorator(decorated, 0);
 
         final Creature defender = new Creature.Builder()
                 .statistic(CreatureStats.builder()

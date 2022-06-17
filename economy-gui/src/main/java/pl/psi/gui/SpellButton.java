@@ -2,6 +2,8 @@ package pl.psi.gui;
 
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import pl.psi.ProductType;
 import pl.psi.spells.EconomySpell;
 
@@ -12,7 +14,7 @@ public class SpellButton extends AbstractButton<EconomySpell> {
 
     public SpellButton(BiConsumer<ProductType, EconomySpell> ecoController, EconomySpell economySpell, boolean canBuy) {
         super(ecoController, economySpell, canBuy);
-        PATH = "/spells/" + economySpell.getSpellStats().name() + ".png";
+        PATH = "/spells/" + economySpell.getSpellStats().toString() + ".png";
         DESCRIPTION = economySpell.getSpellRang() + " " + economySpell.getSpellStats().name() + " | " + economySpell.getGoldCost().getPrice();
     }
 
@@ -26,6 +28,9 @@ public class SpellButton extends AbstractButton<EconomySpell> {
         aTopPane.getChildren().add(new Label("Single Cost: " + product.getGoldCost().getPrice()));
         aTopPane.getChildren().add(new Label("SpellStats : " + product.getSpellStats().name()));
         aTopPane.getChildren().add(new Label("SpellRang : " + product.getSpellRang().name()));
+        Text text = new Text("\n" + product.getSpellStats().getDescription());
+        text.setFont(Font.font ("Arial", 17));
+        aTopPane.getChildren().add(text);
     }
 
 }

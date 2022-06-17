@@ -504,13 +504,15 @@ public class EcoController implements PropertyChangeListener {
         Text label = new Text("Here you can buy spells for your Hero. There are\ndifferent types of spells, these types don't depend on\nchosen fraction. You can buy all types of spells,\nbut spell of one type you can buy only once.");
         label.getStyleClass().add("labelShop");
         spellShop.getChildren().add(label);
-        // TODO we can buy only spells with requiredMagicGuildLevel
-        List<SpellStats> spellStats = List.of(SpellStats.HASTE,SpellStats.MAGIC_ARROW);
+
+        List<SpellStats> spellStats = new ArrayList<>(Arrays.asList(SpellStats.values()));
+
         List<SpellRang> spellRangs = List.of(SpellRang.BASIC,SpellRang.ADVANCED,SpellRang.EXPERT);
+
         final EconomySpellFactory factory = new EconomySpellFactory();
         for(int i = 0; i<spellStats.size(); i++){
             for(int j=0; j<spellRangs.size(); j++) {
-                EconomySpell spell = factory.create(spellStats.get(i),spellRangs.get(j),1);
+                EconomySpell spell = factory.create(spellStats.get(i),spellRangs.get(j));
                 if (economyEngine.getActiveHero().canAddSpell(spell)) {
                     boolean canBuy = economyEngine.getActiveHero().getGold().haveEnoghMoney(spell.getGoldCost());
                     SpellButton button = new SpellButton(this::buy, spell,canBuy );

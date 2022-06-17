@@ -190,13 +190,9 @@ public class EconomyHero {
     }
 
     public boolean canAddSpell(EconomySpell economySpell){
-        // TODO other group must deliver requiredMagicGuildLevel
-        int requiredMagicGuildLevel = 1;
-        if(economySpell.getRequiredMagicGuildLevel() > requiredMagicGuildLevel)
-            return false;
 
         for(EconomySpell spell:spellsList){
-            if(spell.getSpellStats().equals(economySpell.getSpellStats()) && spell.getSpellRang().equals(economySpell.getSpellRang()))
+            if(spell.getSpellStats().equals(economySpell.getSpellStats()))
                 return false;
         }
 

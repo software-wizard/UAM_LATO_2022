@@ -25,7 +25,7 @@ class AmmoCartTest {
                 .build())
                 .build();
         creature1.setCurrentHp(NOT_IMPORTANT);
-        ShooterCreature shooterCreature = new ShooterCreature(creature1, 10);
+        ShooterCreatureDecorator shooterCreature = new ShooterCreatureDecorator(creature1, 10);
         shooterCreature.setHeroNumber(1);
 
         final Creature defender = new Creature.Builder().statistic(CreatureStats.builder()
@@ -63,7 +63,7 @@ class AmmoCartTest {
                 .build())
                 .build();
         creature1.setCurrentHp(20);
-        ShooterCreature shooterCreature = new ShooterCreature(creature1, 10);
+        ShooterCreatureDecorator shooterCreature = new ShooterCreatureDecorator(creature1, 10);
         shooterCreature.setHeroNumber(1);
 
         final Creature defender = new Creature.Builder().statistic(CreatureStats.builder()

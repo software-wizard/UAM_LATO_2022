@@ -11,13 +11,11 @@ public class EconomySpell implements BuyProductInterface {
 
     private final SpellStats spellStats;
     private final SpellRang spellRang;
-    private final int requiredMagicGuildLevel;
     private final Money goldCost;
 
-    public EconomySpell(SpellStats spellStats, SpellRang spellRang, int requiredMagicGuildLevel, int goldCost) {
+    public EconomySpell(SpellStats spellStats, SpellRang spellRang, int goldCost) {
         this.spellStats = spellStats;
         this.spellRang = spellRang;
-        this.requiredMagicGuildLevel = requiredMagicGuildLevel;
         this.goldCost = new Money(goldCost);
     }
 }

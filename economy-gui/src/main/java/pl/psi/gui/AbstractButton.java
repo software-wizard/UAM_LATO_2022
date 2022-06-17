@@ -56,7 +56,7 @@ public abstract class AbstractButton <T extends BuyProductInterface> extends But
 
         final BorderPane pane = new BorderPane();
         pane.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-        final Scene scene = new Scene(pane, 600, 200);
+        final Scene scene = new Scene(pane, 750, 200);
         scene.getStylesheets().add("fxml/main.css");
         dialog.setScene(scene);
         dialog.initOwner(this.getScene().getWindow());
