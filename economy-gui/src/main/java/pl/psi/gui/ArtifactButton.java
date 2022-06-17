@@ -12,7 +12,7 @@ public class ArtifactButton extends AbstractButton<EconomyArtifact>{
 
     public ArtifactButton(BiConsumer<ProductType, EconomyArtifact> ecoController, EconomyArtifact artifact, boolean canBuy) {
         super(ecoController, artifact, canBuy);
-        PATH = "/artifacts/" + artifact.getDisplayName() + ".png";
+        PATH = "/artifacts/" + artifact.getNameHolder().toString() + ".png";
         DESCRIPTION = artifact.getDisplayName() + " | " + artifact.getGoldCost().getPrice();
     }
 
@@ -27,6 +27,7 @@ public class ArtifactButton extends AbstractButton<EconomyArtifact>{
         aTopPane.getChildren().add(new Label("             "));
         String characteristics = "Placement : " + product.getPlacement();
         aTopPane.getChildren().add(new Label(characteristics));
+        aTopPane.getChildren().add(new Label(product.getDescription()));
     }
 
 }

@@ -30,12 +30,17 @@
                                 styleClass="button_aritfact"/>
                         <Button fx:id="SHOULDERS" translateX="85" translateY="15" prefWidth="53" prefHeight="48"
                                 styleClass="button_aritfact"/>
-                        <Button fx:id="RIGHT_HAND" translateX="79" translateY="-45" prefWidth="53" prefHeight="48"
+                        <Button fx:id="LEFT_HAND" translateX="79" translateY="-45" prefWidth="53" prefHeight="48"
                                 styleClass="button_aritfact"/>
-                        <Button fx:id="LEFT_HAND" translateX="-140" translateY="-158" prefWidth="53" prefHeight="48"
+                        <Button fx:id="RIGHT_HAND" translateX="-140" translateY="-158" prefWidth="53" prefHeight="48"
                                 styleClass="button_aritfact"/>
                         <Button fx:id="FEET" translateX="22" translateY="65" prefWidth="53" prefHeight="48"
                                 styleClass="button_aritfact"/>
+
+                        <Button fx:id="MISC" translateX="-117" translateY="10" prefWidth="53" prefHeight="48"
+                                styleClass="button_aritfact"/>
+                        <Button fx:id="FINGERS" translateX="143" translateY="-50" prefWidth="53" prefHeight="48"
+                          styleClass="button_aritfact"/>
 
                     </StackPane>
 

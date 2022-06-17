@@ -91,6 +91,10 @@ public class EcoController implements PropertyChangeListener {
     private Button LEFT_HAND;
     @FXML
     private Button SHOULDERS;
+    @FXML
+    private Button MISC;
+    @FXML
+    private Button FINGERS;
 
     private ProductType shopChoose;
     private HashMap<ArtifactPlacement, Button> artifactPlacementButtonHashMap;
@@ -115,9 +119,11 @@ public class EcoController implements PropertyChangeListener {
         artifactPlacementButtonHashMap.put(ArtifactPlacement.NECK, NECK);
         artifactPlacementButtonHashMap.put(ArtifactPlacement.SHOULDERS, SHOULDERS);
         artifactPlacementButtonHashMap.put(ArtifactPlacement.FEET, FEET);
+        artifactPlacementButtonHashMap.put(ArtifactPlacement.MISC, MISC);
+        artifactPlacementButtonHashMap.put(ArtifactPlacement.FINGERS, FINGERS);
 
         creatureButtons = List.of(creaturete1, creaturete2, creaturete3, creaturete4, creaturete5, creaturete6, creaturete7);
-        artifactButtons = List.of(HEAD, RIGHT_HAND, LEFT_HAND, FEET, NECK, TORSO, SHOULDERS);
+        artifactButtons = List.of(HEAD, RIGHT_HAND, LEFT_HAND, FEET, NECK, TORSO, SHOULDERS,FINGERS,MISC);
 
         VBoxHero.setBackground(new Background(new BackgroundFill(Color.BROWN, CornerRadii.EMPTY, Insets.EMPTY)));
 
@@ -296,14 +302,16 @@ public class EcoController implements PropertyChangeListener {
         currentGoldLabel.setText(String.valueOf(economyEngine.getActiveHero().getGold().getPrice()));
         shopsBox.getChildren().clear();
         refreshShopDependsOnWhatHasChose();
+
         //refresh boughtArtifacts
         List<EconomyArtifact> artifacts = economyEngine.getActiveHero().getArtifacts();
+
         for (Map.Entry<ArtifactPlacement, Button> b : artifactPlacementButtonHashMap.entrySet()) {
             ArtifactPlacement placement = b.getKey();
             for (EconomyArtifact a : artifacts) {
                 if (a.getPlacement().equals(placement)) {
                     Button button = b.getValue();
-                    Image image = new Image("/artifacts/" + a.getDisplayName() + ".png");
+                    Image image = new Image("/artifacts/" + a.getNameHolder().toString() + ".png");
                     ImageView imageView = new ImageView(image);
                     imageView.setFitHeight(39);
                     imageView.setFitWidth(39);
@@ -317,22 +325,25 @@ public class EcoController implements PropertyChangeListener {
 
     void refreshGuiHeroChanged() {
 
-        playerLabel.setText(economyEngine.getActiveHero().toString());
-        currentGoldLabel.setText(String.valueOf(economyEngine.getActiveHero().getGold().getPrice()));
+        EconomyHero hero = economyEngine.getActiveHero();
+        playerLabel.setText(hero.toString());
+        currentGoldLabel.setText(String.valueOf(hero.getGold().getPrice()));
         roundNumberLabel.setText(String.valueOf(economyEngine.getRoundNumber()));
-        fraction.setText("Fraction : " + economyEngine.getActiveHero().getFraction().name());
+        fraction.setText("Fraction : " + hero.getFraction().name());
 
         // refresh buttons of creatures for the hero2 - without it  hero2 can see what hero1 bought
-        for (int i = 0; i < 7; i++) {
-            Image image = new Image("CLEAR.png");
-            ImageView imageView = new ImageView(image);
+        Image image = new Image("CLEAR.png");
+        ImageView imageView = new ImageView(image);
 
+        for (int i = 0; i < 7; i++) {
             Button button = creatureButtons.get(i);
             imageView.setFitWidth(30);
             imageView.setFitHeight(30);
             button.setGraphic(imageView);
             button.setText("");
+        }
 
+        for (int i = 0; i < artifactButtons.size(); i++) {
             Button button2 = artifactButtons.get(i);
             ImageView imageView2 = new ImageView(image);
             imageView2.setFitWidth(40);

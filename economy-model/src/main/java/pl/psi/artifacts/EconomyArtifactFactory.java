@@ -95,17 +95,17 @@ public class EconomyArtifactFactory {
 
             case SKULL_HELMET:
 
-                return new EconomyArtifact( ArtifactPlacement.TORSO, "Skull Helmet",
+                return new EconomyArtifact( ArtifactPlacement.HEAD, "Skull Helmet",
                         new Money(5), aArtifactName, "+2 knowledge" );
 
             case CROWN_OF_THE_SUPREME_MAGI:
 
-                return new EconomyArtifact( ArtifactPlacement.TORSO, "Crown of the Supreme Magi",
+                return new EconomyArtifact( ArtifactPlacement.HEAD, "Crown of the Supreme Magi",
                         new Money(10), aArtifactName, "+4 knowledge" );
 
             case THUNDER_HELMET:
 
-                return new EconomyArtifact( ArtifactPlacement.TORSO, "Thunder Helmet",
+                return new EconomyArtifact( ArtifactPlacement.HEAD, "Thunder Helmet",
                         new Money(25), aArtifactName, "+10 knowledge, -2 spell power");
 
             default:
