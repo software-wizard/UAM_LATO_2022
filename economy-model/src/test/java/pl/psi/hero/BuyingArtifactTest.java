@@ -25,7 +25,7 @@ public class BuyingArtifactTest {
         hero2 = new EconomyHero(EconomyHero.Fraction.NECROPOLIS);
         economyEngine = new EconomyEngine(hero1, hero2);
     }
-
+/*
     @Test
     void shouldHeroBuyArtefact() {
         economyEngine.buy(ProductType.ARTIFACT, artifactFactory.create("Cape of Conjuring"));
@@ -47,5 +47,7 @@ public class BuyingArtifactTest {
         assertThrows(IllegalStateException.class,
                 () -> economyEngine.buy(ProductType.ARTIFACT, artifactFactory.create("Cape of Conjuring")));
     }
+    
+*/
 
 }
