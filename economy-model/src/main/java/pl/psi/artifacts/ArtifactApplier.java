@@ -1,16 +1,15 @@
-package pl.psi.creatures;
+package pl.psi.artifacts;
 
-import pl.psi.artifacts.ArtifactEffectApplicable;
-import pl.psi.artifacts.ArtifactEffectApplyingProperties;
-import pl.psi.artifacts.CreatureArtifactApplicableProperty;
 import pl.psi.artifacts.model.ArtifactEffect;
 import pl.psi.artifacts.model.ArtifactTarget;
+import pl.psi.creatures.CreatureStatisticIf;
+import pl.psi.creatures.CreatureStats;
 
 /**
  * Service responsible for taking care of calculating upgraded values after applying artifact.
  */
 public class ArtifactApplier {
-    protected CreatureStatisticIf calculateCreatureUpgradedStatisticAfterApplyingArtifact(
+    public CreatureStatisticIf calculateCreatureUpgradedStatisticAfterApplyingArtifact(
             final ArtifactEffect<? extends ArtifactEffectApplicable> aArtifactEffect, final CreatureStatisticIf aBaseStats,
             final CreatureStatisticIf aUpgradedStats) {
 

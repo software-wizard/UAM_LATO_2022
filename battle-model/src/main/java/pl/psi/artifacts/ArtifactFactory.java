@@ -1,6 +1,7 @@
 package pl.psi.artifacts;
 
 import lombok.NonNull;
+import pl.psi.artifacts.holder.ArtifactNamesHolder;
 import pl.psi.artifacts.holder.CreatureArtifactNamesHolder;
 import pl.psi.artifacts.holder.SkillArtifactNamesHolder;
 import pl.psi.artifacts.holder.SpellArtifactNamesHolder;
@@ -17,7 +18,25 @@ import java.util.Set;
 public class ArtifactFactory {
     private static final String NO_ARTIFACT_IMPLEMENTATION_EXCEPTION_MESSAGE = "No implementation provided for artifact of that name.";
 
-    public ArtifactIf createArtifact(@NonNull CreatureArtifactNamesHolder aArtifactName) {
+    private static final String NO_HOLDER_IMPLEMENTATION_EXCEPTION_MESSAGE = "No implementation provided for artifacts of such holder.";
+
+    public ArtifactIf createArtifact( @NonNull ArtifactNamesHolder aArtifactName )
+    {
+        ArtifactTarget artifactTarget = aArtifactName.getHolderTarget();
+        switch ( artifactTarget )
+        {
+            case CREATURES:
+                return createArtifact( (CreatureArtifactNamesHolder) aArtifactName );
+            case SKILL:
+                return createArtifact( (SkillArtifactNamesHolder) aArtifactName );
+            case SPELLS:
+                return createArtifact( (SpellArtifactNamesHolder) aArtifactName );
+            default:
+                throw new UnsupportedOperationException( NO_HOLDER_IMPLEMENTATION_EXCEPTION_MESSAGE );
+        }
+    }
+
+    ArtifactIf createArtifact(@NonNull CreatureArtifactNamesHolder aArtifactName) {
         switch (aArtifactName) {
             case RING_OF_LIFE:
 
