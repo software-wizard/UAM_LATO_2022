@@ -49,16 +49,18 @@ public class MainBattleController {
     }
 
     private void renderSpecialFields(MapTile mapTile, int x, int y) {
-        if (x == 0 && y == 0) {
+        if (x == 3 && y == 3) {
             Image img = new Image("/images/cracked_ice.png");
             mapTile.setBackground(img);
         }
-
+        if (x == 6 && y == 6) {
+            Image img = new Image("/images/clover_field.png");
+            mapTile.setBackground(img);
+        }
         if (x == 4 && y == 8) {
             var img = new Image("/images/evilFog.png");
             mapTile.setBackground(img);
         }
-
         if (x == 5 && y == 5) {
             var img = new Image("/images/holyGround.png");
             mapTile.setBackground(img);
