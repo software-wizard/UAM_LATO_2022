@@ -16,6 +16,7 @@ import pl.psi.spells.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import java.util.Random;
 import java.util.function.BiConsumer;
@@ -32,7 +33,7 @@ public class Creature implements PropertyChangeListener, Comparable<Creature>, S
     private CreatureStats buffedStats = new CreatureStats.CreatureStatsBuilder().build();
     private int amount;
     private double currentHp;
-    private boolean canCounterAttack = false;
+    private boolean canCounterAttack = true;
     private DamageCalculatorIf calculator;
     private int heroNumber;
     private double DEFENCE_MULTIPLIER = 0.2;
@@ -41,7 +42,7 @@ public class Creature implements PropertyChangeListener, Comparable<Creature>, S
     private int luck;
     private Alignment alignment;
     private double defenceBonusArmor = 0;
-    private boolean isDefending = true;
+    private boolean isDefending = false;
     private double lastHealAmount;
     private double lastAttackDamage;
     private double lastCounterAttackDamage;
@@ -266,7 +267,7 @@ public class Creature implements PropertyChangeListener, Comparable<Creature>, S
     }
 
     public String getName() {
-        return basicStats.getName();
+        return getBasicStats().getName();
     }
 
     public double getMoveRange() {
@@ -442,6 +443,10 @@ public class Creature implements PropertyChangeListener, Comparable<Creature>, S
 
     public void buffLuck(int luckIncrease) {
         luck = luck + luckIncrease;
+    }
+
+    public List<SpellNames> getImmuneSpellList(){
+        return null;
     }
 
     public static class Builder {

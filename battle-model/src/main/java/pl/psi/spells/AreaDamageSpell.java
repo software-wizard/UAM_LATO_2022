@@ -9,9 +9,9 @@ public class AreaDamageSpell extends Spell<SpellCreatureList> {
 
     @Getter
     private final boolean[][] area;
-    private final int value;
+    private final double value;
 
-    public AreaDamageSpell(SpellTypes category, SpellNames name, SpellMagicClass spellMagicClass, SpellRang rang, int manaCost, boolean[][] area, int value) {
+    public AreaDamageSpell(SpellTypes category, SpellNames name, SpellMagicClass spellMagicClass, SpellRang rang, int manaCost, boolean[][] area, double value) {
         super(category, name, spellMagicClass, rang, manaCost);
         this.area = area;
         this.value = value;

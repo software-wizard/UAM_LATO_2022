@@ -10,6 +10,8 @@ import java.beans.PropertyChangeListener;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static pl.psi.spells.SpellNames.DISRUPTING_RAY;
+
 @Getter
 @Setter
 public class RoundTimer implements PropertyChangeListener {

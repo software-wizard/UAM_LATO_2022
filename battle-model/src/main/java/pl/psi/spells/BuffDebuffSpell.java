@@ -34,12 +34,11 @@ public class BuffDebuffSpell extends Spell<Creature> {
         this.time = buffDebuffSpell.time;
         this.counterSpell = buffDebuffSpell.counterSpell;
         this.roundTimer = new RoundTimer(buffDebuffSpell.time, this, creature, buffDebuffSpell.counterSpell);
-
     }
 
     @Override
     public void castSpell(Creature aDefender, BiConsumer<String, PropertyChangeListener> consumer) {
-        if(aDefender.getRunningSpells().stream().map(Spell::getName).collect(Collectors.toList()).contains(this.getName())){
+        if(aDefender.getRunningSpells().stream().map(Spell::getName).collect(Collectors.toList()).contains(this.getName()) && !getName().equals(SpellNames.DISRUPTING_RAY)){
             observerSupport.firePropertyChange(RoundTimer.RESET_TIMER, null, null);
             return;
         }

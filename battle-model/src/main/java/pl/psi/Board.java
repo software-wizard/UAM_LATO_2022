@@ -32,6 +32,10 @@ public class Board {
         return false;
     }
 
+    public void putCreatureOnBoard(Point point, Creature creature){
+        map.put(point, creature);
+    }
+
     private void addCreatures(final List<Creature> aCreatures, final int aXPosition) {
         for (int i = 0; i < aCreatures.size(); i++) {
             if (i > 4) {

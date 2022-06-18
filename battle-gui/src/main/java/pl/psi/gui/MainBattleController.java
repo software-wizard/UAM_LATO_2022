@@ -3,6 +3,7 @@ package pl.psi.gui;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
+import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -56,9 +57,9 @@ public class MainBattleController implements PropertyChangeListener {
 
     Spell<? extends SpellableIf> selectedSpell;
 
-    List<SpellTypes> spellNotRequiredPressingMouse = List.of(FOR_ALL_CREATURES, FOR_ALL_ALLIED_CREATURES, FOR_ALL_ENEMY_CREATURES);
+    List<SpellTypes> spellNotRequiredPressingMouse = List.of(FOR_ALL_CREATURES, FOR_ALL_ALLIED_CREATURES, FOR_ALL_ENEMY_CREATURES, SPAWN_CREATURE);
 
-    public MainBattleController(final Hero aHero1, final Hero aHero2) {
+    public MainBattleController(Hero aHero1, Hero aHero2) {
         gameEngine = new GameEngine(aHero1, aHero2);
         gameEngine.addObserverToTurnQueue(TurnQueue.END_OF_TURN, this);
     }
@@ -125,7 +126,7 @@ public class MainBattleController implements PropertyChangeListener {
     }
 
     private void renderSpecialFields(MapTile mapTile, int x, int y) {
-        if (x == 0 && y == 0) {
+        if (x == 2 && y == 0) {
             Image img = new Image("/images/cracked_ice.png");
             mapTile.setBackground(img);
         }
@@ -217,6 +218,7 @@ public class MainBattleController implements PropertyChangeListener {
                 if (gameEngine.getCreature(new Point(x1, y1)).isPresent()) {
                     if (gameEngine.getCreature(new Point(x, y)).get().isAlive()) {
                         mapTile.setName("\n\n" + gameEngine.getCreature(new Point(x, y)).get().getAmount());
+                        System.out.println(gameEngine.getCreature(new Point(x1, y1)).get().getBasicStats().getImagePath());
                         Image img = new Image(gameEngine.getCreature(new Point(x1, y1)).get().getBasicStats().getImagePath());
                         mapTile.setBackground(img);
                     } else {
@@ -238,9 +240,9 @@ public class MainBattleController implements PropertyChangeListener {
                             mouseEvent -> {
                                 if (gameEngine.getCreature(new Point(x1, y1)).isPresent()) {
                                     if(gameEngine.canCastSpell(selectedSpell, gameEngine.getCreature(new Point(x1, y1)).get())) {
-                                        mapTile.getScene().setCursor(Cursor.CROSSHAIR);
+                                        mapTile.getScene().setCursor(new ImageCursor(new Image("/images/spells images/Cast Coursor.png")));
                                     }else {
-                                        mapTile.getScene().setCursor(Cursor.OPEN_HAND);
+                                        mapTile.getScene().setCursor(new ImageCursor(new Image("/images/spells images/Block Coursor.png")));
                                     }
                                 } else {
                                     mapTile.getScene().setCursor(Cursor.DEFAULT);

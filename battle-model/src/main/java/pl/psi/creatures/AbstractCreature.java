@@ -7,6 +7,7 @@ import pl.psi.spells.SpellNames;
 import pl.psi.spells.SpellRang;
 
 import java.beans.PropertyChangeEvent;
+import java.util.List;
 
 
 public class AbstractCreature extends Creature {
@@ -225,5 +226,10 @@ public class AbstractCreature extends Creature {
     @Override
     public Integer[][] getSplashDamageRange(){
         return decorated.getSplashDamageRange();
+    }
+
+    @Override
+    public List<SpellNames> getImmuneSpellList(){
+        return decorated.getImmuneSpellList();
     }
 }

@@ -7,9 +7,9 @@ import java.util.function.BiConsumer;
 
 public class ChainLightning extends Spell<SpellCreatureList> {
 
-    private final int value;
+    private final double value;
 
-    public ChainLightning(SpellTypes category, SpellNames name, SpellMagicClass spellMagicClass, SpellRang rang, int manaCost, Integer value) {
+    public ChainLightning(SpellTypes category, SpellNames name, SpellMagicClass spellMagicClass, SpellRang rang, int manaCost, double value) {
         super(category, name, spellMagicClass, rang, manaCost);
         this.value = value;
     }

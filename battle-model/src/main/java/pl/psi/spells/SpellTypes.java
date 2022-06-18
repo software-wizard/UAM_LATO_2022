@@ -6,4 +6,5 @@ public enum SpellTypes {
     FOR_ALL_ENEMY_CREATURES,
     FOR_ALL_ALLIED_CREATURES,
     FOR_ALL_CREATURES,
+    SPAWN_CREATURE,
 }

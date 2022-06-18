@@ -1,7 +1,9 @@
 package pl.psi;
 
+import com.sun.jdi.event.StepEvent;
 import lombok.Getter;
 import pl.psi.creatures.Creature;
+import pl.psi.creatures.CreatureStatistic;
 import pl.psi.creatures.FirstAidTent;
 import pl.psi.spells.AreaDamageSpell;
 import pl.psi.spells.Spell;
@@ -16,6 +18,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.lang.Math.ceil;
+import static pl.psi.spells.SpellNames.*;
 import static pl.psi.spells.SpellRang.BASIC;
 
 /**
@@ -28,18 +31,20 @@ public class GameEngine {
     private final Board board;
     private final PropertyChangeSupport observerSupport = new PropertyChangeSupport(this);
     @Getter
-    private final Hero hero1;
+    private Hero hero1;
     @Getter
-    private final Hero hero2;
+    private Hero hero2;
     private boolean currentCreatureCanMove = true;
     private boolean currentCreatureCanAttack = true;
     private String attackInformation = "";
     private String additionalInformation = "";
     private String spellCastInformation = "";
 
-    public GameEngine(final Hero aHero1, final Hero aHero2) {
+    public GameEngine(Hero aHero1, Hero aHero2) {
         hero1 = aHero1;
+        hero1.setSide(HeroeSide.LEFT);
         hero2 = aHero2;
+        hero2.setSide(HeroeSide.RIGHT);
         turnQueue = new TurnQueue(aHero1.getCreatures(), aHero2.getCreatures());
         board = new Board(aHero1.getCreatures(), aHero2.getCreatures());
     }
@@ -326,12 +331,47 @@ public class GameEngine {
                                 creature.castSpell(creature, spell, biConsumer);
                             });
                     break;
+                case SPAWN_CREATURE:
+                    BiConsumer<String, PropertyChangeListener> newBiConsumer = (s, propertyChangeListener) -> {
+                        List<Creature> creatures = new ArrayList<>(getCurrentHero().getCreatures());
+                        Creature elemental = new ElementalFactory().create(s, getCurrentHero());
+                        creatures.add(elemental);
+                        getCurrentHero().setCreatures(creatures);
+                        turnQueue.getCreatures().add(elemental);
+                        board.putCreatureOnBoard(getPointToSpawnElemental(), elemental);
+                    };
+                    spell.castSpell(null, newBiConsumer);
+                    break;
                 default:
                     throw new IllegalArgumentException("Not supported category.");
             }
             getCurrentHero().subtractMana(spell.getManaCost());
         } else {
             System.out.println("Nie masz wystarczająco many");
+        }
+    }
+
+    private Point getPointToSpawnElemental() {
+        int heroFactor = (getCurrentHero().getSide().equals(HeroeSide.LEFT)) ? 1 : -1;
+
+        int maxVane = (heroFactor == -1) ? 14 : 0;
+        int minVane = (heroFactor == -1) ? 0 : 14;
+
+        for (int i = maxVane; checkSide(i, minVane); i += heroFactor) {
+            for (int j = 0; j <= 9; j++) {
+                if (board.getCreature(new Point(i, j)).isEmpty()) {
+                    return new Point(i, j);
+                }
+            }
+        }
+        return null;
+    }
+
+    private boolean checkSide(int i, int minVane) {
+        if (getCurrentHero().getSide().equals(HeroeSide.RIGHT)) {
+            return i >= minVane;
+        } else {
+            return i <= minVane;
         }
     }
 
@@ -344,7 +384,7 @@ public class GameEngine {
 
         Creature creature = null;
         if (board.getCreature(point).isPresent()) {
-            if(canCastSpell(spell, board.getCreature(point).get())) {
+            if (canCastSpell(spell, board.getCreature(point).get())) {
                 creature = board.getCreature(point).get();
             }
         }
@@ -409,8 +449,9 @@ public class GameEngine {
     public boolean canCastSpell(Spell spell, Creature creature) {
         if ((spell instanceof Dispel) && (spell.getRang() == BASIC)) {
             return isCreatureAllied(creature);
+        } else if (spell.getName().equals(DISRUPTING_RAY) || spell.getName().equals(WEAKNESS)) {
+            return !isCreatureAllied(creature);
         }
-
         return true;
     }
 

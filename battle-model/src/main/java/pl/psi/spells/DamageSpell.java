@@ -12,15 +12,18 @@ import static pl.psi.spells.SpellRang.BASIC;
 public class DamageSpell extends Spell<Creature> {
 
     private double protectionFactor;
-    private final Integer value;
+    private final double value;
 
-    public DamageSpell(SpellTypes category, SpellNames name, SpellMagicClass spellMagicClass, SpellRang rang, int manaCost, Integer value) {
+    public DamageSpell(SpellTypes category, SpellNames name, SpellMagicClass spellMagicClass, SpellRang rang, int manaCost, double value) {
         super(category, name, spellMagicClass, rang, manaCost);
         this.value = value;
     }
 
     @Override
     public void castSpell(Creature aDefender, BiConsumer<String, PropertyChangeListener> consumer) {
+        System.out.println(aDefender.getImmuneSpellList());
+//        ElementalDecorator elementalDecorator = (ElementalDecorator) aDefender;
+//        System.out.println(elementalDecorator.getImmune());
         double damage = (isCreatureHasProtection(aDefender) ? value * protectionFactor : value);
         aDefender.applySpellDamage(aDefender, damage);
     }

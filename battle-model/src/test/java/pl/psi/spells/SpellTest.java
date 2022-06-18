@@ -108,6 +108,7 @@ public class SpellTest {
         Creature creature1 = new Creature.Builder()
                 .statistic(
                         CreatureStats.builder()
+                                .name("C0")
                                 .damage(Range.closed(10, 10))
                                 .attack(50)
                                 .moveRange(25)
@@ -117,6 +118,7 @@ public class SpellTest {
         Creature creature2 = new Creature.Builder()
                 .statistic(
                         CreatureStats.builder()
+                                .name("C1")
                                 .damage(Range.closed(10, 10))
                                 .attack(50)
                                 .moveRange(25)
@@ -126,6 +128,7 @@ public class SpellTest {
         Creature creature3 = new Creature.Builder()
                 .statistic(
                         CreatureStats.builder()
+                                .name("C2")
                                 .damage(Range.closed(10, 10))
                                 .attack(50)
                                 .moveRange(25)
@@ -135,6 +138,7 @@ public class SpellTest {
         Creature creature4 = new Creature.Builder()
                 .statistic(
                         CreatureStats.builder()
+                                .name("C3")
                                 .damage(Range.closed(10, 10))
                                 .attack(50)
                                 .moveRange(25)
@@ -168,12 +172,13 @@ public class SpellTest {
         //when
         gameEngine.castSpell(new Point(8, 2), counterstrike);
 
+
         gameEngine.pass();
-        creature2.attack(creature1);
-        gameEngine.pass();
-        creature3.attack(creature1);// ?????
-        gameEngine.pass();
-        creature4.attack(creature1);
+        gameEngine.attack(new Point(8, 2));
+        gameEngine.attack(new Point(8, 2));
+        gameEngine.attack(new Point(8, 2));
+        gameEngine.attack(new Point(8, 2));
+
 
         //then
         Assertions.assertThat(gameEngine.getCreature(new Point(8, 2)).get().getCurrentHp()).isEqualTo(95);
@@ -644,7 +649,7 @@ public class SpellTest {
         Spell<? extends SpellableIf> protectionFromAir = new SpellFactory().create(PROTECTION_FROM_AIR, ADVANCED, 1);
 
         final GameEngine gameEngine =
-                new GameEngine(new Hero(firstHeroCreatures, SpellsBook.builder().spells(List.of(LIGHTNING_BOLT_RANG_1)).mana(NOT_IMPORTANT_MANA).build()),
+                new GameEngine(new Hero(firstHeroCreatures, SpellsBook.builder().spells(List.of(protectionFromAir, LIGHTNING_BOLT_RANG_1)).mana(NOT_IMPORTANT_MANA).build()),
                         new Hero(secondHeroCreatures, SpellsBook.builder().spells(List.of(MAGIC_ARROW_RANG_1)).mana(NOT_IMPORTANT_MANA).build()));
 
         Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
@@ -660,6 +665,61 @@ public class SpellTest {
                 .get().getRunningSpells()).contains(protectionFromAir);
         Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
                 .get().getCurrentHp()).isEqualTo(82.5);
+    }
+
+    @Test
+    void shouldBuffLuckWhenFortuneCasted(){
+        //given
+        List<Creature> firstHeroCreatures = List.of(EXAMPLE_CREATURE_1);
+        List<Creature> secondHeroCreatures = List.of(EXAMPLE_CREATURE_2);
+
+        Spell<? extends SpellableIf> fortune = new SpellFactory().create(FORTUNE, BASIC, 1);
+
+        final GameEngine gameEngine =
+                new GameEngine(new Hero(firstHeroCreatures, SpellsBook.builder().spells(List.of(fortune)).mana(NOT_IMPORTANT_MANA).build()),
+                        new Hero(secondHeroCreatures, SpellsBook.builder().spells(List.of(MAGIC_ARROW_RANG_1)).mana(NOT_IMPORTANT_MANA).build()));
+
+
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
+                .isPresent()).isTrue();
+
+        //when
+        gameEngine.castSpell(new Point(14, 1), fortune);
+
+
+        //then
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
+                .get().getRunningSpells()).contains(fortune);
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
+                .get().getLuck()).isEqualTo(11);
+    }
+
+    @Test
+    void shouldDebuffMoraleWhenSorrowCasted(){
+        //given
+        List<Creature> firstHeroCreatures = List.of(EXAMPLE_CREATURE_1);
+        List<Creature> secondHeroCreatures = List.of(EXAMPLE_CREATURE_2);
+
+        Spell<? extends SpellableIf> sorrow = new SpellFactory().create(SORROW, BASIC, 1);
+
+        final GameEngine gameEngine =
+                new GameEngine(new Hero(firstHeroCreatures, SpellsBook.builder().spells(List.of(sorrow)).mana(NOT_IMPORTANT_MANA).build()),
+                        new Hero(secondHeroCreatures, SpellsBook.builder().spells(List.of(MAGIC_ARROW_RANG_1)).mana(NOT_IMPORTANT_MANA).build()));
+
+
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
+                .isPresent()).isTrue();
+
+
+        //when
+        gameEngine.castSpell(new Point(14, 1), sorrow);
+
+
+        //then
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
+                .get().getRunningSpells()).contains(sorrow);
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
+                .get().getMorale()).isEqualTo(0);
     }
 
     @Test
