@@ -181,7 +181,7 @@ public class ArtifactFactory {
         final ArtifactEffect<ArtifactEffectApplicable> rightOfVitalityEffect = ArtifactEffect.builder()
                 .effectValue(BigDecimal.valueOf(1))
                 .effectApplyingMode(ArtifactApplyingMode.ADD)
-                .applierTarget(CreatureArtifactApplicableProperty.HEALTH)
+                .applierTarget(CreatureArtifactApplicableProperty.ATTACK)
                 .build();
 
         return Artifact.builder()

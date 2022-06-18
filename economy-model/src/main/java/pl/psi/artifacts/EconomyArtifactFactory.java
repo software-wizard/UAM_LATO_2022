@@ -19,7 +19,7 @@ public class EconomyArtifactFactory {
 
             case RING_OF_VITALITY:
                 return new EconomyArtifact( ArtifactPlacement.FINGERS, "Ring of Vitality", new Money(15),
-                        aArtifactName, "Increases health of all your units by 1" );
+                        aArtifactName, "Increases attack of all your units by 1" );
 
             case VIAL_OF_LIFEBLOOD:
                 return new EconomyArtifact( ArtifactPlacement.MISC, "Vial of Lifeblood", new Money(30),
