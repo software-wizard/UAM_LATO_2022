@@ -50,6 +50,7 @@ public class EcoBattleConverter {
     {
         final Multimap< ArtifactTarget, ArtifactIf> artifacts = getConvertedArtifacts( aPlayer );
         applyArtifactsToCreatures( aPlayer, artifacts );
+        applyArtifactsToHero( aPlayer, artifacts );
 
         final List<Creature> creatures = new ArrayList<>();
         final NecropolisFactory factory = new NecropolisFactory();
@@ -89,6 +90,15 @@ public class EcoBattleConverter {
         {
             artifactEffects.forEach( economyCreature::applyArtifactEffect );
         }
+    }
+
+    private static void applyArtifactsToHero(EconomyHero aPlayer, Multimap<ArtifactTarget, ArtifactIf> aArtifacts) {
+        List< ArtifactEffect< ArtifactEffectApplicable > > artifactEffects = aArtifacts.get( ArtifactTarget.SKILL ).stream()
+                .flatMap( art -> art.getEffects().stream() )
+                .collect( Collectors.toList() );
+
+        artifactEffects.forEach( aPlayer::applyArtifactEffect );
+
     }
 
 }

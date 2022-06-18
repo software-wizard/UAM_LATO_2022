@@ -7,8 +7,13 @@ public enum CreatureArtifactNamesHolder implements ArtifactNamesHolder{
 
     RING_OF_LIFE,
 
-    VIAL_OF_LIFEBLOOD;
+    VIAL_OF_LIFEBLOOD,
 
+    GARNITURE_OF_INTERFERENCE,
+
+    SURCOAT_OF_COUNTERPOISE,
+
+    BOOTS_OF_POLARITY;
 
     @Override
     public ArtifactTarget getHolderTarget()

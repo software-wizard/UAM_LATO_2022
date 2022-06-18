@@ -50,6 +50,18 @@ public class ArtifactFactory {
 
                 return createVialOfLifebloodArtifact();
 
+            case GARNITURE_OF_INTERFERENCE:
+
+                return createGarnitureOfInterferenceArtifact();
+
+            case SURCOAT_OF_COUNTERPOISE:
+
+                return createsurCoatOfCounterpoiseArtifact();
+
+            case BOOTS_OF_POLARITY:
+
+                return createBootsOfPolarityArtifact();
+
             default:
 
                 throw new IllegalArgumentException(NO_ARTIFACT_IMPLEMENTATION_EXCEPTION_MESSAGE);
@@ -194,6 +206,54 @@ public class ArtifactFactory {
                 .rank(ArtifactRank.TREASURE)
                 .target(ArtifactTarget.CREATURES)
                 .effects(Set.of(vialOfLifebloodEffect))
+                .build();
+    }
+
+    private ArtifactIf createGarnitureOfInterferenceArtifact() {
+        final ArtifactEffect<ArtifactEffectApplicable> garnitureOfInterferenceEffect = ArtifactEffect.builder()
+                .effectValue(BigDecimal.valueOf(1.05))
+                .effectApplyingMode(ArtifactApplyingMode.MULTIPLY)
+                .applierTarget(CreatureArtifactApplicableProperty.DEFENCE)
+                .build();
+
+        return Artifact.builder()
+                .name("Garniture of Interference")
+                .placement(ArtifactPlacement.NECK)
+                .rank(ArtifactRank.MAJOR)
+                .target(ArtifactTarget.CREATURES)
+                .effects(Set.of(garnitureOfInterferenceEffect))
+                .build();
+    }
+
+    private ArtifactIf createsurCoatOfCounterpoiseArtifact() {
+        final ArtifactEffect<ArtifactEffectApplicable> coatOfCounterpoiseEffect = ArtifactEffect.builder()
+                .effectValue(BigDecimal.valueOf(1.1))
+                .effectApplyingMode(ArtifactApplyingMode.MULTIPLY)
+                .applierTarget(CreatureArtifactApplicableProperty.DEFENCE)
+                .build();
+
+        return Artifact.builder()
+                .name("Coat of Counterpoise")
+                .placement(ArtifactPlacement.SHOULDERS)
+                .rank(ArtifactRank.MAJOR)
+                .target(ArtifactTarget.CREATURES)
+                .effects(Set.of(coatOfCounterpoiseEffect))
+                .build();
+    }
+
+    private ArtifactIf createBootsOfPolarityArtifact() {
+        final ArtifactEffect<ArtifactEffectApplicable> bootsOfPolarityEffect = ArtifactEffect.builder()
+                .effectValue(BigDecimal.valueOf(1.15))
+                .effectApplyingMode(ArtifactApplyingMode.MULTIPLY)
+                .applierTarget(CreatureArtifactApplicableProperty.DEFENCE)
+                .build();
+
+        return Artifact.builder()
+                .name("Boots of Polarity")
+                .placement(ArtifactPlacement.FEET)
+                .rank(ArtifactRank.RELIC)
+                .target(ArtifactTarget.CREATURES)
+                .effects(Set.of(bootsOfPolarityEffect))
                 .build();
     }
 
