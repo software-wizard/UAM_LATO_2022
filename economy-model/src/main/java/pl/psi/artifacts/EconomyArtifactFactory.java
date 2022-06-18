@@ -25,6 +25,18 @@ public class EconomyArtifactFactory {
                 return new EconomyArtifact( ArtifactPlacement.MISC, "Vial of Lifeblood", new Money(30),
                         aArtifactName, "Increases health of all your units by 2" );
 
+            case GARNITURE_OF_INTERFERENCE:
+                return new EconomyArtifact( ArtifactPlacement.NECK, "Garniture Of Interference", new Money (5),
+                        aArtifactName, "Increases armor of all your units by 5%");
+
+            case SURCOAT_OF_COUNTERPOISE:
+                return new EconomyArtifact( ArtifactPlacement.SHOULDERS, "Surcoat Of Counterpoise", new Money (10),
+                        aArtifactName, "Increases armor of all your units by 10%");
+
+            case BOOTS_OF_POLARITY:
+                return new EconomyArtifact( ArtifactPlacement.FEET, "Boots Of Polarity", new Money (15),
+                        aArtifactName, "Increases armor of all your units by 10%");
+
             default:
                 throw new IllegalArgumentException (NO_ARTIFACT_IMPLEMENTATION_EXCEPTION_MESSAGE);
         }

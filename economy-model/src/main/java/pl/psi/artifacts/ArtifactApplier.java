@@ -92,5 +92,5 @@ public class ArtifactApplier {
 
     }
 
-    // TODO: Two new methods for calculating upgraded skills & spells.
+    // TODO: New method for calculating spells.
 }
