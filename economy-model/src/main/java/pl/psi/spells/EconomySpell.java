@@ -8,8 +8,11 @@ import lombok.Getter;
 public class EconomySpell {
 
     private final SpellStats spellStats;
-    private final SpellRang spellRang;
+    private SpellRang spellRang;
     private final int requiredMagicGuildLevel;
     private final int goldCost;
 
+    public void upgradeSpell(SpellRang aNewSpellRang) {
+        this.spellRang = aNewSpellRang;
+    }
 }

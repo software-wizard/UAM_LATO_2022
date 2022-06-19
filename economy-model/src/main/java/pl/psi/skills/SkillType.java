@@ -10,5 +10,9 @@ public enum SkillType {
     LUCK,
     FIRST_AID,
     ARTILLERY,
-    BALLISTICS
+    BALLISTICS,
+    AIR_MAGIC,
+    EARTH_MAGIC,
+    FIRE_MAGIC,
+    WATER_MAGIC
 }

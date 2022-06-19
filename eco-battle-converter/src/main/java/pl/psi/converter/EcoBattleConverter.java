@@ -10,6 +10,7 @@ import pl.psi.gui.MainBattleController;
 import pl.psi.gui.NecropolisFactory;
 import pl.psi.hero.EconomyHero;
 import pl.psi.skills.EconomySkill;
+import pl.psi.spells.EconomySpell;
 import pl.psi.spells.Spell;
 import pl.psi.spells.SpellFactory;
 
@@ -68,21 +69,23 @@ public class EcoBattleConverter {
                 .forEach(ecoCreature -> creatures.add(factory.create(ecoCreature.isUpgraded(),
                         ecoCreature.getTier(), ecoCreature.getAmount())));
 
+        convertSkills(playerSkills, creatures, aPlayer, aPlayer.getSpellList());
+
         final List<Spell> spells = new ArrayList<>();
         final SpellFactory spellFactory = new SpellFactory();
         aPlayer.getSpellList()
                 .forEach(economySpell -> spells.add(spellFactory.create(economySpell.getSpellStats().getName(), economySpell.getSpellRang(), aPlayer.getSpellPower())));
 
-        convertSkills(playerSkills, creatures, aPlayer);
 
         return new Hero(creatures, spells);
     }
 
     private static void convertSkills( List<EconomySkill> aSkills, List<Creature> aCreatures,
-                                       EconomyHero aHero ) {
+                                       EconomyHero aHero, List<EconomySpell> aSpells ) {
         aSkills.forEach(aSkill -> {
             aSkill.apply(aCreatures);
             aSkill.apply(aHero);
+            aSkill.applyForSpells(aSpells);
         });
     }
 

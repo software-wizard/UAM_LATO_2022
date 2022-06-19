@@ -6,6 +6,7 @@ import pl.psi.creatures.ShooterCreature;
 import pl.psi.creatures.WarMachinesAbstract;
 import pl.psi.hero.EconomyHero;
 import pl.psi.hero.HeroStats;
+import pl.psi.spells.*;
 
 /**
  * Class that represents changing creature stats based on current skill
@@ -68,6 +69,36 @@ public class UpgradeCalculator {
         return changedStats;
     }
 
+    public SpellRang calculate(EconomySpell aSpell) {
+        SpellRang convertedSpellRang = convertIntToSpellRang((int) this.skillEffect );
+        SpellRang changedSpellRang = SpellRang.BASIC;
+        switch (this.skillName) {
+            case AIR_MAGIC:
+                if (aSpell.getSpellStats().getMagicGuild() == SpellMagicGuild.AIR) {
+                    changedSpellRang = convertedSpellRang;
+                }
+                break;
+            case FIRE_MAGIC:
+                if (aSpell.getSpellStats().getMagicGuild() == SpellMagicGuild.FIRE) {
+                    changedSpellRang = convertedSpellRang;
+                }
+                break;
+            case EARTH_MAGIC:
+                if (aSpell.getSpellStats().getMagicGuild() == SpellMagicGuild.EARTH) {
+                    changedSpellRang = convertedSpellRang;
+                }
+                break;
+            case WATER_MAGIC:
+                if (aSpell.getSpellStats().getMagicGuild() == SpellMagicGuild.WATER) {
+                    changedSpellRang = convertedSpellRang;
+                }
+                break;
+            default:
+                changedSpellRang = aSpell.getSpellRang();
+        }
+        return changedSpellRang;
+    }
+
     private void upgradeWarMachineLevel(Creature aCreature ) {
        if (aCreature instanceof WarMachinesAbstract) {
            ((WarMachinesAbstract) aCreature).upgradeSkillLevel(new Double(this.skillEffect).intValue());
@@ -94,5 +125,14 @@ public class UpgradeCalculator {
             }
         }
         return CreatureStats.builder().build();
+    }
+
+    private SpellRang convertIntToSpellRang(int aIntSpellRang) {
+        switch(aIntSpellRang) {
+            case 1: return SpellRang.BASIC;
+            case 2: return SpellRang.ADVANCED;
+            case 3: return SpellRang.EXPERT;
+            default: throw new IllegalArgumentException("Invalid spell rang");
+        }
     }
 }

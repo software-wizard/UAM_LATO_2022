@@ -5,6 +5,8 @@ import pl.psi.Hero;
 import pl.psi.creatures.Creature;
 import pl.psi.creatures.CreatureStats;
 import pl.psi.hero.EconomyHero;
+import pl.psi.spells.EconomySpell;
+import pl.psi.spells.SpellRang;
 
 import java.util.List;
 
@@ -39,8 +41,10 @@ public class EconomySkill {
        aHero.updateHeroStats(this.upgradeCalculator.calculate(aHero));
     }
 
-    // method that will take spell as an argument
-    public void apply() {
-        throw new UnsupportedOperationException("Method not implemented");
+    public void applyForSpells(List<EconomySpell> aSpells) {
+        aSpells.forEach( aSpell -> {
+            SpellRang newSpellRang = this.upgradeCalculator.calculate( aSpell );
+            aSpell.upgradeSpell(newSpellRang);
+        } );
     }
 }
