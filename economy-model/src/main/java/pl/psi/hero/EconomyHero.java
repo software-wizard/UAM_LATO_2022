@@ -29,7 +29,7 @@ public class EconomyHero implements ArtifactEffectApplicable {
     private final List<EconomyCreature> warMachines;
     private final Equipment equipment;
     private final Backpack backpack;
-    private HeroStatistics heroStats;
+    private HeroStatisticsIf heroStats;
     private final int heroNumber;
     private final ArtifactApplier artifactApplier = new ArtifactApplier();
     private Money gold = new Money(10000);
@@ -53,7 +53,7 @@ public class EconomyHero implements ArtifactEffectApplicable {
     }
 
     // konstruktor samokopiujący
-    public EconomyHero(Fraction fraction, List<EconomyCreature> creatureList, List<EconomyArtifact> artifactList, List<EconomySkill> skillsList, List<EconomySpell> spellsList, List<EconomyCreature> warMachines ,Money gold, int heroNumber, HeroStatistics aClass) {
+    public EconomyHero(Fraction fraction, List<EconomyCreature> creatureList, List<EconomyArtifact> artifactList, List<EconomySkill> skillsList, List<EconomySpell> spellsList, List<EconomyCreature> warMachines ,Money gold, int heroNumber, HeroStatisticsIf aClass) {
         this.fraction = fraction;
         this.creatureList = creatureList;
         this.artifactList = artifactList;
@@ -253,6 +253,6 @@ public class EconomyHero implements ArtifactEffectApplicable {
 
     @Override
     public void applyArtifactEffect(final ArtifactEffect<? extends ArtifactEffectApplicable> aArtifactEffect) {
-        heroStats = (HeroStatistics) artifactApplier.calculateHeroUpgradedStatisticsAfterApplyingArtifact(aArtifactEffect, heroStats);
+        heroStats = artifactApplier.calculateHeroUpgradedStatisticsAfterApplyingArtifact(aArtifactEffect, heroStats);
     }
 }
