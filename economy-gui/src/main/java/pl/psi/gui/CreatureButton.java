@@ -19,8 +19,7 @@ import javafx.stage.StageStyle;
 import pl.psi.ProductType;
 import pl.psi.creatures.EconomyCreature;
 
-// TODO createConfirm - Stage and Top - nie
-// TODO &&
+
 public class CreatureButton extends Button {
     private final EconomyCreature creature;
 
@@ -50,7 +49,7 @@ public class CreatureButton extends Button {
         final Slider slider = createSlider(maxSliderValue);
         slider.setMaxWidth(610);
 
-        // if hero cannot buy centerPane instead of Slider show Label , because to do delete Slider a lot of code can be changed
+        // if hero cannot buy centerPane instead of Slider show Label
         if (canBuy && canBuyMore)
             centerPane.getChildren().add(slider);
         else if (!canBuy)
@@ -130,7 +129,7 @@ public class CreatureButton extends Button {
 
 
     private void prepareConfirmAndCancelButton(final HBox aBottomPane, final Slider aSlider, final Stage dialog) {
-//        aBottomPane.setAlignment(Pos.CENTER);
+        aBottomPane.setAlignment(Pos.CENTER);
         aBottomPane.setSpacing(30);
         final Button okButton = new Button("OK");
         okButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> dialog.close());

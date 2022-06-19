@@ -96,10 +96,20 @@ public class EcoController implements PropertyChangeListener {
     @FXML
     private Button FINGERS;
 
+    @FXML
+    private Button BALLISTA;
+    @FXML
+    private Button FIRST_AID_TENT;
+    @FXML
+    private Button AMMO_CART;
+
+
     private ProductType shopChoose;
     private HashMap<ArtifactPlacement, Button> artifactPlacementButtonHashMap;
+    private HashMap<WarMachinesStatistic, Button> warMachinesStatisticButtonHashMap;
     private List<Button> creatureButtons;
     private List<Button> artifactButtons;
+    private List<Button> warMachinesButton;
 
 
     public EcoController(final EconomyHero aHero1, final EconomyHero aHero2) {
@@ -122,8 +132,15 @@ public class EcoController implements PropertyChangeListener {
         artifactPlacementButtonHashMap.put(ArtifactPlacement.MISC, MISC);
         artifactPlacementButtonHashMap.put(ArtifactPlacement.FINGERS, FINGERS);
 
+        warMachinesStatisticButtonHashMap = new HashMap<>();
+        warMachinesStatisticButtonHashMap.put(WarMachinesStatistic.AMMO_CART,AMMO_CART);
+        warMachinesStatisticButtonHashMap.put(WarMachinesStatistic.BALLISTA,BALLISTA);
+        warMachinesStatisticButtonHashMap.put(WarMachinesStatistic.FIRST_AID_TENT,FIRST_AID_TENT);
+
+
         creatureButtons = List.of(creaturete1, creaturete2, creaturete3, creaturete4, creaturete5, creaturete6, creaturete7);
         artifactButtons = List.of(HEAD, RIGHT_HAND, LEFT_HAND, FEET, NECK, TORSO, SHOULDERS,FINGERS,MISC);
+        warMachinesButton = List.of(BALLISTA,FIRST_AID_TENT,AMMO_CART);
 
         VBoxHero.setBackground(new Background(new BackgroundFill(Color.BROWN, CornerRadii.EMPTY, Insets.EMPTY)));
 
@@ -225,6 +242,26 @@ public class EcoController implements PropertyChangeListener {
         currentGoldLabel.setText(String.valueOf(economyEngine.getActiveHero().getGold().getPrice()));
         shopsBox.getChildren().clear();
         refreshShopDependsOnWhatHasChose();
+
+        // add WarMachines
+        List<EconomyCreature> warMachines = economyEngine.getActiveHero().getWarMachines();
+
+        for (Map.Entry<WarMachinesStatistic, Button> b : warMachinesStatisticButtonHashMap.entrySet()) {
+            WarMachinesStatistic placement = b.getKey();
+            for (EconomyCreature a : warMachines) {
+                if (a.getStats().equals(placement)) {
+                    Button button = b.getValue();
+                    Image image = new Image("/machines/" + a.getStats().toString() + ".png");
+                    ImageView imageView = new ImageView(image);
+                    imageView.setFitHeight(39);
+                    imageView.setFitWidth(39);
+                    button.setGraphic(imageView);
+                    button.setContentDisplay(ContentDisplay.CENTER);
+                }
+            }
+        }
+
+        //
 
         List<EconomyCreature> creatureList = economyEngine.getActiveHero().getCreatures();
         int numberOfBoughtCreatures = creatureList.size();
@@ -344,11 +381,15 @@ public class EcoController implements PropertyChangeListener {
         }
 
         for (int i = 0; i < artifactButtons.size(); i++) {
-            Button button2 = artifactButtons.get(i);
-            ImageView imageView2 = new ImageView(image);
-            imageView2.setFitWidth(40);
-            imageView2.setFitHeight(40);
-            button2.setGraphic(imageView2);
+            Button button= artifactButtons.get(i);
+            imageView.setFitWidth(40);
+            imageView.setFitHeight(40);
+            button.setGraphic(imageView);
+        }
+
+        for (int i = 0; i < warMachinesButton.size(); i++) {
+            Button button = warMachinesButton.get(i);
+            button.setGraphic(imageView);
         }
 
         shopsBox.getChildren().clear();
@@ -402,9 +443,25 @@ public class EcoController implements PropertyChangeListener {
         Text label = new Text("Here you can buy creatures for your Hero.There are\ndifferent types of creatures,these types depend on \nchosen fraction.You can buy only 7 types of creatures.\nCreature of one type you can buy as many as gold \nyou have.");
         label.getStyleClass().add("labelShop");
         creatureShop.getChildren().add(label);
+
+        fillShopWithWarMachines(creatureShop);
         fillShopWithCreaturesDependsOnUpgrated(fraction,factory,false,creatureShop);
         fillShopWithCreaturesDependsOnUpgrated(fraction,factory,true,creatureShop);
         shopsBox.getChildren().add(creatureShop);
+    }
+
+    public void fillShopWithWarMachines(VBox creatureShop){
+        int [] tiers = {1,2,4};
+        // because we have tiers not 1-3 , but 1,2,4 :(
+        EconomyWarMachineFactory factory = new EconomyWarMachineFactory();
+        for(int i=0;i<3;i++){
+            EconomyCreature machine = factory.create(tiers[i]);
+            if(economyEngine.getActiveHero().canAddMachine(machine)) {
+                boolean canBuy = economyEngine.getActiveHero().getGold().haveEnoghMoney(machine.getGoldCost());
+                WarMachines button = new WarMachines(this::buy, machine,canBuy);
+                setImageToProducts(button,creatureShop,canBuy);
+            }
+        }
     }
 
     private void fillShopWithCreaturesDependsOnUpgrated(EconomyHero.Fraction fraction, FactoryInterface factory, boolean upgrated, VBox creatureShop){
@@ -436,7 +493,6 @@ public class EcoController implements PropertyChangeListener {
 
 
 
-    // TODO w otdzielną metodę Images
     private void fillShopWithArtifacts() {
         final VBox artifactShop = new VBox();
         Text label = new Text("Here you can buy artifacts for your Hero. There are \ndifferent types of artifacts, these types don't depend\non chosen fraction. Each artifact has placement. One part\nof body can have only one artifact, that's why\nyou can buy all types of artifacts, but artifact \nof one type you can buy only once.");
@@ -481,9 +537,10 @@ public class EcoController implements PropertyChangeListener {
         Text label = new Text("Here you can buy skills for your Hero. There are \ndifferent types of skills, these types don't depend on \nchosen fraction.You can buy all types of skills, \nbut skill of one type you can buy only once.");
         label.getStyleClass().add("labelShop");
         skillShop.getChildren().add(label);
-        List<SkillLevel> skillLevels = List.of(SkillLevel.BASIC,SkillLevel.ADVANCED,SkillLevel.EXPERT);
-        List<SkillType> skillTypes = List.of(SkillType.ARCHERY,SkillType.OFFENCE,SkillType.ARMOURER,SkillType.RESISTANCE,SkillType.LUCK,SkillType.FIRST_AID);
+        List<SkillLevel> skillLevels = new ArrayList<>(Arrays.asList(SkillLevel.values()));
+        List<SkillType> skillTypes = new ArrayList<>(Arrays.asList(SkillType.values()));
         final EconomySkillFactory factory = new EconomySkillFactory();
+
         for(int i = 0; i<skillLevels.size(); i++){
             for(int j=0; j<skillTypes.size(); j++) {
                 EconomySkill skill = factory.create(skillTypes.get(j), skillLevels.get(i));
@@ -507,18 +564,14 @@ public class EcoController implements PropertyChangeListener {
 
         List<SpellStats> spellStats = new ArrayList<>(Arrays.asList(SpellStats.values()));
 
-        List<SpellRang> spellRangs = List.of(SpellRang.BASIC,SpellRang.ADVANCED,SpellRang.EXPERT);
-
         final EconomySpellFactory factory = new EconomySpellFactory();
         for(int i = 0; i<spellStats.size(); i++){
-            for(int j=0; j<spellRangs.size(); j++) {
-                EconomySpell spell = factory.create(spellStats.get(i),spellRangs.get(j));
+                EconomySpell spell = factory.create(spellStats.get(i),SpellRang.BASIC);
                 if (economyEngine.getActiveHero().canAddSpell(spell)) {
                     boolean canBuy = economyEngine.getActiveHero().getGold().haveEnoghMoney(spell.getGoldCost());
                     SpellButton button = new SpellButton(this::buy, spell,canBuy );
                     setImageToProducts(button,spellShop,canBuy);
                 }
-            }
         }
         shopsBox.getChildren().add(spellShop);
     }

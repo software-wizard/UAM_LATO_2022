@@ -7,6 +7,7 @@ import pl.psi.artifacts.EconomyArtifact;
 import pl.psi.artifacts.ArtifactPlacement;
 import pl.psi.artifacts.model.ArtifactEffect;
 import pl.psi.creatures.EconomyCreature;
+import pl.psi.creatures.WarMachinesStatistic;
 import pl.psi.shop.Money;
 import pl.psi.skills.EconomySkill;
 import pl.psi.spells.EconomySpell;
@@ -25,13 +26,12 @@ public class EconomyHero implements ArtifactEffectApplicable {
     private final List<EconomyArtifact> artifactList;
     private final List<EconomySkill> skillsList;
     private final List<EconomySpell> spellsList;
+    private final List<EconomyCreature> warMachines;
     private final Equipment equipment;
     private final Backpack backpack;
     private HeroStatistics heroStats;
     private final int heroNumber;
     private final ArtifactApplier artifactApplier = new ArtifactApplier();
-    // start amount of gold
-    // TODO - MOney zamiast int !!
     private Money gold = new Money(10000);
 
     public EconomyHero(final Fraction aFraction) {
@@ -46,13 +46,14 @@ public class EconomyHero implements ArtifactEffectApplicable {
         artifactList = new ArrayList<>();
         skillsList = new ArrayList<>();
         spellsList = new ArrayList<>();
+        warMachines = new ArrayList<>();
         equipment = new Equipment();
         backpack = new Backpack();
         heroStats = aClass;
     }
 
     // konstruktor samokopiujący
-    public EconomyHero(Fraction fraction, List<EconomyCreature> creatureList, List<EconomyArtifact> artifactList, List<EconomySkill> skillsList, List<EconomySpell> spellsList, Money gold, int heroNumber, HeroStatistics aClass) {
+    public EconomyHero(Fraction fraction, List<EconomyCreature> creatureList, List<EconomyArtifact> artifactList, List<EconomySkill> skillsList, List<EconomySpell> spellsList, List<EconomyCreature> warMachines ,Money gold, int heroNumber, HeroStatistics aClass) {
         this.fraction = fraction;
         this.creatureList = creatureList;
         this.artifactList = artifactList;
@@ -60,6 +61,7 @@ public class EconomyHero implements ArtifactEffectApplicable {
         this.spellsList = spellsList;
         this.gold = gold;
         this.heroNumber = heroNumber;
+        this.warMachines = warMachines;
         // TODO copy of backpack and equipment
         equipment = new Equipment();
         backpack = new Backpack();
@@ -76,18 +78,23 @@ public class EconomyHero implements ArtifactEffectApplicable {
 
     // Hero cannot buy more than 7 creatures
     public void addCreature(final EconomyCreature aCreature) {
-
-        int w = 0;
-        // check if we have this creature in List
-        // and need only to increase amount
-        for (EconomyCreature c : this.creatureList) {
-            if (c.getName().equals(aCreature.getName())) {
-                c.increaseAmount(aCreature.getAmount());
-                w = 1;
-            }
+        if(aCreature.getStats() instanceof WarMachinesStatistic){
+                warMachines.add(aCreature);
         }
-        if (w == 0) {
-            creatureList.add(aCreature);
+
+        else {
+            int w = 0;
+            // check if we have this creature in List
+            // and need only to increase amount
+            for (EconomyCreature c : this.creatureList) {
+                if (c.getName().equals(aCreature.getName())) {
+                    c.increaseAmount(aCreature.getAmount());
+                    w = 1;
+                }
+            }
+            if (w == 0) {
+                creatureList.add(aCreature);
+            }
         }
 
     }
@@ -98,18 +105,27 @@ public class EconomyHero implements ArtifactEffectApplicable {
 
     public boolean canAddCreature(EconomyCreature economyCreature) {
 
-        boolean heroHasThisCreature = false;
-        for (int i = 0; i < this.creatureList.size(); i++) {
-            if (economyCreature.getName().equals(creatureList.get(i).getName())) {
-                heroHasThisCreature = true;
+        if(economyCreature.getStats() instanceof WarMachinesStatistic){
+            for(int i=0;i<this.warMachines.size();i++){
+                if(warMachines.get(i).getStats().getName().equals(economyCreature.getStats().getName()))
+                    return false;
             }
+            return true;
         }
+        else {
+            boolean heroHasThisCreature = false;
+            for (int i = 0; i < this.creatureList.size(); i++) {
+                if (economyCreature.getName().equals(creatureList.get(i).getName())) {
+                    heroHasThisCreature = true;
+                }
+            }
 
-        if (creatureList.size() == 7 && !heroHasThisCreature) {
-            return false;
+            if (creatureList.size() == 7 && !heroHasThisCreature) {
+                return false;
+            }
+
+            return true;
         }
-
-        return true;
     }
 
     public boolean canAddArtifact(ArtifactPlacement placement) {
@@ -130,6 +146,10 @@ public class EconomyHero implements ArtifactEffectApplicable {
 
     public List<EconomySpell> getSpells() {
         return List.copyOf(spellsList);
+    }
+
+    public List<EconomyCreature> getWarMachines() {
+        return List.copyOf(warMachines);
     }
 
     public void substractGold(final int aAmount) {
@@ -205,6 +225,16 @@ public class EconomyHero implements ArtifactEffectApplicable {
 
     public void addSpell(EconomySpell spell){
         this.spellsList.add(spell);
+    }
+
+    public boolean canAddMachine(EconomyCreature machine) {
+        for(int i=0;i<warMachines.size();i++){
+            if(warMachines.get(i).getStats().getName().equals(machine.getStats().getName())){
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public enum Fraction {

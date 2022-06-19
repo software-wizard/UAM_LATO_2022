@@ -32,11 +32,6 @@ public enum WarMachinesStatistic implements CreatureStatisticIf {
     }
 
     @Override
-    public boolean isGoodAligned() {
-        return CreatureStatisticIf.super.isGoodAligned();
-    }
-
-    @Override
     public String getImagePath() {
         return null;
     }

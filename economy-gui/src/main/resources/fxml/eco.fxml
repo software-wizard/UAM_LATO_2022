@@ -39,8 +39,17 @@
 
                         <Button fx:id="MISC" translateX="-117" translateY="10" prefWidth="53" prefHeight="48"
                                 styleClass="button_aritfact"/>
-                        <Button fx:id="FINGERS" translateX="143" translateY="-50" prefWidth="53" prefHeight="48"
+                        <Button fx:id="FINGERS" translateX="-80" translateY="-158" prefWidth="53" prefHeight="48"
                           styleClass="button_aritfact"/>
+
+                        <!--                        WarMachines Buttons-->
+                        <Button fx:id="BALLISTA" translateX="139" translateY="-104" prefWidth="53" prefHeight="43"
+                                styleClass="button_aritfact"/>
+                        <Button fx:id="AMMO_CART" translateX="139" translateY="-152" prefWidth="53" prefHeight="43"
+                                styleClass="button_aritfact"/>
+                        <Button fx:id="FIRST_AID_TENT" translateX="139" translateY="-200" prefWidth="53" prefHeight="43"
+                                styleClass="button_aritfact"/>
+
 
                     </StackPane>
 

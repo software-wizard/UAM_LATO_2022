@@ -2,6 +2,8 @@ package pl.psi.gui;
 
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import pl.psi.ProductType;
 import pl.psi.artifacts.EconomyArtifact;
 
@@ -27,7 +29,10 @@ public class ArtifactButton extends AbstractButton<EconomyArtifact>{
         aTopPane.getChildren().add(new Label("             "));
         String characteristics = "Placement : " + product.getPlacement();
         aTopPane.getChildren().add(new Label(characteristics));
-        aTopPane.getChildren().add(new Label(product.getDescription()));
+
+        Text text = new Text("\n               " + product.getDescription());
+        text.setFont(Font.font ("Arial", 17));
+        aTopPane.getChildren().add(text);
     }
 
 }

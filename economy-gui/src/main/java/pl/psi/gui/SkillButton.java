@@ -25,6 +25,5 @@ public class SkillButton extends AbstractButton<EconomySkill> {
     @Override
     void prepareTop(final FlowPane aTopPane) {
         aTopPane.getChildren().add(new Label("Single Cost: " + product.getGoldCost().getPrice()));
-        aTopPane.getChildren().add(new Label("FACTOR : " + product.getFactor()));
     }
 }

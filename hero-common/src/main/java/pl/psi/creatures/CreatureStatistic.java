@@ -46,7 +46,7 @@ public enum CreatureStatistic implements CreatureStatisticIf {
             "I think it's the best lvl6 unit in the game! Double damage ability puts Dread Knights above Naga Queens.\nSpecial: 20% chance to curse enemy ; 20% chance to do double damage.\n",
             true, CreatureType.UNDEAD, true, 2,CreatureGroup.OTHER), //
     GHOST_DRAGON("Ghost Dragon", 19, 17, 200, 14, Range.closed(25, 50), 7,
-            "When situation seems hopeless, take a chance on the best enemy stack! If you'll get lucky, half their hit points will be gone instantly!! Ageing ability makes ghost dragons as dangerous as other lvl7 creatures.\nSpecial: -1 to enemy morale ; 20% chance to age enemy (halve hit points of all stack members).\n",
+            "When situation seems hopeless, take a chance on the best enemy stack! If you'll get lucky, half their \nhit points will be gone instantly!! Ageing ability makes ghost dragons as dangerous as other lvl7 creatures.\nSpecial: -1 to enemy morale ; 20% chance to age enemy (halve hit points of all stack members).\n",
             true, CreatureType.UNDEAD, false, 2,CreatureGroup.DRAGONS),
 
     //STRONGHOLD FRACTION
@@ -90,7 +90,7 @@ public enum CreatureStatistic implements CreatureStatisticIf {
             "They aren't kings for nothing, packing two seige shots in one turn and leveling walls to the ground in no time. You'll notice that the lack of flyers is compensated by the cyclops' special abbilities. \nKings however are quite pricey - look at that golden skirt armor that you are buying them for 350 gold! \nAttack, defence and speed improvements are too small to be worth 350 gold, so upgrade only if you are filthy rich and are heading for a long seige. \nThink about it, 2 kings cost almost as much as 3 normal cyclops!",
             true, CreatureType.ALIVE, true, 1,CreatureGroup.OTHER),
     ANCIENT_BEHEMOTH("Ancient Behemoth", 19, 19, 300, 9, Range.closed(30, 50), 7,
-            "Quite low on attack, defence and speed for the best creature, but hit points are at the top and the special abbility is amazing: the target is virtually defenceless however high it's skill is, \neven if it is commanded by a good hero, nothing helps, only 1/5th of defence will be useful to the scared enemy.\n Ancient behemoth is able to deal the highest damage amongst all level 7 units, but it's use is more strategic than that: always attack the unit with the highest defence skill since only behemoths can bypass it. \nIf you are ever to face the ancient behemoth, command all your units to attack at once - its attack is great, but its defence is nothing special, making it a strategic target.",
+            "Quite low on attack, defence and speed for the best creature, but hit points are at the top and the special ability is amazing: \nthe target is virtually defenceless however high it's skill is, even if it is commanded by a good hero, nothing helps, only 1/5th of \ndefence will be useful to the scared enemy. Ancient behemoth is able to deal the highest damage amongst all level 7 units, but it's use is more strategic than that:\n always attack the unit with the highest defence skill since only behemoths can bypass it. If you are ever to face the ancient behemoth, command all your units to\n attack at once - its attack is great, but its defence is nothing special, making it a strategic target.",
             true, CreatureType.ALIVE, true, 2,CreatureGroup.BEHEMOTHS),
     //CASTLE FRACTION
     PIKEMAN( "Pikeman", 4, 5, 10, 4, Range.closed( 1, 3 ), 1,
@@ -133,7 +133,7 @@ public enum CreatureStatistic implements CreatureStatisticIf {
             "Nice combat ratings and great constant damage - no need to bless them. Note that before the update patches \nAngels and Archangels didn't cost any gems, just gold. This has been added to try to balance the castle a little. \nI think it's still too powerful.\n",
             false,CreatureType.ALIVE,false, 1,CreatureGroup.ANGELS),
     ARCHANGEL( "Archangel", 30, 30,250, 18, Range.closed( 50, 50 ), 7,
-            "Best attack, defence and speed in a whole game! Resurrection is a very convenient abbility. \nThose fast wings take up a whole extra hex! :] Possibly the best creature in the game.\n",
+            "Best attack, defence and speed in a whole game! Resurrection is a very convenient abbility.\nThose fast wings take up a whole extra hex! :] Possibly the best creature in the game.\n",
             true,CreatureType.ALIVE,false, 2,CreatureGroup.ANGELS);
 
     private final String name;
