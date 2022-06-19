@@ -34,16 +34,16 @@ public enum WarMachinesStatistic implements CreatureStatisticIf {
 
     @Override
     public String getCanAttackImagePath() {
-        return null;
+        return "";
     }
 
     @Override
     public String getCanBuffImagePath() {
-        return null;
+        return "";
     }
 
     @Override
     public String getCurrentImagePath() {
-        return null;
+        return "";
     }
 }
