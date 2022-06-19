@@ -1,4 +1,8 @@
 package pl.psi.artifacts.holder;
 
-public interface ArtifactNamesHolder {
+import pl.psi.artifacts.model.ArtifactTarget;
+
+public interface ArtifactNamesHolder
+{
+    ArtifactTarget getHolderTarget();
 }

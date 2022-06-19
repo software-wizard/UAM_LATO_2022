@@ -1,8 +1,11 @@
 package pl.psi.hero;
 
 import lombok.Getter;
+import pl.psi.artifacts.ArtifactApplier;
+import pl.psi.artifacts.ArtifactEffectApplicable;
 import pl.psi.artifacts.EconomyArtifact;
 import pl.psi.artifacts.ArtifactPlacement;
+import pl.psi.artifacts.model.ArtifactEffect;
 import pl.psi.creatures.EconomyCreature;
 import pl.psi.shop.Money;
 import pl.psi.skills.EconomySkill;
@@ -14,7 +17,7 @@ import java.util.List;
 @Getter
 // TODO - zamiast Artifact - Slots
 // TODO - Economy Engine decide if we have slots and can Buy
-public class EconomyHero {
+public class EconomyHero implements ArtifactEffectApplicable {
 
     private static int heroCounter = 0;
     private final Fraction fraction;
@@ -24,8 +27,9 @@ public class EconomyHero {
     private final List<EconomySpell> spellsList;
     private final Equipment equipment;
     private final Backpack backpack;
-    private final HeroStatistics heroStats;
+    private HeroStatistics heroStats;
     private final int heroNumber;
+    private final ArtifactApplier artifactApplier = new ArtifactApplier();
     // start amount of gold
     // TODO - MOney zamiast int !!
     private Money gold = new Money(10000);
@@ -203,8 +207,6 @@ public class EconomyHero {
         this.spellsList.add(spell);
     }
 
-
-
     public enum Fraction {
         NECROPOLIS,
         CASTLE,
@@ -217,5 +219,10 @@ public class EconomyHero {
 
     public int getSpellPower() {
         return heroStats.getSpellPower();
+    }
+
+    @Override
+    public void applyArtifactEffect(final ArtifactEffect<? extends ArtifactEffectApplicable> aArtifactEffect) {
+        heroStats = (HeroStatistics) artifactApplier.calculateHeroUpgradedStatisticsAfterApplyingArtifact(aArtifactEffect, heroStats);
     }
 }
