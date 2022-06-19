@@ -14,6 +14,11 @@ public class SpellFactory {
     private static final String NAME_EXCEPTION_MESSAGE = "Name not found!";
     private final SpellFactorsModifiers spellFactorsModifiers;
 
+
+    public SpellFactory(SpellFactorsModifiers spellFactorsModifiers) {
+        this.spellFactorsModifiers = spellFactorsModifiers;
+    }
+
     public SpellFactory() {
         this.spellFactorsModifiers = SpellFactorsModifiers.builder()
                 .airDamageModifier(1)
@@ -41,33 +46,33 @@ public class SpellFactory {
             case DISRUPTING_RAY:
                 switch (rang) {
                     case BASIC:
-                        return new BuffDebuffSpell(FIELD, name, AIR, BASIC, 10, CreatureStats.builder().armor(-3).build(), spellPower, STONESKIN);
+                        return new BuffDebuffSpell(FIELD, name, AIR, BASIC, 10, CreatureStats.builder().armor(-3).build(), spellFactorsModifiers.getAddedDuration() + spellPower, STONESKIN);
                     case ADVANCED:
-                        return new BuffDebuffSpell(FIELD, name, AIR, ADVANCED, 10, CreatureStats.builder().armor(-4).build(), spellPower, STONESKIN);
+                        return new BuffDebuffSpell(FIELD, name, AIR, ADVANCED, 10, CreatureStats.builder().armor(-4).build(), spellFactorsModifiers.getAddedDuration() + spellPower, STONESKIN);
                     case EXPERT:
-                        return new BuffDebuffSpell(FIELD, name, AIR, EXPERT, 10, CreatureStats.builder().armor(-4).build(), spellPower, STONESKIN);
+                        return new BuffDebuffSpell(FIELD, name, AIR, EXPERT, 10, CreatureStats.builder().armor(-4).build(), spellFactorsModifiers.getAddedDuration() + spellPower, STONESKIN);
                     default:
                         throw new IllegalArgumentException(RANG_EXCEPTION_MESSAGE);
                 }
             case FORTUNE:
                 switch (rang) {
                     case BASIC:
-                        return new LuckBuffDebuffSpell(FIELD, name, AIR, BASIC, 7, 1, spellPower, MISFORTUNE);
+                        return new LuckBuffDebuffSpell(FIELD, name, AIR, BASIC, 7, 1, spellFactorsModifiers.getAddedDuration() + spellPower, MISFORTUNE);
                     case ADVANCED:
-                        return new LuckBuffDebuffSpell(FIELD, name, AIR, ADVANCED, 7, 2, spellPower, MISFORTUNE);
+                        return new LuckBuffDebuffSpell(FIELD, name, AIR, ADVANCED, 7, 2, spellFactorsModifiers.getAddedDuration() + spellPower, MISFORTUNE);
                     case EXPERT:
-                        return new LuckBuffDebuffSpell(FOR_ALL_ALLIED_CREATURES, name, AIR, EXPERT, 7, 2, spellPower, MISFORTUNE);
+                        return new LuckBuffDebuffSpell(FOR_ALL_ALLIED_CREATURES, name, AIR, EXPERT, 7, 2, spellFactorsModifiers.getAddedDuration() + spellPower, MISFORTUNE);
                     default:
                         throw new IllegalArgumentException(RANG_EXCEPTION_MESSAGE);
                 }
             case HASTE:
                 switch (rang) {
                     case BASIC:
-                        return new BuffDebuffSpell(FIELD, name, AIR, BASIC, 6, CreatureStats.builder().moveRange(10).build(), spellPower, SLOW);
+                        return new BuffDebuffSpell(FIELD, name, AIR, BASIC, 6, CreatureStats.builder().moveRange(10).build(), spellFactorsModifiers.getAddedDuration() + spellPower, SLOW);
                     case ADVANCED:
-                        return new BuffDebuffSpell(FIELD, name, AIR, ADVANCED, 6, CreatureStats.builder().moveRange(20).build(), spellPower, SLOW);
+                        return new BuffDebuffSpell(FIELD, name, AIR, ADVANCED, 6, CreatureStats.builder().moveRange(20).build(), spellFactorsModifiers.getAddedDuration() + spellPower, SLOW);
                     case EXPERT:
-                        return new BuffDebuffSpell(FOR_ALL_ALLIED_CREATURES, name, AIR, EXPERT, 6, CreatureStats.builder().moveRange(30).build(), spellPower, SLOW);
+                        return new BuffDebuffSpell(FOR_ALL_ALLIED_CREATURES, name, AIR, EXPERT, 6, CreatureStats.builder().moveRange(30).build(), spellFactorsModifiers.getAddedDuration() + spellPower, SLOW);
                     default:
                         throw new IllegalArgumentException(RANG_EXCEPTION_MESSAGE);
                 }
@@ -85,11 +90,11 @@ public class SpellFactory {
             case PROTECTION_FROM_AIR:
                 switch (rang) {
                     case BASIC:
-                        return new BuffDebuffSpell(FIELD, name, AIR, BASIC, 6, CreatureStats.builder().build(), spellPower, null);
+                        return new BuffDebuffSpell(FIELD, name, AIR, BASIC, 6, CreatureStats.builder().build(), spellFactorsModifiers.getAddedDuration() + spellPower, null);
                     case ADVANCED:
-                        return new BuffDebuffSpell(FIELD, name, AIR, ADVANCED, 6, CreatureStats.builder().build(), spellPower, null);
+                        return new BuffDebuffSpell(FIELD, name, AIR, ADVANCED, 6, CreatureStats.builder().build(), spellFactorsModifiers.getAddedDuration() + spellPower, null);
                     case EXPERT:
-                        return new BuffDebuffSpell(FOR_ALL_ALLIED_CREATURES, name, AIR, EXPERT, 6, CreatureStats.builder().build(), spellPower, null);
+                        return new BuffDebuffSpell(FOR_ALL_ALLIED_CREATURES, name, AIR, EXPERT, 6, CreatureStats.builder().build(), spellFactorsModifiers.getAddedDuration() + spellPower, null);
                     default:
                         throw new IllegalArgumentException(RANG_EXCEPTION_MESSAGE);
                 }
@@ -107,11 +112,11 @@ public class SpellFactory {
             case COUNTERSTRIKE:
                 switch (rang) {
                     case BASIC:
-                        return new Counterstrike(FIELD, name, AIR, BASIC, 24, 1, spellPower);
+                        return new Counterstrike(FIELD, name, AIR, BASIC, 24, 1, spellFactorsModifiers.getAddedDuration() + spellPower);
                     case ADVANCED:
-                        return new Counterstrike(FIELD, name, AIR, ADVANCED, 24, 2, spellPower);
+                        return new Counterstrike(FIELD, name, AIR, ADVANCED, 24, 2, spellFactorsModifiers.getAddedDuration() + spellPower);
                     case EXPERT:
-                        return new Counterstrike(FOR_ALL_ALLIED_CREATURES, name, AIR, EXPERT, 24, 2, spellPower);
+                        return new Counterstrike(FOR_ALL_ALLIED_CREATURES, name, AIR, EXPERT, 24, 2, spellFactorsModifiers.getAddedDuration() + spellPower);
                     default:
                         throw new IllegalArgumentException(RANG_EXCEPTION_MESSAGE);
                 }
@@ -129,22 +134,22 @@ public class SpellFactory {
             case BLOODLUST:
                 switch (rang) {
                     case BASIC:
-                        return new BuffDebuffSpell(FIELD, name, FIRE, BASIC, 5, CreatureStats.builder().attack(3).build(), spellPower, null);
+                        return new BuffDebuffSpell(FIELD, name, FIRE, BASIC, 5, CreatureStats.builder().attack(3).build(), spellFactorsModifiers.getAddedDuration() + spellPower, null);
                     case ADVANCED:
-                        return new BuffDebuffSpell(FIELD, name, FIRE, ADVANCED, 5, CreatureStats.builder().attack(6).build(), spellPower, null);
+                        return new BuffDebuffSpell(FIELD, name, FIRE, ADVANCED, 5, CreatureStats.builder().attack(6).build(), spellFactorsModifiers.getAddedDuration() + spellPower, null);
                     case EXPERT:
-                        return new BuffDebuffSpell(FOR_ALL_ALLIED_CREATURES, name, FIRE, EXPERT, 5, CreatureStats.builder().attack(6).build(), spellPower, null);
+                        return new BuffDebuffSpell(FOR_ALL_ALLIED_CREATURES, name, FIRE, EXPERT, 5, CreatureStats.builder().attack(6).build(), spellFactorsModifiers.getAddedDuration() + spellPower, null);
                     default:
                         throw new IllegalArgumentException(RANG_EXCEPTION_MESSAGE);
                 }
             case PROTECTION_FROM_FIRE:
                 switch (rang) {
                     case BASIC:
-                        return new BuffDebuffSpell(FIELD, name, FIRE, BASIC, 6, CreatureStats.builder().build(), spellPower, null);
+                        return new BuffDebuffSpell(FIELD, name, FIRE, BASIC, 6, CreatureStats.builder().build(), spellFactorsModifiers.getAddedDuration() + spellPower, null);
                     case ADVANCED:
-                        return new BuffDebuffSpell(FIELD, name, FIRE, ADVANCED, 6, CreatureStats.builder().build(), spellPower, null);
+                        return new BuffDebuffSpell(FIELD, name, FIRE, ADVANCED, 6, CreatureStats.builder().build(), spellFactorsModifiers.getAddedDuration() + spellPower, null);
                     case EXPERT:
-                        return new BuffDebuffSpell(FOR_ALL_ALLIED_CREATURES, name, FIRE, EXPERT, 6, CreatureStats.builder().build(), spellPower, null);
+                        return new BuffDebuffSpell(FOR_ALL_ALLIED_CREATURES, name, FIRE, EXPERT, 6, CreatureStats.builder().build(), spellFactorsModifiers.getAddedDuration() + spellPower, null);
                     default:
                         throw new IllegalArgumentException(RANG_EXCEPTION_MESSAGE);
                 }
@@ -177,11 +182,11 @@ public class SpellFactory {
             case MISFORTUNE:
                 switch (rang) {
                     case BASIC:
-                        return new LuckBuffDebuffSpell(FIELD, name, FIRE, BASIC, 12, -1, spellPower, FORTUNE);
+                        return new LuckBuffDebuffSpell(FIELD, name, FIRE, BASIC, 12, -1, spellFactorsModifiers.getAddedDuration() + spellPower, FORTUNE);
                     case ADVANCED:
-                        return new LuckBuffDebuffSpell(FIELD, name, FIRE, ADVANCED, 12, -2, spellPower, FORTUNE);
+                        return new LuckBuffDebuffSpell(FIELD, name, FIRE, ADVANCED, 12, -2, spellFactorsModifiers.getAddedDuration() + spellPower, FORTUNE);
                     case EXPERT:
-                        return new LuckBuffDebuffSpell(FOR_ALL_ENEMY_CREATURES, name, FIRE, EXPERT, 12, -2, spellPower, FORTUNE);
+                        return new LuckBuffDebuffSpell(FOR_ALL_ENEMY_CREATURES, name, FIRE, EXPERT, 12, -2, spellFactorsModifiers.getAddedDuration() + spellPower, FORTUNE);
                     default:
                         throw new IllegalArgumentException(RANG_EXCEPTION_MESSAGE);
                 }
@@ -236,22 +241,22 @@ public class SpellFactory {
             case SLOW:
                 switch (rang) {
                     case BASIC:
-                        return new BuffDebuffSpell(FIELD, name, EARTH, BASIC, 6, CreatureStats.builder().moveRange(-10).build(), spellPower, HASTE);
+                        return new BuffDebuffSpell(FIELD, name, EARTH, BASIC, 6, CreatureStats.builder().moveRange(-10).build(), spellFactorsModifiers.getAddedDuration() + spellPower, HASTE);
                     case ADVANCED:
-                        return new BuffDebuffSpell(FIELD, name, EARTH, ADVANCED, 6, CreatureStats.builder().moveRange(-20).build(), spellPower, HASTE);
+                        return new BuffDebuffSpell(FIELD, name, EARTH, ADVANCED, 6, CreatureStats.builder().moveRange(-20).build(), spellFactorsModifiers.getAddedDuration() + spellPower, HASTE);
                     case EXPERT:
-                        return new BuffDebuffSpell(FOR_ALL_ENEMY_CREATURES, name, EARTH, EXPERT, 6, CreatureStats.builder().moveRange(-30).build(), spellPower, HASTE);
+                        return new BuffDebuffSpell(FOR_ALL_ENEMY_CREATURES, name, EARTH, EXPERT, 6, CreatureStats.builder().moveRange(-30).build(), spellFactorsModifiers.getAddedDuration() + spellPower, HASTE);
                     default:
                         throw new IllegalArgumentException(RANG_EXCEPTION_MESSAGE);
                 }
             case STONESKIN:
                 switch (rang) {
                     case BASIC:
-                        return new BuffDebuffSpell(FIELD, name, EARTH, BASIC, 5, CreatureStats.builder().armor(3).build(), spellPower, null);
+                        return new BuffDebuffSpell(FIELD, name, EARTH, BASIC, 5, CreatureStats.builder().armor(3).build(), spellFactorsModifiers.getAddedDuration() + spellPower, null);
                     case ADVANCED:
-                        return new BuffDebuffSpell(FIELD, name, EARTH, ADVANCED, 5, CreatureStats.builder().armor(6).build(), spellPower, null);
+                        return new BuffDebuffSpell(FIELD, name, EARTH, ADVANCED, 5, CreatureStats.builder().armor(6).build(), spellFactorsModifiers.getAddedDuration() + spellPower, null);
                     case EXPERT:
-                        return new BuffDebuffSpell(FOR_ALL_ALLIED_CREATURES, name, EARTH, EXPERT, 5, CreatureStats.builder().armor(6).build(), spellPower, null);
+                        return new BuffDebuffSpell(FOR_ALL_ALLIED_CREATURES, name, EARTH, EXPERT, 5, CreatureStats.builder().armor(6).build(), spellFactorsModifiers.getAddedDuration() + spellPower, null);
                     default:
                         throw new IllegalArgumentException(RANG_EXCEPTION_MESSAGE);
                 }
@@ -269,11 +274,11 @@ public class SpellFactory {
             case PROTECTION_FROM_EARTH:
                 switch (rang) {
                     case BASIC:
-                        return new BuffDebuffSpell(FIELD, name, EARTH, BASIC, 6, CreatureStats.builder().build(), spellPower, null);
+                        return new BuffDebuffSpell(FIELD, name, EARTH, BASIC, 6, CreatureStats.builder().build(), spellFactorsModifiers.getAddedDuration() + spellPower, null);
                     case ADVANCED:
-                        return new BuffDebuffSpell(FIELD, name, EARTH, ADVANCED, 6, CreatureStats.builder().build(), spellPower, null);
+                        return new BuffDebuffSpell(FIELD, name, EARTH, ADVANCED, 6, CreatureStats.builder().build(), spellFactorsModifiers.getAddedDuration() + spellPower, null);
                     case EXPERT:
-                        return new BuffDebuffSpell(FOR_ALL_ALLIED_CREATURES, name, EARTH, EXPERT, 6, CreatureStats.builder().build(), spellPower, null);
+                        return new BuffDebuffSpell(FOR_ALL_ALLIED_CREATURES, name, EARTH, EXPERT, 6, CreatureStats.builder().build(), spellFactorsModifiers.getAddedDuration() + spellPower, null);
                     default:
                         throw new IllegalArgumentException(RANG_EXCEPTION_MESSAGE);
                 }
@@ -300,11 +305,11 @@ public class SpellFactory {
             case SORROW:
                 switch (rang) {
                     case BASIC:
-                        return new MoralBuffDebuffSpell(FIELD, name, EARTH, BASIC, 16, -1, spellPower, MIRTH);
+                        return new MoralBuffDebuffSpell(FIELD, name, EARTH, BASIC, 16, -1, spellFactorsModifiers.getAddedDuration() + spellPower, MIRTH);
                     case ADVANCED:
-                        return new MoralBuffDebuffSpell(FIELD, name, EARTH, ADVANCED, 16, -2, spellPower, MIRTH);
+                        return new MoralBuffDebuffSpell(FIELD, name, EARTH, ADVANCED, 16, -2, spellFactorsModifiers.getAddedDuration() + spellPower, MIRTH);
                     case EXPERT:
-                        return new MoralBuffDebuffSpell(FOR_ALL_ENEMY_CREATURES, name, EARTH, EXPERT, 16, -2, spellPower, MIRTH);
+                        return new MoralBuffDebuffSpell(FOR_ALL_ENEMY_CREATURES, name, EARTH, EXPERT, 16, -2, spellFactorsModifiers.getAddedDuration() + spellPower, MIRTH);
                     default:
                         throw new IllegalArgumentException(RANG_EXCEPTION_MESSAGE);
                 }
@@ -344,11 +349,11 @@ public class SpellFactory {
             case PROTECTION_FROM_WATER:
                 switch (rang) {
                     case BASIC:
-                        return new BuffDebuffSpell(FIELD, name, WATER, BASIC, 6, CreatureStats.builder().build(), spellPower, null);
+                        return new BuffDebuffSpell(FIELD, name, WATER, BASIC, 6, CreatureStats.builder().build(), spellFactorsModifiers.getAddedDuration() + spellPower, null);
                     case ADVANCED:
-                        return new BuffDebuffSpell(FIELD, name, WATER, ADVANCED, 6, CreatureStats.builder().build(), spellPower, null);
+                        return new BuffDebuffSpell(FIELD, name, WATER, ADVANCED, 6, CreatureStats.builder().build(), spellFactorsModifiers.getAddedDuration() + spellPower, null);
                     case EXPERT:
-                        return new BuffDebuffSpell(FOR_ALL_ALLIED_CREATURES, name, WATER, EXPERT, 6, CreatureStats.builder().build(), spellPower, null);
+                        return new BuffDebuffSpell(FOR_ALL_ALLIED_CREATURES, name, WATER, EXPERT, 6, CreatureStats.builder().build(), spellFactorsModifiers.getAddedDuration() + spellPower, null);
                     default:
                         throw new IllegalArgumentException(RANG_EXCEPTION_MESSAGE);
                 }
@@ -366,11 +371,11 @@ public class SpellFactory {
             case WEAKNESS:
                 switch (rang) {
                     case BASIC:
-                        return new BuffDebuffSpell(FIELD, name, WATER, BASIC, 8, CreatureStats.builder().attack(-3).build(), spellPower, null);
+                        return new BuffDebuffSpell(FIELD, name, WATER, BASIC, 8, CreatureStats.builder().attack(-3).build(), spellFactorsModifiers.getAddedDuration() + spellPower, null);
                     case ADVANCED:
-                        return new BuffDebuffSpell(FIELD, name, WATER, ADVANCED, 8, CreatureStats.builder().attack(-6).build(), spellPower, null);
+                        return new BuffDebuffSpell(FIELD, name, WATER, ADVANCED, 8, CreatureStats.builder().attack(-6).build(), spellFactorsModifiers.getAddedDuration() + spellPower, null);
                     case EXPERT:
-                        return new BuffDebuffSpell(FOR_ALL_ENEMY_CREATURES, name, WATER, EXPERT, 8, CreatureStats.builder().attack(-6).build(), spellPower, null);
+                        return new BuffDebuffSpell(FOR_ALL_ENEMY_CREATURES, name, WATER, EXPERT, 8, CreatureStats.builder().attack(-6).build(), spellFactorsModifiers.getAddedDuration() + spellPower, null);
                     default:
                         throw new IllegalArgumentException(RANG_EXCEPTION_MESSAGE);
                 }
@@ -397,22 +402,22 @@ public class SpellFactory {
             case MIRTH:
                 switch (rang) {
                     case BASIC:
-                        return new MoralBuffDebuffSpell(FIELD, name, WATER, BASIC, 12, 1, spellPower, SORROW);
+                        return new MoralBuffDebuffSpell(FIELD, name, WATER, BASIC, 12, 1, spellFactorsModifiers.getAddedDuration() + spellPower, SORROW);
                     case ADVANCED:
-                        return new MoralBuffDebuffSpell(FIELD, name, WATER, ADVANCED, 12, 2, spellPower, SORROW);
+                        return new MoralBuffDebuffSpell(FIELD, name, WATER, ADVANCED, 12, 2, spellFactorsModifiers.getAddedDuration() + spellPower, SORROW);
                     case EXPERT:
-                        return new MoralBuffDebuffSpell(FOR_ALL_ALLIED_CREATURES, name, WATER, EXPERT, 12, 2, spellPower, SORROW); // Add removing all non static special fields
+                        return new MoralBuffDebuffSpell(FOR_ALL_ALLIED_CREATURES, name, WATER, EXPERT, 12, 2, spellFactorsModifiers.getAddedDuration() + spellPower, SORROW); // Add removing all non static special fields
                     default:
                         throw new IllegalArgumentException(RANG_EXCEPTION_MESSAGE);
                 }
             case PRAYER:
                 switch (rang) {
                     case BASIC:
-                        return new BuffDebuffSpell(FIELD, name, WATER, BASIC, 16, CreatureStats.builder().attack(4).armor(4).moveRange(4).build(), 2, null);
+                        return new BuffDebuffSpell(FIELD, name, WATER, BASIC, 16, CreatureStats.builder().attack(4).armor(4).moveRange(4).build(), spellFactorsModifiers.getAddedDuration() + spellPower, null);
                     case ADVANCED:
-                        return new BuffDebuffSpell(FIELD, name, WATER, ADVANCED, 16, CreatureStats.builder().attack(4).armor(4).moveRange(4).build(), 4, null);
+                        return new BuffDebuffSpell(FIELD, name, WATER, ADVANCED, 16, CreatureStats.builder().attack(4).armor(4).moveRange(4).build(), spellFactorsModifiers.getAddedDuration() + spellPower, null);
                     case EXPERT:
-                        return new BuffDebuffSpell(FOR_ALL_ALLIED_CREATURES, name, WATER, EXPERT, 16, CreatureStats.builder().attack(4).armor(4).moveRange(4).build(), 2, null);
+                        return new BuffDebuffSpell(FOR_ALL_ALLIED_CREATURES, name, WATER, EXPERT, 16, CreatureStats.builder().attack(4).armor(4).moveRange(4).build(), spellFactorsModifiers.getAddedDuration() + spellPower, null);
                     default:
                         throw new IllegalArgumentException(RANG_EXCEPTION_MESSAGE);
                 }
