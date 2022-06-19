@@ -20,4 +20,12 @@ public class Point {
         py -= getY();
         return Math.sqrt(px * px + py * py);
     }
+
+    public Point normalize(){
+        int x;
+        int y;
+        x = Integer.compare(0,getX());
+        y = Integer.compare(0,getY());
+        return new Point(x,y);
+    }
 }

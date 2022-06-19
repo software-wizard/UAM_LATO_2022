@@ -1,6 +1,8 @@
 package pl.psi.gui;
 
 import pl.psi.creatures.*;
+import pl.psi.spells.SpellNames;
+import pl.psi.spells.SpellRang;
 
 public class StrongholdFactory {
 
@@ -26,7 +28,7 @@ public class StrongholdFactory {
                     Creature decorated = new Creature.Builder().statistic(CreatureStatistic.OGRE)
                             .amount(aAmount)
                             .build();
-                    return new NoCounterCreature(decorated);
+                    return new NoCounterCreatureDecorator(decorated);
                 case 5:
                     return new Creature.Builder().statistic(CreatureStatistic.ROC)
                             .amount(aAmount)
@@ -40,7 +42,7 @@ public class StrongholdFactory {
                     Creature ancientBehemoth = new Creature.Builder().statistic(CreatureStatistic.ANCIENT_BEHEMOTH)
                             .amount(aAmount)
                             .build();
-                    return new DefenceReductionCreature(ancientBehemoth, 0.6);
+                    return new DefenceReductionCreatureDecorator(ancientBehemoth, 0.6);
                 default:
                     throw new IllegalArgumentException(EXCEPTION_MESSAGE);
             }
@@ -54,21 +56,23 @@ public class StrongholdFactory {
                     Creature wolfRaider = new Creature.Builder().statistic(CreatureStatistic.WOLF_RAIDER)
                             .amount(aAmount)
                             .build();
-                    return new DoubleAttackCreature(wolfRaider);
+                    return new DoubleAttackCreatureDecorator(wolfRaider);
                 case 3:
                     Creature orcChieftain = new Creature.Builder().statistic(CreatureStatistic.ORC_CHIEFTAIN)
                             .amount(aAmount)
                             .build();
                     return new ShooterCreatureDecorator(orcChieftain, 24);
                 case 4:
-                    return new Creature.Builder().statistic(CreatureStatistic.OGRE_MAGI)
+                    Creature creature = new Creature.Builder().statistic(CreatureStatistic.OGRE_MAGI)
                             .amount(aAmount)
                             .build();
+
+                    return new CanCastSpellCreatureDecorator(creature, SpellNames.BLOODLUST,3,6, SpellRang.ADVANCED);
                 case 5:
                     Creature thunderbird = new Creature.Builder().statistic(CreatureStatistic.THUNDERBIRD)
                             .amount(aAmount)
                             .build();
-                    return new ThunderboltOnHitCreature(thunderbird);
+                    return new ThunderboltOnHitCreatureDecorator(thunderbird);
                 case 6:
                     Creature cyclopsKing = new Creature.Builder().statistic(CreatureStatistic.CYCLOPS_KING)
                             .amount(aAmount)
@@ -78,7 +82,7 @@ public class StrongholdFactory {
                     Creature ancientBehemoth = new Creature.Builder().statistic(CreatureStatistic.ANCIENT_BEHEMOTH)
                             .amount(aAmount)
                             .build();
-                    return new DefenceReductionCreature(ancientBehemoth, 0.2);
+                    return new DefenceReductionCreatureDecorator(ancientBehemoth, 0.2);
                 default:
                     throw new IllegalArgumentException(EXCEPTION_MESSAGE);
             }

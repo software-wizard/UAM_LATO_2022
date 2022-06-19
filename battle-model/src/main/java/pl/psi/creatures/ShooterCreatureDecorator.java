@@ -3,23 +3,22 @@ package pl.psi.creatures;
 import lombok.Getter;
 
 @Getter
-
 public class ShooterCreatureDecorator extends AbstractCreature {
     private final Creature decorated;
     private final int maxShots;
     private final double MELEE_PENALTY = 0.5;
     private final ReducedDamageCalculator meleeDamageCalculator = new ReducedDamageCalculator(MELEE_PENALTY);
-    private final DamageCalculatorIf rangeDamageCalculator;
+    private final DefaultDamageCalculator rangeDamageCalculator;
     private int shots;
     private boolean isInMelee = false;
-    private int range = Integer.MAX_VALUE;
+    private double range = Integer.MAX_VALUE;
 
     public ShooterCreatureDecorator(final Creature aDecorated, final int aShots) {
         super(aDecorated);
         decorated = aDecorated;
         shots = aShots;
         maxShots = aShots;
-        rangeDamageCalculator = decorated.getCalculator();
+        rangeDamageCalculator = (DefaultDamageCalculator) decorated.getCalculator();
     }
 
     @Override
@@ -37,24 +36,46 @@ public class ShooterCreatureDecorator extends AbstractCreature {
         shots -= 1;
     }
 
-    public void setInMelee(boolean value) {
+    @Override
+    public void setInMelee(final boolean value) {
         if (value) {
             isInMelee = true;
-            range = 1;
+            range = 1.5;
             decorated.setCalculator(meleeDamageCalculator);
-        } else {
+        }
+        else {
             isInMelee = false;
             range = Integer.MAX_VALUE;
             decorated.setCalculator(rangeDamageCalculator);
         }
     }
 
-    public boolean canShoot() {
+    @Override
+    public String getShotsAmount(){
+        return "" + shots;
+    }
+
+
+    @Override
+    public boolean isRange(){
+        return true;
+    }
+
+    @Override
+    public double getAttackRange(){
+        return range;
+    }
+
+    public boolean enoughShots() {
         if (shots > 0) {
             return true;
         } else {
             throw new RuntimeException("No more shots");
         }
+    }
+
+    public boolean canShoot(){
+        return !isInMelee && enoughShots();
     }
 
     public void resetShots() {

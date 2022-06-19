@@ -6,17 +6,36 @@ import pl.psi.creatures.Alignment;
 import pl.psi.creatures.Creature;
 import pl.psi.creatures.CreatureStats;
 
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static java.util.List.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class HolyGroundTest {
 
     @Test
+    void shouldReturnCorrectBuiltHolyGroundObject() {
+        // when
+        var holyGround = HolyGround
+                .builder()
+                .point(new Point(10, 10))
+                .build();
+
+        var holyGroundWithoutPoint = HolyGround
+                .builder()
+                .build();
+
+        // then
+        assertEquals(new Point(10, 10), holyGround.getPoint());
+        assertNull(holyGroundWithoutPoint.getPoint());
+    }
+
+    @Test
     void shouldGiveOneMoraleToGoodAlignedCreature() {
         // given
-        var holyGround = new HolyGround(new Point(10, 10));
+        var holyGround = HolyGround
+                .builder()
+                .point(new Point(10, 10))
+                .build();
+
         var goodAlignedCreature = new Creature.Builder()
                 .statistic(
                         CreatureStats.builder().build()
@@ -32,7 +51,11 @@ public class HolyGroundTest {
     @Test
     void shouldTakeOneMoraleFromBadAlignedCreature() {
         // given
-        var holyGround = new HolyGround(new Point(10, 10));
+        var holyGround = HolyGround
+                .builder()
+                .point(new Point(10, 10))
+                .build();
+
         var badAlignedCreature = new Creature.Builder()
                 .statistic(
                         CreatureStats.builder().build()
@@ -48,7 +71,10 @@ public class HolyGroundTest {
     @Test
     void shouldThrowExceptionWhenGivenCreatureIsNull() {
         // given
-        var holyGround = new HolyGround(new Point(10, 10));
+        var holyGround = HolyGround
+                .builder()
+                .point(new Point(10, 10))
+                .build();
 
         // when
         var exception = assertThrows(IllegalArgumentException.class, () -> holyGround.buffCreature(null));
@@ -61,7 +87,11 @@ public class HolyGroundTest {
     void shouldGiveOneMoraleToAllGoodAlignedCreaturesAndTakeOneMoraleFromAllBadAlignedCreatures() {
 
         // given
-        var holyGround = new HolyGround(new Point(10, 10));
+        var holyGround = HolyGround
+                .builder()
+                .point(new Point(10, 10))
+                .build();
+
         var goodAlignedCreature = new Creature.Builder()
                 .statistic(
                         CreatureStats.builder().build()
@@ -82,12 +112,11 @@ public class HolyGroundTest {
                         CreatureStats.builder().build()
                 ).alignment(Alignment.EVIL).build();
 
-        var creatures = List.of(
+        var creatures = of(
                 goodAlignedCreature,
                 badAlignedCreature,
                 secondGoodAlignedCreature,
                 secondBadAlignedCreature
-
         );
 
         // when
@@ -104,11 +133,14 @@ public class HolyGroundTest {
     void shouldThrowExceptionsWhenGivenDataIsIncorrect() {
 
         // given
-        var holyGround = new HolyGround(new Point(10, 10));
+        var holyGround = HolyGround
+                .builder()
+                .point(new Point(10, 10))
+                .build();
 
         // when
         var exceptionWhenGivenDataIsNull = assertThrows(IllegalArgumentException.class, () -> holyGround.buffCreatures(null));
-        var exceptionWhenGivenDataIsEmpty = assertThrows(IllegalArgumentException.class, () -> holyGround.buffCreatures(List.of()));
+        var exceptionWhenGivenDataIsEmpty = assertThrows(IllegalArgumentException.class, () -> holyGround.buffCreatures(of()));
 
         // then
         assertEquals("Creatures list must not be null", exceptionWhenGivenDataIsNull.getMessage());
