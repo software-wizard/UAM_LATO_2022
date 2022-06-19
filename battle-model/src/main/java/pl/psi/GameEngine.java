@@ -1,12 +1,8 @@
 package pl.psi;
 
-import com.sun.jdi.event.StepEvent;
 import lombok.Getter;
 import pl.psi.creatures.Creature;
-import pl.psi.creatures.CreatureStatistic;
 import pl.psi.creatures.FirstAidTent;
-import pl.psi.spells.AreaDamageSpell;
-import pl.psi.spells.Spell;
 import pl.psi.spells.*;
 
 import java.beans.PropertyChangeListener;
@@ -18,7 +14,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.lang.Math.ceil;
-import static pl.psi.spells.SpellNames.*;
+import static pl.psi.spells.SpellNames.DISRUPTING_RAY;
+import static pl.psi.spells.SpellNames.WEAKNESS;
 import static pl.psi.spells.SpellRang.BASIC;
 
 /**
@@ -332,15 +329,7 @@ public class GameEngine {
                             });
                     break;
                 case SPAWN_CREATURE:
-                    BiConsumer<String, PropertyChangeListener> newBiConsumer = (s, propertyChangeListener) -> {
-                        List<Creature> creatures = new ArrayList<>(getCurrentHero().getCreatures());
-                        Creature elemental = new ElementalFactory().create(s, getCurrentHero());
-                        creatures.add(elemental);
-                        getCurrentHero().setCreatures(creatures);
-                        turnQueue.getCreatures().add(elemental);
-                        board.putCreatureOnBoard(getPointToSpawnElemental(), elemental);
-                    };
-                    spell.castSpell(null, newBiConsumer);
+                    spell.castSpell(null, getSpawnElementalBiConsumer());
                     break;
                 default:
                     throw new IllegalArgumentException("Not supported category.");
@@ -349,6 +338,18 @@ public class GameEngine {
         } else {
             System.out.println("Nie masz wystarczająco many");
         }
+    }
+
+    private BiConsumer<String, PropertyChangeListener> getSpawnElementalBiConsumer() {
+        return (creatureName, propertyChangeListener) -> {
+            List<Creature> creatures = new ArrayList<>(getCurrentHero().getCreatures());
+            Creature elemental = new ElementalFactory().create(creatureName, getCurrentHero());
+            creatures.add(elemental);
+            getCurrentHero().setCreatures(creatures);
+            turnQueue.getCreatures().add(elemental);
+            board.putCreatureOnBoard(getPointToSpawnElemental(), elemental);
+        };
+
     }
 
     private Point getPointToSpawnElemental() {

@@ -12,8 +12,11 @@ import pl.psi.creatures.CreatureStats;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static pl.psi.creatures.CreatureStatistic.AIR_ELEMENTAL;
+import static pl.psi.creatures.CreatureStatistic.WATER_ELEMENTAL;
 import static pl.psi.spells.SpellNames.*;
 import static pl.psi.spells.SpellRang.*;
 
@@ -21,20 +24,23 @@ import static pl.psi.spells.SpellRang.*;
 public class SpellTest {
 
     private static final int NOT_IMPORTANT_MANA = Integer.MAX_VALUE;
-
-    private static final Spell<? extends SpellableIf> MAGIC_ARROW_RANG_1 = new SpellFactory().create(MAGIC_ARROW, BASIC, 1);
-    private static final Spell<? extends SpellableIf> MAGIC_ARROW_RANG_2 = new SpellFactory().create(MAGIC_ARROW, ADVANCED, 1);
-    private static final Spell<? extends SpellableIf> LIGHTNING_BOLT_RANG_1 = new SpellFactory().create(LIGHTNING_BOLT, BASIC, 1);
-    private static final Spell<? extends SpellableIf> HASTE_BASIC = new SpellFactory().create(HASTE, BASIC, 1);
-    private static final Spell<? extends SpellableIf> HASTE_EXPERT = new SpellFactory().create(HASTE, EXPERT, 1);
-    private static final Spell<? extends SpellableIf> SLOW_BASIC = new SpellFactory().create(SLOW, BASIC, 1);
-    private static final Spell<? extends SpellableIf> SLOW_EXPERT = new SpellFactory().create(SLOW, EXPERT, 1);
-    private static final Spell<? extends SpellableIf> FIREBALL = new SpellFactory().create(FIRE_BALL, BASIC, 1);
-    private static final Spell<? extends SpellableIf> DISPEL_RANG_1 = new SpellFactory().create(DISPEL, BASIC, 1);
-    private static final Spell<? extends SpellableIf> DISPEL_RANG_2 = new SpellFactory().create(DISPEL, ADVANCED, 1);
-    private static final Spell<? extends SpellableIf> STONESKIN_RANG_1 = new SpellFactory().create(STONESKIN, BASIC, 1);
-    private static final Spell<? extends SpellableIf> MISFORTUNE_RANG_1 = new SpellFactory().create(MISFORTUNE, BASIC, 1);
-    private static final Spell<? extends SpellableIf> PRAYER_RANG_1 = new SpellFactory().create(PRAYER, BASIC, 1);
+    private static final int EXAMPLE_SPELL_POWER_1 = 1;
+    private static final int EXAMPLE_SPELL_POWER_2 = 2;
+    private static final Spell<? extends SpellableIf> MAGIC_ARROW_RANG_1 = new SpellFactory().create(MAGIC_ARROW, BASIC, EXAMPLE_SPELL_POWER_1);
+    private static final Spell<? extends SpellableIf> MAGIC_ARROW_RANG_2 = new SpellFactory().create(MAGIC_ARROW, ADVANCED, EXAMPLE_SPELL_POWER_1);
+    private static final Spell<? extends SpellableIf> LIGHTNING_BOLT_RANG_1 = new SpellFactory().create(LIGHTNING_BOLT, BASIC, EXAMPLE_SPELL_POWER_1);
+    private static final Spell<? extends SpellableIf> HASTE_BASIC = new SpellFactory().create(HASTE, BASIC, EXAMPLE_SPELL_POWER_2);
+    private static final Spell<? extends SpellableIf> HASTE_EXPERT = new SpellFactory().create(HASTE, EXPERT, EXAMPLE_SPELL_POWER_2);
+    private static final Spell<? extends SpellableIf> SLOW_BASIC = new SpellFactory().create(SLOW, BASIC, EXAMPLE_SPELL_POWER_2);
+    private static final Spell<? extends SpellableIf> SLOW_EXPERT = new SpellFactory().create(SLOW, EXPERT, EXAMPLE_SPELL_POWER_2);
+    private static final Spell<? extends SpellableIf> FIREBALL = new SpellFactory().create(FIRE_BALL, BASIC, EXAMPLE_SPELL_POWER_1);
+    private static final Spell<? extends SpellableIf> DISPEL_RANG_1 = new SpellFactory().create(DISPEL, BASIC, EXAMPLE_SPELL_POWER_1);
+    private static final Spell<? extends SpellableIf> DISPEL_RANG_2 = new SpellFactory().create(DISPEL, ADVANCED, EXAMPLE_SPELL_POWER_1);
+    private static final Spell<? extends SpellableIf> STONESKIN_RANG_1 = new SpellFactory().create(STONESKIN, BASIC, EXAMPLE_SPELL_POWER_2);
+    private static final Spell<? extends SpellableIf> MISFORTUNE_RANG_1 = new SpellFactory().create(MISFORTUNE, BASIC, EXAMPLE_SPELL_POWER_2);
+    private static final Spell<? extends SpellableIf> PRAYER_RANG_1 = new SpellFactory().create(PRAYER, BASIC, EXAMPLE_SPELL_POWER_2);
+    private static final Spell<? extends SpellableIf> SUMMON_AIR_ELEMENTAL_RANG_1 = new SpellFactory().create(SUMMON_AIR_ELEMENTAL, BASIC, EXAMPLE_SPELL_POWER_2);
+    private static final Spell<? extends SpellableIf> SUMMON_WATER_ELEMENTAL_RANG_1 = new SpellFactory().create(SUMMON_WATER_ELEMENTAL, BASIC, EXAMPLE_SPELL_POWER_2);
 
 
     private final Creature EXAMPLE_CREATURE_1 = new Creature.Builder()
@@ -515,7 +521,7 @@ public class SpellTest {
     }
 
     @Test
-    void shouldBlockCastingBasicDispelOnEnemyCreatureAndAllowForAllied() {
+    void shouldBlockCastingBasicDispelOnEnemyCreature() {
         //given
         List<Creature> firstHeroCreatures = List.of(EXAMPLE_CREATURE_1);
         List<Creature> secondHeroCreatures = List.of(EXAMPLE_CREATURE_2);
@@ -528,7 +534,6 @@ public class SpellTest {
                 .isPresent()).isTrue();
 
         gameEngine.castSpell(new Point(14, 1), HASTE_BASIC);
-
         Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
                 .get().getBuffedStats().getMoveRange()).isEqualTo(10);
 
@@ -539,6 +544,35 @@ public class SpellTest {
 
         //then
         Assertions.assertThat(gameEngine.getCreature(new Point(14, 1)).get().getBuffedStats().getMoveRange()).isEqualTo(10);
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1)).get().getRunningSpells()).contains(HASTE_BASIC);
+    }
+
+    @Test
+    void shouldAllowCastingBasicDispelOnAlliedCreature() {
+        //given
+        List<Creature> firstHeroCreatures = List.of(EXAMPLE_CREATURE_1);
+        List<Creature> secondHeroCreatures = List.of(EXAMPLE_CREATURE_2);
+
+        final GameEngine gameEngine =
+                new GameEngine(new Hero(firstHeroCreatures, SpellsBook.builder().spells(List.of(HASTE_BASIC, DISPEL_RANG_1)).mana(NOT_IMPORTANT_MANA).build()),
+                        new Hero(secondHeroCreatures, SpellsBook.builder().spells(List.of(MAGIC_ARROW_RANG_1)).mana(NOT_IMPORTANT_MANA).build()));
+
+        Assertions.assertThat(gameEngine.getCreature(new Point(0, 1))
+                .isPresent()).isTrue();
+
+
+        gameEngine.castSpell(new Point(0, 1), HASTE_BASIC);
+        Assertions.assertThat(gameEngine.getCreature(new Point(0, 1))
+                .get().getBuffedStats().getMoveRange()).isEqualTo(10);
+
+
+        //when
+        gameEngine.castSpell(new Point(0, 1), DISPEL_RANG_1);
+
+
+        //then
+        Assertions.assertThat(gameEngine.getCreature(new Point(0, 1)).get().getBuffedStats().getMoveRange()).isEqualTo(0);
+        Assertions.assertThat(gameEngine.getCreature(new Point(0, 1)).get().getRunningSpells()).isEmpty();
     }
 
     @Test
@@ -565,7 +599,7 @@ public class SpellTest {
     }
 
     @Test
-    void shouldBlockCastingSpellWhenNotEnoughMana(){
+    void shouldBlockCastingSpellWhenNotEnoughMana() {
         //given
         List<Creature> firstHeroCreatures = List.of(EXAMPLE_CREATURE_1);
         List<Creature> secondHeroCreatures = List.of(EXAMPLE_CREATURE_2);
@@ -591,7 +625,7 @@ public class SpellTest {
     }
 
     @Test
-    void shouldTakeAppropriateAmountOfMana(){
+    void shouldTakeAppropriateAmountOfMana() {
         //given
         List<Creature> firstHeroCreatures = List.of(EXAMPLE_CREATURE_1);
         List<Creature> secondHeroCreatures = List.of(EXAMPLE_CREATURE_2);
@@ -611,33 +645,6 @@ public class SpellTest {
         //then
         Assertions.assertThat(gameEngine.getCurrentHero()
                 .getSpellBook().getMana()).isEqualTo(5);
-    }
-
-    @Test
-    void shouldReduceLightningBoltDamageWhenCreatureHasAirProtection() {
-        //given
-        List<Creature> firstHeroCreatures = List.of(EXAMPLE_CREATURE_1);
-        List<Creature> secondHeroCreatures = List.of(EXAMPLE_CREATURE_2);
-
-        Spell<? extends SpellableIf> protectionFromAir = new SpellFactory().create(PROTECTION_FROM_AIR, BASIC, 1);
-
-        final GameEngine gameEngine =
-                new GameEngine(new Hero(firstHeroCreatures, SpellsBook.builder().spells(List.of(LIGHTNING_BOLT_RANG_1)).mana(NOT_IMPORTANT_MANA).build()),
-                        new Hero(secondHeroCreatures, SpellsBook.builder().spells(List.of(MAGIC_ARROW_RANG_1)).mana(NOT_IMPORTANT_MANA).build()));
-
-        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
-                .isPresent()).isTrue();
-
-        //when
-        gameEngine.castSpell(new Point(14, 1), protectionFromAir);
-        gameEngine.castSpell(new Point(14, 1), LIGHTNING_BOLT_RANG_1);
-
-
-        //then
-        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
-                .get().getRunningSpells()).contains(protectionFromAir);
-        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
-                .get().getCurrentHp()).isEqualTo(75.5);
     }
 
     @Test
@@ -668,7 +675,35 @@ public class SpellTest {
     }
 
     @Test
-    void shouldBuffLuckWhenFortuneCasted(){
+    void shouldReduceLightningBoltDamageWhenCreatureHasAirProtection() {
+        //given
+        List<Creature> firstHeroCreatures = List.of(EXAMPLE_CREATURE_1);
+        List<Creature> secondHeroCreatures = List.of(EXAMPLE_CREATURE_2);
+
+        Spell<? extends SpellableIf> protectionFromAir = new SpellFactory().create(PROTECTION_FROM_AIR, BASIC, 1);
+
+        final GameEngine gameEngine =
+                new GameEngine(new Hero(firstHeroCreatures, SpellsBook.builder().spells(List.of(LIGHTNING_BOLT_RANG_1)).mana(NOT_IMPORTANT_MANA).build()),
+                        new Hero(secondHeroCreatures, SpellsBook.builder().spells(List.of(MAGIC_ARROW_RANG_1)).mana(NOT_IMPORTANT_MANA).build()));
+
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
+                .isPresent()).isTrue();
+
+        //when
+        gameEngine.castSpell(new Point(14, 1), protectionFromAir);
+        gameEngine.castSpell(new Point(14, 1), LIGHTNING_BOLT_RANG_1);
+
+
+        //then
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
+                .get().getRunningSpells()).contains(protectionFromAir);
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
+                .get().getCurrentHp()).isEqualTo(75.5);
+    }
+
+
+    @Test
+    void shouldBuffLuckWhenFortuneCasted() {
         //given
         List<Creature> firstHeroCreatures = List.of(EXAMPLE_CREATURE_1);
         List<Creature> secondHeroCreatures = List.of(EXAMPLE_CREATURE_2);
@@ -695,7 +730,7 @@ public class SpellTest {
     }
 
     @Test
-    void shouldDebuffMoraleWhenSorrowCasted(){
+    void shouldDebuffMoraleWhenSorrowCasted() {
         //given
         List<Creature> firstHeroCreatures = List.of(EXAMPLE_CREATURE_1);
         List<Creature> secondHeroCreatures = List.of(EXAMPLE_CREATURE_2);
@@ -724,7 +759,136 @@ public class SpellTest {
 
     @Test
     void shouldUnCastTheOldestSpellAndCastNew() {
+        //given
+        List<Creature> firstHeroCreatures = List.of(EXAMPLE_CREATURE_1);
+        List<Creature> secondHeroCreatures = List.of(EXAMPLE_CREATURE_2);
 
+        final GameEngine gameEngine =
+                new GameEngine(new Hero(firstHeroCreatures, SpellsBook.builder().spells(List.of(HASTE_BASIC, MISFORTUNE_RANG_1, PRAYER_RANG_1, STONESKIN_RANG_1)).mana(NOT_IMPORTANT_MANA).build()),
+                        new Hero(secondHeroCreatures, SpellsBook.builder().spells(List.of(MAGIC_ARROW_RANG_1)).mana(NOT_IMPORTANT_MANA).build()));
+
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
+                .isPresent()).isTrue();
+
+
+        gameEngine.castSpell(new Point(14, 1), HASTE_BASIC);
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
+                .get().getRunningSpells()).isEqualTo(List.of(HASTE_BASIC));
+
+        gameEngine.castSpell(new Point(14, 1), MISFORTUNE_RANG_1);
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
+                .get().getRunningSpells()).isEqualTo(List.of(HASTE_BASIC, MISFORTUNE_RANG_1));
+
+        gameEngine.castSpell(new Point(14, 1), PRAYER_RANG_1);
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
+                .get().getRunningSpells()).isEqualTo(List.of(HASTE_BASIC, MISFORTUNE_RANG_1, PRAYER_RANG_1));
+
+
+        //when
+        gameEngine.castSpell(new Point(14, 1), STONESKIN_RANG_1);
+
+
+        //then
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
+                .get().getRunningSpells()).isEqualTo(List.of(MISFORTUNE_RANG_1, PRAYER_RANG_1, STONESKIN_RANG_1));
+    }
+
+
+    @Test
+    void shouldSpawnAppropriateElementalOnAppropriatePositionWithAppropriateAmount() {
+        //given
+        List<Creature> firstHeroCreatures = List.of(EXAMPLE_CREATURE_1);
+        List<Creature> secondHeroCreatures = List.of(EXAMPLE_CREATURE_2);
+
+        Hero hero1 = new Hero(firstHeroCreatures, SpellsBook.builder().spells(List.of(SUMMON_AIR_ELEMENTAL_RANG_1)).mana(NOT_IMPORTANT_MANA).build());
+        Hero hero2 = new Hero(secondHeroCreatures, SpellsBook.builder().spells(List.of(SUMMON_WATER_ELEMENTAL_RANG_1)).mana(NOT_IMPORTANT_MANA).build());
+
+        final GameEngine gameEngine =
+                new GameEngine(hero1, hero2);
+
+
+        //when
+        gameEngine.castSpell(null, SUMMON_AIR_ELEMENTAL_RANG_1);
+        gameEngine.pass();
+        gameEngine.castSpell(null, SUMMON_WATER_ELEMENTAL_RANG_1);
+
+
+        //then
+        Optional<Creature> expectedAirElemental = gameEngine.getCreature(new Point(0, 0));
+        Assertions.assertThat(expectedAirElemental)
+                .isPresent();
+        Assertions.assertThat(hero1.getCreatures()).contains(expectedAirElemental.get());
+        Assertions.assertThat(expectedAirElemental.get().getName())
+                .isEqualTo(AIR_ELEMENTAL.getName());
+        Assertions.assertThat(expectedAirElemental.get().getAmount())
+                .isEqualTo(EXAMPLE_SPELL_POWER_2);
+
+
+        Optional<Creature> expectedWaterElemental = gameEngine.getCreature(new Point(14, 0));
+        Assertions.assertThat(expectedWaterElemental)
+                .isPresent();
+        Assertions.assertThat(hero2.getCreatures()).contains(expectedWaterElemental.get());
+        Assertions.assertThat(expectedWaterElemental.get().getName())
+                .isEqualTo(WATER_ELEMENTAL.getName());
+        Assertions.assertThat(expectedWaterElemental.get().getAmount())
+                .isEqualTo(EXAMPLE_SPELL_POWER_2);
+    }
+
+    @Test
+    void waterElementalShouldBeImmuneForIceBolt() {
+        //given
+        List<Creature> firstHeroCreatures = List.of(EXAMPLE_CREATURE_1);
+        List<Creature> secondHeroCreatures = List.of(EXAMPLE_CREATURE_2);
+
+        Spell<? extends SpellableIf> iceBolt = new SpellFactory().create(ICE_BOLT, BASIC, EXAMPLE_SPELL_POWER_1);
+
+        Hero hero1 = new Hero(firstHeroCreatures, SpellsBook.builder().spells(List.of(SUMMON_WATER_ELEMENTAL_RANG_1)).mana(NOT_IMPORTANT_MANA).build());
+        Hero hero2 = new Hero(secondHeroCreatures, SpellsBook.builder().spells(List.of(SUMMON_AIR_ELEMENTAL_RANG_1, iceBolt)).mana(NOT_IMPORTANT_MANA).build());
+
+        final GameEngine gameEngine =
+                new GameEngine(hero1, hero2);
+
+        gameEngine.castSpell(null, SUMMON_WATER_ELEMENTAL_RANG_1);
+        gameEngine.pass();
+
+        Optional<Creature> expectedAirElemental = gameEngine.getCreature(new Point(0, 0));
+        Assertions.assertThat(expectedAirElemental)
+                .isPresent();
+
+        //when
+        gameEngine.castSpell(new Point(0, 0), iceBolt);
+
+
+        //then
+        Assertions.assertThat(expectedAirElemental.get().getCurrentHp()).isEqualTo(30);
+    }
+
+    @Test
+    void airElementalShouldBeVulnerableForLightningBolt() {
+        //given
+        List<Creature> firstHeroCreatures = List.of(EXAMPLE_CREATURE_1);
+        List<Creature> secondHeroCreatures = List.of(EXAMPLE_CREATURE_2);
+
+        Hero hero1 = new Hero(firstHeroCreatures, SpellsBook.builder().spells(List.of(SUMMON_AIR_ELEMENTAL_RANG_1)).mana(NOT_IMPORTANT_MANA).build());
+        Hero hero2 = new Hero(secondHeroCreatures, SpellsBook.builder().spells(List.of(SUMMON_WATER_ELEMENTAL_RANG_1, LIGHTNING_BOLT_RANG_1)).mana(NOT_IMPORTANT_MANA).build());
+
+        final GameEngine gameEngine =
+                new GameEngine(hero1, hero2);
+
+        gameEngine.castSpell(null, SUMMON_AIR_ELEMENTAL_RANG_1);
+        gameEngine.pass();
+
+        Optional<Creature> expectedAirElemental = gameEngine.getCreature(new Point(0, 0));
+        Assertions.assertThat(expectedAirElemental)
+                .isPresent();
+
+        //when
+        gameEngine.castSpell(new Point(0, 0), LIGHTNING_BOLT_RANG_1);
+
+
+        //then
+        Assertions.assertThat(expectedAirElemental.get().getCurrentHp()).isEqualTo(0);
+        Assertions.assertThat(expectedAirElemental.get().getAmount()).isEqualTo(0);
     }
 
 }

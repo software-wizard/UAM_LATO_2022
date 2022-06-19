@@ -19,7 +19,10 @@ public class AreaDamageSpell extends Spell<SpellCreatureList> {
 
     @Override
     public void castSpell(SpellCreatureList creatureList, BiConsumer<String, PropertyChangeListener> consumer) {
-        creatureList.getCreatureList().forEach(creature -> creature.applySpellDamage(creature, value));
+        creatureList.getCreatureList().forEach(creature -> {
+            SpellFactorCalculator spellFactorCalculator = new SpellFactorCalculator();
+            creature.applySpellDamage(creature, value * spellFactorCalculator.isCreatureHasProtection(this, creature));
+        });
     }
 
     @Override

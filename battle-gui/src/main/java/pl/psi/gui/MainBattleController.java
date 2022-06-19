@@ -218,7 +218,6 @@ public class MainBattleController implements PropertyChangeListener {
                 if (gameEngine.getCreature(new Point(x1, y1)).isPresent()) {
                     if (gameEngine.getCreature(new Point(x, y)).get().isAlive()) {
                         mapTile.setName("\n\n" + gameEngine.getCreature(new Point(x, y)).get().getAmount());
-                        System.out.println(gameEngine.getCreature(new Point(x1, y1)).get().getBasicStats().getImagePath());
                         Image img = new Image(gameEngine.getCreature(new Point(x1, y1)).get().getBasicStats().getImagePath());
                         mapTile.setBackground(img);
                     } else {
@@ -239,9 +238,9 @@ public class MainBattleController implements PropertyChangeListener {
                     mapTile.addEventHandler(MouseEvent.MOUSE_ENTERED,
                             mouseEvent -> {
                                 if (gameEngine.getCreature(new Point(x1, y1)).isPresent()) {
-                                    if(gameEngine.canCastSpell(selectedSpell, gameEngine.getCreature(new Point(x1, y1)).get())) {
+                                    if (gameEngine.canCastSpell(selectedSpell, gameEngine.getCreature(new Point(x1, y1)).get())) {
                                         mapTile.getScene().setCursor(new ImageCursor(new Image("/images/spells images/Cast Coursor.png")));
-                                    }else {
+                                    } else {
                                         mapTile.getScene().setCursor(new ImageCursor(new Image("/images/spells images/Block Coursor.png")));
                                     }
                                 } else {
@@ -254,7 +253,7 @@ public class MainBattleController implements PropertyChangeListener {
                                 if (e.getButton() == MouseButton.PRIMARY) {
                                     gameEngine.getCreature(new Point(x1, y1)).ifPresent(
                                             creature -> {
-                                                if(gameEngine.canCastSpell(selectedSpell, creature)){
+                                                if (gameEngine.canCastSpell(selectedSpell, creature)) {
                                                     castSpell(new Point(x1, y1));
                                                     mapTile.getScene().setCursor(Cursor.DEFAULT);
                                                     refreshGui();
@@ -291,24 +290,24 @@ public class MainBattleController implements PropertyChangeListener {
                             });
                 }
 
-                if(gameEngine.canCreatureCastSpell(new Point(x,y))){
+                if (gameEngine.canCreatureCastSpell(new Point(x, y))) {
                     mapTile.setOnMouseEntered(e -> {
-                        Image img = new Image(gameEngine.getCreature(new Point(x1,y1)).get().getBasicStats().getCanBuffImagePath());
+                        Image img = new Image(gameEngine.getCreature(new Point(x1, y1)).get().getBasicStats().getCanBuffImagePath());
                         mapTile.setBackground(img);
 
                     });
                     mapTile.setOnMouseExited(e -> {
-                        Image img = new Image(gameEngine.getCreature(new Point(x1,y1)).get().getBasicStats().getImagePath());
-                        if(gameEngine.getCreature(new Point(x1,y1)).get().equals(gameEngine.getCurrentCreature())){
-                            img = new Image(gameEngine.getCreature(new Point(x1,y1)).get().getBasicStats().getCurrentImagePath());
+                        Image img = new Image(gameEngine.getCreature(new Point(x1, y1)).get().getBasicStats().getImagePath());
+                        if (gameEngine.getCreature(new Point(x1, y1)).get().equals(gameEngine.getCurrentCreature())) {
+                            img = new Image(gameEngine.getCreature(new Point(x1, y1)).get().getBasicStats().getCurrentImagePath());
                         }
                         mapTile.setBackground(img);
                     });
 
                     mapTile.setOnMousePressed(
                             e -> {
-                                if(e.getButton() == MouseButton.PRIMARY){
-                                    gameEngine.castCurrentCreatureSpell(new Point(x1,y1));
+                                if (e.getButton() == MouseButton.PRIMARY) {
+                                    gameEngine.castCurrentCreatureSpell(new Point(x1, y1));
                                 }
                             });
                 }
