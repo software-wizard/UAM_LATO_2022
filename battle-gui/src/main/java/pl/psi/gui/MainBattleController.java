@@ -124,10 +124,15 @@ public class MainBattleController {
             width = BIG_WIDTH;
             height = BIG_HEIGHT;
         }
+        else if(text.getText().equals("Game Over")){
+            width = 140;
+            height = 35;
+        }
         else {
             width = SMALL_WIDTH;
             height = SMALL_HEIGHT;
         }
+
         Scene stageScene = new Scene(comp, width, height);
         newStage.setScene(stageScene);
         newStage.show();
@@ -135,6 +140,9 @@ public class MainBattleController {
 
     private void refreshGui() {
         roundNumber.setText(gameEngine.getRoundNumber());
+        if(gameEngine.isGameEnded()){
+            showStage("Game Over",false);
+        }
         for (int x = 0; x < 15; x++) {
             for (int y = 0; y < 10; y++) {
                 final int x1 = x;

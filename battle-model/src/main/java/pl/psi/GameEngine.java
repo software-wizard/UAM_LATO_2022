@@ -33,8 +33,8 @@ public class GameEngine {
     private boolean currentCreatureCanMove = true;
     private boolean currentCreatureCanAttack = true;
     private String attackInformation = "";
-    private String additionalInformation = "";
     private String spellCastInformation = "";
+    private boolean gameEnded = false;
 
     public GameEngine(final Hero aHero1, final Hero aHero2) {
         hero1 = aHero1;
@@ -43,11 +43,21 @@ public class GameEngine {
         board = new Board(aHero1.getCreatures(), aHero2.getCreatures());
     }
 
+    public boolean isGameEnded(){
+        return gameEnded;
+    }
+
+    private void checkIfGameEnded(){
+        if(hero1.allCreaturesDead() || hero2.allCreaturesDead()){
+            gameEnded = true;
+        }
+    }
+
     public void attack(final Point aPoint) {
         if(turnQueue.getCurrentCreature().isDefending()){
             turnQueue.getCurrentCreature().defend(false);
         }
-        AttackAndPrintAttackInformation(aPoint);
+        applyAttackLogic( aPoint );
         currentCreatureCanMove = false;
         currentCreatureCanAttack = false;
         if(!getCreature(aPoint).get().isAlive()){
@@ -58,17 +68,13 @@ public class GameEngine {
             turnQueue.addDeadCreature(getCurrentCreature());
             turnQueue.addDeadCreaturePoint(getCreaturePosition(getCurrentCreature()));
         }
-//        updateDeadCreatureLists();
+        checkIfGameEnded();
         pass();
         observerSupport.firePropertyChange(CREATURE_MOVED, null, null);
     }
 
     public List<Point> getCurrentCreatureSplashDamagePointsList(final Point aPoint){
         return board.getCreatureSplashDamagePointsList(getCurrentCreature(), aPoint);
-    }
-
-    private void AttackAndPrintAttackInformation(final Point pointToAttack) {
-        applyAttackLogic(pointToAttack);
     }
 
     private void applyAttackLogic(final Point aPoint) {
@@ -119,7 +125,8 @@ public class GameEngine {
     }
 
     public boolean canAttack(final Point aPoint) {
-        return board.getCreature( aPoint ).isPresent()
+        return !gameEnded
+                && board.getCreature( aPoint ).isPresent()
                 && board.canAttack( turnQueue.getCurrentCreature(), aPoint )
                 && isEnemy(board.getCreature(aPoint).get())
                 && currentCreatureCanAttack
@@ -156,12 +163,15 @@ public class GameEngine {
             turnQueue.getRangeCreatures().forEach(this::creatureInMeleeRange);
         }
         if(board.getCreature(aPoint).isPresent()){
-            return !board.getCreature(aPoint).get().isAlive()
+            return !gameEnded
+                    && !board.getCreature(aPoint).get().isAlive()
                     && board.canMove(turnQueue.getCurrentCreature(), aPoint)
                     && currentCreatureCanMove;
         }
         else{
-            return board.canMove(turnQueue.getCurrentCreature(), aPoint) && currentCreatureCanMove;
+            return !gameEnded
+                    && board.canMove(turnQueue.getCurrentCreature(), aPoint)
+                    && currentCreatureCanMove;
         }
     }
 
@@ -263,7 +273,6 @@ public class GameEngine {
         currentCreatureCanMove = true;
         currentCreatureCanAttack = true;
         turnQueue.next();
-        additionalInformation = "";
         board.putDeadCreaturesOnBoard( turnQueue.getDeadCreatures(), turnQueue.getDeadCreaturePoints() );
     }
 
@@ -301,7 +310,7 @@ public class GameEngine {
             default:
                 throw new IllegalArgumentException("Not supported category.");
         }
-
+        checkIfGameEnded();
     }
 
     //ToDO: In the future think about better solution and refactor this

@@ -45,7 +45,7 @@ public class Start extends Application {
                         new NecropolisFactory().create(true, 2, 5),
                         new NecropolisFactory().create(false,3,5),
                         new NecropolisFactory().create(true,4,5),
-                        new NecropolisFactory().create(false, 5, 100),
+                        new NecropolisFactory().create(false, 5, 2),
                         new NecropolisFactory().create(true, 6, 1000),
                         new NecropolisFactory().create(true,7,5)
                         ),HeroStatistics.NECROMANCER);
@@ -55,7 +55,7 @@ public class Start extends Application {
 
     private Hero createP2() {
         final Hero ret = new Hero(List.of(
-                new StrongholdFactory().create(true, 1, 100),
+                new StrongholdFactory().create(true, 1, 1),
                 new StrongholdFactory().create(true, 2, 50),
                 new StrongholdFactory().create(false, 3, 25),
                 new StrongholdFactory().create(true, 4, 15),

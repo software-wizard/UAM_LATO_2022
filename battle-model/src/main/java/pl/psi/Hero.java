@@ -31,4 +31,8 @@ public class Hero {
         creatures = aCreatures;
         spells = aSpells;
     }
+
+    public boolean allCreaturesDead(){
+        return creatures.stream().noneMatch(Creature::isAlive);
+    }
 }
