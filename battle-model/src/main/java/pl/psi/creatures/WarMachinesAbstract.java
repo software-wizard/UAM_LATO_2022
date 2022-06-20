@@ -24,7 +24,7 @@ public abstract class WarMachinesAbstract extends Creature {
     public abstract void performAction(List<Creature> creatureList);
 
     @Override
-    double getAttack() {
+    public double getAttack() {
         return stats.getAttack();
     }
 
@@ -48,5 +48,10 @@ public abstract class WarMachinesAbstract extends Creature {
         return stats.getDamage();
     }
 
+    public void upgradeSkillLevel( int aNewLevel) {
+        if (aNewLevel < 4 && aNewLevel > 0) {
+            this.skillLevel = aNewLevel;
+        } else throw new IllegalArgumentException("War machine level must but a number between 1 and 3");
+    }
 
 }

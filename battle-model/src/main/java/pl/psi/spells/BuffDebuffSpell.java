@@ -1,33 +1,54 @@
 package pl.psi.spells;
 
+import lombok.Getter;
 import pl.psi.TurnQueue;
 import pl.psi.creatures.Creature;
 import pl.psi.creatures.CreatureStats;
 
-import java.beans.PropertyChangeEvent;
-import java.util.HashMap;
-import java.util.Map;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 
 public class BuffDebuffSpell extends Spell<Creature> {
 
+    private final PropertyChangeSupport observerSupport = new PropertyChangeSupport(this);
     private final CreatureStats creatureStats;
-    private final int timer;
-    private final Map<Creature, Integer> spellTimer = new HashMap<>();
+    private final int time;
+    @Getter
+    private RoundTimer roundTimer;
+    private final SpellNames counterSpell;
 
-    public BuffDebuffSpell(SpellTypes category, String name, SpellRang rang, int manaCost, CreatureStats creatureStats, int timer) {
-        super(category, name, rang, manaCost);
+    public BuffDebuffSpell(SpellTypes category, SpellNames name, SpellMagicClass spellMagicClass, SpellRang rang, int manaCost, CreatureStats creatureStats, int time, SpellNames counterSpell) {
+        super(category, name, spellMagicClass, rang, manaCost);
         this.creatureStats = creatureStats;
-        this.timer = timer;
+        this.time = time;
+        this.counterSpell = counterSpell;
+    }
+
+    private BuffDebuffSpell(BuffDebuffSpell buffDebuffSpell, Creature creature) {
+        super(buffDebuffSpell.getCategory(), buffDebuffSpell.getName(), buffDebuffSpell.getSpellMagicClass(), buffDebuffSpell.getRang(), buffDebuffSpell.getManaCost());
+        this.creatureStats = buffDebuffSpell.creatureStats;
+        this.time = buffDebuffSpell.time;
+        this.counterSpell = buffDebuffSpell.counterSpell;
+        this.roundTimer = new RoundTimer(buffDebuffSpell.time, this, creature, buffDebuffSpell.counterSpell);
     }
 
     @Override
-    public void castSpell(Creature aDefender) {
-        aDefender.applyStatsWithSpells(creatureStats);
-        spellTimer.put(aDefender, timer);
+    public void castSpell(Creature aDefender, BiConsumer<String, PropertyChangeListener> consumer) {
+        if (aDefender.getRunningSpells().stream().map(Spell::getName).collect(Collectors.toList()).contains(this.getName()) && !getName().equals(SpellNames.DISRUPTING_RAY)) {
+            observerSupport.firePropertyChange(RoundTimer.RESET_TIMER, null, null);
+            return;
+        }
+        aDefender.addRunningSpell(this);
+        BuffDebuffSpell buffDebuffSpell = new BuffDebuffSpell(this, aDefender);
+        consumer.accept(TurnQueue.END_OF_TURN, buffDebuffSpell.getRoundTimer());
+        observerSupport.addPropertyChangeListener(RoundTimer.RESET_TIMER, buffDebuffSpell.getRoundTimer());
+        aDefender.buff(creatureStats);
     }
 
-    private CreatureStats convertToNegative(CreatureStats creatureStats) { // ToDo: find better way to do this if it possible
+    private CreatureStats convertToNegative(CreatureStats creatureStats) {
         return CreatureStats.builder()
                 .attack(-creatureStats.getAttack())
                 .armor(-creatureStats.getArmor())
@@ -35,23 +56,9 @@ public class BuffDebuffSpell extends Spell<Creature> {
                 .build();
     }
 
-    public void unCastSpell(Creature creature) {
-        creature.applyStatsWithSpells(convertToNegative(creatureStats));
-    }
-
     @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        if (TurnQueue.END_OF_TURN.equals(evt.getPropertyName())) {
-            spellTimer.forEach(((creature, currentTimer) -> {
-                currentTimer = currentTimer - 1;
-                spellTimer.put(creature, currentTimer);
-            }));
-
-            spellTimer.forEach(((creature, currentTimer) -> {
-                if (currentTimer == 0) unCastSpell(creature);
-            }));
-
-            spellTimer.values().removeIf(currentTimer -> (currentTimer == 0));
-        }
+    public void unCastSpell(Creature creature) {
+        creature.buff(convertToNegative(creatureStats));
     }
+
 }
