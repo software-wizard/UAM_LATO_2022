@@ -3,26 +3,25 @@ package pl.psi.spells;
 import pl.psi.creatures.Creature;
 import pl.psi.creatures.CreatureStats;
 
-import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
 import java.util.List;
-import java.util.function.BiConsumer;
 
-public class AreaBuffDebuffSpell extends Spell<SpellCreatureList> {
+public class AreaBuffDebuffSpell extends Spell<List<Creature>> {
 
     private final CreatureStats creatureStats;
 
-    public AreaBuffDebuffSpell(SpellTypes category, SpellNames name, SpellMagicClass spellMagicClass, SpellRang rang, int manaCost, CreatureStats creatureStats) {
-        super(category, name, spellMagicClass, rang, manaCost);
+    public AreaBuffDebuffSpell(SpellTypes category, String name, SpellRang rang, int manaCost, CreatureStats creatureStats) {
+        super(category, name, rang, manaCost);
         this.creatureStats = creatureStats;
     }
 
     @Override
-    public void castSpell(SpellCreatureList spellCreatureList, BiConsumer<String, PropertyChangeListener> consumer) {
-        spellCreatureList.getCreatureList().forEach(creature -> creature.buff(creatureStats));
+    public void castSpell(List<Creature> aDefender) {
+        aDefender.forEach(creature -> creature.applyStatsWithSpells(creatureStats));
     }
 
     @Override
-    public void unCastSpell(SpellCreatureList spellCreatureList) {
+    public void propertyChange(PropertyChangeEvent evt) {
 
     }
 }

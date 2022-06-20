@@ -3,11 +3,8 @@ package pl.psi.creatures;
 import com.google.common.collect.Range;
 import lombok.AccessLevel;
 import lombok.Getter;
-import pl.psi.spells.SpellNames;
-import pl.psi.spells.SpellRang;
 
 import java.beans.PropertyChangeEvent;
-import java.util.List;
 
 
 public class AbstractCreature extends Creature {
@@ -34,21 +31,6 @@ public class AbstractCreature extends Creature {
     }
 
     @Override
-    public void setAmount(final int aAmount) {
-        decorated.setAmount(aAmount);
-    }
-
-    @Override
-    public boolean getCanCounterAttack() {
-        return decorated.getCanCounterAttack();
-    }
-
-    @Override
-    public void setCanCounterAttack(final boolean value) {
-        decorated.setCanCounterAttack(value);
-    }
-
-    @Override
     public DamageCalculatorIf getCalculator() {
         return decorated.getCalculator();
     }
@@ -59,38 +41,8 @@ public class AbstractCreature extends Creature {
     }
 
     @Override
-    protected void applyCounterAttackDamage(final Creature aDefender, final double aDamage) {
-        decorated.applyCounterAttackDamage(aDefender, aDamage);
-    }
-
-    @Override
     public void attack(final Creature aDefender) {
         decorated.attack(aDefender);
-    }
-
-    @Override
-    protected void setLastAttackDamage(double damage) {
-        decorated.setLastAttackDamage(damage);
-    }
-
-    @Override
-    public double getLastAttackDamage() {
-        return decorated.getLastAttackDamage();
-    }
-
-    @Override
-    protected void setLastCounterAttackDamage(final double damage) {
-        decorated.setLastCounterAttackDamage(damage);
-    }
-
-    @Override
-    public double getLastCounterAttackDamage() {
-        return decorated.getLastCounterAttackDamage();
-    }
-
-    @Override
-    public void clearLastCounterAttackDamage() {
-        decorated.clearLastCounterAttackDamage();
     }
 
     @Override
@@ -101,16 +53,6 @@ public class AbstractCreature extends Creature {
     @Override
     public void age() {
         decorated.age();
-    }
-
-    @Override
-    protected void setLastHealAmount(final double healAmount) {
-        decorated.setLastHealAmount(healAmount);
-    }
-
-    @Override
-    public double getLastHealAmount() {
-        return decorated.getLastHealAmount();
     }
 
     @Override
@@ -144,17 +86,12 @@ public class AbstractCreature extends Creature {
     }
 
     @Override
-    public Range<Integer> getDamage() {
+    Range<Integer> getDamage() {
         return decorated.getDamage();
     }
 
     @Override
-    public double getMaxHp() {
-        return decorated.getMaxHp();
-    }
-
-    @Override
-    public double getAttack() {
+    double getAttack() {
         return decorated.getAttack();
     }
 
@@ -174,46 +111,6 @@ public class AbstractCreature extends Creature {
     }
 
     @Override
-    public void addShots(int i) {
-        decorated.addShots(i);
-    }
-
-    @Override
-    public int getShots() {
-        return decorated.getShots();
-    }
-
-    @Override
-    public boolean canCastSpell() {
-        return decorated.canCastSpell();
-    }
-
-    @Override
-    public SpellNames getSpellName() {
-        return decorated.getSpellName();
-    }
-
-    @Override
-    public int getSpellPower() {
-        return decorated.getSpellPower();
-    }
-
-    @Override
-    public SpellRang getSpellRang() {
-        return decorated.getSpellRang();
-    }
-
-    @Override
-    public int getSpellCastCounter() {
-        return decorated.getSpellCastCounter();
-    }
-
-    @Override
-    public void reduceNumberOfSpellCasts() {
-        decorated.reduceNumberOfSpellCasts();
-    }
-
-    @Override
     protected void restoreCurrentHpToMax() {
         decorated.restoreCurrentHpToMax();
     }
@@ -221,20 +118,5 @@ public class AbstractCreature extends Creature {
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
         decorated.propertyChange(evt);
-    }
-
-    @Override
-    public Integer[][] getSplashDamageRange() {
-        return decorated.getSplashDamageRange();
-    }
-
-    @Override
-    public List<SpellNames> getImmuneSpellList() {
-        return decorated.getImmuneSpellList();
-    }
-
-    @Override
-    public List<SpellNames> getVulnerableSpellList() {
-        return decorated.getImmuneSpellList();
     }
 }

@@ -17,9 +17,9 @@ public class AmmoCart extends WarMachinesAbstract {
         if (isAlive()) {
             creatureList.stream()
                     .filter(creature -> this.getHeroNumber() == creature.getHeroNumber())
-                    .filter(creature -> creature instanceof ShooterCreatureDecorator)
-                    .map(ShooterCreatureDecorator.class::cast)
-                    .forEach(ShooterCreatureDecorator::resetShots);
+                    .filter(creature -> creature instanceof ShooterCreature)
+                    .map(ShooterCreature.class::cast)
+                    .forEach(ShooterCreature::resetShots);
         }
     }
 

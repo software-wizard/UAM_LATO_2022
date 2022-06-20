@@ -1,32 +1,30 @@
 package pl.psi.spells;
 
 import lombok.Getter;
+import pl.psi.creatures.Creature;
 
-import java.beans.PropertyChangeListener;
-import java.util.function.BiConsumer;
+import java.beans.PropertyChangeEvent;
+import java.util.List;
 
-public class AreaDamageSpell extends Spell<SpellCreatureList> {
+public class AreaDamageSpell extends Spell<List<Creature>> {
 
     @Getter
     private final boolean[][] area;
-    private final double value;
+    private final int value;
 
-    public AreaDamageSpell(SpellTypes category, SpellNames name, SpellMagicClass spellMagicClass, SpellRang rang, int manaCost, boolean[][] area, double value) {
-        super(category, name, spellMagicClass, rang, manaCost);
+    public AreaDamageSpell(SpellTypes category, String name, SpellRang rang, int manaCost, boolean[][] area, int value) {
+        super(category, name, rang, manaCost);
         this.area = area;
         this.value = value;
     }
 
     @Override
-    public void castSpell(SpellCreatureList creatureList, BiConsumer<String, PropertyChangeListener> consumer) {
-        creatureList.getCreatureList().forEach(creature -> {
-            SpellFactorCalculator spellFactorCalculator = new SpellFactorCalculator();
-            creature.applySpellDamage(creature, value * spellFactorCalculator.isCreatureHasProtection(this, creature));
-        });
+    public void castSpell(List<Creature> aDefender) {
+        aDefender.forEach(creature -> creature.applySpellDamage(creature, value));
     }
 
     @Override
-    public void unCastSpell(SpellCreatureList creatureList) {
+    public void propertyChange(PropertyChangeEvent evt) {
 
     }
 }

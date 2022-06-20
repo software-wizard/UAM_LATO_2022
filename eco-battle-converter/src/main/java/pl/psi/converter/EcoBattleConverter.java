@@ -4,7 +4,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import pl.psi.Hero;
-import pl.psi.SpellsBook;
 import pl.psi.artifacts.model.Artifact;
 import pl.psi.creatures.Creature;
 import pl.psi.gui.MainBattleController;
@@ -12,8 +11,6 @@ import pl.psi.gui.NecropolisFactory;
 import pl.psi.hero.EconomyHero;
 import pl.psi.spells.Spell;
 import pl.psi.spells.SpellFactory;
-import pl.psi.spells.SpellNames;
-import pl.psi.spells.SpellableIf;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -68,14 +65,12 @@ public class EcoBattleConverter {
                 .forEach(ecoCreature -> creatures.add(factory.create(ecoCreature.isUpgraded(),
                         ecoCreature.getTier(), ecoCreature.getAmount())));
 
-        final List<Spell<? extends SpellableIf>> spells = new ArrayList<>();
+        final List<Spell> spells = new ArrayList<>();
         final SpellFactory spellFactory = new SpellFactory();
         aPlayer.getSpellList()
-                .forEach(economySpell -> spells.add(spellFactory.create(SpellNames.valueOf(economySpell.getSpellStats().getName()), economySpell.getSpellRang(), aPlayer.getSpellPower())));
+                .forEach(economySpell -> spells.add(spellFactory.create(economySpell.getSpellStats().getName(), economySpell.getSpellRang(), aPlayer.getSpellPower())));
 
-        SpellsBook spellsBook = SpellsBook.builder().spells(spells).mana(aPlayer.getHeroStats().getSpellPoints()).build();
-
-        return new Hero(creatures, spellsBook);
+        return new Hero(creatures, spells);
     }
 
 }

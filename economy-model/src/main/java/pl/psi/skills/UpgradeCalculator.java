@@ -3,7 +3,7 @@ package pl.psi.skills;
 import pl.psi.Hero;
 import pl.psi.creatures.Creature;
 import pl.psi.creatures.CreatureStats;
-import pl.psi.creatures.ShooterCreatureDecorator;
+import pl.psi.creatures.ShooterCreature;
 
 /**
  * Class that represents changing creature stats based on current skill
@@ -24,7 +24,7 @@ public class UpgradeCalculator {
         CreatureStats statsToApply = null;
         switch (this.skillName) {
             case ARCHERY:
-                if (aCreature instanceof ShooterCreatureDecorator) {
+                if (aCreature instanceof ShooterCreature) {
                     changedStat = (1 + this.skillEffect) * aCreature.getStats().getAttack();
                     statsToApply = CreatureStats.builder()
                             .armor(changedStat)

@@ -42,7 +42,7 @@ public class Ballista extends WarMachinesAbstract {
     }
 
     @Override
-    public double getAttack() {
+    double getAttack() {
         return stats.getAttack();
     }
 

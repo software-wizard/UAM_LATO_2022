@@ -30,22 +30,6 @@
                         <Font size="24.0"/>
                     </font>
                 </Label>
-                <Label fx:id="roundNumber" style="-fx-padding: 0 20 0 0;">
-                    <font>
-                        <Font size="24.0"/>
-                    </font>
-                    <opaqueInsets>
-                        <Insets/>
-                    </opaqueInsets>
-                </Label>
-                <Label fx:id="manaLabel" style="-fx-padding: 0 20 0 0;">
-                    <font>
-                        <Font size="24.0"/>
-                    </font>
-                    <opaqueInsets>
-                        <Insets/>
-                    </opaqueInsets>
-                </Label>
             </children>
         </HBox>
     </top>
@@ -56,32 +40,20 @@
     <bottom>
         <HBox alignment="TOP_RIGHT" prefHeight="1.0" prefWidth="600.0" BorderPane.alignment="CENTER">
             <children>
-                <Label fx:id="console" alignment="CENTER" layoutX="194.0" layoutY="10.0" style="-fx-padding: 0 0 0 0;"
-                       text=" ">
-                    <font>
-                        <Font size="14.0"/>
-                    </font>
-                </Label>
                 <Button fx:id="passButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="115.0" text="PASS"
                         textAlignment="CENTER">
                     <font>
                         <Font size="16.0"/>
                     </font>
                 </Button>
-                <Button fx:id="spellButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="115.0" text="SPELL"
+                <Button fx:id="windowButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="115.0" text="SPELL"
                         textAlignment="CENTER">
                     <font>
                         <Font size="16.0"/>
                     </font>
                 </Button>
-                <Button fx:id="waitButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="115.0"
-                        text="WAIT" textAlignment="CENTER">
-                    <font>
-                        <Font size="16.0"/>
-                    </font>
-                </Button>
-                <Button fx:id="defendButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="115.0"
-                        text="DEFEND" textAlignment="CENTER">
+                <Button fx:id="defenceModeButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="115.0"
+                        text="DEFENCE" textAlignment="CENTER">
                     <font>
                         <Font size="16.0"/>
                     </font>

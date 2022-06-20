@@ -8,7 +8,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum SpecialFieldsToAttackStatistic implements CreatureStatisticIf {
 
-    WALL("Wall", 0, 0, 20, 0, Range.closed(0, 0), 1, "Lorem ipsum", false, CreatureStatistic.CreatureType.NON_LIVING, true, 1,"");
+    WALL("Wall", 0, 0, 20, 0, Range.closed(0, 0), 1, "Lorem ipsum", false, CreatureStatistic.CreatureType.NON_LIVING, true, 1);
 
     private final String name;
     private final double attack;
@@ -22,30 +22,4 @@ public enum SpecialFieldsToAttackStatistic implements CreatureStatisticIf {
     private final CreatureStatistic.CreatureType type;
     private final boolean isGround;
     private final int size;
-    private final String imagePath;
-
-    @Override
-    public CreatureStatistic.CreatureGroup getGroup() {
-        return null;
-    }
-
-    @Override
-    public boolean isGoodAligned() {
-        return CreatureStatisticIf.super.isGoodAligned();
-    }
-
-    @Override
-    public String getCanAttackImagePath() {
-        return null;
-    }
-
-    @Override
-    public String getCanBuffImagePath() {
-        return null;
-    }
-
-    @Override
-    public String getCurrentImagePath() {
-        return null;
-    }
 }
