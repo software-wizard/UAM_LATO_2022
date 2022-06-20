@@ -217,9 +217,9 @@ class EcoBattleConverterTest {
 	void shouldApplySpellSkillCorrectly() {
 		EconomySpellFactory economySpellFactory = new EconomySpellFactory();
 
-		EconomySpell airMagicSpell1 = economySpellFactory.create( SpellStats.HASTE, SpellRang.BASIC, 1, 100 );
-		EconomySpell airMagicSpell2 = economySpellFactory.create( SpellStats.MAGIC_ARROW, SpellRang.BASIC, 1, 100 );
-		EconomySpell fireMagicSpell1 = economySpellFactory.create( SpellStats.FIREBALL, SpellRang.BASIC, 3, 100 );
+		EconomySpell airMagicSpell1 = economySpellFactory.create( SpellStats.HASTE, SpellRang.BASIC );
+		EconomySpell airMagicSpell2 = economySpellFactory.create( SpellStats.MAGIC_ARROW, SpellRang.BASIC );
+		EconomySpell fireMagicSpell1 = economySpellFactory.create( SpellStats.FIRE_BALL, SpellRang.BASIC );
 		List<EconomySpell> spellsList = new LinkedList<>(List.of(airMagicSpell1, airMagicSpell2, fireMagicSpell1));
 
 		EconomySkill skill = new EconomySkillFactory().create( SkillType.AIR_MAGIC, SkillLevel.ADVANCED );

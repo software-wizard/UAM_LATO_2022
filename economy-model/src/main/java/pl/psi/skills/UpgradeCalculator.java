@@ -2,8 +2,6 @@ package pl.psi.skills;
 
 import pl.psi.creatures.Creature;
 import pl.psi.creatures.CreatureStats;
-import pl.psi.creatures.ShooterCreatureDecorator;
-import pl.psi.creatures.ShooterCreature;
 import pl.psi.creatures.WarMachinesAbstract;
 import pl.psi.hero.EconomyHero;
 import pl.psi.hero.HeroStats;
