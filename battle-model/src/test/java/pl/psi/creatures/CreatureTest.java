@@ -190,7 +190,7 @@ public class CreatureTest {
                 .build())
                 .build();
 
-        final Creature selfHealAfterEndOfTurnCreature = new SelfHealAfterTurnCreature(new Creature.Builder()
+        final Creature selfHealAfterEndOfTurnCreature = new SelfHealAfterTurnCreatureDecorator(new Creature.Builder()
                 .statistic(CreatureStats.builder()
                         .maxHp(100)
                         .damage(NOT_IMPORTANT_DMG)
@@ -215,7 +215,7 @@ public class CreatureTest {
                 .build())
                 .build();
 
-        final NoCounterCreature noCounterCreature = new NoCounterCreature(decorated);
+        final NoCounterCreatureDecorator noCounterCreature = new NoCounterCreatureDecorator(decorated);
 
         final Creature attacker = new Creature.Builder().statistic(CreatureStats.builder()
                 .maxHp(100)
@@ -233,7 +233,7 @@ public class CreatureTest {
         noCounterCreature.attack(defender);
         attacker.attack(defender);
 
-        assertThat(noCounterCreature.getClass()).isEqualTo(NoCounterCreature.class);
+        assertThat(noCounterCreature.getClass()).isEqualTo(NoCounterCreatureDecorator.class);
         assertThat(noCounterCreature.getCurrentHp()).isEqualTo(100);
         assertThat(attacker.getCurrentHp()).isEqualTo(90);
     }
@@ -246,7 +246,7 @@ public class CreatureTest {
                 .build())
                 .build();
 
-        final ShooterCreature shooterCreature = new ShooterCreature(decorated, 1);
+        final ShooterCreatureDecorator shooterCreature = new ShooterCreatureDecorator(decorated, 1);
 
         final Creature defender = new Creature.Builder()
                 .statistic(CreatureStats.builder()
@@ -268,7 +268,7 @@ public class CreatureTest {
                 .build())
                 .build();
 
-        final ShooterCreature shooterCreature = new ShooterCreature(decorated, 0);
+        final ShooterCreatureDecorator shooterCreature = new ShooterCreatureDecorator(decorated, 0);
 
         final Creature defender = new Creature.Builder()
                 .statistic(CreatureStats.builder()
@@ -291,10 +291,11 @@ public class CreatureTest {
                 .amount(10)
                 .build();
 
-        final HealFromAttackCreature healFromAttackCreature = new HealFromAttackCreature(decorated);
+        final NoCounterCreatureDecorator noCounterCreature = new NoCounterCreatureDecorator(decorated);
+        final HealFromAttackCreatureDecorator healFromAttackCreature = new HealFromAttackCreatureDecorator(noCounterCreature);
 
         final Creature defender = new Creature.Builder().statistic(CreatureStats.builder()
-                .maxHp(NOT_IMPORTANT)
+                .maxHp(100)
                 .damage(NOT_IMPORTANT_DMG)
                 .type(CreatureStatistic.CreatureType.ALIVE)
                 .build())
@@ -306,6 +307,39 @@ public class CreatureTest {
     }
 
     @Test
+    void decoratedCreatureShouldCounterAttackProperly() {
+        final Creature decorated = new Creature.Builder().statistic(CreatureStats.builder()
+                .maxHp(40)
+                .damage(Range.closed(5, 5))
+                .build())
+                .amount(1)
+                .build();
+
+        final NoCounterCreatureDecorator noCounterCreature = new NoCounterCreatureDecorator(decorated);
+        final HealFromAttackCreatureDecorator healFromAttackCreature = new HealFromAttackCreatureDecorator(noCounterCreature);
+        healFromAttackCreature.setCurrentHp(1); // this is here so creature cant resurrect units and mess up the math
+
+        final Creature defender = new Creature.Builder().statistic(CreatureStats.builder()
+                .maxHp(100)
+                .damage(NOT_IMPORTANT_DMG)
+                .type(CreatureStatistic.CreatureType.ALIVE)
+                .build())
+                .build();
+
+        final TurnQueue turnQueue = new TurnQueue(List.of(healFromAttackCreature), List.of(defender));
+
+        defender.attack( healFromAttackCreature );
+        defender.attack( healFromAttackCreature );
+        turnQueue.next();
+        turnQueue.next();
+        turnQueue.next();
+        turnQueue.next();
+        defender.attack( healFromAttackCreature );
+        assertThat(defender.getCurrentHp()).isEqualTo(90);
+    }
+
+
+    @Test
     void vampireCreatureTest() {
         final Creature vampireToDecorate = new Creature.Builder().statistic(CreatureStats.builder()
                 .maxHp(CreatureStatistic.VAMPIRE_LORD.getMaxHp())
@@ -314,8 +348,8 @@ public class CreatureTest {
                 .amount(1)
                 .build();
 
-        final NoCounterCreature noCounterVampire = new NoCounterCreature(vampireToDecorate);
-        final HealFromAttackCreature vampireLord = new HealFromAttackCreature(noCounterVampire);
+        final NoCounterCreatureDecorator noCounterVampire = new NoCounterCreatureDecorator(vampireToDecorate);
+        final HealFromAttackCreatureDecorator vampireLord = new HealFromAttackCreatureDecorator(noCounterVampire);
 
         final Creature defender = new Creature.Builder().statistic(CreatureStats.builder()
                 .maxHp(100)
@@ -338,7 +372,7 @@ public class CreatureTest {
                 .build())
                 .build();
 
-        final DiseaseOnHitCreature diseaseOnHitCreature = new DiseaseOnHitCreature(decorated);
+        final DiseaseOnHitCreatureDecorator diseaseOnHitCreature = new DiseaseOnHitCreatureDecorator(decorated);
 
         final Creature defender = new Creature.Builder().statistic(CreatureStats.builder()
                 .maxHp(100)
@@ -402,7 +436,7 @@ public class CreatureTest {
                 .build())
                 .build();
 
-        final DoubleDamageOnHitCreature doubleDamageOnHitCreature = new DoubleDamageOnHitCreature(decorated);
+        final DoubleDamageOnHitCreatureDecorator doubleDamageOnHitCreature = new DoubleDamageOnHitCreatureDecorator(decorated);
 
         final Creature defender = new Creature.Builder().statistic(CreatureStats.builder()
                 .maxHp(100)
@@ -416,12 +450,13 @@ public class CreatureTest {
 
     @Test
     void buffingWorksProperly() {
-        final Creature creature = new Creature.Builder().statistic(CreatureStats.builder()
+        final Creature creatureToDecorate = new Creature.Builder().statistic(CreatureStats.builder()
                 .maxHp(100)
                 .damage(Range.closed(5, 5))
                 .attack(5)
                 .build())
                 .build();
+        final NoCounterCreatureDecorator creature = new NoCounterCreatureDecorator(creatureToDecorate);
 
         final CreatureStats stats = new CreatureStats.CreatureStatsBuilder()
                 .attack(5)
@@ -467,7 +502,7 @@ public class CreatureTest {
                 .build())
                 .build();
 
-        final AgeOnHitCreature ageOnHitCreature = new AgeOnHitCreature(decorated);
+        final AgeOnHitCreatureDecorator ageOnHitCreature = new AgeOnHitCreatureDecorator(decorated);
 
         final Creature defender = new Creature.Builder().statistic(CreatureStats.builder()
                 .maxHp(100)
@@ -489,7 +524,7 @@ public class CreatureTest {
                 .build())
                 .build();
 
-        final CurseOnHitCreature curseOnHitCreature = new CurseOnHitCreature(decorated);
+        final CurseOnHitCreatureDecorator curseOnHitCreature = new CurseOnHitCreatureDecorator(decorated);
 
         final Creature defender = new Creature.Builder().statistic(CreatureStats.builder()
                 .maxHp(NOT_IMPORTANT)
@@ -505,12 +540,13 @@ public class CreatureTest {
     @Test
     void creatureShouldAttackTwice() {
         final Creature decorated = new Creature.Builder().statistic(CreatureStats.builder()
-                .maxHp(100)
+                .maxHp(6)
                 .damage(Range.closed(10, 10))
                 .build())
+                .amount(2)
                 .build();
 
-        final DoubleAttackCreature doubleAttackCreature = new DoubleAttackCreature(decorated);
+        final DoubleAttackCreatureDecorator doubleAttackCreature = new DoubleAttackCreatureDecorator(decorated);
 
         final Creature defender = new Creature.Builder().statistic(CreatureStats.builder()
                 .maxHp(100)
@@ -519,8 +555,119 @@ public class CreatureTest {
                 .build();
 
         doubleAttackCreature.attack(defender);
+
+        assertThat(defender.getCurrentHp()).isEqualTo(70);
+        assertThat(doubleAttackCreature.getCurrentHp()).isEqualTo(2);
+    }
+
+    @Test
+    void shooterCreatureShouldAttackTwice() {
+        final Creature decorated = new Creature.Builder().statistic(CreatureStats.builder()
+                        .maxHp(6)
+                        .damage(Range.closed(5, 5))
+                        .build())
+                .amount(2)
+                .build();
+
+        final ShooterCreatureDecorator shooterCreature = new ShooterCreatureDecorator(decorated,12);
+        final DoubleAttackCreatureDecorator doubleAttackCreature = new DoubleAttackCreatureDecorator(shooterCreature);
+
+
+        final Creature defender = new Creature.Builder().statistic(CreatureStats.builder()
+                        .maxHp(100)
+                        .damage(Range.closed(10, 10))
+                        .build())
+                .build();
+
+        doubleAttackCreature.attack(defender);
+
         assertThat(defender.getCurrentHp()).isEqualTo(80);
-        assertThat(doubleAttackCreature.getCurrentHp()).isEqualTo(90);
+        assertThat(doubleAttackCreature.getCurrentHp()).isEqualTo(6);
+    }
+
+    @Test
+    void creatureShouldHaveTwoCounters() {
+        final Creature decorated = new Creature.Builder().statistic(CreatureStats.builder()
+                        .maxHp(100)
+                        .damage(Range.closed(5, 5))
+                        .build())
+                .build();
+
+        final MoreCounterAttacksCreatureDecorator moreCounterAttacksCreature = new MoreCounterAttacksCreatureDecorator(decorated,2);
+
+        final Creature attacker = new Creature.Builder().statistic(CreatureStats.builder()
+                        .maxHp(100)
+                        .damage(Range.closed(10, 10))
+                        .build())
+                .build();
+
+        attacker.attack(moreCounterAttacksCreature);
+        attacker.attack(moreCounterAttacksCreature);
+
+        assertThat(moreCounterAttacksCreature.getCurrentHp()).isEqualTo(80);
+        assertThat(attacker.getCurrentHp()).isEqualTo(90);
+
+        attacker.attack(moreCounterAttacksCreature);
+
+        assertThat(attacker.getCurrentHp()).isEqualTo(90);
+    }
+
+    @Test
+    void creatureShouldHaveInfiniteCounters() {
+        final Creature decorated = new Creature.Builder().statistic(CreatureStats.builder()
+                        .maxHp(100)
+                        .damage(Range.closed(5, 5))
+                        .build())
+                .build();
+
+        final MoreCounterAttacksCreatureDecorator moreCounterAttacksCreature = new MoreCounterAttacksCreatureDecorator(decorated,Integer.MAX_VALUE);
+
+        final Creature attacker1 = new Creature.Builder().statistic(CreatureStats.builder()
+                        .maxHp(100)
+                        .damage(NOT_IMPORTANT_DMG)
+                        .build())
+                .build();
+
+        final Creature attacker2 = new Creature.Builder().statistic(CreatureStats.builder()
+                        .maxHp(100)
+                        .damage(NOT_IMPORTANT_DMG)
+                        .build())
+                .build();
+
+        attacker1.attack(moreCounterAttacksCreature);
+        attacker1.attack(moreCounterAttacksCreature);
+        attacker1.attack(moreCounterAttacksCreature);
+        attacker1.attack(moreCounterAttacksCreature);
+
+        assertThat(attacker1.getCurrentHp()).isEqualTo(80);
+
+        attacker2.attack(moreCounterAttacksCreature);
+        attacker2.attack(moreCounterAttacksCreature);
+
+        assertThat(attacker2.getCurrentHp()).isEqualTo(90);
+    }
+
+    @Test
+    void creatureShouldNotHaveMeleePenalty() {
+        final Creature decorated = new Creature.Builder().statistic(CreatureStats.builder()
+                        .maxHp(100)
+                        .damage(Range.closed(10, 10))
+                        .build())
+                .build();
+
+        final NoMeleePenaltyShooterCreatureDecorator zealot = new NoMeleePenaltyShooterCreatureDecorator(decorated, 1);
+
+        final Creature defender = new Creature.Builder()
+                .statistic(CreatureStats.builder()
+                        .maxHp(100)
+                        .damage(Range.closed(10,10))
+                        .build())
+                .build();
+
+        zealot.setInMelee(true);
+        zealot.attack(defender);
+        assertThat(defender.getCurrentHp()).isEqualTo(90);
+        assertThat(zealot.getCurrentHp()).isEqualTo(90);
     }
 
     @Test
@@ -531,7 +678,7 @@ public class CreatureTest {
                 .amount(2)
                 .build();
 
-        final ThunderboltOnHitCreature thunderboltOnHitCreature = new ThunderboltOnHitCreature(decorated);
+        final ThunderboltOnHitCreatureDecorator thunderboltOnHitCreature = new ThunderboltOnHitCreatureDecorator(decorated);
 
         final Creature defender = new Creature.Builder().statistic(CreatureStats.builder()
                 .maxHp(100)
@@ -552,7 +699,7 @@ public class CreatureTest {
                 .build())
                 .build();
 
-        final DefenceReductionCreature reduceDefenceCreature = new DefenceReductionCreature(decorated, 0.6);
+        final DefenceReductionCreatureDecorator reduceDefenceCreature = new DefenceReductionCreatureDecorator(decorated, 0.6);
 
 
         final Creature defender = new Creature.Builder().statistic(CreatureStats.builder()
@@ -585,37 +732,65 @@ public class CreatureTest {
         assertThat(reducedSpellDamage.getCurrentHp()).isEqualTo(95);
     }
 
-    /*@Test
-    void dreadKnightCreatureTest()
-    {
-        final Creature decorated = new Creature.Builder().statistic( CreatureStats.builder()
-                .maxHp( 1 )
-                .damage( Range.closed(10,10) )
-                .build() )
-                .build();
-
-        final DoubleDamageOnHitCreature doubleDamageOnHitCreature = new DoubleDamageOnHitCreature( decorated );
-        final CurseOnHitCreature dreadKnight = new CurseOnHitCreature( doubleDamageOnHitCreature );
-
-
-        final Creature defender = new Creature.Builder().statistic( CreatureStats.builder()
-                .maxHp( 100 )
-                .damage( Range.closed( 0,100 ) )
-                .type( CreatureStatistic.CreatureType.ALIVE )
-                .build() )
-                .build();
-
-        dreadKnight.attackWithCurse( defender );
-        assertThat( dreadKnight.getCurrentHp() ).isEqualTo( 1 );
-        assertThat( defender.getCurrentHp() ).isEqualTo( 80 );
-    }*/
-
     @Test
     void shouldThrowExceptionWhenTryingToSetMoraleValueLessThanPossible() {
         var creature = new Creature.Builder().statistic(CreatureStats.builder().build()).build(); // current morale value = 1
         var exception = assertThrows(IllegalArgumentException.class, () -> creature.setMorale(-4));
 
         assertEquals("Morale must not be less than 3", exception.getMessage());
+    }
+
+    @Test
+    void defendShouldIncreaseDefense() {
+        final Creature creature = new Creature.Builder().statistic(CreatureStats.builder()
+                .maxHp(NOT_IMPORTANT)
+                .armor(11)
+                .build())
+                .build();
+
+        creature.defend(true);
+        assertThat( creature.getArmor() ).isEqualTo(13.2);
+        creature.defend( false );
+        assertThat( creature.getArmor() ).isEqualTo(11);
+    }
+
+    @Test
+    void creatureShouldHaveSplashDamageRange(){
+        final Creature creature = new Creature.Builder().statistic(CreatureStats.builder()
+                .maxHp(NOT_IMPORTANT)
+                .build())
+                .build();
+
+        assertThat(creature.getSplashDamageRange()[1][1]).isEqualTo(1);
+        assertThat(creature.getSplashDamageRange()[0][1]).isEqualTo(0);
+    }
+
+    @Test
+    void creatureShouldHaveInformationAboutLastAttack(){
+        final Creature attackerToDecorate = new Creature.Builder().statistic(CreatureStats.builder()
+                .maxHp(100)
+                .damage(Range.closed(11,20))
+                .build())
+                .build();
+        final NoCounterCreatureDecorator attackerToDecorate2 = new NoCounterCreatureDecorator(attackerToDecorate);
+        final HealFromAttackCreatureDecorator attacker = new HealFromAttackCreatureDecorator(attackerToDecorate2);
+        attacker.setCurrentHp(50); // // this is here so creature cant resurrect units and mess up the math
+
+        final Creature defender = new Creature.Builder().statistic(CreatureStats.builder()
+                .maxHp(100)
+                .damage(Range.closed(1,10))
+                .type(CreatureStatistic.CreatureType.ALIVE)
+                .build())
+                .build();
+        
+        attacker.attack(defender);
+        assertThat(attacker.getLastAttackDamage()).isBetween(11.0,20.0);
+        assertThat(attacker.getLastHealAmount()).isEqualTo(attacker.getLastAttackDamage());
+        assertThat(defender.getLastCounterAttackDamage()).isEqualTo(0);
+
+        defender.attack(attacker);
+        assertThat(defender.getLastAttackDamage()).isBetween(1.0,10.0);
+        assertThat(attacker.getLastCounterAttackDamage()).isBetween(11.0,20.0);
     }
 
 }

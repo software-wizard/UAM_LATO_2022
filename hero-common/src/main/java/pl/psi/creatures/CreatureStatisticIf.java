@@ -23,6 +23,8 @@ public interface CreatureStatisticIf {
 
     CreatureStatistic.CreatureType getType();
 
+    CreatureStatistic.CreatureGroup getGroup();
+
     int getSize();
 
     boolean isGround();
@@ -30,4 +32,12 @@ public interface CreatureStatisticIf {
     default boolean isGoodAligned() {
         return false;
     }
+
+    String getImagePath();
+
+    String getCanAttackImagePath();
+
+    String getCanBuffImagePath();
+
+    String getCurrentImagePath();
 }
