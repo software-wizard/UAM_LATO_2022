@@ -8,6 +8,7 @@ import pl.psi.Hero;
 import pl.psi.Point;
 import pl.psi.SpellsBook;
 import pl.psi.creatures.Creature;
+import pl.psi.creatures.CreatureStatistic;
 import pl.psi.creatures.CreatureStats;
 
 import java.util.Collections;
@@ -56,6 +57,27 @@ public class SpellTest {
             .statistic(
                     CreatureStats.builder()
                             .moveRange(10)
+                            .maxHp(100)
+                            .build())
+            .build();
+
+    private final Creature EXAMPLE_CREATURE_3 = new Creature.Builder()
+            .statistic(
+                    CreatureStats.builder()
+                            .name("C0")
+                            .damage(Range.closed(10, 10))
+                            .attack(50)
+                            .moveRange(25)
+                            .maxHp(100)
+                            .build())
+            .build();
+    private final Creature EXAMPLE_CREATURE_4 = new Creature.Builder()
+            .statistic(
+                    CreatureStats.builder()
+                            .name("C1")
+                            .damage(Range.closed(10, 10))
+                            .attack(50)
+                            .moveRange(25)
                             .maxHp(100)
                             .build())
             .build();
@@ -891,4 +913,247 @@ public class SpellTest {
         Assertions.assertThat(expectedAirElemental.get().getAmount()).isEqualTo(0);
     }
 
+
+    @Test
+    void shouldDamageThreeNearestCreaturesWithCorrectValueWhenChainLightningCasted() {
+        //when
+        Spell<? extends SpellableIf> chainLightning = new SpellFactory().create(CHAIN_LIGHTNING, BASIC, 1);
+
+        Creature creature5 = new Creature.Builder()
+                .statistic(
+                        CreatureStats.builder()
+                                .name("C2")
+                                .damage(Range.closed(10, 10))
+                                .attack(50)
+                                .moveRange(25)
+                                .maxHp(100)
+                                .build())
+                .build();
+        Creature creature6 = new Creature.Builder()
+                .statistic(
+                        CreatureStats.builder()
+                                .name("C3")
+                                .damage(Range.closed(10, 10))
+                                .attack(50)
+                                .moveRange(25)
+                                .maxHp(100)
+                                .build())
+                .build();
+
+        Creature creature7 = new Creature.Builder()
+                .statistic(
+                        CreatureStats.builder()
+                                .name("C3")
+                                .damage(Range.closed(10, 10))
+                                .attack(50)
+                                .moveRange(25)
+                                .maxHp(100)
+                                .build())
+                .build();
+
+        final GameEngine gameEngine =
+                new GameEngine(new Hero(List.of(EXAMPLE_CREATURE_3), SpellsBook.builder().spells(List.of(chainLightning)).mana(NOT_IMPORTANT_MANA).build()),
+                        new Hero(List.of(EXAMPLE_CREATURE_4, creature5, creature6, creature7), SpellsBook.builder().mana(NOT_IMPORTANT_MANA).build()));
+
+
+        Assertions.assertThat(gameEngine.getCreature(new Point(0, 1))
+                .isPresent()).isTrue();
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
+                .isPresent()).isTrue();
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 3))
+                .isPresent()).isTrue();
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 5))
+                .isPresent()).isTrue();
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 7))
+                .isPresent()).isTrue();
+
+
+        //when
+        gameEngine.castSpell(new Point(14, 3), chainLightning);
+
+
+        //then
+        Assertions.assertThat(gameEngine.getCreature(new Point(0, 1)).get().getCurrentHp()).isEqualTo(100);
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1)).get().getCurrentHp()).isEqualTo(67.5);
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 3)).get().getCurrentHp()).isEqualTo(35);
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 5)).get().getCurrentHp()).isEqualTo(83.75);
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 7)).get().getCurrentHp()).isEqualTo(100);
+    }
+
+    @Test
+    void creatureShouldAttackWithMaximumDamageWhenBlessBasicCasted() {
+        //given
+        Spell<? extends SpellableIf> bless = new SpellFactory().create(BLESS, BASIC, EXAMPLE_SPELL_POWER_1);
+
+        Creature creature1 = new Creature.Builder()
+                .statistic(
+                        CreatureStats.builder()
+                                .name("C0")
+                                .damage(Range.closed(2, 10))
+                                .moveRange(25)
+                                .maxHp(100)
+                                .build())
+                .build();
+        Creature creature2 = new Creature.Builder()
+                .statistic(
+                        CreatureStats.builder()
+                                .name("C1")
+                                .damage(Range.closed(2, 10))
+                                .moveRange(25)
+                                .maxHp(100)
+                                .build())
+                .build();
+
+        Hero hero1 = new Hero(List.of(creature1), SpellsBook.builder().spells(List.of(bless)).mana(NOT_IMPORTANT_MANA).build());
+        Hero hero2 = new Hero(List.of(creature2), SpellsBook.builder().mana(NOT_IMPORTANT_MANA).build());
+
+        final GameEngine gameEngine =
+                new GameEngine(hero1, hero2);
+
+
+        gameEngine.move(new Point(8, 1));
+        gameEngine.pass();
+        gameEngine.move(new Point(9, 1));
+        gameEngine.pass();
+
+        Assertions.assertThat(gameEngine.getCreature(new Point(8, 1))).isPresent();
+        Assertions.assertThat(gameEngine.getCreature(new Point(9, 1))).isPresent();
+
+        //when
+        gameEngine.castSpell(new Point(8, 1), bless);
+        gameEngine.attack(new Point(9, 1));
+
+        //then
+        Assertions.assertThat(gameEngine.getCreature(new Point(9, 1)).get().getCurrentHp()).isEqualTo(90);
+    }
+
+    @Test
+    void creatureShouldAttackWithMaximumDamagePlusOneWhenBlessAdvancedCasted() {
+        //given
+        Spell<? extends SpellableIf> bless = new SpellFactory().create(BLESS, ADVANCED, EXAMPLE_SPELL_POWER_1);
+
+        Creature creature1 = new Creature.Builder()
+                .statistic(
+                        CreatureStats.builder()
+                                .name("C0")
+                                .damage(Range.closed(2, 10))
+                                .moveRange(25)
+                                .maxHp(100)
+                                .build())
+                .build();
+        Creature creature2 = new Creature.Builder()
+                .statistic(
+                        CreatureStats.builder()
+                                .name("C1")
+                                .damage(Range.closed(2, 10))
+                                .moveRange(25)
+                                .maxHp(100)
+                                .build())
+                .build();
+
+        Hero hero1 = new Hero(List.of(creature1), SpellsBook.builder().spells(List.of(bless)).mana(NOT_IMPORTANT_MANA).build());
+        Hero hero2 = new Hero(List.of(creature2), SpellsBook.builder().mana(NOT_IMPORTANT_MANA).build());
+
+        final GameEngine gameEngine =
+                new GameEngine(hero1, hero2);
+
+
+        gameEngine.move(new Point(8, 1));
+        gameEngine.pass();
+        gameEngine.move(new Point(9, 1));
+        gameEngine.pass();
+
+        Assertions.assertThat(gameEngine.getCreature(new Point(8, 1))).isPresent();
+        Assertions.assertThat(gameEngine.getCreature(new Point(9, 1))).isPresent();
+
+        //when
+        gameEngine.castSpell(new Point(8, 1), bless);
+        gameEngine.attack(new Point(9, 1));
+
+        //then
+        Assertions.assertThat(gameEngine.getCreature(new Point(9, 1)).get().getCurrentHp()).isEqualTo(89);
+    }
+
+    @Test
+    void creatureShouldAttackWithEightyPercentMinusOneWhenCurseExpertCasted() {
+        //given
+        Spell<? extends SpellableIf> curse = new SpellFactory().create(CURSE, ADVANCED, EXAMPLE_SPELL_POWER_1);
+
+        Creature creature1 = new Creature.Builder()
+                .statistic(
+                        CreatureStats.builder()
+                                .name("C0")
+                                .damage(Range.closed(10, 20))
+                                .moveRange(25)
+                                .maxHp(100)
+                                .build())
+                .build();
+        Creature creature2 = new Creature.Builder()
+                .statistic(
+                        CreatureStats.builder()
+                                .name("C1")
+                                .damage(Range.closed(10, 20))
+                                .moveRange(25)
+                                .maxHp(100)
+                                .build())
+                .build();
+
+        Hero hero1 = new Hero(List.of(creature1), SpellsBook.builder().spells(List.of(curse)).mana(NOT_IMPORTANT_MANA).build());
+        Hero hero2 = new Hero(List.of(creature2), SpellsBook.builder().mana(NOT_IMPORTANT_MANA).build());
+
+        final GameEngine gameEngine =
+                new GameEngine(hero1, hero2);
+
+
+        gameEngine.move(new Point(8, 1));
+        gameEngine.pass();
+        gameEngine.move(new Point(9, 1));
+        gameEngine.pass();
+
+        Assertions.assertThat(gameEngine.getCreature(new Point(8, 1))).isPresent();
+        Assertions.assertThat(gameEngine.getCreature(new Point(9, 1))).isPresent();
+
+        //when
+        gameEngine.castSpell(new Point(8, 1), curse);
+        gameEngine.attack(new Point(9, 1));
+
+        //then
+        Assertions.assertThat(gameEngine.getCreature(new Point(9, 1)).get().getCurrentHp()).isEqualTo(91);
+    }
+
+    @Test
+    void shouldRemoveAllNegativeEffectsAndHealWhenCureCasted() {
+        //given
+        Spell<? extends SpellableIf> cure = new SpellFactory().create(CURE, BASIC, EXAMPLE_SPELL_POWER_1);
+
+        List<Creature> firstHeroCreatures = List.of(EXAMPLE_CREATURE_1);
+        List<Creature> secondHeroCreatures = List.of(EXAMPLE_CREATURE_2);
+
+        final GameEngine gameEngine =
+                new GameEngine(new Hero(firstHeroCreatures, SpellsBook.builder().spells(List.of(cure, SLOW_BASIC, HASTE_BASIC, MAGIC_ARROW_RANG_1)).mana(NOT_IMPORTANT_MANA).build()),
+                        new Hero(secondHeroCreatures, SpellsBook.builder().mana(NOT_IMPORTANT_MANA).build()));
+
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
+                .isPresent()).isTrue();
+
+
+
+        gameEngine.castSpell(new Point(14, 1), MAGIC_ARROW_RANG_1);
+        gameEngine.castSpell(new Point(14, 1), MISFORTUNE_RANG_1);
+        gameEngine.castSpell(new Point(14, 1), HASTE_BASIC);
+
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
+                .get().getRunningSpells()).isEqualTo(List.of(MISFORTUNE_RANG_1, HASTE_BASIC));
+
+        //when
+        gameEngine.pass();
+        gameEngine.castSpell(new Point(14, 1), cure);
+
+
+        //then
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
+                .get().getRunningSpells()).isEqualTo(List.of(HASTE_BASIC));
+        Assertions.assertThat(gameEngine.getCreature(new Point(14, 1))
+                .get().getCurrentHp()).isEqualTo(95);
+    }
 }

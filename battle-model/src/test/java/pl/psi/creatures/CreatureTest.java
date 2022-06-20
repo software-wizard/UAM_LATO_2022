@@ -364,7 +364,7 @@ public class CreatureTest {
 
         vampireLord.attack(defender);
         assertThat(defender.getCurrentHp()).isLessThanOrEqualTo(95);
-        assertThat(vampireLord.getAmount()).isEqualTo(2);
+        assertThat(vampireLord.getAmount()).isEqualTo(1);
         assertThat(vampireLord.getCurrentHp()).isGreaterThanOrEqualTo(5);
     }
 

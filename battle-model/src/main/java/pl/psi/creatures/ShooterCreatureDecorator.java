@@ -1,6 +1,10 @@
 package pl.psi.creatures;
 
 import lombok.Getter;
+import pl.psi.spells.SpellNames;
+import pl.psi.spells.SpellRang;
+
+import static pl.psi.spells.SpellNames.FORGETFULNESS;
 
 @Getter
 public class ShooterCreatureDecorator extends AbstractCreature {
@@ -23,6 +27,7 @@ public class ShooterCreatureDecorator extends AbstractCreature {
 
     @Override
     public void attack(final Creature aDefender) {
+        System.out.println(getCalculator());
         if (isInMelee) {
             decorated.attack(aDefender);
         } else if (canShoot()) {
@@ -32,6 +37,7 @@ public class ShooterCreatureDecorator extends AbstractCreature {
 
     private void attackRange(final Creature aDefender) {
         final int damage = getCalculator().calculateDamage(decorated, aDefender);
+        System.out.println(damage);
         decorated.applyDamage(aDefender, damage);
         shots -= 1;
     }
@@ -44,9 +50,11 @@ public class ShooterCreatureDecorator extends AbstractCreature {
             decorated.setCalculator(meleeDamageCalculator);
         }
         else {
-            isInMelee = false;
-            range = Integer.MAX_VALUE;
-            decorated.setCalculator(rangeDamageCalculator);
+            if(isInMelee) {
+                isInMelee = false;
+                range = Integer.MAX_VALUE;
+                decorated.setCalculator(rangeDamageCalculator);
+            }
         }
     }
 
@@ -80,5 +88,14 @@ public class ShooterCreatureDecorator extends AbstractCreature {
 
     public void resetShots() {
         shots = maxShots;
+    }
+
+    @Override
+    public int getShots(){
+        if(decorated.getCreatureRunningSpellWithName(FORGETFULNESS).isPresent() && !decorated.getCreatureRunningSpellWithName(FORGETFULNESS).get().getRang().equals(SpellRang.BASIC)){
+            return 0;
+        }
+        System.out.println(shots);
+        return shots;
     }
 }

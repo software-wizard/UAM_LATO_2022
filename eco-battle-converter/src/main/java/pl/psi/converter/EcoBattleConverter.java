@@ -76,7 +76,7 @@ public class EcoBattleConverter {
         final List<Spell<? extends SpellableIf>> spells = new ArrayList<>();
         final SpellFactory spellFactory = new SpellFactory();
         aPlayer.getSpellList()
-                .forEach(economySpell -> spells.add(spellFactory.create(SpellNames.valueOf(economySpell.getSpellStats().getName()), economySpell.getSpellRang(), aPlayer.getSpellPower())));
+                .forEach(economySpell -> spells.add(spellFactory.create(economySpell.getSpellStats().getName(), economySpell.getSpellRang(), aPlayer.getSpellPower())));
 
         SpellsBook spellsBook = SpellsBook.builder().spells(spells).mana(aPlayer.getHeroStats().getSpellPoints()).build();
 

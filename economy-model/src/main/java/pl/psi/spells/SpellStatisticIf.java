@@ -1,7 +1,7 @@
 package pl.psi.spells;
 
 public interface SpellStatisticIf {
-    String getName();
+    SpellStats getName();
 
     SpellMagicGuild getMagicGuild();
 

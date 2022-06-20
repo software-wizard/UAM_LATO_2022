@@ -7,7 +7,6 @@ import pl.psi.creatures.Creature;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.function.BiConsumer;
-import java.util.stream.Collectors;
 
 public class Counterstrike extends Spell<Creature> implements PropertyChangeListener {
 
@@ -18,15 +17,15 @@ public class Counterstrike extends Spell<Creature> implements PropertyChangeList
     Creature creature;
     int currentCounterstrikeCounter;
 
-    public Counterstrike(SpellTypes category, SpellNames name, SpellMagicClass spellMagicClass, SpellRang rang, int manaCost, int counterstrikeCounter, int time) {
-        super(category, name, spellMagicClass, rang, manaCost);
+    public Counterstrike(SpellTypes category, SpellNames name, SpellMagicClass spellMagicClass, SpellRang rang, SpellAlignment spellAlignment, int manaCost, int counterstrikeCounter, int time) {
+        super(category, name, spellMagicClass, rang, spellAlignment, manaCost);
         this.counterstrikeCounter = counterstrikeCounter;
         this.time = time;
 
     }
 
     public Counterstrike(Counterstrike counterstrike, Creature creature, BiConsumer<String, PropertyChangeListener> consumer) {
-        super(counterstrike.getCategory(), counterstrike.getName(), counterstrike.getSpellMagicClass(), counterstrike.getRang(), counterstrike.getManaCost());
+        super(counterstrike.getCategory(), counterstrike.getName(), counterstrike.getSpellMagicClass(), counterstrike.getRang(), counterstrike.getSpellAlignment(), counterstrike.getManaCost());
         this.counterstrikeCounter = counterstrike.counterstrikeCounter;
         this.time = counterstrike.time;
         this.roundTimer = new RoundTimer(counterstrike.time, this, creature, null);

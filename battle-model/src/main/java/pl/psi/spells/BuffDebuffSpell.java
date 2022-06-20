@@ -20,15 +20,15 @@ public class BuffDebuffSpell extends Spell<Creature> {
     private RoundTimer roundTimer;
     private final SpellNames counterSpell;
 
-    public BuffDebuffSpell(SpellTypes category, SpellNames name, SpellMagicClass spellMagicClass, SpellRang rang, int manaCost, CreatureStats creatureStats, int time, SpellNames counterSpell) {
-        super(category, name, spellMagicClass, rang, manaCost);
+    public BuffDebuffSpell(SpellTypes category, SpellNames name, SpellMagicClass spellMagicClass, SpellRang rang, SpellAlignment spellAlignment, int manaCost, CreatureStats creatureStats, int time, SpellNames counterSpell) {
+        super(category, name, spellMagicClass, rang, spellAlignment, manaCost);
         this.creatureStats = creatureStats;
         this.time = time;
         this.counterSpell = counterSpell;
     }
 
     private BuffDebuffSpell(BuffDebuffSpell buffDebuffSpell, Creature creature) {
-        super(buffDebuffSpell.getCategory(), buffDebuffSpell.getName(), buffDebuffSpell.getSpellMagicClass(), buffDebuffSpell.getRang(), buffDebuffSpell.getManaCost());
+        super(buffDebuffSpell.getCategory(), buffDebuffSpell.getName(), buffDebuffSpell.getSpellMagicClass(), buffDebuffSpell.getRang(), buffDebuffSpell.getSpellAlignment(), buffDebuffSpell.getManaCost());
         this.creatureStats = buffDebuffSpell.creatureStats;
         this.time = buffDebuffSpell.time;
         this.counterSpell = buffDebuffSpell.counterSpell;
