@@ -3,6 +3,7 @@ package pl.psi;
 import lombok.Getter;
 import pl.psi.creatures.Creature;
 import pl.psi.creatures.FirstAidTent;
+import pl.psi.specialfields.*;
 import pl.psi.spells.AreaDamageSpell;
 import pl.psi.spells.Spell;
 
@@ -19,6 +20,7 @@ import static java.lang.Math.ceil;
  */
 public class GameEngine {
 
+    private final List<Field> fields = new FieldsFactory().createFields(DensityLevel.MEDIUM);
     public static final String CREATURE_MOVED = "CREATURE_MOVED";
     private final TurnQueue turnQueue;
     private final Board board;
@@ -32,13 +34,18 @@ public class GameEngine {
         hero1 = aHero1;
         hero2 = aHero2;
         turnQueue = new TurnQueue(aHero1.getCreatures(), aHero2.getCreatures());
-        board = new Board(aHero1.getCreatures(), aHero2.getCreatures());
+        board = new Board(aHero1.getCreatures(), aHero2.getCreatures(), fields);
     }
 
     public void attack(final Point point) {
         board.getCreature(point)
                 .ifPresent(defender -> turnQueue.getCurrentCreature()
                         .attack(defender));
+    }
+
+    public void handleFieldEffect(final Point point) {
+        board.getField(point)
+                .ifPresent(f -> board.getCreature(point).ifPresent(f::handleEffect));
     }
 
     public void heal(final Point point) {
@@ -58,6 +65,10 @@ public class GameEngine {
 
     public Optional<Creature> getCreature(final Point aPoint) {
         return board.getCreature(aPoint);
+    }
+
+    public Optional<Field> getField(final Point aPoint) {
+        return board.getField(aPoint);
     }
 
     public void pass() {

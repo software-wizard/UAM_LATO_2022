@@ -92,7 +92,7 @@ public class CrackedIceTest {
         ).defense(4).build();
 
         // when
-        crackedIce.buffCreature(creature);
+        crackedIce.handleEffect(creature);
 
         // then
         assertThat(creature.getDefense()).isEqualTo(-1);
@@ -107,7 +107,7 @@ public class CrackedIceTest {
         ).defense(20).alignment(Alignment.EVIL).build();
 
         // when
-        crackedIce.buffCreature(creature);
+        crackedIce.handleEffect(creature);
 
         // then
         assertThat(creature.getDefense()).isEqualTo(15);
@@ -122,7 +122,7 @@ public class CrackedIceTest {
         ).defense(50).alignment(Alignment.GOOD).build();
 
         // when
-        crackedIce.buffCreature(creature);
+        crackedIce.handleEffect(creature);
 
         // then
         assertThat(creature.getDefense()).isEqualTo(45);

@@ -3,6 +3,7 @@ package pl.psi;
 import org.junit.jupiter.api.Test;
 import pl.psi.creatures.Creature;
 import pl.psi.creatures.CreatureStats;
+import pl.psi.specialfields.Field;
 
 import java.util.List;
 
@@ -18,7 +19,8 @@ class BoardTest {
                 .build();
         final List<Creature> c1 = List.of(creature);
         final List<Creature> c2 = List.of();
-        final Board board = new Board(c1, c2);
+        final List<Field> f = List.of();
+        final Board board = new Board(c1, c2, f);
 
         board.move(creature, new Point(3, 3));
 

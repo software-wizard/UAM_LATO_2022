@@ -10,6 +10,8 @@ import pl.psi.GameEngine;
 import pl.psi.Hero;
 import pl.psi.Point;
 
+import java.util.*;
+
 public class MainBattleController {
     private final GameEngine gameEngine;
     @FXML
@@ -45,15 +47,18 @@ public class MainBattleController {
             refreshGui();
         });
 
-        gameEngine.addObserver(GameEngine.CREATURE_MOVED, (e) -> refreshGui());
+        gameEngine.addObserver(GameEngine.CREATURE_MOVED, (e) -> {
+            gameEngine.handleFieldEffect((Point) e.getNewValue());
+            refreshGui();
+        });
     }
 
     private void renderSpecialFields(MapTile mapTile, int x, int y) {
-        if (x == 3 && y == 3) {
+        if (x == 10 && y == 3) {
             Image img = new Image("/images/cracked_ice.png");
             mapTile.setBackground(img);
         }
-        if (x == 6 && y == 6) {
+        if (x == 14 && y == 6) {
             Image img = new Image("/images/clover_field.png");
             mapTile.setBackground(img);
         }
@@ -106,6 +111,9 @@ public class MainBattleController {
                 }
 
                 renderSpecialFields(mapTile, x, y);
+                gameEngine.getField(new Point(x, y))
+                    .ifPresent(f -> mapTile.setBackground(new Image(f.getImagePath())));
+
                 gridMap.add(mapTile, x, y);
             }
         }
