@@ -25,7 +25,7 @@ class AmmoCartTest {
                 .build())
                 .build();
         creature1.setCurrentHp(NOT_IMPORTANT);
-        ShooterCreature shooterCreature = new ShooterCreature(creature1, 10);
+        ShooterCreatureDecorator shooterCreature = new ShooterCreatureDecorator(creature1, 10);
         shooterCreature.setHeroNumber(1);
 
         final Creature defender = new Creature.Builder().statistic(CreatureStats.builder()
@@ -49,7 +49,7 @@ class AmmoCartTest {
         firstAidTent.performAction(creaturesList);
 
         //then
-        assertEquals(shooterCreature.getMaxShots(), shooterCreature.getShots());
+        assertEquals(shooterCreature.getMaxShots(), shooterCreature.getShotsAmount());
     }
 
     @Test
@@ -63,7 +63,7 @@ class AmmoCartTest {
                 .build())
                 .build();
         creature1.setCurrentHp(20);
-        ShooterCreature shooterCreature = new ShooterCreature(creature1, 10);
+        ShooterCreatureDecorator shooterCreature = new ShooterCreatureDecorator(creature1, 10);
         shooterCreature.setHeroNumber(1);
 
         final Creature defender = new Creature.Builder().statistic(CreatureStats.builder()
@@ -87,7 +87,7 @@ class AmmoCartTest {
         firstAidTent.performAction(creaturesList);
 
         //then
-        assertNotEquals(shooterCreature.getMaxShots(), shooterCreature.getShots());
+        assertNotEquals(shooterCreature.getMaxShots(), shooterCreature.getShotsAmount());
     }
 
 }

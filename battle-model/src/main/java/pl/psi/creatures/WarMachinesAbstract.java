@@ -24,7 +24,7 @@ public abstract class WarMachinesAbstract extends Creature {
     public abstract void performAction(List<Creature> creatureList);
 
     @Override
-    double getAttack() {
+    public double getAttack() {
         return stats.getAttack();
     }
 

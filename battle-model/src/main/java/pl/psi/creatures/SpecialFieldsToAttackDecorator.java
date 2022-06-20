@@ -47,18 +47,18 @@ public class SpecialFieldsToAttackDecorator extends Creature {
         return decorated.getCurrentHp();
     }
 
-    @Override
-    protected void setCurrentHp(final double aCurrentHp) {
-        decorated.setCurrentHp(aCurrentHp);
-    }
+//    @Override
+//    protected void setCurrentHp(final double aCurrentHp) {
+//        decorated.setCurrentHp(aCurrentHp);
+//    }
 
     @Override
-    Range<Integer> getDamage() {
+    public Range<Integer> getDamage() {
         return decorated.getDamage();
     }
 
     @Override
-    double getAttack() {
+    public double getAttack() {
         return decorated.getAttack();
     }
 
