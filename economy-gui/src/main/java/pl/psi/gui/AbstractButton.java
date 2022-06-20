@@ -13,9 +13,11 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import pl.psi.ProductType;
 import pl.psi.shop.BuyProductInterface;
-
 import java.util.function.BiConsumer;
 
+/**
+Class represents button to buy one product
+ */
 
 public abstract class AbstractButton <T extends BuyProductInterface> extends Button {
 
@@ -23,7 +25,7 @@ public abstract class AbstractButton <T extends BuyProductInterface> extends But
     protected String PATH;
     protected String DESCRIPTION;
 
-    public AbstractButton(BiConsumer<ProductType,T> ecoController, T t, boolean canBuy) {
+    public AbstractButton(final BiConsumer<ProductType,T> ecoController, T t, boolean canBuy) {
         this.product = t;
 
         addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
@@ -31,31 +33,30 @@ public abstract class AbstractButton <T extends BuyProductInterface> extends But
         });
     }
 
-    private void startDialog(BiConsumer<ProductType,T> ecoController, boolean canBuy) {
+    private void startDialog(final BiConsumer<ProductType,T> ecoController, boolean canBuy) {
 
-        Stage dialogWindow = new Stage();
-        // OK and Close buttons
+        final Stage dialogWindow = new Stage();
         final VBox bottomPane = new VBox();
-        // Pane for cost and info about item
         final FlowPane topPane = new FlowPane(Orientation.HORIZONTAL, 0, 5);
         if (!canBuy) {
             HBox box = new HBox();
             box.getChildren().add(new Label("You cannot buy this product \nyou have bought this type or you don't have enough money"));
             topPane.getChildren().add(box);
         }
-        final Stage dialog = prepareWindow(bottomPane, topPane, dialogWindow);
-        // add buttons - OK and Close
-        prepareConfirmAndCancelButton(bottomPane, ecoController, dialogWindow, canBuy);
-        // info on Top
-        prepareTop(topPane);
-        dialog.showAndWait();
+           prepareWindow(bottomPane, topPane, dialogWindow);
+           prepareConfirmAndCancelButton(bottomPane, ecoController, dialogWindow, canBuy);
+           dialogWindow.showAndWait();
     }
 
 
-    private Stage prepareWindow(final Pane aBottom, final Pane aTop, final Stage dialog) {
+    private void prepareWindow(final Pane aBottom, final FlowPane aTop, final Stage dialog) {
 
         final BorderPane pane = new BorderPane();
         pane.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+        prepareTop(aTop);
+        pane.setTop(aTop);
+        pane.setBottom(aBottom);
+
         final Scene scene = new Scene(pane, 750, 200);
         scene.getStylesheets().add("fxml/main.css");
         dialog.setScene(scene);
@@ -63,19 +64,15 @@ public abstract class AbstractButton <T extends BuyProductInterface> extends But
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initStyle(StageStyle.UNDECORATED);
 
-        pane.setTop(aTop);
-        pane.setBottom(aBottom);
-
-        return dialog;
     }
 
     private void prepareConfirmAndCancelButton(final VBox aBottomPane, BiConsumer<ProductType,T> ecoController, Stage dialog, boolean canBuy) {
         final HBox hBox = new HBox();
+        hBox.setAlignment(Pos.CENTER);
         Button okButton = null;
 
         if (canBuy) {
             okButton = new Button("OK");
-            hBox.setAlignment(Pos.CENTER);
             okButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
                 acceptProduct(ecoController);
                 dialog.close();
@@ -85,20 +82,17 @@ public abstract class AbstractButton <T extends BuyProductInterface> extends But
             HBox.setHgrow(okButton, Priority.ALWAYS);
         }
 
-
         final Button cancelButton = new Button("CLOSE");
         cancelButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
             dialog.close();
         });
         cancelButton.setPrefWidth(200);
         hBox.getChildren().add(cancelButton);
-
         aBottomPane.getChildren().add(hBox);
         HBox.setHgrow(cancelButton, Priority.ALWAYS);
-
     }
 
-    abstract void acceptProduct(BiConsumer<ProductType,T > buy);
+    abstract void acceptProduct(final BiConsumer<ProductType,T > buy);
 
     abstract void prepareTop(final FlowPane aTopPane);
 

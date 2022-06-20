@@ -15,9 +15,6 @@ import pl.psi.spells.EconomySpell;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-// TODO - zamiast Artifact - Slots
-// TODO - Economy Engine decide if we have slots and can Buy
 public class EconomyHero implements ArtifactEffectApplicable {
 
     private static int heroCounter = 0;
@@ -62,30 +59,22 @@ public class EconomyHero implements ArtifactEffectApplicable {
         this.gold = gold;
         this.heroNumber = heroNumber;
         this.warMachines = warMachines;
-        // TODO copy of backpack and equipment
         equipment = new Equipment();
         backpack = new Backpack();
         heroStats = aClass;
     }
 
-    public List<EconomyCreature> getCreatures() {
-        List<EconomyCreature> economyCreatureList = new ArrayList<>();
-        for (EconomyCreature c : this.creatureList) {
-            economyCreatureList.add(new EconomyCreature(c.getStats(), c.getAmount(), c.getGoldCost()));
-        }
-        return economyCreatureList;
+    public List<EconomyCreature> getCreatureList() {
+        return List.copyOf(creatureList);
     }
 
-    // Hero cannot buy more than 7 creatures
+
     public void addCreature(final EconomyCreature aCreature) {
         if(aCreature.getStats() instanceof WarMachinesStatistic){
                 warMachines.add(aCreature);
         }
-
         else {
             int w = 0;
-            // check if we have this creature in List
-            // and need only to increase amount
             for (EconomyCreature c : this.creatureList) {
                 if (c.getName().equals(aCreature.getName())) {
                     c.increaseAmount(aCreature.getAmount());
@@ -136,15 +125,15 @@ public class EconomyHero implements ArtifactEffectApplicable {
         return true;
     }
 
-    public List<EconomyArtifact> getArtifacts() {
+    public List<EconomyArtifact> getArtifactList() {
         return List.copyOf(artifactList);
     }
 
-    public List<EconomySkill> getSkills() {
+    public List<EconomySkill> getSkillsList() {
         return List.copyOf(skillsList);
     }
 
-    public List<EconomySpell> getSpells() {
+    public List<EconomySpell> getSpellsList() {
         return List.copyOf(spellsList);
     }
 
@@ -214,12 +203,10 @@ public class EconomyHero implements ArtifactEffectApplicable {
     }
 
     public boolean canAddSpell(EconomySpell economySpell){
-
         for(EconomySpell spell:spellsList){
             if(spell.getSpellStats().equals(economySpell.getSpellStats()))
                 return false;
         }
-
         return true;
     }
 
@@ -233,7 +220,6 @@ public class EconomyHero implements ArtifactEffectApplicable {
                 return false;
             }
         }
-
         return true;
     }
 
@@ -254,5 +240,25 @@ public class EconomyHero implements ArtifactEffectApplicable {
     @Override
     public void applyArtifactEffect(final ArtifactEffect<? extends ArtifactEffectApplicable> aArtifactEffect) {
         heroStats = artifactApplier.calculateHeroUpgradedStatisticsAfterApplyingArtifact(aArtifactEffect, heroStats);
+    }
+
+    public static int getHeroCounter() {
+        return heroCounter;
+    }
+
+    public Equipment getEquipment() {
+        return equipment;
+    }
+
+    public Backpack getBackpack() {
+        return backpack;
+    }
+
+    public HeroStatisticsIf getHeroStats() {
+        return heroStats;
+    }
+
+    public Money getGold() {
+        return gold;
     }
 }

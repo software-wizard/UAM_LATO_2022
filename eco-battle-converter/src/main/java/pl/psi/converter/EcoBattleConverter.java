@@ -10,7 +10,6 @@ import pl.psi.SpellsBook;
 import pl.psi.artifacts.ArtifactEffectApplicable;
 import pl.psi.artifacts.ArtifactFactory;
 import pl.psi.artifacts.EconomyArtifact;
-import pl.psi.artifacts.model.Artifact;
 import pl.psi.artifacts.model.ArtifactEffect;
 import pl.psi.artifacts.model.ArtifactIf;
 import pl.psi.artifacts.model.ArtifactTarget;
@@ -57,7 +56,7 @@ public class EcoBattleConverter {
 
         final List<Creature> creatures = new ArrayList<>();
         final NecropolisFactory factory = new NecropolisFactory();
-        aPlayer.getCreatures()
+        aPlayer.getCreatureList()
                 .forEach(ecoCreature -> creatures.add(factory.create(ecoCreature.isUpgraded(),
                         ecoCreature.getTier(), ecoCreature.getAmount())));
 

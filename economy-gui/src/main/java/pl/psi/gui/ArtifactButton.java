@@ -6,20 +6,19 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import pl.psi.ProductType;
 import pl.psi.artifacts.EconomyArtifact;
-
 import java.util.function.BiConsumer;
 
 public class ArtifactButton extends AbstractButton<EconomyArtifact>{
 
 
-    public ArtifactButton(BiConsumer<ProductType, EconomyArtifact> ecoController, EconomyArtifact artifact, boolean canBuy) {
+    public ArtifactButton(final BiConsumer<ProductType, EconomyArtifact> ecoController,final EconomyArtifact artifact, boolean canBuy) {
         super(ecoController, artifact, canBuy);
         PATH = "/artifacts/" + artifact.getNameHolder().toString() + ".png";
         DESCRIPTION = artifact.getDisplayName() + " | " + artifact.getGoldCost().getPrice();
     }
 
     @Override
-    void acceptProduct(BiConsumer<ProductType, EconomyArtifact> buy) {
+    void acceptProduct(final BiConsumer<ProductType, EconomyArtifact> buy) {
         buy.accept(ProductType.ARTIFACT,product);
     }
 
@@ -29,7 +28,6 @@ public class ArtifactButton extends AbstractButton<EconomyArtifact>{
         aTopPane.getChildren().add(new Label("             "));
         String characteristics = "Placement : " + product.getPlacement();
         aTopPane.getChildren().add(new Label(characteristics));
-
         Text text = new Text("\n               " + product.getDescription());
         text.setFont(Font.font ("Arial", 17));
         aTopPane.getChildren().add(text);

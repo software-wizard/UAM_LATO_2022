@@ -14,7 +14,6 @@ import lombok.SneakyThrows;
 import pl.psi.EconomyEngine;
 import pl.psi.ProductType;
 import pl.psi.artifacts.*;
-import pl.psi.artifacts.holder.ArtifactNamesHolder;
 import pl.psi.artifacts.holder.CreatureArtifactNamesHolder;
 import pl.psi.artifacts.holder.SkillArtifactNamesHolder;
 import pl.psi.artifacts.holder.SpellArtifactNamesHolder;
@@ -27,8 +26,12 @@ import pl.psi.shop.BuyProductInterface;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.*;
-
 import static javafx.scene.layout.BackgroundRepeat.NO_REPEAT;
+
+
+/**
+ * Class Represents refresh of shop
+ */
 
 public class EcoController implements PropertyChangeListener {
 
@@ -95,14 +98,12 @@ public class EcoController implements PropertyChangeListener {
     private Button MISC;
     @FXML
     private Button FINGERS;
-
     @FXML
     private Button BALLISTA;
     @FXML
     private Button FIRST_AID_TENT;
     @FXML
     private Button AMMO_CART;
-
 
     private ProductType shopChoose;
     private HashMap<ArtifactPlacement, Button> artifactPlacementButtonHashMap;
@@ -111,11 +112,9 @@ public class EcoController implements PropertyChangeListener {
     private List<Button> artifactButtons;
     private List<Button> warMachinesButton;
 
-
     public EcoController(final EconomyHero aHero1, final EconomyHero aHero2) {
         economyEngine = new EconomyEngine(aHero1, aHero2);
         shopChoose = ProductType.CREATURE;
-
     }
 
     @FXML
@@ -136,7 +135,6 @@ public class EcoController implements PropertyChangeListener {
         warMachinesStatisticButtonHashMap.put(WarMachinesStatistic.AMMO_CART,AMMO_CART);
         warMachinesStatisticButtonHashMap.put(WarMachinesStatistic.BALLISTA,BALLISTA);
         warMachinesStatisticButtonHashMap.put(WarMachinesStatistic.FIRST_AID_TENT,FIRST_AID_TENT);
-
 
         creatureButtons = List.of(creaturete1, creaturete2, creaturete3, creaturete4, creaturete5, creaturete6, creaturete7);
         artifactButtons = List.of(HEAD, RIGHT_HAND, LEFT_HAND, FEET, NECK, TORSO, SHOULDERS,FINGERS,MISC);
@@ -168,12 +166,7 @@ public class EcoController implements PropertyChangeListener {
         economyEngine.addObserver(EconomyEngine.HERO_BOUGHT_SKILL,this);
         economyEngine.addObserver(EconomyEngine.HERO_BOUGHT_SPELL,this);
         economyEngine.addObserver(EconomyEngine.NEXT_ROUND, this);
-        economyEngine.addObserver(EconomyEngine.END_SHOPPING, this);
-
-        playerLabel.setText(economyEngine.getActiveHero().toString());
-        currentGoldLabel.setText(String.valueOf(economyEngine.getActiveHero().getGold().getPrice()));
-        roundNumberLabel.setText(String.valueOf(economyEngine.getRoundNumber()));
-        fraction.setText("Fraction : " + economyEngine.getActiveHero().getFraction().name());
+        //economyEngine.addObserver(EconomyEngine.END_SHOPPING, this);
 
         readyButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
             if (economyEngine.getRoundNumber() == 1) {
@@ -214,7 +207,7 @@ public class EcoController implements PropertyChangeListener {
         }
     }
 
-    void refreshShopDependsOnWhatHasChose(){
+    void refreshShopDependsOnWhatPlayerHasChose(){
         if (shopChoose.equals(ProductType.ARTIFACT)) {
             fillShopWithArtifacts();
         } else if (shopChoose.equals(ProductType.CREATURE)) {
@@ -234,23 +227,21 @@ public class EcoController implements PropertyChangeListener {
         currentGoldLabel.setText(String.valueOf(economyEngine.getActiveHero().getGold().getPrice()));
         roundNumberLabel.setText(String.valueOf(economyEngine.getRoundNumber()));
         fraction.setText("Fraction : " + economyEngine.getActiveHero().getFraction().name());
-        fillShopWithCreatures();
-
+        refreshShopDependsOnWhatPlayerHasChose();
     }
 
     void refreshGuiHeroBoughtCreature() {
         currentGoldLabel.setText(String.valueOf(economyEngine.getActiveHero().getGold().getPrice()));
         shopsBox.getChildren().clear();
-        refreshShopDependsOnWhatHasChose();
+        refreshShopDependsOnWhatPlayerHasChose();
 
         // add WarMachines
         List<EconomyCreature> warMachines = economyEngine.getActiveHero().getWarMachines();
 
-        for (Map.Entry<WarMachinesStatistic, Button> b : warMachinesStatisticButtonHashMap.entrySet()) {
-            WarMachinesStatistic placement = b.getKey();
             for (EconomyCreature a : warMachines) {
-                if (a.getStats().equals(placement)) {
-                    Button button = b.getValue();
+                CreatureStatisticIf placement = a.getStats();
+                if(warMachinesStatisticButtonHashMap.containsKey(placement)){
+                    Button button = warMachinesStatisticButtonHashMap.get(placement);
                     Image image = new Image("/machines/" + a.getStats().toString() + ".png");
                     ImageView imageView = new ImageView(image);
                     imageView.setFitHeight(39);
@@ -259,11 +250,8 @@ public class EcoController implements PropertyChangeListener {
                     button.setContentDisplay(ContentDisplay.CENTER);
                 }
             }
-        }
 
-        //
-
-        List<EconomyCreature> creatureList = economyEngine.getActiveHero().getCreatures();
+        List<EconomyCreature> creatureList = economyEngine.getActiveHero().getCreatureList();
         int numberOfBoughtCreatures = creatureList.size();
         for (int i = 0; i < numberOfBoughtCreatures; i++) {
 
@@ -289,9 +277,9 @@ public class EcoController implements PropertyChangeListener {
         skillsScrollPaneHBox.getChildren().clear();
         currentGoldLabel.setText(String.valueOf(economyEngine.getActiveHero().getGold().getPrice()));
         shopsBox.getChildren().clear();
-        refreshShopDependsOnWhatHasChose();
+        refreshShopDependsOnWhatPlayerHasChose();
 
-        List<EconomySkill> economySkills = economyEngine.getActiveHero().getSkills();
+        List<EconomySkill> economySkills = economyEngine.getActiveHero().getSkillsList();
 
         final HBox skills = new HBox();
         for (int i=0;i<economySkills.size();i++) {
@@ -314,9 +302,9 @@ public class EcoController implements PropertyChangeListener {
         spellsScrollPaneHBox.getChildren().clear();
         currentGoldLabel.setText(String.valueOf(economyEngine.getActiveHero().getGold().getPrice()));
         shopsBox.getChildren().clear();
-        refreshShopDependsOnWhatHasChose();
+        refreshShopDependsOnWhatPlayerHasChose();
 
-        List<EconomySpell> economySpells = economyEngine.getActiveHero().getSpells();
+        List<EconomySpell> economySpells = economyEngine.getActiveHero().getSpellsList();
         final HBox spells = new HBox();
         for (int i=0;i<economySpells.size();i++) {
             Button button = new Button();
@@ -338,23 +326,21 @@ public class EcoController implements PropertyChangeListener {
     void refreshGuiHeroBoughtArtefact() {
         currentGoldLabel.setText(String.valueOf(economyEngine.getActiveHero().getGold().getPrice()));
         shopsBox.getChildren().clear();
-        refreshShopDependsOnWhatHasChose();
+        refreshShopDependsOnWhatPlayerHasChose();
 
         //refresh boughtArtifacts
-        List<EconomyArtifact> artifacts = economyEngine.getActiveHero().getArtifacts();
+        List<EconomyArtifact> artifacts = economyEngine.getActiveHero().getArtifactList();
 
-        for (Map.Entry<ArtifactPlacement, Button> b : artifactPlacementButtonHashMap.entrySet()) {
-            ArtifactPlacement placement = b.getKey();
-            for (EconomyArtifact a : artifacts) {
-                if (a.getPlacement().equals(placement)) {
-                    Button button = b.getValue();
-                    Image image = new Image("/artifacts/" + a.getNameHolder().toString() + ".png");
-                    ImageView imageView = new ImageView(image);
-                    imageView.setFitHeight(39);
-                    imageView.setFitWidth(39);
-                    button.setGraphic(imageView);
-                    button.setContentDisplay(ContentDisplay.CENTER);
-                }
+        for (EconomyArtifact a : artifacts) {
+            ArtifactPlacement placement = a.getPlacement();
+            if(artifactPlacementButtonHashMap.containsKey(placement)){
+                Button button = artifactPlacementButtonHashMap.get(placement);
+                Image image = new Image("/artifacts/" + a.getNameHolder().toString() + ".png");
+                ImageView imageView = new ImageView(image);
+                imageView.setFitHeight(39);
+                imageView.setFitWidth(39);
+                button.setGraphic(imageView);
+                button.setContentDisplay(ContentDisplay.CENTER);
             }
         }
     }
@@ -368,7 +354,7 @@ public class EcoController implements PropertyChangeListener {
         roundNumberLabel.setText(String.valueOf(economyEngine.getRoundNumber()));
         fraction.setText("Fraction : " + hero.getFraction().name());
 
-        // refresh buttons of creatures for the hero2 - without it  hero2 can see what hero1 bought
+        // refresh buttons of creatures for the hero2 - without it  hero2 can see what hero1 has bought
         Image image = new Image("CLEAR.png");
         ImageView imageView = new ImageView(image);
 
@@ -395,7 +381,7 @@ public class EcoController implements PropertyChangeListener {
         shopsBox.getChildren().clear();
         skillsScrollPaneHBox.getChildren().clear();
         spellsScrollPaneHBox.getChildren().clear();
-        refreshShopDependsOnWhatHasChose();
+        refreshShopDependsOnWhatPlayerHasChose();
     }
 
     @FXML
@@ -410,7 +396,6 @@ public class EcoController implements PropertyChangeListener {
         shopsBox.getChildren().clear();
         fillShopWithArtifacts();
         shopChoose = ProductType.ARTIFACT;
-
     }
 
     @FXML
@@ -435,7 +420,6 @@ public class EcoController implements PropertyChangeListener {
             fillShopWithCreaturesOfFraction(EconomyHero.Fraction.CASTLE,new EconomyCastleFactory());
         else if(economyEngine.getActiveHero().getFraction().equals(EconomyHero.Fraction.STRONGHOLD))
             fillShopWithCreaturesOfFraction(EconomyHero.Fraction.STRONGHOLD,new EconomyStrongholdFactory());
-
     }
 
     private void fillShopWithCreaturesOfFraction(EconomyHero.Fraction fraction, FactoryInterface factory){
@@ -458,7 +442,7 @@ public class EcoController implements PropertyChangeListener {
             EconomyCreature machine = factory.create(tiers[i]);
             if(economyEngine.getActiveHero().canAddMachine(machine)) {
                 boolean canBuy = economyEngine.getActiveHero().getGold().haveEnoghMoney(machine.getGoldCost());
-                WarMachines button = new WarMachines(this::buy, machine,canBuy);
+                WarMachinesButton button = new WarMachinesButton(this::buy, machine,canBuy);
                 setImageToProducts(button,creatureShop,canBuy);
             }
         }
@@ -471,7 +455,7 @@ public class EcoController implements PropertyChangeListener {
             int maxCreaturesHeroCanBuy = economyEngine.getActiveHero().getGold().getPrice() / costOfCreature;
             boolean canBuyMore = economyEngine.getActiveHero().canAddCreature(creature);
             boolean canBuy = economyEngine.getActiveHero().getGold().haveEnoghMoney(creature.getGoldCost());
-            CreatureButton button = new CreatureButton(this, creature, maxCreaturesHeroCanBuy, canBuy, canBuyMore);
+            CreatureButton button = new CreatureButton(this::buy, creature, maxCreaturesHeroCanBuy, canBuy, canBuyMore);
             String up = upgrated ? "1" : "0";
             String name = i + "" + up ;
             Image image = new Image("/creatures/" + fraction.name() + "/" + name + ".png");
@@ -487,11 +471,6 @@ public class EcoController implements PropertyChangeListener {
             creatureShop.getChildren().add(button);
         }
     }
-    // TODO - one method , Factory - interface and factory has String with the path of images i getter na to  !!!!
-    // TODO CreateCreaterPreFactory
-    // TODO interface dla fabryki EcoCreaterIf ...
-
-
 
     private void fillShopWithArtifacts() {
         final VBox artifactShop = new VBox();
@@ -499,7 +478,6 @@ public class EcoController implements PropertyChangeListener {
         label.getStyleClass().add("labelShop");
         artifactShop.getChildren().add(label);
         final EconomyArtifactFactory economyArtifactFactory = new EconomyArtifactFactory();
-
 
         for (CreatureArtifactNamesHolder name : CreatureArtifactNamesHolder.values()) {
             EconomyArtifact artifact = economyArtifactFactory.create(name);
@@ -527,7 +505,6 @@ public class EcoController implements PropertyChangeListener {
                 setImageToProducts(button,artifactShop,canBuy);
             }
         }
-
         shopsBox.getChildren().add(artifactShop);
     }
 
@@ -563,7 +540,6 @@ public class EcoController implements PropertyChangeListener {
         spellShop.getChildren().add(label);
 
         List<SpellStats> spellStats = new ArrayList<>(Arrays.asList(SpellStats.values()));
-
         final EconomySpellFactory factory = new EconomySpellFactory();
         for(int i = 0; i<spellStats.size(); i++){
                 EconomySpell spell = factory.create(spellStats.get(i),SpellRang.BASIC);

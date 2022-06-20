@@ -4,19 +4,18 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import pl.psi.ProductType;
 import pl.psi.creatures.EconomyCreature;
-
 import java.util.function.BiConsumer;
 
-public class WarMachines extends AbstractButton<EconomyCreature> {
+public class WarMachinesButton extends AbstractButton<EconomyCreature> {
 
-    public WarMachines(BiConsumer<ProductType, EconomyCreature> ecoController, EconomyCreature economyCreature, boolean canBuy) {
+    public WarMachinesButton(final BiConsumer<ProductType, EconomyCreature> ecoController,final EconomyCreature economyCreature, boolean canBuy) {
         super(ecoController, economyCreature, canBuy);
         PATH = "/machines/" + economyCreature.getStats().toString() + ".png";
         DESCRIPTION = economyCreature.getStats().getName() + " | " + economyCreature.getGoldCost().getPrice();
     }
 
     @Override
-    void acceptProduct(BiConsumer<ProductType, EconomyCreature> buy) {
+    void acceptProduct(final BiConsumer<ProductType, EconomyCreature> buy) {
         buy.accept(ProductType.CREATURE,product);
     }
 
