@@ -10,6 +10,8 @@ import pl.psi.creatures.Creature;
 import pl.psi.gui.MainBattleController;
 import pl.psi.gui.NecropolisFactory;
 import pl.psi.hero.EconomyHero;
+import pl.psi.skills.EconomySkill;
+import pl.psi.spells.EconomySpell;
 import pl.psi.spells.Spell;
 import pl.psi.spells.SpellFactory;
 import pl.psi.spells.SpellNames;
@@ -48,6 +50,8 @@ public class EcoBattleConverter {
         final List<Artifact> skillArtifacts = new ArrayList<>();
         final List<Artifact> spellArtifacts = new ArrayList<>();
 
+        final List<EconomySkill> playerSkills = aPlayer.getSkills();
+
         artifacts.forEach(artifact -> {
             switch (artifact.getTarget()) {
                 case CREATURES:
@@ -68,6 +72,7 @@ public class EcoBattleConverter {
                 .forEach(ecoCreature -> creatures.add(factory.create(ecoCreature.isUpgraded(),
                         ecoCreature.getTier(), ecoCreature.getAmount())));
 
+        convertSkills(playerSkills, creatures, aPlayer, aPlayer.getSpellList());
         final List<Spell<? extends SpellableIf>> spells = new ArrayList<>();
         final SpellFactory spellFactory = new SpellFactory();
         aPlayer.getSpellList()
@@ -76,6 +81,15 @@ public class EcoBattleConverter {
         SpellsBook spellsBook = SpellsBook.builder().spells(spells).mana(aPlayer.getHeroStats().getSpellPoints()).build();
 
         return new Hero(creatures, spellsBook);
+    }
+
+    private static void convertSkills( List<EconomySkill> aSkills, List<Creature> aCreatures,
+                                       EconomyHero aHero, List<EconomySpell> aSpells ) {
+        aSkills.forEach(aSkill -> {
+            aSkill.apply(aCreatures);
+            aSkill.apply(aHero);
+            aSkill.applyForSpells(aSpells);
+        });
     }
 
 }

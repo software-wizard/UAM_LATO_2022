@@ -14,4 +14,8 @@ public interface HeroStatisticsIf {
     int getMorale();
 
     int getLuck();
+
+    int getSpellPoints();
+
+    HeroStatisticsIf updateStats(HeroStatisticsIf newStats);
 }

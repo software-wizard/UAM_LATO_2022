@@ -4,7 +4,7 @@ import lombok.Getter;
 import pl.psi.artifacts.Artifact;
 import pl.psi.artifacts.ArtifactPlacement;
 import pl.psi.creatures.EconomyCreature;
-import pl.psi.skills.EconomySkills;
+import pl.psi.skills.EconomySkill;
 import pl.psi.spells.EconomySpell;
 
 import java.util.ArrayList;
@@ -17,11 +17,11 @@ public class EconomyHero {
     private final Fraction fraction;
     private final List<EconomyCreature> creatureList;
     private final List<Artifact> artifactList;
-    private final List<EconomySkills> skillsList;
+    private final List<EconomySkill> skillsList;
     private final List<EconomySpell> spellsList;
     private final Equipment equipment;
     private final Backpack backpack;
-    private final HeroStatistics heroStats;
+    private HeroStatisticsIf heroStats;
     private final int heroNumber;
     // start amount of gold
     private int gold = 10000;
@@ -43,7 +43,7 @@ public class EconomyHero {
         heroStats = aClass;
     }
 
-    public EconomyHero(Fraction fraction, List<EconomyCreature> creatureList, List<Artifact> artifactList, List<EconomySkills> skillsList, List<EconomySpell> spellsList, int gold, int heroNumber) {
+    public EconomyHero(Fraction fraction, List<EconomyCreature> creatureList, List<Artifact> artifactList, List<EconomySkill> skillsList, List<EconomySpell> spellsList, int gold, int heroNumber) {
         this.fraction = fraction;
         this.creatureList = creatureList;
         this.artifactList = artifactList;
@@ -102,6 +102,10 @@ public class EconomyHero {
         return true;
     }
 
+    public void updateHeroStats( HeroStats aStats ) {
+        this.heroStats.updateStats(aStats);
+    }
+
     public boolean canAddArtifact(ArtifactPlacement placement) {
         for (Artifact a : this.artifactList) {
             if (a.getPlacement().equals(placement))
@@ -114,7 +118,7 @@ public class EconomyHero {
         return List.copyOf(artifactList);
     }
 
-    public List<EconomySkills> getSkills() {
+    public List<EconomySkill> getSkills() {
         return List.copyOf(skillsList);
     }
 
