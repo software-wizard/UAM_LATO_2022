@@ -27,11 +27,6 @@ public enum WarMachinesStatistic implements CreatureStatisticIf {
     private final int size;
 
     @Override
-    public CreatureStatistic.CreatureGroup getGroup() {
-        return null;
-    }
-
-    @Override
     public boolean isGoodAligned() {
         return CreatureStatisticIf.super.isGoodAligned();
     }
