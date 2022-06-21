@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import pl.psi.Hero;
 import pl.psi.SpellsBook;
+import pl.psi.artifacts.ArtifactApplier;
 import pl.psi.artifacts.ArtifactEffectApplicable;
 import pl.psi.artifacts.ArtifactFactory;
 import pl.psi.artifacts.EconomyArtifact;
@@ -18,10 +19,7 @@ import pl.psi.creatures.EconomyCreature;
 import pl.psi.gui.MainBattleController;
 import pl.psi.gui.NecropolisFactory;
 import pl.psi.hero.EconomyHero;
-import pl.psi.spells.Spell;
-import pl.psi.spells.SpellFactory;
-import pl.psi.spells.SpellNames;
-import pl.psi.spells.SpellableIf;
+import pl.psi.spells.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -61,7 +59,11 @@ public class EcoBattleConverter {
                         ecoCreature.getTier(), ecoCreature.getAmount())));
 
         final List<Spell<? extends SpellableIf>> spells = new ArrayList<>();
-        final SpellFactory spellFactory = new SpellFactory();
+
+        final SpellFactorsModifiers spellFactorsModifiers = applyArtifactsToSpells(artifacts);
+
+        final SpellFactory spellFactory = new SpellFactory(spellFactorsModifiers);
+
         aPlayer.getSpellList()
                 .forEach(economySpell -> spells.add(spellFactory.create(SpellNames.valueOf(economySpell.getSpellStats().getName()), economySpell.getSpellRang(), aPlayer.getSpellPower())));
 
@@ -96,13 +98,33 @@ public class EcoBattleConverter {
         }
     }
 
-    private static void applyArtifactsToHero(EconomyHero aPlayer, Multimap<ArtifactTarget, ArtifactIf> aArtifacts) {
+    private static void applyArtifactsToHero(EconomyHero aPlayer, final Multimap<ArtifactTarget, ArtifactIf> aArtifacts) {
         List< ArtifactEffect< ArtifactEffectApplicable > > artifactEffects = aArtifacts.get( ArtifactTarget.SKILL ).stream()
                 .flatMap( art -> art.getEffects().stream() )
                 .collect( Collectors.toList() );
 
         artifactEffects.forEach( aPlayer::applyArtifactEffect );
 
+    }
+
+    private static SpellFactorsModifiers applyArtifactsToSpells(final Multimap<ArtifactTarget, ArtifactIf> aArtifacts) {
+        List< ArtifactEffect< ArtifactEffectApplicable> > artifactEffects = aArtifacts.get( ArtifactTarget.SPELLS ).stream()
+                .flatMap( art -> art.getEffects().stream() )
+                .collect( Collectors.toList() );
+        ArtifactApplier artifactApplier = new ArtifactApplier();
+
+        SpellFactorsModifiers spellFactorsModifiers = SpellFactorsModifiers.builder()
+                .airDamageModifier(1)
+                .earthDamageModifier(1)
+                .fireDamageModifier(1)
+                .waterDamageModifier(1)
+                .addedDuration(0).build();
+
+        for(final ArtifactEffect< ArtifactEffectApplicable> artifactEffect : artifactEffects){
+            spellFactorsModifiers = artifactApplier.calculateSpellFactorsModifiers(artifactEffect, spellFactorsModifiers);
+        }
+
+        return spellFactorsModifiers;
     }
 
 }

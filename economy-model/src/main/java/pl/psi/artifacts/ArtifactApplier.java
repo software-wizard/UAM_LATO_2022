@@ -6,6 +6,7 @@ import pl.psi.creatures.CreatureStatisticIf;
 import pl.psi.creatures.CreatureStats;
 import pl.psi.hero.HeroStatisticsIf;
 import pl.psi.hero.HeroStats;
+import pl.psi.spells.SpellFactorsModifiers;
 
 /**
  * Service responsible for taking care of calculating upgraded values after applying artifact.
@@ -92,5 +93,42 @@ public class ArtifactApplier {
 
     }
 
+    public SpellFactorsModifiers calculateSpellFactorsModifiers(
+            final ArtifactEffect<? extends ArtifactEffectApplicable> aArtifactEffect,
+            final SpellFactorsModifiers aBaseStats) {
+
+        if (!(aArtifactEffect.getApplierTarget().getArtifactTarget() == ArtifactTarget.SPELLS)) {
+            throw new IllegalArgumentException("Artifact Effect is not meant to be applied to spells.");
+        }
+
+        final SpellArtifactApplicableProperty applierTarget = (SpellArtifactApplicableProperty) aArtifactEffect.getApplierTarget();
+
+        final SpellFactorsModifiers.SpellFactorsModifiersBuilder spellFactorsModifiersBuilder = SpellFactorsModifiers.builder();
+
+        switch (applierTarget) {
+            case AIR_DAMAGE:
+                final double upgradedAirDamage = aArtifactEffect.calculateStatisticValueAfterApplying(
+                        new ArtifactEffectApplyingProperties(aBaseStats.getAirDamageModifier(), aBaseStats.getAirDamageModifier()));
+                return spellFactorsModifiersBuilder.airDamageModifier(upgradedAirDamage).build();
+            case FIRE_DAMAGE:
+                final double upgradedFireDamage = aArtifactEffect.calculateStatisticValueAfterApplying(
+                        new ArtifactEffectApplyingProperties(aBaseStats.getFireDamageModifier(), aBaseStats.getFireDamageModifier()));
+                return spellFactorsModifiersBuilder.fireDamageModifier(upgradedFireDamage).build();
+            case EARTH_DAMAGE:
+                final double upgradedEarthDamage = aArtifactEffect.calculateStatisticValueAfterApplying(
+                        new ArtifactEffectApplyingProperties(aBaseStats.getEarthDamageModifier(), aBaseStats.getEarthDamageModifier()));
+                return spellFactorsModifiersBuilder.earthDamageModifier(upgradedEarthDamage).build();
+            case WATER_DAMAGE:
+                final double upgradedWaterDamage = aArtifactEffect.calculateStatisticValueAfterApplying(
+                        new ArtifactEffectApplyingProperties(aBaseStats.getWaterDamageModifier(), aBaseStats.getWaterDamageModifier()));
+                return spellFactorsModifiersBuilder.waterDamageModifier(upgradedWaterDamage).build();
+            case DURATION:
+                final int upgradedDuration = aArtifactEffect.calculateStatisticValueAfterApplying(
+                        new ArtifactEffectApplyingProperties(aBaseStats.getAddedDuration(), aBaseStats.getAddedDuration()));
+                return spellFactorsModifiersBuilder.addedDuration(upgradedDuration).build();
+            default:
+                throw new UnsupportedOperationException("Unrecognised applying target type.");
+        }
+    }
     // TODO: New method for calculating spells.
 }

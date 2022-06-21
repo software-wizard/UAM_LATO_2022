@@ -46,6 +46,8 @@ public class ArtifactEffect<T extends ArtifactEffectApplicable> {
         return result.setScale(0, RoundingMode.FLOOR).intValueExact();
     }
 
+
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) {
