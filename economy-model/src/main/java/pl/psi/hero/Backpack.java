@@ -6,13 +6,13 @@ import java.util.ArrayList;
 
 @Getter
 public class Backpack {
-    ArrayList<Artifact> items;
+    ArrayList<Artifact> artifacts;
 
     public Backpack() {
-        items = new ArrayList<>();
+        artifacts = new ArrayList<>();
     }
 
-    public void addItem(Artifact aItem){
-        items.add(aItem);
+    public void addArtifact(Artifact aArtifact){
+        artifacts.add(aArtifact);
     }
 }

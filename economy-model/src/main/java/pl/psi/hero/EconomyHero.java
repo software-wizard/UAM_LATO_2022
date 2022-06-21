@@ -24,7 +24,7 @@ public class EconomyHero
         gold = aGold;
         creatureList = new ArrayList<>();
         equipment = new Equipment();
-        backpack = new Backpack();
+        backpack = equipment.getBackpack();
         heroClass = aClass;
     }
 
@@ -53,32 +53,11 @@ public class EconomyHero
         gold -= aAmount;
     }
 
-    public void addItem(final Artifact aItem){
-        backpack.addItem(aItem);
+    public void equipArtifact(final Artifact aArtifact){
+        equipment.equipArtifact(aArtifact);
     }
 
-    public void equipHead(Artifact aItem){
-        equipment.setHead(aItem);
-    }
-
-    public void equipNeck(Artifact aItem){
-        equipment.setNeck(aItem);
-    }
-    public void equipTorso(Artifact aItem){
-        equipment.setTorso(aItem);
-    }
-    public void equipShoulders(Artifact aItem){
-        equipment.setShoulders(aItem);
-    }
-    public void equipRightHand(Artifact aItem){
-        equipment.setRightHand(aItem);
-    }
-    public void equipLeftHand(Artifact aItem){
-        equipment.setLeftHand(aItem);
-    }
-    public void equipFeet(Artifact aItem){
-        equipment.setFeet(aItem);
-    }
+    public void addArtifactToBackpack(final Artifact aArtifact){ backpack.addArtifact(aArtifact);}
 
     public enum Fraction
     {

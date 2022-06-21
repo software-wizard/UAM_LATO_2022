@@ -1,8 +1,5 @@
 package pl.psi.hero;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,12 +8,15 @@ import pl.psi.creatures.EconomyNecropolisFactory;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 class EconomyHeroTest
 {
 
     private EconomyHero hero;
     private Artifact item1;
     private Artifact item2;
+    private Artifact item3;
 
     @BeforeEach
     void init()
@@ -24,6 +24,7 @@ class EconomyHeroTest
         hero = new EconomyHero( EconomyHero.Fraction.NECROPOLIS, 3000, HeroStatistics.NECROMANCER);
         item1 = new Artifact("item1", "adadadadad", new BigDecimal("4"), ArtifactPlacement.FEET);
         item2 = new Artifact("item12", "adadadadadadad", new BigDecimal("4"), ArtifactPlacement.HEAD);
+        item3 = new Artifact("ite12m12", "adadadadad123adad", new BigDecimal("42"), ArtifactPlacement.HEAD);
     }
 
     @Test
@@ -50,25 +51,26 @@ class EconomyHeroTest
     @Test
     void shouldAddItemToBackpack()
     {
-        hero.addItem(item1);
-        assertEquals(hero.getBackpack().size(),1);
+        hero.addArtifactToBackpack(item1);
+        assertEquals(hero.getBackpack().getArtifacts().size(),1);
     }
 
     @Test
-    void addItemtoEqSlot()
+    void setNewArtifactFreePlace()
     {
-        EqSlot slot = new EqSlot(ArtifactPlacement.FEET);
-        slot.setItem(item1);
-        assertEquals(slot.getItem(),item1);
-        assertThrows(IllegalStateException.class, () -> slot.setItem(item2));
+        hero.equipArtifact(item1);
+        assertTrue(hero.getEquipment().getArtifacts().contains(item1));
 
     }
 
     @Test
-    void addItemToEqSlotErrorThrow()
+    void setNewArtifactTakenPlace()
     {
-        EqSlot slot = new EqSlot(ArtifactPlacement.FEET);
-        assertThrows(IllegalStateException.class, () -> slot.setItem(item2));
+        hero.equipArtifact(item2);
+        hero.equipArtifact(item3);
+        assertFalse(hero.getEquipment().getArtifacts().contains(item2));
+        assertTrue(hero.getBackpack().getArtifacts().contains(item2));
+        assertTrue(hero.getEquipment().getArtifacts().contains(item3));
 
     }
 }
