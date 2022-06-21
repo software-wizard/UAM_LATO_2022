@@ -3,21 +3,18 @@ package pl.psi.hero;
 import lombok.Getter;
 import pl.psi.artifacts.Artifact;
 
+
 import java.util.ArrayList;
 
 @Getter
 public class Backpack {
-    ArrayList<Artifact> items;
+    ArrayList<Artifact> artifacts;
 
     public Backpack() {
-        items = new ArrayList<>();
+        artifacts = new ArrayList<>();
     }
 
-    public void addItem(Artifact aItem) {
-        items.add(aItem);
-    }
-
-    int size() {
-        return items.size();
+    public void addArtifact(Artifact aArtifact){
+        artifacts.add(aArtifact);
     }
 }

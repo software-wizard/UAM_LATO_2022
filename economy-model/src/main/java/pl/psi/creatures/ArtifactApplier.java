@@ -5,6 +5,8 @@ import pl.psi.artifacts.ArtifactEffectApplyingProperties;
 import pl.psi.artifacts.CreatureArtifactApplicableProperty;
 import pl.psi.artifacts.model.ArtifactEffect;
 import pl.psi.artifacts.model.ArtifactTarget;
+import pl.psi.hero.HeroStatistics;
+import pl.psi.hero.HeroStatisticsIf;
 
 /**
  * Service responsible for taking care of calculating upgraded values after applying artifact.
@@ -48,6 +50,11 @@ public class ArtifactApplier {
                 throw new UnsupportedOperationException("Unrecognised applying target type.");
         }
     }
+
+    public HeroStatisticsIf calculateHeroUpgradedStatisticsAfterApplyingArtifact(ArtifactEffect<? extends ArtifactEffectApplicable> artifactEffect, HeroStatisticsIf heroStats){
+        return HeroStatistics.NECROMANCER;
+    }
+
 
     // TODO: Two new methods for calculating upgraded skills & spells.
 }

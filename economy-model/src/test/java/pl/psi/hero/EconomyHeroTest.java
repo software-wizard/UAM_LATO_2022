@@ -10,20 +10,21 @@ import pl.psi.shop.Money;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class EconomyHeroTest {
 
     private EconomyHero hero;
     private Artifact item1;
     private Artifact item2;
+    private Artifact item3;
 
     @BeforeEach
     void init() {
         hero = new EconomyHero(EconomyHero.Fraction.NECROPOLIS, HeroStatistics.NECROMANCER);
         item1 = new Artifact(ArtifactPlacement.FEET, "item1", new Money(4));
         item2 = new Artifact(ArtifactPlacement.HEAD, "item2", new Money(4));
+        item3 = new Artifact(ArtifactPlacement.HEAD, "item3", new Money(6));
     }
 
     @Test
@@ -68,24 +69,28 @@ class EconomyHeroTest {
     }
 
     @Test
-    void shouldAddItemToBackpack() {
-        hero.addItem(item1);
-        assertEquals(hero.getBackpack().size(), 1);
+    void shouldAddItemToBackpack()
+    {
+        hero.addArtifactToBackpack(item1);
+        assertEquals(hero.getBackpack().getArtifacts().size(),1);
     }
 
     @Test
-    void addItemtoEqSlot() {
-        EqSlot slot = new EqSlot(ArtifactPlacement.FEET);
-        slot.setItem(item1);
-        assertEquals(slot.getItem(), item1);
-        assertThrows(IllegalStateException.class, () -> slot.setItem(item2));
+    void setNewArtifactFreePlace()
+    {
+        hero.equipArtifact(item1);
+        assertTrue(hero.getEquipment().getArtifacts().contains(item1));
 
     }
 
     @Test
-    void addItemToEqSlotErrorThrow() {
-        EqSlot slot = new EqSlot(ArtifactPlacement.FEET);
-        assertThrows(IllegalStateException.class, () -> slot.setItem(item2));
+    void setNewArtifactTakenPlace()
+    {
+        hero.equipArtifact(item2);
+        hero.equipArtifact(item3);
+        assertFalse(hero.getEquipment().getArtifacts().contains(item2));
+        assertTrue(hero.getBackpack().getArtifacts().contains(item2));
+        assertTrue(hero.getEquipment().getArtifacts().contains(item3));
 
     }
 

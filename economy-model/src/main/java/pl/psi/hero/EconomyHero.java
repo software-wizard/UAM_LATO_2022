@@ -2,16 +2,20 @@ package pl.psi.hero;
 
 import lombok.Getter;
 import pl.psi.artifacts.Artifact;
+import pl.psi.artifacts.ArtifactEffectApplicable;
 import pl.psi.artifacts.ArtifactPlacement;
+import pl.psi.artifacts.model.ArtifactEffect;
+import pl.psi.creatures.ArtifactApplier;
 import pl.psi.creatures.EconomyCreature;
 import pl.psi.skills.EconomySkill;
 import pl.psi.spells.EconomySpell;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-public class EconomyHero {
+public class EconomyHero implements ArtifactEffectApplicable {
 
     private static int heroCounter = 0;
     private final Fraction fraction;
@@ -25,6 +29,7 @@ public class EconomyHero {
     private final int heroNumber;
     // start amount of gold
     private int gold = 10000;
+    private final ArtifactApplier artifactApplier = new ArtifactApplier();
 
     public EconomyHero(final Fraction aFraction) {
         this(aFraction, HeroStatistics.NECROMANCER);
@@ -39,7 +44,7 @@ public class EconomyHero {
         skillsList = new ArrayList<>();
         spellsList = new ArrayList<>();
         equipment = new Equipment();
-        backpack = new Backpack();
+        backpack = equipment.getBackpack();
         heroStats = aClass;
     }
 
@@ -52,7 +57,7 @@ public class EconomyHero {
         this.gold = gold;
         this.heroNumber = heroNumber;
         equipment = new Equipment();
-        backpack = new Backpack();
+        backpack = equipment.getBackpack();
         heroStats = HeroStatistics.NECROMANCER;
     }
 
@@ -82,9 +87,11 @@ public class EconomyHero {
 
     }
 
-    public void addArtifact(Artifact artifact) {
-        this.artifactList.add(artifact);
+    public void equipArtifact(Artifact artifact) {
+        this.equipment.equipArtifact(artifact);
     }
+
+    public void addArtifactToBackpack(final Artifact aArtifact){ backpack.addArtifact(aArtifact);}
 
     public boolean canAddCreature(EconomyCreature economyCreature) {
 
@@ -106,16 +113,9 @@ public class EconomyHero {
         this.heroStats.updateStats(aStats);
     }
 
-    public boolean canAddArtifact(ArtifactPlacement placement) {
-        for (Artifact a : this.artifactList) {
-            if (a.getPlacement().equals(placement))
-                return false;
-        }
-        return true;
-    }
 
     public List<Artifact> getArtifacts() {
-        return List.copyOf(artifactList);
+        return List.copyOf(equipment.getArtifacts());
     }
 
     public List<EconomySkill> getSkills() {
@@ -130,37 +130,6 @@ public class EconomyHero {
         gold -= aAmount;
     }
 
-    public void addItem(final Artifact aItem) {
-        backpack.addItem(aItem);
-    }
-
-    public void equipHead(Artifact aItem) {
-        equipment.setHead(aItem);
-    }
-
-    public void equipNeck(Artifact aItem) {
-        equipment.setNeck(aItem);
-    }
-
-    public void equipTorso(Artifact aItem) {
-        equipment.setTorso(aItem);
-    }
-
-    public void equipShoulders(Artifact aItem) {
-        equipment.setShoulders(aItem);
-    }
-
-    public void equipRightHand(Artifact aItem) {
-        equipment.setRightHand(aItem);
-    }
-
-    public void equipLeftHand(Artifact aItem) {
-        equipment.setLeftHand(aItem);
-    }
-
-    public void equipFeet(Artifact aItem) {
-        equipment.setFeet(aItem);
-    }
 
     public Fraction getFraction() {
         return fraction;
@@ -175,6 +144,18 @@ public class EconomyHero {
         return heroNumber;
     }
 
+    @Override
+    public void applyArtifactEffect(ArtifactEffect<? extends ArtifactEffectApplicable> artifactEffect) {
+        heroStats = (HeroStatistics) artifactApplier.calculateHeroUpgradedStatisticsAfterApplyingArtifact(artifactEffect, heroStats);
+    }
+
+    public boolean canAddArtifact(ArtifactPlacement placement) {
+        for (Artifact a : this.artifactList) {
+            if (a.getPlacement().equals(placement))
+                return false;
+        }
+        return true;
+    }
 
     public enum Fraction {
         NECROPOLIS,
@@ -188,4 +169,5 @@ public class EconomyHero {
     public int getSpellPower() {
         return heroStats.getSpellPower();
     }
+
 }
