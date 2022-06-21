@@ -49,7 +49,6 @@ public class Start extends Application {
                         new NecropolisFactory().create(true, 6, 1000),
                         new NecropolisFactory().create(true,7,5)
                         ),HeroStatistics.NECROMANCER);
-        ret.getCreatures().forEach(creature -> creature.setHeroNumber(1));
         return ret;
     }
 
@@ -63,7 +62,6 @@ public class Start extends Application {
                 new StrongholdFactory().create(true, 6, 5),
                 new StrongholdFactory().create(false, 7, 100)
         ),HeroStatistics.KNIGHT);
-        ret.getCreatures().forEach(creature -> creature.setHeroNumber(2));
         return ret;
     }
 

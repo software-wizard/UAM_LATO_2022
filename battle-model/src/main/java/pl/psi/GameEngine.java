@@ -290,7 +290,6 @@ public class GameEngine {
 
         return currentCreature instanceof FirstAidTent
                 && board.getCreature(aPoint)
-                .filter(creature -> creature.getHeroNumber() == currentCreature.getHeroNumber())
                 .isPresent();
     }
 

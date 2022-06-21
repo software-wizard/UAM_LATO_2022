@@ -6,7 +6,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import pl.psi.TurnQueue;
 
+import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -41,12 +43,13 @@ public class BallistaTest {
                 .build();
         defender.setHeroNumber(1);
 
-        final WarMachinesAbstract maszyna_ballista;
+        final AbstractWarMachines maszyna_ballista;
         maszyna_ballista = new WarMachinesFactory().create(1, 1, new DefaultDamageCalculator(randomMock), 0);
         maszyna_ballista.setHeroNumber(2);
         List<Creature> list = new ArrayList<Creature>();
         list.add(defender);
-        maszyna_ballista.performAction(list);
+        PropertyChangeEvent evt = new PropertyChangeEvent(TurnQueue.class, TurnQueue.NEW_TURN,list, null );
+        maszyna_ballista.propertyChange(evt);
         assertThat(list.get(0).getCurrentHp()).isEqualTo(84);
     }
 
@@ -63,7 +66,7 @@ public class BallistaTest {
                 .build();
         attacker.setHeroNumber(1);
 
-        final WarMachinesAbstract ballista;
+        final AbstractWarMachines ballista;
         ballista = new WarMachinesFactory().create(1, 1, new DefaultDamageCalculator(randomMock), 0);
         ballista.setHeroNumber(2);
         attacker.attack(ballista);
@@ -82,7 +85,7 @@ public class BallistaTest {
                 .build();
         final DefaultDamageCalculator calcMock = mock(DefaultDamageCalculator.class);
         when(calcMock.getArmor(attacker)).thenReturn(2.0);
-        final WarMachinesAbstract ballista;
+        final AbstractWarMachines ballista;
         ballista = new WarMachinesFactory().create(1, 1, calcMock, 0);
         attacker.attack(ballista);
         Mockito.verify(calcMock, times(0)).calculateDamage(attacker, ballista);

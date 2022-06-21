@@ -2,7 +2,7 @@ package pl.psi.creatures;
 
 import java.util.Random;
 
-abstract class AbstractCalculateDamageStrategy implements DamageCalculatorIf {
+public abstract class AbstractCalculateDamageStrategy implements DamageCalculatorIf {
 
     public static final int MAX_ATTACK_DIFF = 60;
     public static final int MAX_DEFENCE_DIFF = 12;

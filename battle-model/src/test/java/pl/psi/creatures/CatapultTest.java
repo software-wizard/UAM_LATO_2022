@@ -1,7 +1,9 @@
 package pl.psi.creatures;
 
 import org.junit.jupiter.api.Test;
+import pl.psi.TurnQueue;
 
+import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -18,7 +20,7 @@ public class CatapultTest {
         final Random randomMock = mock(Random.class);
         when(randomMock.nextInt(anyInt())).thenReturn(5);
 
-        final WarMachinesAbstract catapult;
+        final AbstractWarMachines catapult;
         catapult = new WarMachinesFactory().create(3, 1, new DefaultDamageCalculator(randomMock), 0);
         catapult.setHeroNumber(2);
 
@@ -28,7 +30,9 @@ public class CatapultTest {
 
         List<Creature> list = new ArrayList<Creature>();
         list.add(Wall);
-        catapult.performAction(list);
+        PropertyChangeEvent evt = new PropertyChangeEvent(TurnQueue.class, TurnQueue.NEW_TURN,list, null );
+        catapult.propertyChange(evt);
+//        catapult.performAction(list);
 
         assertThat(list.get(0).getCurrentHp()).isEqualTo(11);
     }

@@ -1,7 +1,6 @@
 package pl.psi;
 
 import pl.psi.creatures.Creature;
-import pl.psi.creatures.WarMachinesAbstract;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -15,6 +14,8 @@ import java.util.stream.Stream;
 public class TurnQueue {
 
     public static final String END_OF_TURN = "END_OF_TURN";
+    public static final String NEW_TURN = "NEW_TURN";
+
     private final Collection<Creature> creatures;
     private final LinkedList<Creature> creaturesQueue;
     private final LinkedList<Creature> waitingCreaturesQueue;
@@ -24,6 +25,8 @@ public class TurnQueue {
     private int roundNumber;
     private List<Creature> deadCreatures = new ArrayList<>();
     private List<Point> deadCreaturePoints = new ArrayList<>();
+    private List<Creature> hero1Creatures;
+    private List<Creature> hero2Creatures;
 
     public TurnQueue(final Collection<Creature> aCreatureList,
                      final Collection<Creature> aCreatureList2) {
@@ -31,8 +34,11 @@ public class TurnQueue {
                 .collect(Collectors.toList());
         creaturesQueue = new LinkedList<>();
         waitingCreaturesQueue = new LinkedList<>();
+        hero1Creatures = new ArrayList<>(aCreatureList);
+        hero2Creatures = new ArrayList<>(aCreatureList2);
         initQueue();
         creatures.forEach(c -> observerSupport.addPropertyChangeListener(END_OF_TURN, c));
+        creatures.forEach(c -> observerSupport.addPropertyChangeListener(NEW_TURN, c));
         next();
     }
 
@@ -101,8 +107,10 @@ public class TurnQueue {
             next();
         }
 
-        if (currentCreature instanceof WarMachinesAbstract) {
-            handleWarMachineAction();
+        newTurn();
+
+        if(!currentCreature.isActive()) {
+            next();
         }
     }
 
@@ -112,17 +120,15 @@ public class TurnQueue {
         observerSupport.firePropertyChange(END_OF_TURN, roundNumber - 1, roundNumber);
     }
 
-    public int getRoundNumber(){
-        return roundNumber+1;
+    private void newTurn() {
+        if (hero1Creatures.contains(currentCreature)) {
+            observerSupport.firePropertyChange(NEW_TURN,hero2Creatures,hero1Creatures);
+        } else {
+            observerSupport.firePropertyChange(NEW_TURN, hero1Creatures, hero2Creatures);
+        }
     }
 
-    private void handleWarMachineAction() {
-        WarMachinesAbstract warMachine = (WarMachinesAbstract) currentCreature;
-
-        if (warMachine.getSkillLevel() == 0) {
-            List<Creature> creatureList = new ArrayList<>(creatures);
-            warMachine.performAction(creatureList);
-            currentCreature = creaturesQueue.poll();
-        }
+    public int getRoundNumber(){
+        return roundNumber+1;
     }
 }

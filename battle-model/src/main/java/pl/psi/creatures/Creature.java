@@ -441,6 +441,10 @@ public class Creature implements PropertyChangeListener, Comparable<Creature> {
         return 0;
     }
 
+    public boolean isActive() {
+        return true;
+    }
+
 
     public static class Builder {
         private int amount = 1;
