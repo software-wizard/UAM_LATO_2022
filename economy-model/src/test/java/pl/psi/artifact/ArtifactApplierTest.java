@@ -13,13 +13,19 @@ import pl.psi.spells.SpellFactorsModifiers;
 
 import java.math.BigDecimal;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ArtifactApplierTest
 {
     private static ArtifactApplier artifactApplier;
-
     private static final double EPSILON = 0.00001;
+
+    private static final SkillArtifactApplicableProperty SKILL_PROPERTY = SkillArtifactApplicableProperty.ATTACK;
+
+    private static final CreatureArtifactApplicableProperty CREATURE_PROPERTY = CreatureArtifactApplicableProperty.ATTACK;
+
+    private static final SpellArtifactApplicableProperty SPELL_PROPERTY = SpellArtifactApplicableProperty.WATER_DAMAGE;
 
     @BeforeAll
     public static void init()
@@ -94,5 +100,42 @@ public class ArtifactApplierTest
         // then
         final double expectedValue = artifactEffect.getEffectValue().doubleValue();
         assertTrue( Math.abs( ( expectedValue + baseStats.getFireDamageModifier() ) - resultOfApplier.getFireDamageModifier() ) < EPSILON );
+    }
+
+    @Test
+    void shouldThrowWhenInvalidArtifactTargetForCreature()
+    {
+        // given
+        final ArtifactEffect.ArtifactEffectBuilder< ? extends ArtifactApplicableProperty > effectBuilder = ArtifactEffect.builder();
+        final ArtifactEffect< ? extends ArtifactApplicableProperty > skillEffect = effectBuilder.applierTarget( SKILL_PROPERTY ).build();
+        final ArtifactEffect< ? extends ArtifactApplicableProperty > spellEffect = effectBuilder.applierTarget( SPELL_PROPERTY ).build();
+
+        // when & then
+        assertThrows( IllegalArgumentException.class, () -> artifactApplier.calculateCreatureUpgradedStatisticAfterApplyingArtifact(skillEffect, null, null));
+        assertThrows( IllegalArgumentException.class, () -> artifactApplier.calculateCreatureUpgradedStatisticAfterApplyingArtifact(spellEffect, null, null));
+    }
+
+    @Test
+    void shouldThrowWhenInvalidArtifactTargetForSkill() {
+        // given
+        final ArtifactEffect.ArtifactEffectBuilder< ? extends ArtifactApplicableProperty > effectBuilder = ArtifactEffect.builder();
+        final ArtifactEffect< ? extends ArtifactApplicableProperty > creatureEffect = effectBuilder.applierTarget( CREATURE_PROPERTY ).build();
+        final ArtifactEffect< ? extends ArtifactApplicableProperty > spellEffect = effectBuilder.applierTarget( SPELL_PROPERTY ).build();
+
+        // when & then
+        assertThrows(IllegalArgumentException.class, () -> artifactApplier.calculateHeroUpgradedStatisticsAfterApplyingArtifact(creatureEffect, null));
+        assertThrows(IllegalArgumentException.class, () -> artifactApplier.calculateHeroUpgradedStatisticsAfterApplyingArtifact(spellEffect, null));
+    }
+
+    @Test
+    void shouldThrowWhenInvalidArtifactTargetForSpells() {
+        // given
+        final ArtifactEffect.ArtifactEffectBuilder< ? extends ArtifactApplicableProperty > effectBuilder = ArtifactEffect.builder();
+        final ArtifactEffect< ? extends ArtifactApplicableProperty > creatureEffect = effectBuilder.applierTarget( CREATURE_PROPERTY ).build();
+        final ArtifactEffect< ? extends ArtifactApplicableProperty > skillEffect = effectBuilder.applierTarget( SKILL_PROPERTY ).build();
+
+        // when & then
+        assertThrows(IllegalArgumentException.class, () -> artifactApplier.calculateSpellFactorsModifiers(creatureEffect, null));
+        assertThrows(IllegalArgumentException.class, () -> artifactApplier.calculateSpellFactorsModifiers(skillEffect, null));
     }
 }
