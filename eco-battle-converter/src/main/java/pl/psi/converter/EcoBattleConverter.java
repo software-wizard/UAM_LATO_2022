@@ -40,7 +40,7 @@ public class EcoBattleConverter {
             final FXMLLoader loader = new FXMLLoader();
             loader.setLocation(EcoBattleConverter.class.getClassLoader()
                     .getResource("fxml/main-battle.fxml"));
-            loader.setController(new MainBattleController(convert(aPlayer1), convert(aPlayer2)));
+            loader.setController(new MainBattleController(convert(aPlayer1, 1), convert(aPlayer2, 2)));
             scene = new Scene(loader.load());
             final Stage aStage = new Stage();
             aStage.setScene(scene);
@@ -52,7 +52,7 @@ public class EcoBattleConverter {
         }
     }
 
-    public static Hero convert(final EconomyHero aPlayer) {
+    public static Hero convert(final EconomyHero aPlayer, int id) {
 
         final Multimap<ArtifactTarget, ArtifactIf> artifacts = getConvertedArtifacts(aPlayer);
         applyArtifactsToCreatures(aPlayer, artifacts);
@@ -77,7 +77,11 @@ public class EcoBattleConverter {
 
             SpellsBook spellsBook = SpellsBook.builder().spells(spells).mana(aPlayer.getHeroStats().getSpellPoints()).build();
 
-            return new Hero(creatures, spellsBook);
+            Hero aHero = new Hero(creatures, spellsBook);
+
+            aHero.getCreatures().forEach(creature -> creature.setHeroNumber(id));
+
+            return aHero;
         }
 
         private static Multimap<ArtifactTarget, ArtifactIf> getConvertedArtifacts ( final EconomyHero aPlayer )
