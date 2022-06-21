@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import pl.psi.EconomyEngine;
 import pl.psi.hero.EconomyHero;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class EconomySkillTest {
 
     private final EconomySkillFactory economySkillFactory = new EconomySkillFactory();
@@ -37,17 +39,11 @@ public class EconomySkillTest {
     }
 
     @Test
-    public void heroHasMaxAmountOfSkills() {
-
+    void heroHasUpdatedLuck() {
+        EconomySkill skillToApply = this.economySkillFactory.create(SkillType.LUCK, SkillLevel.BASIC);
+        skillToApply.apply(hero1);
+        assertEquals(hero1.getHeroStats().getLuck(), 1);
     }
 
-    @Test
-    public void heroCannotLearnSkillBecauseHeHasNoCreaturesWithCorrespondingType() {
 
-    }
-
-    @Test
-    public void heroHasUpdatedPreviouslyLearnedSkill() {
-
-    }
 }

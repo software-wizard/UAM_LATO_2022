@@ -117,6 +117,10 @@ public class EconomyHero implements ArtifactEffectApplicable {
         }
     }
 
+    public void updateHeroStats( HeroStats aStats ) {
+        this.heroStats.updateStats(aStats);
+    }
+
     public boolean canAddArtifact(ArtifactPlacement placement) {
         for (EconomyArtifact a : this.artifactList) {
             if (a.getPlacement().equals(placement))

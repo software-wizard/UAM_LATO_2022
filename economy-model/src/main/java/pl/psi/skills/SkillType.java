@@ -2,7 +2,6 @@ package pl.psi.skills;
 
 public enum SkillType {
 
-    AIR_MAGIC,
     ARCHERY,
     OFFENCE,
     ARMOURER,
@@ -12,6 +11,7 @@ public enum SkillType {
     FIRST_AID,
     ARTILLERY,
     BALLISTICS,
+    AIR_MAGIC,
     EARTH_MAGIC,
     FIRE_MAGIC,
     WATER_MAGIC
