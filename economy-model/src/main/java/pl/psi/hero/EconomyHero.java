@@ -8,7 +8,7 @@ import lombok.Getter;
 import pl.psi.creatures.EconomyCreature;
 
 @Getter
-public class EconomyHero
+public class EconomyHero implements ArtifactEffectApplicable
 {
 
     private final Fraction fraction;
@@ -16,16 +16,17 @@ public class EconomyHero
     private int gold;
     private final Equipment equipment;
     private final Backpack backpack;
-    private final HeroStatistics heroClass;
+    private HeroStatistics heroStats;
+    private final ArtifactApplier artifactApplier = new ArtifactApplier();
 
-    public EconomyHero( final Fraction aFraction, final int aGold, final HeroStatistics aClass )
+    public EconomyHero( final Fraction aFraction, final int aGold, final HeroStatistics aStats )
     {
         fraction = aFraction;
         gold = aGold;
         creatureList = new ArrayList<>();
         equipment = new Equipment();
         backpack = equipment.getBackpack();
-        heroClass = aClass;
+        heroStats = aStats;
     }
 
     void addCreature( final EconomyCreature aCreature )
@@ -59,6 +60,10 @@ public class EconomyHero
 
     public void addArtifactToBackpack(final Artifact aArtifact){ backpack.addArtifact(aArtifact);}
 
+    @Override
+    public void applyArtifactEffect(final ArtifactEffect<? extends ArtifactEffectAplicable> aArtifactEffect){
+        heroStats = (HeroStatistics) artifactApplier.calculateHeroUpgradedStatisticsAfterApplyingArtifact(aArtifactEffect, heroStats);
+    }
     public enum Fraction
     {
         NECROPOLIS
