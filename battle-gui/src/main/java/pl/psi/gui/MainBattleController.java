@@ -53,6 +53,8 @@ public class MainBattleController implements PropertyChangeListener {
     private Label roundNumber;
     @FXML
     private Label manaLabel;
+    @FXML
+    private Label defenseLabel;
 
     Spell<? extends SpellableIf> selectedSpell;
 
@@ -178,6 +180,7 @@ public class MainBattleController implements PropertyChangeListener {
     private void refreshGui() {
         roundNumber.setText(gameEngine.getRoundNumber());
         manaLabel.setText("Mana: " + gameEngine.getCurrentHero().getSpellBook().getMana());
+        defenseLabel.setText("Defense: " + gameEngine.getCurrentCreature().getDefense());
         for (int x = 0; x < 15; x++) {
             for (int y = 0; y < 10; y++) {
                 final int x1 = x;
@@ -199,6 +202,8 @@ public class MainBattleController implements PropertyChangeListener {
                             if (gameEngine.getCreature(new Point(x1, y1)).isEmpty()) {
                                 mapTile.setBackground(Color.DARKGREY);
                                 renderSpecialFields(mapTile, x1, y1);
+                                gameEngine.getField(new Point(x1, y1))
+                                    .ifPresent(f -> mapTile.setBackground(new Image(f.getImagePath())));
                             }
                         });
                     }
@@ -235,7 +240,6 @@ public class MainBattleController implements PropertyChangeListener {
                             e -> gameEngine.heal(new Point(x1, y1)));
                 }
 
-                gridMap.add(mapTile, x, y);
                 if (gameEngine.isHeroCastingSpell()) {
                     mapTile.addEventHandler(MouseEvent.MOUSE_ENTERED,
                             mouseEvent -> {
@@ -264,8 +268,6 @@ public class MainBattleController implements PropertyChangeListener {
                                 }
                             });
                 }
-
-                renderSpecialFields(mapTile, x1, y1);
 
                 if (gameEngine.getCreature(new Point(x1, y1)).isPresent()) {
                     mapTile.setOnMouseClicked(e -> {
@@ -323,10 +325,6 @@ public class MainBattleController implements PropertyChangeListener {
 
                 waitButton.setDisable(!gameEngine.allActionsLeft());
                 defendButton.setDisable(!gameEngine.allActionsLeft());
-
-                renderSpecialFields(mapTile, x, y);
-                gameEngine.getField(new Point(x, y))
-                    .ifPresent(f -> mapTile.setBackground(new Image(f.getImagePath())));
 
                 gridMap.add(mapTile, x1, y1);
             }
