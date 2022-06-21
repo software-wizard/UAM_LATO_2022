@@ -29,23 +29,23 @@ public class EconomySkill implements BuyProductInterface {
         this.skillType = aType;
         this.skillCost = new Money(aCost);
         this.factor = aFactor;
-        this.upgradeCalculator = new UpgradeCalculator(this.skillType, this.factor);
+        upgradeCalculator = new UpgradeCalculator(this.skillType, this.factor);
     }
 
     public void apply(List<Creature> aCreatures) {
         aCreatures.forEach(aCreature -> {
-            CreatureStats statsToApply = this.upgradeCalculator.calculate(aCreature);
+            CreatureStats statsToApply = upgradeCalculator.calculate(aCreature);
             aCreature.increaseStats(statsToApply);
         });
     }
 
     public void apply(EconomyHero aHero) {
-       aHero.updateHeroStats(this.upgradeCalculator.calculate(aHero));
+       aHero.updateHeroStats(upgradeCalculator.calculate(aHero));
     }
 
     public void applyForSpells(List<EconomySpell> aSpells) {
         aSpells.forEach( aSpell -> {
-            SpellRang newSpellRang = this.upgradeCalculator.calculate( aSpell );
+            SpellRang newSpellRang = upgradeCalculator.calculate( aSpell );
             aSpell.upgradeSpell(newSpellRang);
         } );
     }
