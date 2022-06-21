@@ -1,9 +1,15 @@
 package pl.psi.hero;
 
 import lombok.Getter;
-import pl.psi.artifacts.Artifact;
+import pl.psi.artifacts.ArtifactApplier;
+import pl.psi.artifacts.ArtifactEffectApplicable;
+import pl.psi.artifacts.EconomyArtifact;
 import pl.psi.artifacts.ArtifactPlacement;
+import pl.psi.artifacts.model.ArtifactEffect;
 import pl.psi.creatures.EconomyCreature;
+import pl.psi.creatures.WarMachinesStatistic;
+import pl.psi.shop.Money;
+import pl.psi.skills.EconomySkill;
 import pl.psi.skills.EconomySkills;
 import pl.psi.spells.EconomySpell;
 
@@ -60,7 +66,11 @@ public class EconomyHero implements ArtifactEffectApplicable {
     }
 
     public List<EconomyCreature> getCreatureList() {
-        return List.copyOf(creatureList);
+        List<EconomyCreature> economyCreatureList = new ArrayList<>();
+        for (EconomyCreature c : this.creatureList) {
+            economyCreatureList.add(new EconomyCreature(c.getStats(), c.getAmount(), c.getGoldCost()));
+        }
+        return economyCreatureList;
     }
 
 
@@ -83,11 +93,11 @@ public class EconomyHero implements ArtifactEffectApplicable {
 
     }
 
-    public void equipArtifact(Artifact artifact) {
+    public void equipArtifact(EconomyArtifact artifact) {
         this.equipment.equipArtifact(artifact);
     }
 
-    public void addArtifactToBackpack(final Artifact aArtifact){ backpack.addArtifact(aArtifact);}
+    public void addArtifactToBackpack(final EconomyArtifact aArtifact){ backpack.addArtifact(aArtifact);}
 
     public boolean canAddCreature(EconomyCreature economyCreature) {
 
@@ -212,10 +222,6 @@ public class EconomyHero implements ArtifactEffectApplicable {
         return heroStats.getSpellPower();
     }
 
-    @Override
-    public void applyArtifactEffect(final ArtifactEffect<? extends ArtifactEffectApplicable> aArtifactEffect) {
-        heroStats = artifactApplier.calculateHeroUpgradedStatisticsAfterApplyingArtifact(aArtifactEffect, heroStats);
-    }
 
     public static int getHeroCounter() {
         return heroCounter;

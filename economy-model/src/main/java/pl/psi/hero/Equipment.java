@@ -2,13 +2,13 @@ package pl.psi.hero;
 
 import lombok.Getter;
 import lombok.Setter;
-import pl.psi.artifacts.Artifact;
+import pl.psi.artifacts.EconomyArtifact;
 
 import java.util.ArrayList;
 
 @Getter
 public class Equipment {
-    private final ArrayList<Artifact> artifacts;
+    private final ArrayList<EconomyArtifact> artifacts;
     private final Backpack backpack;
 
     public Equipment() {
@@ -16,8 +16,8 @@ public class Equipment {
         backpack = new Backpack();
     }
 
-    public void equipArtifact(Artifact aArtifact){
-        for (Artifact artifactfromlist : artifacts){
+    public void equipArtifact(EconomyArtifact aArtifact){
+        for (EconomyArtifact artifactfromlist : artifacts){
             if (artifactfromlist.getPlacement().equals(aArtifact.getPlacement())){
                 backpack.addArtifact(artifactfromlist);
                 artifacts.remove(artifactfromlist);

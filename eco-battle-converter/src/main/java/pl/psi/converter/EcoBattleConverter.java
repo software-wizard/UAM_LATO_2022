@@ -19,11 +19,7 @@ import pl.psi.gui.MainBattleController;
 import pl.psi.gui.NecropolisFactory;
 import pl.psi.hero.EconomyHero;
 import pl.psi.skills.EconomySkill;
-import pl.psi.spells.EconomySpell;
-import pl.psi.spells.Spell;
-import pl.psi.spells.SpellFactory;
-import pl.psi.spells.SpellNames;
-import pl.psi.spells.SpellableIf;
+import pl.psi.spells.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -114,5 +110,11 @@ public class EcoBattleConverter {
             aSkill.apply(aHero);
             aSkill.applyForSpells(aSpells);
         });
+    }
+    public void applyForSpells(List<EconomySpell> aSpells) {
+        aSpells.forEach( aSpell -> {
+            SpellRang newSpellRang = this.upgradeCalculator.calculate( aSpell );
+            aSpell.upgradeSpell(newSpellRang);
+        } );
     }
 }

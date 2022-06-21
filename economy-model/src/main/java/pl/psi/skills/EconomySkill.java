@@ -4,8 +4,11 @@ import lombok.Getter;
 import pl.psi.Hero;
 import pl.psi.creatures.Creature;
 import pl.psi.creatures.CreatureStats;
+import pl.psi.hero.EconomyHero;
 import pl.psi.shop.BuyProductInterface;
 import pl.psi.shop.Money;
+import pl.psi.spells.EconomySpell;
+import pl.psi.spells.SpellRang;
 
 import java.util.List;
 
@@ -36,7 +39,7 @@ public class EconomySkill implements BuyProductInterface {
         });
     }
 
-    public void apply(Hero aHero) {
+    public void apply(EconomyHero aHero) {
         this.upgradeCalculator.calculate(aHero);
     }
 
@@ -48,5 +51,12 @@ public class EconomySkill implements BuyProductInterface {
     @Override
     public Money getGoldCost() {
         return skillCost;
+    }
+
+    public void applyForSpells(List<EconomySpell> aSpells) {
+        aSpells.forEach( aSpell -> {
+            SpellRang newSpellRang = this.upgradeCalculator.calculate( aSpell );
+            aSpell.upgradeSpell(newSpellRang);
+        } );
     }
 }

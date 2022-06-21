@@ -10,12 +10,16 @@ import pl.psi.shop.Money;
 public class EconomySpell implements BuyProductInterface {
 
     private final SpellStats spellStats;
-    private final SpellRang spellRang;
+    private SpellRang spellRang;
     private final Money goldCost;
 
     public EconomySpell(SpellStats spellStats, SpellRang spellRang, int goldCost) {
         this.spellStats = spellStats;
         this.spellRang = spellRang;
         this.goldCost = new Money(goldCost);
+    }
+
+    public void upgradeSpell(SpellRang aNewSpellRang) {
+        this.spellRang = aNewSpellRang;
     }
 }

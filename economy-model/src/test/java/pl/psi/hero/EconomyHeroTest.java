@@ -11,8 +11,7 @@ import pl.psi.shop.Money;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class EconomyHeroTest {
 
@@ -27,9 +26,7 @@ class EconomyHeroTest {
         hero = new EconomyHero(EconomyHero.Fraction.NECROPOLIS, HeroStatistics.NECROMANCER);
         item1 = new EconomyArtifact(ArtifactPlacement.FEET, "item1", new Money(4), ENUM_NOT_IMPORTANT,"");
         item2 = new EconomyArtifact(ArtifactPlacement.HEAD, "item2", new Money(4), ENUM_NOT_IMPORTANT,"");
-        item1 = new Artifact(ArtifactPlacement.FEET, "item1", new Money(4));
-        item2 = new Artifact(ArtifactPlacement.HEAD, "item2", new Money(4));
-        item3 = new Artifact(ArtifactPlacement.HEAD, "item3", new Money(6));
+        item3 = new EconomyArtifact(ArtifactPlacement.HEAD, "item2", new Money(4), ENUM_NOT_IMPORTANT,"");
     }
 
     @Test
@@ -59,8 +56,8 @@ class EconomyHeroTest {
         hero.addCreature(factory.create(true, 1, 1));
 
         assertEquals(true, hero.canAddCreature(factory.create(true, 1, 1)));
-        assertEquals(7, hero.getCreatures().get(0).getAmount());
-        assertEquals(1, hero.getCreatures().size());
+        assertEquals(7, hero.getCreatureList().get(0).getAmount());
+        assertEquals(1, hero.getCreatureList().size());
     }
 
 
@@ -70,7 +67,7 @@ class EconomyHeroTest {
         hero.addCreature(factory.create(true, 7, 1));
         hero.addCreature(factory.create(true, 7, 1));
 
-        assertEquals(2, hero.getCreatures().get(0).getAmount());
+        assertEquals(2, hero.getCreatureList().get(0).getAmount());
     }
 
     @Test
@@ -107,10 +104,10 @@ class EconomyHeroTest {
         hero.addCreature(factory.create(true, 2, 3));
         hero.addCreature(factory.create(true, 3, 5));
 
-        List<EconomyCreature> economyCreatureList = hero.getCreatures();
+        List<EconomyCreature> economyCreatureList = hero.getCreatureList();
         economyCreatureList.add(factory.create(true, 4, 1));
         assertEquals(4, economyCreatureList.size());
-        assertEquals(3, hero.getCreatures().size());
+        assertEquals(3, hero.getCreatureList().size());
     }
 
 }

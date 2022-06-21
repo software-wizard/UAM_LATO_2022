@@ -13,11 +13,11 @@ public class Backpack {
         artifacts = new ArrayList<>();
     }
 
-    public void addArtifact(Artifact aArtifact){
+    public void addArtifact(EconomyArtifact aArtifact){
         artifacts.add(aArtifact);
     }
-}
+
     int size() {
-        return items.size();
+        return artifacts.size();
     }
 }
