@@ -135,7 +135,21 @@ public enum CreatureStatistic implements CreatureStatisticIf {
             true,CreatureType.ALIVE,true, 2, CreatureGroup.OTHER),
     ARCHANGEL( "Archangel", 30, 30,250, 18, Range.closed( 50, 50 ), 7,
             "Best attack, defence and speed in a whole game! Resurrection is a very convenient abbility. \nThose fast wings take up a whole extra hex! :] Possibly the best creature in the game.\n",
-            true,CreatureType.ALIVE,false, 2, CreatureGroup.ANGELS);
+            true,CreatureType.ALIVE,false, 2, CreatureGroup.ANGELS),
+
+    AIR_ELEMENTAL( "Air Elemental", 9, 9,25, 7, Range.closed( 2, 8 ), 0,
+            "You may notice that price of elementals is their hit points multiplied by 10. All elementals have roughly the same attack and defence and average damage, except for earth elementals. Air elementals are fast, durable and cheap. Curse and bless affect their damage very strongly. Great creature for early game army if you manage to hire some.; ",
+            true,CreatureType.ALIVE,true, 1, CreatureGroup.OTHER),
+    FIRE_ELEMENTAL( "Fire Elemental", 8, 10,30, 6, Range.closed( 4, 6 ), 0,
+            "Quite a durable creature, fire immunity can be a very strategic bonus. Speed and hit points are also reasonable.; ",
+            true,CreatureType.ALIVE,true, 1, CreatureGroup.OTHER),
+    EARTH_ELEMENTAL( "Earth Elemental", 10, 10,40, 4, Range.closed( 4, 8 ), 0,
+            "The toughest of elementals (without AB expansion), has good stats, hit points and higher damage, but extra slow speed, making them unpractical for anything other than castle defence.; ",
+            true,CreatureType.ALIVE,true, 1, CreatureGroup.OTHER),
+    WATER_ELEMENTAL( "Water Elemental", 8, 10,30, 5, Range.closed( 3, 7 ), 0,
+            "Water elementals can slow down some heroes and are more of a defensive creature. Could be used for blocking shooters, but also good for early game army.; ",
+            true,CreatureType.ALIVE,true, 1, CreatureGroup.OTHER);
+
 
     private final String name;
     private final double attack;

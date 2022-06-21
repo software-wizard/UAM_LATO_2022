@@ -3,9 +3,11 @@ package pl.psi.creatures;
 import com.google.common.collect.Range;
 import lombok.AccessLevel;
 import lombok.Getter;
+import pl.psi.spells.SpellNames;
 import pl.psi.spells.SpellRang;
 
 import java.beans.PropertyChangeEvent;
+import java.util.List;
 
 
 public class AbstractCreature extends Creature {
@@ -32,17 +34,17 @@ public class AbstractCreature extends Creature {
     }
 
     @Override
-    public void setAmount( final int aAmount) {
+    public void setAmount(final int aAmount) {
         decorated.setAmount(aAmount);
     }
 
     @Override
-    public boolean getCanCounterAttack(){
+    public boolean getCanCounterAttack() {
         return decorated.getCanCounterAttack();
     }
 
     @Override
-    public void setCanCounterAttack(final boolean value){
+    public void setCanCounterAttack(final boolean value) {
         decorated.setCanCounterAttack(value);
     }
 
@@ -57,8 +59,8 @@ public class AbstractCreature extends Creature {
     }
 
     @Override
-    protected void applyCounterAttackDamage(final Creature aDefender, final double aDamage){
-        decorated.applyCounterAttackDamage(aDefender,aDamage);
+    protected void applyCounterAttackDamage(final Creature aDefender, final double aDamage) {
+        decorated.applyCounterAttackDamage(aDefender, aDamage);
     }
 
     @Override
@@ -67,7 +69,7 @@ public class AbstractCreature extends Creature {
     }
 
     @Override
-    protected void setLastAttackDamage(double damage){
+    protected void setLastAttackDamage(double damage) {
         decorated.setLastAttackDamage(damage);
     }
 
@@ -87,7 +89,7 @@ public class AbstractCreature extends Creature {
     }
 
     @Override
-    public void clearLastCounterAttackDamage(){
+    public void clearLastCounterAttackDamage() {
         decorated.clearLastCounterAttackDamage();
     }
 
@@ -102,7 +104,7 @@ public class AbstractCreature extends Creature {
     }
 
     @Override
-    protected void setLastHealAmount(final double healAmount){
+    protected void setLastHealAmount(final double healAmount) {
         decorated.setLastHealAmount(healAmount);
     }
 
@@ -177,7 +179,7 @@ public class AbstractCreature extends Creature {
     }
 
     @Override
-    public int getShots(){
+    public int getShots() {
         return decorated.getShots();
     }
 
@@ -187,27 +189,27 @@ public class AbstractCreature extends Creature {
     }
 
     @Override
-    public String getSpellName(){
+    public SpellNames getSpellName() {
         return decorated.getSpellName();
     }
 
     @Override
-    public int getSpellPower(){
+    public int getSpellPower() {
         return decorated.getSpellPower();
     }
 
     @Override
-    public SpellRang getSpellRang(){
+    public SpellRang getSpellRang() {
         return decorated.getSpellRang();
     }
 
     @Override
-    public int getSpellCastCounter(){
+    public int getSpellCastCounter() {
         return decorated.getSpellCastCounter();
     }
 
     @Override
-    public void reduceNumberOfSpellCasts(){
+    public void reduceNumberOfSpellCasts() {
         decorated.reduceNumberOfSpellCasts();
     }
 
@@ -222,7 +224,17 @@ public class AbstractCreature extends Creature {
     }
 
     @Override
-    public Integer[][] getSplashDamageRange(){
+    public Integer[][] getSplashDamageRange() {
         return decorated.getSplashDamageRange();
+    }
+
+    @Override
+    public List<SpellNames> getImmuneSpellList() {
+        return decorated.getImmuneSpellList();
+    }
+
+    @Override
+    public List<SpellNames> getVulnerableSpellList() {
+        return decorated.getImmuneSpellList();
     }
 }

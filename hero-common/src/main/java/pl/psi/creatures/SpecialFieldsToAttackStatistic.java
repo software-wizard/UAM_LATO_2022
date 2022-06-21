@@ -28,6 +28,11 @@ public enum SpecialFieldsToAttackStatistic implements CreatureStatisticIf {
     public CreatureStatistic.CreatureGroup getGroup() {
         return CreatureStatistic.CreatureGroup.OTHER;
     }
+  
+    @Override
+    public boolean isGoodAligned() {
+        return CreatureStatisticIf.super.isGoodAligned();
+    }
 
     @Override
     public String getCanAttackImagePath() {

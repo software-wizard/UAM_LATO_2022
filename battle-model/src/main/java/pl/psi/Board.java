@@ -32,6 +32,10 @@ public class Board {
         return false;
     }
 
+    public void putCreatureOnBoard(Point point, Creature creature){
+        map.put(point, creature);
+    }
+
     private void addCreatures(final List<Creature> aCreatures, final int aXPosition) {
         for (int i = 0; i < aCreatures.size(); i++) {
             if (i > 4) {
@@ -48,6 +52,10 @@ public class Board {
 
     Optional<Creature> getCreature(final Point aPoint) {
         return Optional.ofNullable(map.get(aPoint));
+    }
+
+    Optional<Point> getPoint(final Creature aCreature) {
+        return Optional.ofNullable(map.inverse().get(aCreature));
     }
 
     void move(final Creature aCreature, final Point aPoint) {

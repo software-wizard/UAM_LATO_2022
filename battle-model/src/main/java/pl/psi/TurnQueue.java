@@ -15,10 +15,11 @@ import java.util.stream.Stream;
 public class TurnQueue {
 
     public static final String END_OF_TURN = "END_OF_TURN";
-    private final Collection<Creature> creatures;
+    public static final String NEXT_CREATURE = "NEXT_CREATURE";
+    private Collection<Creature> creatures;
     private final LinkedList<Creature> creaturesQueue;
     private final LinkedList<Creature> waitingCreaturesQueue;
-//  private final Queue<Creature> creaturesQueue; ???
+    //  private final Queue<Creature> creaturesQueue; ???
     private final PropertyChangeSupport observerSupport = new PropertyChangeSupport(this);
     private Creature currentCreature;
     private int roundNumber;
@@ -45,11 +46,11 @@ public class TurnQueue {
         sortBySpeed();
     }
 
-    private void sortBySpeed(){
+    private void sortBySpeed() {
         Collections.sort(creaturesQueue);
     }
 
-    public void pushCurrentCreatureToEndOfQueue(){
+    public void pushCurrentCreatureToEndOfQueue() {
         waitingCreaturesQueue.add(currentCreature);
     }
 
@@ -57,24 +58,26 @@ public class TurnQueue {
         return currentCreature;
     }
 
-    public Collection<Creature> getRangeCreatures(){
-        return creatures.stream().filter(Creature::isRange).collect( Collectors.toList() );
+    public Collection<Creature> getRangeCreatures() {
+        return creatures.stream().filter(Creature::isRange).collect(Collectors.toList());
     }
 
-    public void addDeadCreature( final Creature creature ){
+    public Collection<Creature> getCreatures() {return creatures; }
+
+    public void addDeadCreature(final Creature creature) {
         deadCreatures.add(creature);
     }
 
-    public List<Creature> getDeadCreatures(){
+    public List<Creature> getDeadCreatures() {
         return deadCreatures;
     }
 
-    public List<Point> getDeadCreaturePoints(){
+    public List<Point> getDeadCreaturePoints() {
         return deadCreaturePoints;
     }
 
-    public void addDeadCreaturePoint(final Point point){
-        if(deadCreaturePoints.contains(point)){
+    public void addDeadCreaturePoint(final Point point) {
+        if (deadCreaturePoints.contains(point)) {
             int i = deadCreaturePoints.indexOf(point);
             deadCreaturePoints.remove(i);
             deadCreatures.remove(i);
@@ -83,21 +86,26 @@ public class TurnQueue {
     }
 
     public void next() {
-        sortBySpeed();
-        if (creaturesQueue.isEmpty()) {
-            if(waitingCreaturesQueue.isEmpty()){
-                endOfTurn();
-                next();
-            }
-            else{
-                currentCreature = waitingCreaturesQueue.poll();
-            }
-        }
-        else{
-            currentCreature = creaturesQueue.poll();
+        List<Creature> collect = creatures.stream().filter(Creature::isAlive).collect(Collectors.toList());
+
+        if(collect.isEmpty()) {
+            return;
         }
 
-        if(!currentCreature.isAlive()){
+        sortBySpeed();
+        if (creaturesQueue.isEmpty()) {
+            if (waitingCreaturesQueue.isEmpty()) {
+                endOfTurn();
+                next();
+            } else {
+                currentCreature = waitingCreaturesQueue.poll();
+            }
+        } else {
+            currentCreature = creaturesQueue.poll();
+        }
+        observerSupport.firePropertyChange(NEXT_CREATURE, null, currentCreature);
+
+        if (!currentCreature.isAlive()) {
             next();
         }
 
@@ -112,8 +120,8 @@ public class TurnQueue {
         observerSupport.firePropertyChange(END_OF_TURN, roundNumber - 1, roundNumber);
     }
 
-    public int getRoundNumber(){
-        return roundNumber+1;
+    public int getRoundNumber() {
+        return roundNumber + 1;
     }
 
     private void handleWarMachineAction() {
