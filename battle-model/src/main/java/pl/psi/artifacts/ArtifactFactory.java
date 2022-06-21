@@ -155,6 +155,15 @@ public class ArtifactFactory {
 
                 return createOrbOfDrivingRain();
 
+            case CAPE_OF_CONJURING:
+                return createCapeOfConjuringArtifact();
+
+            case RING_OF_CONJURING:
+                return createRingOfConjuringArtifact();
+
+            case COLLAR_OF_CONJURING:
+                return createCollarOfConjuringArtifact();
+
             default:
                 throw new IllegalArgumentException(NO_ARTIFACT_IMPLEMENTATION_EXCEPTION_MESSAGE);
 
@@ -582,6 +591,54 @@ public class ArtifactFactory {
                 .rank(ArtifactRank.MAJOR)
                 .target(ArtifactTarget.SPELLS)
                 .effects(Set.of(orbOfDrivingRainEffect))
+                .build();
+    }
+
+    private ArtifactIf createCollarOfConjuringArtifact() {
+        final ArtifactEffect<ArtifactEffectApplicable> collarOfConjuringEffect = ArtifactEffect.builder()
+                .effectValue(BigDecimal.valueOf(1))
+                .effectApplyingMode(ArtifactApplyingMode.ADD)
+                .applierTarget(SpellArtifactApplicableProperty.DURATION)
+                .build();
+
+        return Artifact.builder()
+                .name("Collar Of Conjuring")
+                .placement(ArtifactPlacement.NECK)
+                .rank(ArtifactRank.TREASURE)
+                .target(ArtifactTarget.SPELLS)
+                .effects(Set.of(collarOfConjuringEffect))
+                .build();
+    }
+
+    private ArtifactIf createRingOfConjuringArtifact() {
+        final ArtifactEffect<ArtifactEffectApplicable> ringOfConjuringEffect = ArtifactEffect.builder()
+                .effectValue(BigDecimal.valueOf(2))
+                .effectApplyingMode(ArtifactApplyingMode.ADD)
+                .applierTarget(SpellArtifactApplicableProperty.DURATION)
+                .build();
+
+        return Artifact.builder()
+                .name("Ring Of Conjuring")
+                .placement(ArtifactPlacement.FINGERS)
+                .rank(ArtifactRank.TREASURE)
+                .target(ArtifactTarget.SPELLS)
+                .effects(Set.of(ringOfConjuringEffect))
+                .build();
+    }
+
+    private ArtifactIf createCapeOfConjuringArtifact() {
+        final ArtifactEffect<ArtifactEffectApplicable> ringOfConjuringEffect = ArtifactEffect.builder()
+                .effectValue(BigDecimal.valueOf(3))
+                .effectApplyingMode(ArtifactApplyingMode.ADD)
+                .applierTarget(SpellArtifactApplicableProperty.DURATION)
+                .build();
+
+        return Artifact.builder()
+                .name("Ring Of Conjuring")
+                .placement(ArtifactPlacement.FINGERS)
+                .rank(ArtifactRank.TREASURE)
+                .target(ArtifactTarget.SPELLS)
+                .effects(Set.of(ringOfConjuringEffect))
                 .build();
     }
 }

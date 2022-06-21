@@ -145,6 +145,18 @@ public class EconomyArtifactFactory {
                 return new EconomyArtifact( ArtifactPlacement.MISC, "Orb of Tempstuous Fire",
                         new Money(20), aArtifactName, "Hero's fire spells do extra 50% damage" );
 
+            case COLLAR_OF_CONJURING:
+                return new EconomyArtifact( ArtifactPlacement.NECK, "Collar of Conjuring",
+                        new Money(30), aArtifactName, "Increases duration of all your spells by 1");
+
+            case RING_OF_CONJURING:
+                return new EconomyArtifact( ArtifactPlacement.FINGERS, "Ring of Conjuring",
+                        new Money(40), aArtifactName, "Increases duration of all your spells by 2");
+
+            case CAPE_OF_CONJURING:
+                return new EconomyArtifact( ArtifactPlacement.SHOULDERS, "Cape of Conjuring",
+                        new Money(50), aArtifactName, "Increases duration of all your spells by 3");
+
             default:
                 throw new IllegalArgumentException ( NO_ARTIFACT_IMPLEMENTATION_EXCEPTION_MESSAGE );
         }
