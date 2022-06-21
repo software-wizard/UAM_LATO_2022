@@ -15,7 +15,6 @@ import java.util.Objects;
 public class ArtifactEffect<T extends ArtifactEffectApplicable> {
 
     private final BigDecimal effectValue;
-
     private final ArtifactApplyingMode effectApplyingMode;
 
     private final ArtifactApplicableProperty applierTarget;

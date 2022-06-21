@@ -130,5 +130,4 @@ public class ArtifactApplier {
                 throw new UnsupportedOperationException("Unrecognised applying target type.");
         }
     }
-    // TODO: New method for calculating spells.
 }
