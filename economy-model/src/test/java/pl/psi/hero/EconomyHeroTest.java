@@ -2,26 +2,31 @@ package pl.psi.hero;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import pl.psi.artifacts.Artifact;
+import pl.psi.artifacts.EconomyArtifact;
 import pl.psi.artifacts.ArtifactPlacement;
+import pl.psi.artifacts.holder.CreatureArtifactNamesHolder;
 import pl.psi.creatures.EconomyCreature;
 import pl.psi.creatures.EconomyNecropolisFactory;
 import pl.psi.shop.Money;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class EconomyHeroTest {
 
     private EconomyHero hero;
-    private Artifact item1;
-    private Artifact item2;
-    private Artifact item3;
+    private EconomyArtifact item1;
+    private EconomyArtifact item2;
+    private EconomyArtifact item3;
+    private CreatureArtifactNamesHolder ENUM_NOT_IMPORTANT = CreatureArtifactNamesHolder.RING_OF_LIFE;
 
     @BeforeEach
     void init() {
         hero = new EconomyHero(EconomyHero.Fraction.NECROPOLIS, HeroStatistics.NECROMANCER);
+        item1 = new EconomyArtifact(ArtifactPlacement.FEET, "item1", new Money(4), ENUM_NOT_IMPORTANT,"");
+        item2 = new EconomyArtifact(ArtifactPlacement.HEAD, "item2", new Money(4), ENUM_NOT_IMPORTANT,"");
         item1 = new Artifact(ArtifactPlacement.FEET, "item1", new Money(4));
         item2 = new Artifact(ArtifactPlacement.HEAD, "item2", new Money(4));
         item3 = new Artifact(ArtifactPlacement.HEAD, "item3", new Money(6));

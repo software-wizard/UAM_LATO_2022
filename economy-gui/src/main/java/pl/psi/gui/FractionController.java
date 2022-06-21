@@ -7,26 +7,30 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import pl.psi.hero.EconomyHero;
-
+import java.util.Arrays;
 import static javafx.scene.layout.BackgroundRepeat.NO_REPEAT;
+
+/**
+ * Class to choose fraction with default Fraction Necropolis
+ */
 
 public class FractionController {
 
     @FXML
-    Button ready;
-
+    private Button ready;
     @FXML
-    BorderPane borderPane;
-
+    private BorderPane borderPane;
     @FXML
     private ComboBox<EconomyHero.Fraction> boxFractionPlayer1;
     @FXML
     private ComboBox<EconomyHero.Fraction> boxFractionPlayer2;
+    private final EconomyHero.Fraction defaultFraction  = EconomyHero.Fraction.NECROPOLIS;
 
     @FXML
     public void initialize() {
-        boxFractionPlayer1.getItems().setAll(EconomyHero.Fraction.CASTLE, EconomyHero.Fraction.NECROPOLIS);
-        boxFractionPlayer2.getItems().setAll(EconomyHero.Fraction.CASTLE, EconomyHero.Fraction.NECROPOLIS);
+
+        boxFractionPlayer1.getItems().setAll(Arrays.asList(EconomyHero.Fraction.values()));
+        boxFractionPlayer2.getItems().setAll(Arrays.asList(EconomyHero.Fraction.values()));
 
         Image image = new Image("walp.jpg");
         BackgroundSize bSize = new BackgroundSize(400, 300, false, false, false, false);
@@ -38,10 +42,10 @@ public class FractionController {
         EconomyStart start = new EconomyStart();
 
         if (boxFractionPlayer1.getValue() == null) {
-            boxFractionPlayer1.setValue(EconomyHero.Fraction.NECROPOLIS);
+            boxFractionPlayer1.setValue(defaultFraction);
         }
         if (boxFractionPlayer2.getValue() == null) {
-            boxFractionPlayer2.setValue(EconomyHero.Fraction.NECROPOLIS);
+            boxFractionPlayer2.setValue(defaultFraction);
         }
 
         start.startApp(boxFractionPlayer1.getValue(), boxFractionPlayer2.getValue());

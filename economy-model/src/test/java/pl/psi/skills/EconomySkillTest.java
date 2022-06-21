@@ -1,21 +1,53 @@
 package pl.psi.skills;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import pl.psi.EconomyEngine;
 import pl.psi.hero.EconomyHero;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class EconomySkillTest {
 
     private final EconomySkillFactory economySkillFactory = new EconomySkillFactory();
-    private final EconomyHero aHero = new EconomyHero(EconomyHero.Fraction.NECROPOLIS);
+    private EconomyHero hero1;
+    private EconomyEngine economyEngine;
+    private EconomyHero hero2;
 
-    @Test
-    void heroHasUpdatedLuck() {
-        EconomySkill skillToApply = this.economySkillFactory.create(SkillType.LUCK, SkillLevel.BASIC);
-        skillToApply.apply(aHero);
-        assertEquals(aHero.getHeroStats().getLuck(), 1);
+    @BeforeEach
+    void init() {
+        hero1 = new EconomyHero(EconomyHero.Fraction.NECROPOLIS);
+        hero2 = new EconomyHero(EconomyHero.Fraction.NECROPOLIS);
+        economyEngine = new EconomyEngine(hero1, hero2);
     }
 
+    @Test
+    public void heroShouldBeAbleToLearnSkill() {
+        EconomySkill skillToLearn = economySkillFactory.create(SkillType.ARCHERY, SkillLevel.BASIC);
+    }
 
+    @Test
+    public void heroDoesNotHaveEnoughMoneyToBuySkill() {
+        int moneyBeforeBuyingSkill = hero1.getGold().getPrice();
+
+    }
+
+    @Test
+    public void heroHasLearnedSkill() {
+        EconomySkill skillToLearn = economySkillFactory.create(SkillType.OFFENCE, SkillLevel.BASIC);
+
+    }
+
+    @Test
+    public void heroHasMaxAmountOfSkills() {
+
+    }
+
+    @Test
+    public void heroCannotLearnSkillBecauseHeHasNoCreaturesWithCorrespondingType() {
+
+    }
+
+    @Test
+    public void heroHasUpdatedPreviouslyLearnedSkill() {
+
+    }
 }

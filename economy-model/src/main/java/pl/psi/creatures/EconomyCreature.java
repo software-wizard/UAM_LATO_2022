@@ -2,6 +2,7 @@ package pl.psi.creatures;
 
 import lombok.Getter;
 import lombok.Setter;
+import pl.psi.artifacts.ArtifactApplier;
 import pl.psi.artifacts.ArtifactEffectApplicable;
 import pl.psi.artifacts.model.ArtifactEffect;
 import pl.psi.shop.BuyProductInterface;

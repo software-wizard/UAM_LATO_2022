@@ -1,9 +1,7 @@
 package pl.psi.hero;
 
+import lombok.Builder;
 import lombok.Getter;
-
-import java.util.Optional;
-
 
 @Getter
 public enum HeroStatistics implements HeroStatisticsIf {
@@ -22,8 +20,8 @@ public enum HeroStatistics implements HeroStatisticsIf {
     private final int defence;
     private final int spellPower;
     private final int knowledge;
-    private int morale;
-    private int luck;
+    private final int morale;
+    private final int luck;
     private final int spellPoints;
 
     HeroStatistics(final String aName, final int aAttack, final int aDefence, final int aSpellPower, final int aKnowledge, final int aMorale, final int aLuck) {
@@ -37,12 +35,5 @@ public enum HeroStatistics implements HeroStatisticsIf {
         luck = aLuck;
         spellPoints = knowledge * KNOWLEDGE_MANA_FACTOR;
 
-    }
-
-    @Override
-    public HeroStatisticsIf updateStats(HeroStatisticsIf newStats) {
-        this.morale += newStats.getMorale();
-        this.luck += newStats.getLuck();
-        return this;
     }
 }
