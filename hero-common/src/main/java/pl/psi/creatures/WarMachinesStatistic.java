@@ -29,7 +29,7 @@ public enum WarMachinesStatistic implements CreatureStatisticIf {
 
     @Override
     public CreatureStatistic.CreatureGroup getGroup() {
-        return null;
+        return CreatureStatistic.CreatureGroup.OTHER;
     }
 
     @Override
