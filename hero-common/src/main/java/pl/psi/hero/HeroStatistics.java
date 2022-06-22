@@ -15,7 +15,10 @@ public enum HeroStatistics implements HeroStatisticsIf {
 
     // CASTLE
     KNIGHT("Knight", 2, 2, 1, 1, 0, 0),
-    CLERIC("Cleric", 1, 0, 2, 2, 0, 0);
+    CLERIC("Cleric", 1, 0, 2, 2, 0, 0),
+
+    // STRONGHOLD
+    BARBARIAN("Barbarian", 4,0,1,1,0,0);
 
     private final static int KNOWLEDGE_MANA_FACTOR = 10;
     private final String name;
