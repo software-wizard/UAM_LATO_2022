@@ -316,7 +316,6 @@ public class GameEngine {
         return (hero1.getCreatures().contains(turnQueue.getCurrentCreature())) ? hero2 : hero1;
     }
 
-
     public void castSpell(final Point point, Spell<? extends SpellableIf> spell) {
         if (isEnoughMana(spell)) {
             BiConsumer<String, PropertyChangeListener> biConsumer = this::addObserverToTurnQueue;
@@ -440,7 +439,6 @@ public class GameEngine {
 
     private List<Creature> getCreaturesFromArea(Point point, Spell spell) {
         List<Creature> creatures = new ArrayList<>();
-
 
         if (spell instanceof ChainLightning) {
             List<Optional<Point>> creaturePoints = turnQueue.getCreatures().stream().map(board::getPoint).collect(Collectors.toList());

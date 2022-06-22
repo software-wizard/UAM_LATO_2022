@@ -5,10 +5,13 @@ import pl.psi.TurnQueue;
 import pl.psi.creatures.Creature;
 
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 public class LuckBuffDebuffSpell extends Spell<Creature> {
 
+    private final PropertyChangeSupport observerSupport = new PropertyChangeSupport(this);
     private final int luck;
     private final int time;
     @Getter
@@ -32,9 +35,14 @@ public class LuckBuffDebuffSpell extends Spell<Creature> {
 
     @Override
     public void castSpell(Creature aDefender, BiConsumer<String, PropertyChangeListener> consumer) {
+        if (aDefender.getRunningSpells().stream().map(Spell::getName).collect(Collectors.toList()).contains(this.getName()) && !getName().equals(SpellNames.DISRUPTING_RAY)) {
+            observerSupport.firePropertyChange(RoundTimer.RESET_TIMER, null, null);
+            return;
+        }
         aDefender.addRunningSpell(this);
-        LuckBuffDebuffSpell moralBuffDebuffSpell = new LuckBuffDebuffSpell(this, aDefender);
-        consumer.accept(TurnQueue.END_OF_TURN, moralBuffDebuffSpell.getRoundTimer());
+        LuckBuffDebuffSpell luckBuffDebuffSpell = new LuckBuffDebuffSpell(this, aDefender);
+        consumer.accept(TurnQueue.END_OF_TURN, luckBuffDebuffSpell.getRoundTimer());
+        observerSupport.addPropertyChangeListener(RoundTimer.RESET_TIMER, luckBuffDebuffSpell.getRoundTimer());
         aDefender.buffLuck(luck);
     }
 
