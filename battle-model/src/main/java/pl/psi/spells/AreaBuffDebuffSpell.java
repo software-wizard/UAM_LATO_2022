@@ -1,18 +1,16 @@
 package pl.psi.spells;
 
-import pl.psi.creatures.Creature;
 import pl.psi.creatures.CreatureStats;
 
 import java.beans.PropertyChangeListener;
-import java.util.List;
 import java.util.function.BiConsumer;
 
 public class AreaBuffDebuffSpell extends Spell<SpellCreatureList> {
 
     private final CreatureStats creatureStats;
 
-    public AreaBuffDebuffSpell(SpellTypes category, SpellNames name, SpellMagicClass spellMagicClass, SpellRang rang, int manaCost, CreatureStats creatureStats) {
-        super(category, name, spellMagicClass, rang, manaCost);
+    public AreaBuffDebuffSpell(SpellTypes category, SpellNames name, SpellMagicClass spellMagicClass, SpellRang rang, SpellAlignment spellAlignment, int manaCost, CreatureStats creatureStats) {
+        super(category, name, spellMagicClass, rang, spellAlignment, manaCost);
         this.creatureStats = creatureStats;
     }
 

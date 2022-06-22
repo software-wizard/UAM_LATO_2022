@@ -1,6 +1,7 @@
 package pl.psi.spells;
 
 import pl.psi.creatures.Creature;
+import pl.psi.creatures.CreatureStatistic;
 
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -10,7 +11,7 @@ import static pl.psi.spells.SpellRang.BASIC;
 
 public class SpellFactorCalculator {
 
-    public double isCreatureHasProtection(Spell spell, Creature creature) {
+    public double getCreatureProtectionFactor(Spell spell, Creature creature) {
         double protectionFactor = 1;
 
         if (creature.getImmuneSpellList() != null) {
