@@ -11,12 +11,19 @@ import static pl.psi.creatures.Alignment.*;
 @Getter
 @Setter
 @ToString
-@EqualsAndHashCode
-@AllArgsConstructor
-@NoArgsConstructor
-public class EvilFog implements BufferIf {
+public class EvilFog extends Field implements BufferIf {
 
+    private static final String IMAGE_PATH = "/images/evilFog.png";
     private Point point;
+
+    public EvilFog() {
+        super(IMAGE_PATH);
+    }
+
+    @Override
+    public void handleEffect(List<Creature> creature) {
+        buffCreatures(creature);
+    }
 
     /**
      * this method is responsible for buffing single morale points
@@ -30,7 +37,7 @@ public class EvilFog implements BufferIf {
         }
 
         var currentMorale = creature.getMorale();
-        if (creature.getAlignment().equals(EVIL)) {
+        if (creature.getAlignment() == EVIL) {
             creature.setMorale(currentMorale + 1);
         } else {
             creature.setMorale(currentMorale - 1);

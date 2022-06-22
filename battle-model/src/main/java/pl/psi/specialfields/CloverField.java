@@ -1,11 +1,26 @@
 package pl.psi.specialfields;
 
+import lombok.ToString;
 import pl.psi.creatures.Alignment;
 import pl.psi.creatures.Creature;
 
 import java.util.List;
 
-public class CloverField implements BufferIf {
+@ToString
+public class CloverField extends Field implements BufferIf {
+    public CloverField() {
+        super("/images/clover_field.png");
+    }
+
+    public CloverField(String imagePath) {
+        super(imagePath);
+    }
+
+    @Override
+    public void handleEffect(List<Creature> creatures) {
+        buffCreatures(creatures);
+    }
+
     @Override
     public void buffCreature(Creature creature) {
         if (creature.getAlignment() == Alignment.NEUTRAL) {

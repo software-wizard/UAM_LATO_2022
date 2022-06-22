@@ -11,12 +11,19 @@ import static pl.psi.creatures.Alignment.*;
 @Getter
 @Setter
 @ToString
-@EqualsAndHashCode
-@NoArgsConstructor
-@AllArgsConstructor
-public class HolyGround implements BufferIf {
+public class HolyGround extends Field implements BufferIf {
 
+    private static final String IMAGE_PATH = "/images/holyGround.png";
     private Point point;
+
+    public HolyGround() {
+        super(IMAGE_PATH);
+    }
+
+    @Override
+    public void handleEffect(List<Creature> creature) {
+        buffCreatures(creature);
+    }
 
     /**
      * this method is responsible for buffing single morale points
@@ -30,7 +37,7 @@ public class HolyGround implements BufferIf {
         }
 
         var currentMorale = creature.getMorale();
-        if (creature.getAlignment().equals(GOOD)) {
+        if (creature.getAlignment() == GOOD) {
             creature.setMorale(currentMorale + 1);
         } else {
             creature.setMorale(currentMorale - 1);

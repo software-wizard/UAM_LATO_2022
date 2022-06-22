@@ -40,6 +40,7 @@ public class Creature implements PropertyChangeListener, Comparable<Creature>, S
     private double spellDamageReduction = 1;
     private int morale = 1; // range = < -3;3 >
     private int luck;
+    private int defense;
     private Alignment alignment;
     private double defenceBonusArmor = 0;
     private boolean isDefending = false;
@@ -54,13 +55,14 @@ public class Creature implements PropertyChangeListener, Comparable<Creature>, S
 
     private Creature(final CreatureStatisticIf aStats, final DamageCalculatorIf aCalculator,
                      final int aAmount, final Alignment aAlignment,
-                     final int aLuck) {
+                     final int aLuck, final int aDefense) {
         basicStats = aStats;
         amount = aAmount;
         currentHp = basicStats.getMaxHp();
         calculator = aCalculator;
         alignment = aAlignment;
         luck = aLuck;
+        defense = aDefense;
         runningSpells = new LinkedList<>();
     }
 
@@ -157,6 +159,14 @@ public class Creature implements PropertyChangeListener, Comparable<Creature>, S
 
     public void increaseLuckBy(int factor) {
         setLuck(luck + factor);
+    }
+
+    public void reduceDefenseBy(int factor) {
+        setDefense(defense - factor);
+    }
+
+    protected void setCurrentHp(final int aCurrentHp) {
+        currentHp = aCurrentHp;
     }
 
     public void age() {
@@ -398,7 +408,6 @@ public class Creature implements PropertyChangeListener, Comparable<Creature>, S
     public void reduceNumberOfSpellCasts() {
     }
 
-
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
         if (TurnQueue.END_OF_TURN.equals(evt.getPropertyName())) {
@@ -465,6 +474,7 @@ public class Creature implements PropertyChangeListener, Comparable<Creature>, S
         private int amount = 1;
         private DamageCalculatorIf calculator = new DefaultDamageCalculator(new Random());
         private int luck = 10;
+        private int defense = 5;
         private Alignment alignment = Alignment.NEUTRAL;
         private CreatureStatisticIf statistic;
 
@@ -488,6 +498,11 @@ public class Creature implements PropertyChangeListener, Comparable<Creature>, S
             return this;
         }
 
+        public Builder defense(final int aDefense) {
+            defense = aDefense;
+            return this;
+        }
+
         Builder calculator(final DamageCalculatorIf aCalc) {
             calculator = aCalc;
             return this;
@@ -495,7 +510,7 @@ public class Creature implements PropertyChangeListener, Comparable<Creature>, S
 
 
         public Creature build() {
-            return new Creature(statistic, calculator, amount, alignment, luck);
+            return new Creature(statistic, calculator, amount, alignment, luck, defense);
         }
     }
 }
