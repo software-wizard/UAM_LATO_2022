@@ -11,8 +11,6 @@ public class MinimalDamageCalculator extends AbstractCalculateDamageStrategy {
 
     @Override
     protected double getRandomValueFromAttackRange(final Creature aAttacker, final Creature aDefender) {
-        System.out.println("MIN");
-        System.out.println(aAttacker.getDamage().lowerEndpoint());
         return aAttacker.getDamage().lowerEndpoint();
     }
 

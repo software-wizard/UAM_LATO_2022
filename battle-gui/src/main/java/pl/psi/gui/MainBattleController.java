@@ -256,7 +256,7 @@ public class MainBattleController implements PropertyChangeListener {
                             mouseEvent -> {
                                 if (gameEngine.getCreature(new Point(x1, y1)).isPresent()) {
                                     if (gameEngine.canCastSpell(selectedSpell, gameEngine.getCreature(new Point(x1, y1)).get())) {
-                                        mapTile.getScene().setCursor(new ImageCursor(new Image("/images/spells images/Cast Coursor.png")));
+                                        mapTile.getScene().setCursor(new ImageCursor(new Image("/images/spells images/Cast Coursor.gif")));
                                     } else {
                                         mapTile.getScene().setCursor(new ImageCursor(new Image("/images/spells images/Block Coursor.png")));
                                     }

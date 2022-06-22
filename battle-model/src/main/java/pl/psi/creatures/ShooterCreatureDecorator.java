@@ -27,7 +27,6 @@ public class ShooterCreatureDecorator extends AbstractCreature {
 
     @Override
     public void attack(final Creature aDefender) {
-        System.out.println(getCalculator());
         if (isInMelee) {
             decorated.attack(aDefender);
         } else if (canShoot()) {
@@ -37,7 +36,6 @@ public class ShooterCreatureDecorator extends AbstractCreature {
 
     private void attackRange(final Creature aDefender) {
         final int damage = getCalculator().calculateDamage(decorated, aDefender);
-        System.out.println(damage);
         decorated.applyDamage(aDefender, damage);
         shots -= 1;
     }
@@ -95,7 +93,7 @@ public class ShooterCreatureDecorator extends AbstractCreature {
         if(decorated.getCreatureRunningSpellWithName(FORGETFULNESS).isPresent() && !decorated.getCreatureRunningSpellWithName(FORGETFULNESS).get().getRang().equals(SpellRang.BASIC)){
             return 0;
         }
-        System.out.println(shots);
+
         return shots;
     }
 }

@@ -53,6 +53,7 @@ public class Start extends Application {
                         SpellsBook.builder().spells(List.of(
                                 new SpellFactory().create(HASTE, BASIC, 2),
                                 new SpellFactory().create(MAGIC_ARROW, BASIC, 10),
+                                new SpellFactory().create(DISRUPTING_RAY, BASIC, 1),
                                 new SpellFactory().create(FORTUNE, BASIC, 1),
                                 new SpellFactory().create(LIGHTNING_BOLT, BASIC, 1),
                                 new SpellFactory().create(PROTECTION_FROM_AIR, BASIC, 1),
@@ -102,6 +103,7 @@ public class Start extends Application {
                 SpellsBook.builder().spells(List.of(
                         new SpellFactory().create(HASTE, BASIC, 2),
                         new SpellFactory().create(MAGIC_ARROW, BASIC, 10),
+                        new SpellFactory().create(DISRUPTING_RAY, BASIC, 1),
                         new SpellFactory().create(FORTUNE, BASIC, 1),
                         new SpellFactory().create(LIGHTNING_BOLT, BASIC, 1),
                         new SpellFactory().create(PROTECTION_FROM_AIR, BASIC, 1),
