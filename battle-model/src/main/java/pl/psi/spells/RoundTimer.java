@@ -38,11 +38,11 @@ public class RoundTimer implements PropertyChangeListener {
         if(RESET_TIMER.equals(evt.getPropertyName())){
             resetTimer();
         }
+
         if (TurnQueue.END_OF_TURN.equals(evt.getPropertyName()) && isSpellOnRunningSpellList()) {
             currentTimer = currentTimer - 1;
             if (currentTimer == 0) {
-                spell.unCastSpell(creature);
-                creature.getRunningSpells().removeIf(aSpell -> aSpell.getName().equals(spell.getName()));
+                unCastSpellAndRemoveFromRunningList(spell, creature, spell.getName());
             }
         }
     }
@@ -56,12 +56,10 @@ public class RoundTimer implements PropertyChangeListener {
     }
 
     public void removeCounterSpell(Creature aDefender, SpellNames counterSpell){
-        Optional<Spell> optionalCounterSpell = aDefender.getRunningSpells().stream()
-                .filter(spell -> spell.getName().equals(counterSpell))
-                .findAny();
+        Optional<Spell> optionalCounterSpell = aDefender.getCreatureRunningSpellWithName(counterSpell);
+
         if (optionalCounterSpell.isPresent()) {
-            optionalCounterSpell.get().unCastSpell(aDefender);
-            aDefender.getRunningSpells().removeIf(spell -> spell.getName().equals(counterSpell));
+            unCastSpellAndRemoveFromRunningList(optionalCounterSpell.get(), aDefender, counterSpell);
         }
     }
 
@@ -69,5 +67,10 @@ public class RoundTimer implements PropertyChangeListener {
         if (!aDefender.isRunningSpellsSlotsFull()){
             aDefender.getRunningSpells().poll().unCastSpell(aDefender);
         }
+    }
+
+    private void unCastSpellAndRemoveFromRunningList(Spell spell, Creature creature, SpellNames spell1) {
+        spell.unCastSpell(creature);
+        creature.getRunningSpells().removeIf(aSpell -> aSpell.getName().equals(spell1));
     }
 }
