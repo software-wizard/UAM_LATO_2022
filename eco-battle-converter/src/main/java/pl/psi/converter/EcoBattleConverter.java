@@ -75,12 +75,14 @@ public class EcoBattleConverter {
                     aPlayer.getCreatureList()
                             .forEach(ecoCreature -> creatures.add(strongholdFactory.create(ecoCreature.isUpgraded(),
                                     ecoCreature.getTier(), ecoCreature.getAmount())));
+                    break;
 
                 case CASTLE:
                     final CastleCreatureFactory castleCreatureFactory = new CastleCreatureFactory();
                     aPlayer.getCreatureList()
                             .forEach(ecoCreature -> creatures.add(castleCreatureFactory.create(ecoCreature.getTier(),
                                     ecoCreature.isUpgraded(), ecoCreature.getAmount())));
+                    break;
             }
             convertSkills(playerSkills, creatures, aPlayer, aPlayer.getSpellList());
             final List<Spell<? extends SpellableIf>> spells = new ArrayList<>();
