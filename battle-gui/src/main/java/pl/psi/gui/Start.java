@@ -5,10 +5,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import pl.psi.Hero;
+import pl.psi.creatures.DefaultDamageCalculator;
+import pl.psi.creatures.WarMachinesFactory;
 import pl.psi.hero.HeroStatistics;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Random;
 
 public class Start extends Application {
 
@@ -41,6 +44,7 @@ public class Start extends Application {
     private Hero createP1() {
         final Hero ret =
                 new Hero(List.of(
+                        new WarMachinesFactory().create(1, 1, new DefaultDamageCalculator(new Random()), 1),
                         new NecropolisFactory().create(false, 1, 5),
                         new NecropolisFactory().create(true, 2, 5),
                         new NecropolisFactory().create(false,3,5),
