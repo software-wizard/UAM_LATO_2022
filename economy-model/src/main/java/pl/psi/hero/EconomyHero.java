@@ -34,7 +34,7 @@ public class EconomyHero implements ArtifactEffectApplicable {
         this(aFraction, HeroStatistics.NECROMANCER);
     }
 
-    public EconomyHero(final Fraction aFraction, final HeroStatistics aClass) {
+    public EconomyHero(final Fraction aFraction, final HeroStatisticsIf aClass) {
         heroCounter++;
         heroNumber = heroCounter;
         fraction = aFraction;
@@ -114,7 +114,7 @@ public class EconomyHero implements ArtifactEffectApplicable {
         }
     }
 
-    public void updateHeroStats( HeroStats aStats ) {
+    public void updateHeroStats( HeroStatisticsIf aStats ) {
         this.heroStats.updateStats(aStats);
     }
 

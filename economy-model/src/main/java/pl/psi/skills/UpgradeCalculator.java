@@ -4,6 +4,7 @@ import pl.psi.creatures.Creature;
 import pl.psi.creatures.CreatureStats;
 import pl.psi.creatures.WarMachinesAbstract;
 import pl.psi.hero.EconomyHero;
+import pl.psi.hero.HeroStatisticsIf;
 import pl.psi.hero.HeroStats;
 import pl.psi.spells.*;
 
@@ -50,8 +51,8 @@ public class UpgradeCalculator {
         return statsToApply;
     }
 
-    public HeroStats calculate(EconomyHero aHero) {
-        HeroStats changedStats;
+    public HeroStatisticsIf calculate(EconomyHero aHero) {
+        HeroStatisticsIf changedStats;
         int newEffect;
         switch (this.skillName) {
             case LEADERSHIP:
@@ -63,7 +64,7 @@ public class UpgradeCalculator {
                 changedStats = HeroStats.builder().luck(newEffect).build();
                 break;
             default:
-                changedStats = (HeroStats) aHero.getHeroStats();
+                changedStats = aHero.getHeroStats();
         }
         return changedStats;
     }
@@ -131,7 +132,7 @@ public class UpgradeCalculator {
             case 1: return SpellRang.BASIC;
             case 2: return SpellRang.ADVANCED;
             case 3: return SpellRang.EXPERT;
-            default: throw new IllegalArgumentException("Invalid spell rang");
+            default: return SpellRang.EXPERT;
         }
     }
 }
