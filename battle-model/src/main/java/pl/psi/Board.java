@@ -4,6 +4,7 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import pl.psi.creatures.Creature;
 import pl.psi.specialfields.Field;
+import pl.psi.specialfields.FieldPointPair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,10 +18,10 @@ public class Board {
     private final BiMap<Point, Creature> map = HashBiMap.create();
     private final BiMap<Point, Field> fieldsMap = HashBiMap.create();
 
-    public Board(final List<Creature> aCreatures1, final List<Creature> aCreatures2, final List<Field> aFields) {
+    public Board(final List<Creature> aCreatures1, final List<Creature> aCreatures2, final List<FieldPointPair> aFieldPointPairs) {
         addCreatures(aCreatures1, 0);
         addCreatures(aCreatures2, MAX_WITDH);
-        addFields(aFields);
+        addFieldPointPairs(aFieldPointPairs);
     }
 
     public boolean canCreatureAttackAnyone(Creature aCreature) {
@@ -53,9 +54,9 @@ public class Board {
         }
     }
 
-    private void addFields(final List<Field> aFields) {
-        for (int i = 0; i < aFields.size(); i++) {
-            fieldsMap.put(new Point(i, i), aFields.get(i));
+    private void addFieldPointPairs(final List<FieldPointPair> aFieldPointPairs) {
+        for (FieldPointPair aFieldPointPair : aFieldPointPairs) {
+            fieldsMap.put(aFieldPointPair.getPoint(), aFieldPointPair.getField());
         }
     }
 

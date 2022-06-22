@@ -23,7 +23,7 @@ import static pl.psi.spells.SpellRang.BASIC;
  */
 public class GameEngine {
 
-    private final List<Field> fields = new FieldsFactory().createFields(DensityLevel.MEDIUM);
+    private final List<FieldPointPair> fields = new FieldsFactory().createFields(DensityLevel.MEDIUM);
     public static final String CREATURE_MOVED = "CREATURE_MOVED";
     private final TurnQueue turnQueue;
     private final Board board;
