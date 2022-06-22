@@ -70,7 +70,7 @@ public class GameEngine {
 
     public void handleFieldEffect(final Point point) {
         board.getField(point)
-                .ifPresent(f -> board.getCreature(point).ifPresent(f::handleEffect));
+                .ifPresent(f -> f.handleEffect(getCurrentHero().getCreatures()));
     }
     public List<Point> getCurrentCreatureSplashDamagePointsList(final Point aPoint) {
         return board.getCreatureSplashDamagePointsList(getCurrentCreature(), aPoint);

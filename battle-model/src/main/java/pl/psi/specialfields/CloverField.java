@@ -17,8 +17,8 @@ public class CloverField extends Field implements BufferIf {
     }
 
     @Override
-    public void handleEffect(Creature creature) {
-        buffCreature(creature);
+    public void handleEffect(List<Creature> creatures) {
+        buffCreatures(creatures);
     }
 
     @Override

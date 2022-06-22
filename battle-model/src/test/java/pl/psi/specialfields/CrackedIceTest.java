@@ -32,7 +32,7 @@ public class CrackedIceTest {
         List<Creature> creatures = List.of(creature1, creature2, creature3, creature4);
 
         // when
-        crackedIce.buffCreatures(creatures);
+        crackedIce.handleEffect(creatures);
 
         // then
         assertThat(creature1.getDefense()).isEqualTo(10);
@@ -55,7 +55,7 @@ public class CrackedIceTest {
         List<Creature> creatures = List.of(creature1, creature2);
 
         // when
-        crackedIce.buffCreatures(creatures);
+        crackedIce.handleEffect(creatures);
 
         // then
         assertThat(creature1.getDefense()).isEqualTo(-3);
@@ -76,7 +76,7 @@ public class CrackedIceTest {
         List<Creature> creatures = List.of(creature1, creature2);
 
         // when
-        crackedIce.buffCreatures(creatures);
+        crackedIce.handleEffect(creatures);
 
         // then
         assertThat(creature1.getDefense()).isEqualTo(1);
@@ -92,7 +92,7 @@ public class CrackedIceTest {
         ).defense(4).build();
 
         // when
-        crackedIce.handleEffect(creature);
+        crackedIce.handleEffect(List.of(creature));
 
         // then
         assertThat(creature.getDefense()).isEqualTo(-1);
@@ -107,7 +107,7 @@ public class CrackedIceTest {
         ).defense(20).alignment(Alignment.EVIL).build();
 
         // when
-        crackedIce.handleEffect(creature);
+        crackedIce.handleEffect(List.of(creature));
 
         // then
         assertThat(creature.getDefense()).isEqualTo(15);
@@ -122,7 +122,7 @@ public class CrackedIceTest {
         ).defense(50).alignment(Alignment.GOOD).build();
 
         // when
-        crackedIce.handleEffect(creature);
+        crackedIce.handleEffect(List.of(creature));
 
         // then
         assertThat(creature.getDefense()).isEqualTo(45);

@@ -7,7 +7,7 @@ import pl.psi.creatures.CreatureStats;
 import java.util.List;
 
 @ToString
-public class CrackedIce extends Field implements BufferIf {
+public class CrackedIce extends Field implements DebufferIf {
 
     public CrackedIce() {
         super("/images/cracked_ice.png");
@@ -18,19 +18,19 @@ public class CrackedIce extends Field implements BufferIf {
     }
 
     @Override
-    public void buffCreature(Creature creature) {
+    public void debuffCreature(Creature creature) {
         creature.reduceDefenseBy(5);
     }
 
     @Override
-    public void buffCreatures(List<Creature> creatures) {
+    public void debuffCreatures(List<Creature> creatures) {
         if (!creatures.isEmpty()) {
-            creatures.forEach(this::buffCreature);
+            creatures.forEach(this::debuffCreature);
         }
     }
 
     @Override
-    public void handleEffect(Creature creature) {
-        buffCreature(creature);
+    public void handleEffect(List<Creature> creatures) {
+        debuffCreatures(creatures);
     }
 }

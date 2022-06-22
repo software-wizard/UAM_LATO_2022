@@ -201,7 +201,7 @@ public class MainBattleController implements PropertyChangeListener {
                         mapTile.setOnMouseExited(mouseEvent -> {
                             if (gameEngine.getCreature(new Point(x1, y1)).isEmpty()) {
                                 mapTile.setBackground(Color.DARKGREY);
-                                renderSpecialFields(mapTile, x1, y1);
+//                                renderSpecialFields(mapTile, x1, y1);
                                 gameEngine.getField(new Point(x1, y1))
                                     .ifPresent(f -> mapTile.setBackground(new Image(f.getImagePath())));
                             }

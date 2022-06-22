@@ -2,6 +2,8 @@ package pl.psi.specialfields;
 
 import pl.psi.creatures.Creature;
 
+import java.util.List;
+
 public class Field {
     private String imagePath = "";
 
@@ -15,5 +17,5 @@ public class Field {
         return imagePath;
     }
 
-    public void handleEffect(Creature creature) {}
+    public void handleEffect(List<Creature> creature) {}
 }
