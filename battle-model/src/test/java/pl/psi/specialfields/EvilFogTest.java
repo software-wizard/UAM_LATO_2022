@@ -120,7 +120,7 @@ public class EvilFogTest {
         );
 
         // when
-        evilFog.buffCreatures(creatures);
+        evilFog.handleEffect(creatures);
 
         // then
         assertEquals(0, goodAlignedCreature.getMorale());
@@ -139,8 +139,8 @@ public class EvilFogTest {
                 .build();
 
         // when
-        var exceptionWhenGivenDataIsNull = assertThrows(IllegalArgumentException.class, () -> evilFog.buffCreatures(null));
-        var exceptionWhenGivenDataIsEmpty = assertThrows(IllegalArgumentException.class, () -> evilFog.buffCreatures(of()));
+        var exceptionWhenGivenDataIsNull = assertThrows(IllegalArgumentException.class, () -> evilFog.handleEffect(null));
+        var exceptionWhenGivenDataIsEmpty = assertThrows(IllegalArgumentException.class, () -> evilFog.handleEffect(of()));
 
         // then
         assertEquals("Creatures list must not be null", exceptionWhenGivenDataIsNull.getMessage());

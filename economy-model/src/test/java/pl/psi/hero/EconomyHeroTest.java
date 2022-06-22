@@ -39,16 +39,5 @@ class EconomyHeroTest {
 
     }
 
-    @Test
-    void setNewArtifactTakenPlace()
-    {
-        hero.equipArtifact(item2);
-        hero.equipArtifact(item3);
-        assertFalse(hero.getEquipment().getArtifacts().contains(item2));
-        assertTrue(hero.getBackpack().getArtifacts().contains(item2));
-        assertTrue(hero.getEquipment().getArtifacts().contains(item3));
-
-    }
-
 
 }

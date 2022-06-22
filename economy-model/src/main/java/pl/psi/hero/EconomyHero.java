@@ -114,7 +114,7 @@ public class EconomyHero implements ArtifactEffectApplicable {
         }
     }
 
-    public void updateHeroStats( HeroStats aStats ) {
+    public void updateHeroStats( HeroStatisticsIf aStats ) {
         this.heroStats.updateStats(aStats);
     }
 
