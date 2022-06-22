@@ -11,8 +11,6 @@ public class MaximalDamageCalculator extends AbstractCalculateDamageStrategy {
 
     @Override
     protected double getRandomValueFromAttackRange(final Creature aAttacker, final Creature aDefender) {
-        System.out.println("MAX");
-        System.out.println(aAttacker.getDamage().upperEndpoint());
         return aAttacker.getDamage().upperEndpoint();
     }
 

@@ -328,7 +328,6 @@ public class GameEngine {
                     );
                     break;
                 case AREA:
-                    System.out.println(point);
                     SpellCreatureList creatureList = new SpellCreatureList(getCreaturesFromArea(point, spell));
                     turnQueue.getCurrentCreature().castSpell(creatureList, spell, biConsumer);
                     break;

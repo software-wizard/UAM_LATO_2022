@@ -38,7 +38,6 @@ public class RoundTimer implements PropertyChangeListener {
         if(RESET_TIMER.equals(evt.getPropertyName())){
             resetTimer();
         }
-        System.out.println(creature.getRunningSpells().stream().map(Spell::getName).collect(Collectors.toList()));
         if (TurnQueue.END_OF_TURN.equals(evt.getPropertyName()) && isSpellOnRunningSpellList()) {
             currentTimer = currentTimer - 1;
             if (currentTimer == 0) {

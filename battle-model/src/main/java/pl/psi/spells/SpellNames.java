@@ -3,7 +3,7 @@ package pl.psi.spells;
 public enum SpellNames {
     HASTE("Haste"),
     MAGIC_ARROW("Magic Arrow"),
-    DISRUPTING_RAY("Disrupting_ray"),
+    DISRUPTING_RAY("Disrupting Ray"),
     FORTUNE("Fortune"),
     LIGHTNING_BOLT("Lightning Bolt"),
     PROTECTION_FROM_AIR("Protection From Air"),
