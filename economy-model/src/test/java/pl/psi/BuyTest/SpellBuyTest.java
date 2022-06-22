@@ -32,7 +32,7 @@ public class SpellBuyTest {
         economyEngine.buy(ProductType.SPELL,
                 factory.create(SpellStats.MAGIC_ARROW, SpellRang.BASIC));
         assertEquals(1, hero1.getSpellList().size());
-        assertEquals(startGold - 100, hero1.getGold().getPrice());
+        assertEquals(startGold - 50, hero1.getGold().getPrice());
     }
 
     @Test
@@ -42,7 +42,7 @@ public class SpellBuyTest {
         economyEngine.buy(ProductType.SPELL,
                 factory.create(SpellStats.FIRE_BALL, SpellRang.BASIC));
         assertEquals(2, hero1.getSpellsList().size());
-        assertEquals(startGold - 205, hero1.getGold().getPrice());
+        assertEquals(startGold - 200, hero1.getGold().getPrice());
     }
 
     @Test
