@@ -42,7 +42,7 @@ public class EcoBattleConverter {
             final FXMLLoader loader = new FXMLLoader();
             loader.setLocation(EcoBattleConverter.class.getClassLoader()
                     .getResource("fxml/main-battle.fxml"));
-            loader.setController(new MainBattleController(convert(aPlayer1), convert(aPlayer2)));
+            loader.setController(new MainBattleController(convert(aPlayer1,1), convert(aPlayer2,2)));
             scene = new Scene(loader.load());
             final Stage aStage = new Stage();
             aStage.setScene(scene);
