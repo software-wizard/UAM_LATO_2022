@@ -28,13 +28,8 @@ public class Ballista extends AbstractWarMachines {
             creatures.stream()
                     .filter(Creature::isAlive)
                     .findAny()
-                    .ifPresent(this::calculateAndApplyDamage);
+                    .ifPresent(this::attackRange);
         }
-    }
-
-    private void calculateAndApplyDamage(Creature aDefender) {
-        final int damage = getCalculator().calculateDamage(this, aDefender);
-        applyDamage(aDefender, damage);
     }
 
     @Override
@@ -56,8 +51,4 @@ public class Ballista extends AbstractWarMachines {
         final int damage = getCalculator().calculateDamage(this, aDefender);
         applyDamage(aDefender, damage);
     }
-
-//    protected void applyDamage(final Creature aDefender, final double aDamage) {
-//        aDefender.setCurrentHp(aDefender.getCurrentHp() - aDamage);
-//    }
 }
