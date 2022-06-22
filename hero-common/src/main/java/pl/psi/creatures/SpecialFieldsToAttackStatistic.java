@@ -26,9 +26,9 @@ public enum SpecialFieldsToAttackStatistic implements CreatureStatisticIf {
 
     @Override
     public CreatureStatistic.CreatureGroup getGroup() {
-        return null;
+        return CreatureStatistic.CreatureGroup.OTHER;
     }
-
+  
     @Override
     public boolean isGoodAligned() {
         return CreatureStatisticIf.super.isGoodAligned();
@@ -36,16 +36,16 @@ public enum SpecialFieldsToAttackStatistic implements CreatureStatisticIf {
 
     @Override
     public String getCanAttackImagePath() {
-        return null;
+        return "";
     }
 
     @Override
     public String getCanBuffImagePath() {
-        return null;
+        return "";
     }
 
     @Override
     public String getCurrentImagePath() {
-        return null;
+        return "";
     }
 }
