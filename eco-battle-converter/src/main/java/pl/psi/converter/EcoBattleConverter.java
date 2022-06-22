@@ -42,7 +42,7 @@ public class EcoBattleConverter {
             final FXMLLoader loader = new FXMLLoader();
             loader.setLocation(EcoBattleConverter.class.getClassLoader()
                     .getResource("fxml/main-battle.fxml"));
-            loader.setController(new MainBattleController(convert(aPlayer1, 1), convert(aPlayer2, 2)));
+            loader.setController(new MainBattleController(convert(aPlayer1,1), convert(aPlayer2,2)));
             scene = new Scene(loader.load());
             final Stage aStage = new Stage();
             aStage.setScene(scene);
@@ -92,7 +92,7 @@ public class EcoBattleConverter {
             final SpellFactory spellFactory = new SpellFactory(spellFactorsModifiers);
 
             aPlayer.getSpellList()
-                    .forEach(economySpell -> spells.add(spellFactory.create(SpellNames.valueOf(economySpell.getSpellStats().getName()), economySpell.getSpellRang(), aPlayer.getSpellPower())));
+                .forEach(economySpell -> spells.add(spellFactory.create(economySpell.getSpellStats().getName(), economySpell.getSpellRang(), aPlayer.getSpellPower())));
 
             SpellsBook spellsBook = SpellsBook.builder().spells(spells).mana(aPlayer.getHeroStats().getSpellPoints()).build();
 

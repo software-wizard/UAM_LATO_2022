@@ -30,6 +30,8 @@ import pl.psi.spells.SpellableIf;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.*;
 
 import static pl.psi.gui.SpellBattleController.SPELL_SELECTED;
@@ -196,7 +198,7 @@ public class MainBattleController implements PropertyChangeListener {
                 final int y1 = y;
                 final MapTile mapTile = new MapTile("");
 
-                if (gameEngine.canMove(new Point(x1, y1))) {
+                if (gameEngine.canMove(new Point(x1, y1)) && !gameEngine.isHeroCastingSpell()) {
                     mapTile.setBackground(Color.DARKGREY);
                     List<Point> path = gameEngine.getPath(new Point(x1, y1));
 
@@ -254,7 +256,7 @@ public class MainBattleController implements PropertyChangeListener {
                             mouseEvent -> {
                                 if (gameEngine.getCreature(new Point(x1, y1)).isPresent()) {
                                     if (gameEngine.canCastSpell(selectedSpell, gameEngine.getCreature(new Point(x1, y1)).get())) {
-                                        mapTile.getScene().setCursor(new ImageCursor(new Image("/images/spells images/Cast Coursor.png")));
+                                        mapTile.getScene().setCursor(new ImageCursor(new Image("/images/spells images/Cast Coursor.gif")));
                                     } else {
                                         mapTile.getScene().setCursor(new ImageCursor(new Image("/images/spells images/Block Coursor.png")));
                                     }
@@ -285,7 +287,7 @@ public class MainBattleController implements PropertyChangeListener {
                         }
                     });
                 }
-                if (gameEngine.canAttack(new Point(x, y))) {
+                if (gameEngine.canAttack(new Point(x, y)) && !gameEngine.isHeroCastingSpell()) {
                     mapTile.setOnMouseEntered(e -> {
                         Image img = new Image(gameEngine.getCreature(new Point(x1, y1)).get().getBasicStats().getCanAttackImagePath());
                         mapTile.setBackground(img);

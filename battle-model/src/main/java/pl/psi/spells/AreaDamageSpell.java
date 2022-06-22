@@ -11,8 +11,8 @@ public class AreaDamageSpell extends Spell<SpellCreatureList> {
     private final boolean[][] area;
     private final double value;
 
-    public AreaDamageSpell(SpellTypes category, SpellNames name, SpellMagicClass spellMagicClass, SpellRang rang, int manaCost, boolean[][] area, double value) {
-        super(category, name, spellMagicClass, rang, manaCost);
+    public AreaDamageSpell(SpellTypes category, SpellNames name, SpellMagicClass spellMagicClass, SpellRang rang, SpellAlignment spellAlignment, int manaCost, boolean[][] area, double value) {
+        super(category, name, spellMagicClass, rang, spellAlignment, manaCost);
         this.area = area;
         this.value = value;
     }
@@ -21,7 +21,7 @@ public class AreaDamageSpell extends Spell<SpellCreatureList> {
     public void castSpell(SpellCreatureList creatureList, BiConsumer<String, PropertyChangeListener> consumer) {
         creatureList.getCreatureList().forEach(creature -> {
             SpellFactorCalculator spellFactorCalculator = new SpellFactorCalculator();
-            creature.applySpellDamage(creature, value * spellFactorCalculator.isCreatureHasProtection(this, creature));
+            creature.applySpellDamage(creature, value * spellFactorCalculator.getCreatureProtectionFactor(this, creature));
         });
     }
 

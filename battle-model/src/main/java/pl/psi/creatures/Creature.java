@@ -15,10 +15,7 @@ import pl.psi.spells.*;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
-import java.util.Random;
+import java.util.*;
 import java.util.function.BiConsumer;
 
 /**
@@ -32,6 +29,7 @@ public class Creature implements PropertyChangeListener, Comparable<Creature>, S
     private CreatureStats externalStats = new CreatureStats.CreatureStatsBuilder().build();
     private CreatureStats buffedStats = new CreatureStats.CreatureStatsBuilder().build();
     private int amount;
+    private int startAmount;
     private double currentHp;
     private boolean canCounterAttack = true;
     private DamageCalculatorIf calculator;
@@ -58,6 +56,7 @@ public class Creature implements PropertyChangeListener, Comparable<Creature>, S
                      final int aLuck, final int aDefense) {
         basicStats = aStats;
         amount = aAmount;
+        startAmount = aAmount;
         currentHp = basicStats.getMaxHp();
         calculator = aCalculator;
         alignment = aAlignment;
@@ -191,12 +190,22 @@ public class Creature implements PropertyChangeListener, Comparable<Creature>, S
         applyDamage(this, damage * spellDamageReduction);
     }
 
-    protected void heal(final double healAmount) {
+    public void heal(final double healAmount) {
         setCurrentHp((getCurrentHp() + healAmount));
 
-        addUnits(calculateAmount());
-        setCurrentHp(calculateCurrentHp());
+        if(calculateAmount() > startAmount){
+            restoreCurrentStackToMax();
+            restoreCurrentHpToMax();
+        }else{
+            addUnits(calculateAmount());
+            setCurrentHp(calculateCurrentHp());
+        }
+
         setLastHealAmount(healAmount);
+    }
+
+    private void restoreCurrentStackToMax(){
+        amount = startAmount;
     }
 
     private int calculateAmount() {
@@ -468,6 +477,25 @@ public class Creature implements PropertyChangeListener, Comparable<Creature>, S
 
     public List<SpellNames> getVulnerableSpellList() {
         return null;
+    }
+
+    public boolean isCreatureContainsRunningSpellWithName(SpellNames spellName) {
+        Optional<Spell> optionalCounterSpell = this.getRunningSpells().stream()
+                .filter(spell1 -> spell1.getName().equals(spellName))
+                .findAny();
+
+        return optionalCounterSpell.isPresent();
+    }
+
+    public Optional<Spell> getCreatureRunningSpellWithName(SpellNames spellName) {
+        Optional<Spell> optionalSpell = this.getRunningSpells().stream()
+                .filter(spell1 -> spell1.getName().equals(spellName))
+                .findAny();
+        return optionalSpell;
+    }
+
+    public CreatureStatistic.CreatureType getCreatureType() {
+        return this.getBasicStats().getType();
     }
 
     public static class Builder {

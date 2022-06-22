@@ -237,4 +237,9 @@ public class AbstractCreature extends Creature {
     public List<SpellNames> getVulnerableSpellList() {
         return decorated.getImmuneSpellList();
     }
+
+    @Override
+    public void setCalculator(DamageCalculatorIf calculator) {
+        decorated.setCalculator(calculator);
+    }
 }

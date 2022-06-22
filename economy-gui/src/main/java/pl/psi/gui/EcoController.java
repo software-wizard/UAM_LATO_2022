@@ -553,6 +553,7 @@ public class EcoController implements PropertyChangeListener {
     }
 
     private void setImageToProducts(AbstractButton button, VBox shop, boolean canBuy){
+        System.out.println(button.PATH);
         Image image = new Image(button.PATH);
         ImageView imageView = new ImageView(image);
         imageView.setFitHeight(40);

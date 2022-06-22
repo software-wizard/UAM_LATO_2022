@@ -132,7 +132,7 @@ public class UpgradeCalculator {
             case 1: return SpellRang.BASIC;
             case 2: return SpellRang.ADVANCED;
             case 3: return SpellRang.EXPERT;
-            default: return SpellRang.EXPERT;
+            default: throw new IllegalArgumentException("Invalid spell rang");
         }
     }
 }
