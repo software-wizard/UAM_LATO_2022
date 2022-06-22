@@ -2,6 +2,7 @@ package pl.psi;
 
 import lombok.Getter;
 import pl.psi.creatures.Creature;
+import pl.psi.creatures.CreatureStatistic;
 import pl.psi.creatures.FirstAidTent;
 import pl.psi.specialfields.*;
 import pl.psi.spells.*;
@@ -12,11 +13,9 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static java.lang.Math.ceil;
-import static pl.psi.spells.SpellNames.DISRUPTING_RAY;
-import static pl.psi.spells.SpellNames.WEAKNESS;
+import static pl.psi.spells.SpellNames.*;
 import static pl.psi.spells.SpellRang.BASIC;
 
 /**
@@ -407,11 +406,31 @@ public class GameEngine {
         Creature creature = null;
         if (board.getCreature(point).isPresent()) {
             if (canCastSpell(spell, board.getCreature(point).get())) {
+
                 creature = board.getCreature(point).get();
+
+                if (creature.isCreatureContainsRunningSpellWithName(MAGIC_MIRROR)) {
+                    Spell magicMirror = creature.getCreatureRunningSpellWithName(MAGIC_MIRROR).get();
+                    Random rand = new Random();
+                    Creature redirectedCreature = redirectSpellWithSpecificProbability((MagicMirror) magicMirror, rand);
+                    creature = (redirectedCreature != null) ? redirectedCreature : creature;
+                }
             }
         }
 
         return Optional.ofNullable(creature);
+    }
+
+    private Creature redirectSpellWithSpecificProbability(MagicMirror magicMirror, Random rand) {
+        return (calculateChances(magicMirror, rand)) ? getRandomCreature(rand) : null;
+    }
+
+    private Boolean calculateChances(MagicMirror magicMirror, Random rand) {
+        return rand.nextInt(10) <= magicMirror.getProbability();
+    }
+
+    private Creature getRandomCreature(Random rand) {
+        return getCurrentHero().getCreatures().get(rand.nextInt(getCurrentHero().getCreatures().size()));
     }
 
 
@@ -424,11 +443,9 @@ public class GameEngine {
 
 
         if (spell instanceof ChainLightning) {
-            List<Creature> pom = Stream.concat(hero1.getCreatures().stream(), hero2.getCreatures().stream())
-                    .collect(Collectors.toList());
-            List<Optional<Point>> creaturePoints = pom.stream().map(board::getPoint).collect(Collectors.toList());
+            List<Optional<Point>> creaturePoints = turnQueue.getCreatures().stream().map(board::getPoint).collect(Collectors.toList());
 
-            Map<Point, Double> distanceMap = new HashMap<>();
+            Map<Point, Double> distanceMap = new LinkedHashMap<>();
             creaturePoints.forEach(point1 -> {
                 point1.ifPresent(point2 -> {
                     double distance = Math.pow((point2.getX() - point.getX()), 2) + Math.pow((point2.getY() - point.getY()), 2);
@@ -436,11 +453,7 @@ public class GameEngine {
                 });
             });
 
-            Map<Point, Double> distanceMapSorted = new HashMap<>();
-
-            distanceMap.entrySet().stream()
-                    .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-                    .forEachOrdered(x -> distanceMapSorted.put(x.getKey(), x.getValue()));
+            Map<Point, Double> distanceMapSorted = distanceMap.entrySet().stream().sorted(Map.Entry.comparingByValue()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (x, y) -> y, LinkedHashMap::new));
 
             distanceMapSorted
                     .forEach((k, v) -> board.getCreature(k).ifPresent(creature -> {
@@ -468,11 +481,23 @@ public class GameEngine {
         return creatures;
     }
 
-    public boolean canCastSpell(Spell spell, Creature creature) {
-        if ((spell instanceof Dispel) && (spell.getRang() == BASIC)) {
+    public boolean canCastSpell(Spell<? extends SpellableIf> spell, Creature creature) {
+        if ((spell.getName().equals(DISPEL) && (spell.getRang() == BASIC)) || spell.getName().equals(RESURRECTION)) {
             return isCreatureAllied(creature);
         } else if (spell.getName().equals(DISRUPTING_RAY) || spell.getName().equals(WEAKNESS)) {
             return !isCreatureAllied(creature);
+        } else if (spell.getName().equals(CURE)){
+            if(isCreatureAllied(creature)){
+                Dispel dispel = new Dispel(SpellTypes.FIELD, DISPEL, SpellMagicClass.WATER, spell.getRang(),SpellAlignment.POSITIVE, 0, List.of(SpellAlignment.NEGATIVE));
+                castSpell(board.getCreaturePosition(creature), dispel);
+                return true;
+            }else {
+                return false;
+            }
+        }else if(spell.getName().equals(ANIMATE_DEAD)) {
+            return !creature.isAlive() && creature.getCreatureType().equals(CreatureStatistic.CreatureType.UNDEAD) && isCreatureAllied(creature);
+        }else if(spell.getName().equals(DEATH_RIPPLE)){
+            return creature.getCreatureType().equals(CreatureStatistic.CreatureType.UNDEAD);
         }
         return true;
     }

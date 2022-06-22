@@ -14,10 +14,12 @@ import pl.psi.artifacts.EconomyArtifact;
 import pl.psi.artifacts.model.ArtifactEffect;
 import pl.psi.artifacts.model.ArtifactIf;
 import pl.psi.artifacts.model.ArtifactTarget;
+import pl.psi.creatures.CastleCreatureFactory;
 import pl.psi.creatures.Creature;
 import pl.psi.creatures.EconomyCreature;
 import pl.psi.gui.MainBattleController;
 import pl.psi.gui.NecropolisFactory;
+import pl.psi.gui.StrongholdFactory;
 import pl.psi.hero.EconomyHero;
 import pl.psi.skills.EconomySkill;
 import pl.psi.spells.EconomySpell;
@@ -40,7 +42,7 @@ public class EcoBattleConverter {
             final FXMLLoader loader = new FXMLLoader();
             loader.setLocation(EcoBattleConverter.class.getClassLoader()
                     .getResource("fxml/main-battle.fxml"));
-            loader.setController(new MainBattleController(convert(aPlayer1, 1), convert(aPlayer2, 2)));
+            loader.setController(new MainBattleController(convert(aPlayer1,1), convert(aPlayer2,2)));
             scene = new Scene(loader.load());
             final Stage aStage = new Stage();
             aStage.setScene(scene);
@@ -60,11 +62,28 @@ public class EcoBattleConverter {
             final List<EconomySkill> playerSkills = aPlayer.getSkillsList();
 
             final List<Creature> creatures = new ArrayList<>();
-            final NecropolisFactory factory = new NecropolisFactory();
-            aPlayer.getCreatureList()
-                    .forEach(ecoCreature -> creatures.add(factory.create(ecoCreature.isUpgraded(),
-                            ecoCreature.getTier(), ecoCreature.getAmount())));
+            switch (aPlayer.getFraction()) {
+                case NECROPOLIS:
+                    final NecropolisFactory necroFactory = new NecropolisFactory();
 
+                    aPlayer.getCreatureList()
+                            .forEach(ecoCreature -> creatures.add(necroFactory.create(ecoCreature.isUpgraded(),
+                                    ecoCreature.getTier(), ecoCreature.getAmount())));
+                    break;
+                case STRONGHOLD:
+                    final StrongholdFactory strongholdFactory = new StrongholdFactory();
+                    aPlayer.getCreatureList()
+                            .forEach(ecoCreature -> creatures.add(strongholdFactory.create(ecoCreature.isUpgraded(),
+                                    ecoCreature.getTier(), ecoCreature.getAmount())));
+                    break;
+
+                case CASTLE:
+                    final CastleCreatureFactory castleCreatureFactory = new CastleCreatureFactory();
+                    aPlayer.getCreatureList()
+                            .forEach(ecoCreature -> creatures.add(castleCreatureFactory.create(ecoCreature.getTier(),
+                                    ecoCreature.isUpgraded(), ecoCreature.getAmount())));
+                    break;
+            }
             convertSkills(playerSkills, creatures, aPlayer, aPlayer.getSpellList());
             final List<Spell<? extends SpellableIf>> spells = new ArrayList<>();
 
@@ -73,7 +92,7 @@ public class EcoBattleConverter {
             final SpellFactory spellFactory = new SpellFactory(spellFactorsModifiers);
 
             aPlayer.getSpellList()
-                    .forEach(economySpell -> spells.add(spellFactory.create(SpellNames.valueOf(economySpell.getSpellStats().getName()), economySpell.getSpellRang(), aPlayer.getSpellPower())));
+                .forEach(economySpell -> spells.add(spellFactory.create(economySpell.getSpellStats().getName(), economySpell.getSpellRang(), aPlayer.getSpellPower())));
 
             SpellsBook spellsBook = SpellsBook.builder().spells(spells).mana(aPlayer.getHeroStats().getSpellPoints()).build();
 
@@ -88,7 +107,7 @@ public class EcoBattleConverter {
         {
             final Multimap<ArtifactTarget, ArtifactIf> artifacts = ArrayListMultimap.create();
             final ArtifactFactory factory = new ArtifactFactory();
-            final List<EconomyArtifact> economyArtifacts = aPlayer.getArtifactList();
+            final List<EconomyArtifact> economyArtifacts = aPlayer.getArtifacts();
 
             for (final EconomyArtifact economyArtifact : economyArtifacts) {
                 final ArtifactTarget target = economyArtifact.getNameHolder().getHolderTarget();

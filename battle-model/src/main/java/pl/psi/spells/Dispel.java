@@ -4,12 +4,16 @@ import pl.psi.creatures.Creature;
 
 import java.beans.PropertyChangeListener;
 import java.util.Iterator;
+import java.util.List;
 import java.util.function.BiConsumer;
 
 public class Dispel extends Spell<Creature> {
 
-    public Dispel(SpellTypes category, SpellNames name, SpellMagicClass spellMagicClass, SpellRang rang, int manaCost) {
-        super(category, name, spellMagicClass, rang, manaCost);
+    private final List<SpellAlignment> acceptableAlignments;
+
+    public Dispel(SpellTypes category, SpellNames name, SpellMagicClass spellMagicClass, SpellRang rang, SpellAlignment spellAlignment, int manaCost, List<SpellAlignment> acceptableAlignments) {
+        super(category, name, spellMagicClass, rang, spellAlignment, manaCost);
+        this.acceptableAlignments = acceptableAlignments;
     }
 
     @Override
@@ -18,8 +22,10 @@ public class Dispel extends Spell<Creature> {
 
         while (spellIterator.hasNext()) {
             Spell spell = spellIterator.next();
-            spell.unCastSpell(aDefender);
-            spellIterator.remove();
+            if(acceptableAlignments.contains(spell.getSpellAlignment())){
+                spell.unCastSpell(aDefender);
+                spellIterator.remove();
+            }
         }
     }
 

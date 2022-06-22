@@ -5,7 +5,7 @@ import java.util.Random;
 public class MaximalDamageCalculator extends AbstractCalculateDamageStrategy {
 
 
-    protected MaximalDamageCalculator() {
+    public MaximalDamageCalculator() {
         super(new Random());
     }
 

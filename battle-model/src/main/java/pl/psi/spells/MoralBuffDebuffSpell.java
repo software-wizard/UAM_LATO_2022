@@ -3,10 +3,8 @@ package pl.psi.spells;
 import lombok.Getter;
 import pl.psi.TurnQueue;
 import pl.psi.creatures.Creature;
-import pl.psi.creatures.CreatureStats;
 
 import java.beans.PropertyChangeListener;
-import java.util.Optional;
 import java.util.function.BiConsumer;
 
 public class MoralBuffDebuffSpell extends Spell<Creature> {
@@ -17,15 +15,15 @@ public class MoralBuffDebuffSpell extends Spell<Creature> {
     private RoundTimer roundTimer;
     private final SpellNames counterSpell;
 
-    public MoralBuffDebuffSpell(SpellTypes category, SpellNames name, SpellMagicClass spellMagicClass, SpellRang rang, int manaCost, int moral, int time, SpellNames counterSpell) {
-        super(category, name, spellMagicClass, rang, manaCost);
+    public MoralBuffDebuffSpell(SpellTypes category, SpellNames name, SpellMagicClass spellMagicClass, SpellRang rang, SpellAlignment spellAlignment, int manaCost, int moral, int time, SpellNames counterSpell) {
+        super(category, name, spellMagicClass, rang, spellAlignment, manaCost);
         this.moral = moral;
         this.time = time;
         this.counterSpell = counterSpell;
     }
 
     public MoralBuffDebuffSpell(MoralBuffDebuffSpell moralBuffDebuffSpell, Creature creature) {
-        super(moralBuffDebuffSpell.getCategory(), moralBuffDebuffSpell.getName(), moralBuffDebuffSpell.getSpellMagicClass(), moralBuffDebuffSpell.getRang(), moralBuffDebuffSpell.getManaCost());
+        super(moralBuffDebuffSpell.getCategory(), moralBuffDebuffSpell.getName(), moralBuffDebuffSpell.getSpellMagicClass(), moralBuffDebuffSpell.getRang(), moralBuffDebuffSpell.getSpellAlignment(), moralBuffDebuffSpell.getManaCost());
         this.moral = moralBuffDebuffSpell.moral;
         this.time = moralBuffDebuffSpell.time;
         this.counterSpell = moralBuffDebuffSpell.counterSpell;

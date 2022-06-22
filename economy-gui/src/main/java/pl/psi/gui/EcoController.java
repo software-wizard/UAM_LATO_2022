@@ -329,7 +329,7 @@ public class EcoController implements PropertyChangeListener {
         refreshShopDependsOnWhatPlayerHasChose();
 
         //refresh boughtArtifacts
-        List<EconomyArtifact> artifacts = economyEngine.getActiveHero().getArtifactList();
+        List<EconomyArtifact> artifacts = economyEngine.getActiveHero().getArtifacts();
 
         for (EconomyArtifact a : artifacts) {
             ArtifactPlacement placement = a.getPlacement();
