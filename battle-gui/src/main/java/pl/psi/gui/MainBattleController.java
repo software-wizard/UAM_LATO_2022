@@ -126,33 +126,6 @@ public class MainBattleController implements PropertyChangeListener {
         });
     }
 
-    private void renderSpecialFields(MapTile mapTile, int x, int y) {
-        if (x == 10 && y == 3) {
-            Image img = new Image("/images/cracked_ice.png");
-            mapTile.setBackground(img);
-        }
-        if (x == 14 && y == 6) {
-            Image img = new Image("/images/clover_field.png");
-            mapTile.setBackground(img);
-        }
-        if (x == 4 && y == 8) {
-            Image img = new Image("/images/evilFog.png");
-            mapTile.setBackground(img);
-        }
-        if (x == 5 && y == 5) {
-            Image img = new Image("/images/holyGround.png");
-            mapTile.setBackground(img);
-        }
-        if (x == 3 && y == 4) {
-            Image img = new Image("/images/fields_of_Glory.png");
-            mapTile.setBackground(img);
-        }
-        if (x == 4 && y == 6) {
-            Image img = new Image("/images/fiery_Fields.png");
-            mapTile.setBackground(img);
-        }
-    }
-
     private static void showStage(final String information, final boolean hasSpecial) {
         final int SMALL_WIDTH = 250;
         final int SMALL_HEIGHT = 225;
@@ -201,7 +174,6 @@ public class MainBattleController implements PropertyChangeListener {
                         mapTile.setOnMouseExited(mouseEvent -> {
                             if (gameEngine.getCreature(new Point(x1, y1)).isEmpty()) {
                                 mapTile.setBackground(Color.DARKGREY);
-//                                renderSpecialFields(mapTile, x1, y1);
                                 gameEngine.getField(new Point(x1, y1))
                                     .ifPresent(f -> mapTile.setBackground(new Image(f.getImagePath())));
                             }
