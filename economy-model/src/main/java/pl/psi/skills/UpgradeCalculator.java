@@ -2,7 +2,7 @@ package pl.psi.skills;
 
 import pl.psi.creatures.Creature;
 import pl.psi.creatures.CreatureStats;
-import pl.psi.creatures.WarMachinesAbstract;
+import pl.psi.creatures.AbstractWarMachines;
 import pl.psi.hero.EconomyHero;
 import pl.psi.hero.HeroStats;
 import pl.psi.spells.*;
@@ -99,13 +99,13 @@ public class UpgradeCalculator {
     }
 
     private void upgradeWarMachineLevel(Creature aCreature ) {
-       if (aCreature instanceof WarMachinesAbstract) {
-           ((WarMachinesAbstract) aCreature).upgradeSkillLevel(new Double(this.skillEffect).intValue());
+       if (aCreature instanceof AbstractWarMachines) {
+           ((AbstractWarMachines) aCreature).upgradeSkillLevel(new Double(this.skillEffect).intValue());
        }
     }
 
     private CreatureStats getHandToHandFighterStats( Creature aCreature, double changedStat ) {
-        if ( !(aCreature instanceof WarMachinesAbstract) ) {
+        if ( !(aCreature instanceof AbstractWarMachines) ) {
             if (aCreature.getBasicStats().isGround()) {
                 return  CreatureStats.builder()
                         .attack(changedStat)
@@ -116,7 +116,7 @@ public class UpgradeCalculator {
     }
 
     private CreatureStats getShooterCreaturesStats( Creature aCreature, double changedStat ) {
-        if (!(aCreature instanceof WarMachinesAbstract)) {
+        if (!(aCreature instanceof AbstractWarMachines)) {
             if (!aCreature.getBasicStats().isGround()) {
                 return CreatureStats.builder()
                         .attack(changedStat)

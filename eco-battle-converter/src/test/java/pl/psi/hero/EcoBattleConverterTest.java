@@ -203,7 +203,7 @@ class EcoBattleConverterTest {
 	@Test
 	void shouldHaveCorrectSkillsApplied() {
 		NecropolisFactory factory = new NecropolisFactory();
-        WarMachinesAbstract aidTent = new WarMachinesFactory().create(2, 1, null, 0);
+        AbstractWarMachines aidTent = new WarMachinesFactory().create(2, 1, null, 0);
         Creature creature1 = factory.create(false, 1, 100);
         Creature creature2 = factory.create(false, 2, 100);
         List<Creature> creatureList = new LinkedList<>(List.of(aidTent, creature1, creature2));
