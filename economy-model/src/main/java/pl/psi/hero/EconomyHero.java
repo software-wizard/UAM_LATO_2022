@@ -1,11 +1,13 @@
 package pl.psi.hero;
 
 import lombok.Getter;
+import pl.psi.Hero;
 import pl.psi.artifacts.ArtifactApplier;
 import pl.psi.artifacts.ArtifactEffectApplicable;
 import pl.psi.artifacts.EconomyArtifact;
 import pl.psi.artifacts.ArtifactPlacement;
 import pl.psi.artifacts.model.ArtifactEffect;
+import pl.psi.creatures.CastleCreatureFactory;
 import pl.psi.creatures.EconomyCreature;
 import pl.psi.creatures.WarMachinesStatistic;
 import pl.psi.shop.Money;
@@ -31,7 +33,27 @@ public class EconomyHero implements ArtifactEffectApplicable {
     private Money gold = new Money(10000);
 
     public EconomyHero(final Fraction aFraction) {
-        this(aFraction, HeroStatistics.NECROMANCER);
+        heroCounter++;
+        heroNumber = heroCounter;
+        fraction = aFraction;
+        creatureList = new ArrayList<>();
+        skillsList = new ArrayList<>();
+        spellsList = new ArrayList<>();
+        warMachines = new ArrayList<>();
+        equipment = new Equipment();
+        backpack = equipment.getBackpack();
+        switch (fraction) {
+            case NECROPOLIS:
+                heroStats = HeroStatistics.NECROMANCER;
+                break;
+            case STRONGHOLD:
+                heroStats = HeroStatistics.BARBARIAN;
+                break;
+
+            case CASTLE:
+                heroStats = HeroStatistics.KNIGHT;
+                break;
+        }
     }
 
     public EconomyHero(final Fraction aFraction, final HeroStatisticsIf aStats) {
