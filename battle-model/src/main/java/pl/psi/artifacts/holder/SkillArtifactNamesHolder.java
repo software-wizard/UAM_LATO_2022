@@ -1,6 +1,8 @@
 package pl.psi.artifacts.holder;
 
-public enum SkillArtifactNamesHolder {
+import pl.psi.artifacts.model.ArtifactTarget;
+
+public enum SkillArtifactNamesHolder implements ArtifactNamesHolder{
     CENTAURS_AX,
 
     BLACKSHARD_OF_THE_DEAD_KNIGHT,
@@ -33,5 +35,11 @@ public enum SkillArtifactNamesHolder {
     CROWN_OF_THE_SUPREME_MAGI,
 
     THUNDER_HELMET;
-    // TODO: define names for skill artifacts.
+
+
+    @Override
+    public ArtifactTarget getHolderTarget()
+    {
+        return ArtifactTarget.SKILL;
+    }
 }

@@ -3,7 +3,7 @@ package pl.psi.creatures;
 import pl.psi.shop.Money;
 
 // this factory should delivery group
-public class EconomyNecropolisFactory {
+public class EconomyNecropolisFactory implements FactoryInterface {
 
     private static final String EXCEPTION_MESSAGE = "We support tiers from 1 to 7";
 

@@ -12,7 +12,9 @@ public enum SpellArtifactApplicableProperty implements ArtifactApplicablePropert
 
     FIRE_DAMAGE,
 
-    WATER_DAMAGE;
+    WATER_DAMAGE,
+
+    DURATION;
 
     @Override
     public final ArtifactTarget getArtifactTarget() {

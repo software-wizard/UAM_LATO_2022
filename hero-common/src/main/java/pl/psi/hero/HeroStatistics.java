@@ -1,5 +1,6 @@
 package pl.psi.hero;
 
+import lombok.Builder;
 import lombok.Getter;
 
 import java.util.Optional;

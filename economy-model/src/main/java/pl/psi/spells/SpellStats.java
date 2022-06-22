@@ -21,7 +21,6 @@ public enum SpellStats implements SpellStatisticIf {
     FIRE_BALL("Fire Ball", FIRE, "Causes the selected target to burst into flames, inflicting fire damage to the target and any adjacent units.", 15),
     MISFORTUNE("Misfortune", FIRE, "Reduces the luck of the selected enemy unit", 12),
     ARMAGEDDON("Armageddon", FIRE, "Rains fire down upon the battlefield, damaging all units.", 24),
-    FRENZY("Frenzy", FIRE, "Creates a battle fury that allows the selected unit to attack twice, however the unit will make very little effort to protect itself from attacks.", 16),
     INFERNO("Inferno", FIRE, "Causes a huge blast of fire to strike the selected target. Don't be near this when it goes off!", 16),
     ICE_BOLT("Ice Bolt", WATER, "Drains the body heat from the selected enemy unit", 8),
     WEAKNESS("Weakness", WATER, "Reduces the selected enemy unit's attack strength.", 8),

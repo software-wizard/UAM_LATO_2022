@@ -1,30 +1,35 @@
 package pl.psi.hero;
 
 import lombok.Getter;
-import pl.psi.artifacts.Artifact;
+import pl.psi.artifacts.ArtifactApplier;
+import pl.psi.artifacts.ArtifactEffectApplicable;
+import pl.psi.artifacts.EconomyArtifact;
 import pl.psi.artifacts.ArtifactPlacement;
+import pl.psi.artifacts.model.ArtifactEffect;
 import pl.psi.creatures.EconomyCreature;
+import pl.psi.creatures.WarMachinesStatistic;
+import pl.psi.shop.Money;
 import pl.psi.skills.EconomySkill;
 import pl.psi.spells.EconomySpell;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-public class EconomyHero {
+public class EconomyHero implements ArtifactEffectApplicable {
 
     private static int heroCounter = 0;
     private final Fraction fraction;
     private final List<EconomyCreature> creatureList;
-    private final List<Artifact> artifactList;
+    private final List<EconomyArtifact> artifactList;
     private final List<EconomySkill> skillsList;
     private final List<EconomySpell> spellsList;
+    private final List<EconomyCreature> warMachines;
     private final Equipment equipment;
     private final Backpack backpack;
     private HeroStatisticsIf heroStats;
     private final int heroNumber;
-    // start amount of gold
-    private int gold = 10000;
+    private final ArtifactApplier artifactApplier = new ArtifactApplier();
+    private Money gold = new Money(10000);
 
     public EconomyHero(final Fraction aFraction) {
         this(aFraction, HeroStatistics.NECROMANCER);
@@ -38,12 +43,14 @@ public class EconomyHero {
         artifactList = new ArrayList<>();
         skillsList = new ArrayList<>();
         spellsList = new ArrayList<>();
+        warMachines = new ArrayList<>();
         equipment = new Equipment();
         backpack = new Backpack();
         heroStats = aClass;
     }
 
-    public EconomyHero(Fraction fraction, List<EconomyCreature> creatureList, List<Artifact> artifactList, List<EconomySkill> skillsList, List<EconomySpell> spellsList, int gold, int heroNumber) {
+    // konstruktor samokopiujący
+    public EconomyHero(Fraction fraction, List<EconomyCreature> creatureList, List<EconomyArtifact> artifactList, List<EconomySkill> skillsList, List<EconomySpell> spellsList, List<EconomyCreature> warMachines ,Money gold, int heroNumber, HeroStatisticsIf aClass) {
         this.fraction = fraction;
         this.creatureList = creatureList;
         this.artifactList = artifactList;
@@ -51,55 +58,63 @@ public class EconomyHero {
         this.spellsList = spellsList;
         this.gold = gold;
         this.heroNumber = heroNumber;
+        this.warMachines = warMachines;
         equipment = new Equipment();
         backpack = new Backpack();
-        heroStats = HeroStatistics.NECROMANCER;
+        heroStats = aClass;
     }
 
-    public List<EconomyCreature> getCreatures() {
-        List<EconomyCreature> economyCreatureList = new ArrayList<>();
-        for (EconomyCreature c : this.creatureList) {
-            economyCreatureList.add(new EconomyCreature(c.getStats(), c.getAmount(), c.getGoldCost()));
-        }
-        return economyCreatureList;
+    public List<EconomyCreature> getCreatureList() {
+        return List.copyOf(creatureList);
     }
 
-    // Hero cannot buy more than 7 creatures
+
     public void addCreature(final EconomyCreature aCreature) {
-
-        int w = 0;
-        // check if we have this creature in List
-        // and need only to increase amount
-        for (EconomyCreature c : this.creatureList) {
-            if (c.getName().equals(aCreature.getName())) {
-                c.increaseAmount(aCreature.getAmount());
-                w = 1;
+        if(aCreature.getStats() instanceof WarMachinesStatistic){
+                warMachines.add(aCreature);
+        }
+        else {
+            int w = 0;
+            for (EconomyCreature c : this.creatureList) {
+                if (c.getName().equals(aCreature.getName())) {
+                    c.increaseAmount(aCreature.getAmount());
+                    w = 1;
+                }
+            }
+            if (w == 0) {
+                creatureList.add(aCreature);
             }
         }
-        if (w == 0) {
-            creatureList.add(aCreature);
-        }
 
     }
 
-    public void addArtifact(Artifact artifact) {
+    public void addArtifact(EconomyArtifact artifact) {
         this.artifactList.add(artifact);
     }
 
     public boolean canAddCreature(EconomyCreature economyCreature) {
 
-        boolean heroHasThisCreature = false;
-        for (int i = 0; i < this.creatureList.size(); i++) {
-            if (economyCreature.getName().equals(creatureList.get(i).getName())) {
-                heroHasThisCreature = true;
+        if(economyCreature.getStats() instanceof WarMachinesStatistic){
+            for(int i=0;i<this.warMachines.size();i++){
+                if(warMachines.get(i).getStats().getName().equals(economyCreature.getStats().getName()))
+                    return false;
             }
+            return true;
         }
+        else {
+            boolean heroHasThisCreature = false;
+            for (int i = 0; i < this.creatureList.size(); i++) {
+                if (economyCreature.getName().equals(creatureList.get(i).getName())) {
+                    heroHasThisCreature = true;
+                }
+            }
 
-        if (creatureList.size() == 7 && !heroHasThisCreature) {
-            return false;
+            if (creatureList.size() == 7 && !heroHasThisCreature) {
+                return false;
+            }
+
+            return true;
         }
-
-        return true;
     }
 
     public void updateHeroStats( HeroStats aStats ) {
@@ -107,58 +122,62 @@ public class EconomyHero {
     }
 
     public boolean canAddArtifact(ArtifactPlacement placement) {
-        for (Artifact a : this.artifactList) {
+        for (EconomyArtifact a : this.artifactList) {
             if (a.getPlacement().equals(placement))
                 return false;
         }
         return true;
     }
 
-    public List<Artifact> getArtifacts() {
+    public List<EconomyArtifact> getArtifactList() {
         return List.copyOf(artifactList);
     }
 
-    public List<EconomySkill> getSkills() {
+    public List<EconomySkill> getSkillsList() {
         return List.copyOf(skillsList);
     }
 
-    public List<EconomySpell> getSpells() {
+    public List<EconomySpell> getSpellsList() {
         return List.copyOf(spellsList);
     }
 
-    public void substractGold(final int aAmount) {
-        gold -= aAmount;
+    public List<EconomyCreature> getWarMachines() {
+        return List.copyOf(warMachines);
     }
 
-    public void addItem(final Artifact aItem) {
+    public void substractGold(final int aAmount) {
+        this.gold = new Money(gold.getPrice() - aAmount);
+    }
+
+    public void addItem(final EconomyArtifact aItem) {
         backpack.addItem(aItem);
     }
 
-    public void equipHead(Artifact aItem) {
+    public void equipHead(EconomyArtifact aItem) {
         equipment.setHead(aItem);
     }
 
-    public void equipNeck(Artifact aItem) {
+    public void equipNeck(EconomyArtifact aItem) {
         equipment.setNeck(aItem);
     }
 
-    public void equipTorso(Artifact aItem) {
+    public void equipTorso(EconomyArtifact aItem) {
         equipment.setTorso(aItem);
     }
 
-    public void equipShoulders(Artifact aItem) {
+    public void equipShoulders(EconomyArtifact aItem) {
         equipment.setShoulders(aItem);
     }
 
-    public void equipRightHand(Artifact aItem) {
+    public void equipRightHand(EconomyArtifact aItem) {
         equipment.setRightHand(aItem);
     }
 
-    public void equipLeftHand(Artifact aItem) {
+    public void equipLeftHand(EconomyArtifact aItem) {
         equipment.setLeftHand(aItem);
     }
 
-    public void equipFeet(Artifact aItem) {
+    public void equipFeet(EconomyArtifact aItem) {
         equipment.setFeet(aItem);
     }
 
@@ -175,10 +194,43 @@ public class EconomyHero {
         return heroNumber;
     }
 
+    public boolean canAddSkill(EconomySkill economySkill) {
+        for(EconomySkill s: skillsList){
+            if(s.getSkillType().equals(economySkill.getSkillType()))
+                return false;
+        }
+        return true;
+    }
+
+    public void addSkill(EconomySkill economySkill) {
+        this.skillsList.add(economySkill);
+    }
+
+    public boolean canAddSpell(EconomySpell economySpell){
+        for(EconomySpell spell:spellsList){
+            if(spell.getSpellStats().equals(economySpell.getSpellStats()))
+                return false;
+        }
+        return true;
+    }
+
+    public void addSpell(EconomySpell spell){
+        this.spellsList.add(spell);
+    }
+
+    public boolean canAddMachine(EconomyCreature machine) {
+        for(int i=0;i<warMachines.size();i++){
+            if(warMachines.get(i).getStats().getName().equals(machine.getStats().getName())){
+                return false;
+            }
+        }
+        return true;
+    }
 
     public enum Fraction {
         NECROPOLIS,
-        CASTLE
+        CASTLE,
+        STRONGHOLD
     }
 
     public List<EconomySpell> getSpellList() {
@@ -187,5 +239,30 @@ public class EconomyHero {
 
     public int getSpellPower() {
         return heroStats.getSpellPower();
+    }
+
+    @Override
+    public void applyArtifactEffect(final ArtifactEffect<? extends ArtifactEffectApplicable> aArtifactEffect) {
+        heroStats = artifactApplier.calculateHeroUpgradedStatisticsAfterApplyingArtifact(aArtifactEffect, heroStats);
+    }
+
+    public static int getHeroCounter() {
+        return heroCounter;
+    }
+
+    public Equipment getEquipment() {
+        return equipment;
+    }
+
+    public Backpack getBackpack() {
+        return backpack;
+    }
+
+    public HeroStatisticsIf getHeroStats() {
+        return heroStats;
+    }
+
+    public Money getGold() {
+        return gold;
     }
 }

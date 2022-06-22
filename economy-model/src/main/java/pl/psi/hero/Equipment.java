@@ -1,7 +1,7 @@
 package pl.psi.hero;
 
 import lombok.Getter;
-import pl.psi.artifacts.Artifact;
+import pl.psi.artifacts.EconomyArtifact;
 import pl.psi.artifacts.ArtifactPlacement;
 
 import java.util.ArrayList;
@@ -26,36 +26,36 @@ public class Equipment {
         feetSlot = new EqSlot(ArtifactPlacement.FEET);
     }
 
-    public void setHead(Artifact aItem) {
+    public void setHead(EconomyArtifact aItem) {
         headSlot.setItem(aItem);
     }
 
-    public void setNeck(Artifact aItem) {
+    public void setNeck(EconomyArtifact aItem) {
         neckSlot.setItem(aItem);
     }
 
-    public void setTorso(Artifact aItem) {
+    public void setTorso(EconomyArtifact aItem) {
         torsoSlot.setItem(aItem);
     }
 
-    public void setShoulders(Artifact aItem) {
+    public void setShoulders(EconomyArtifact aItem) {
         shouldersSlot.setItem(aItem);
     }
 
-    public void setRightHand(Artifact aItem) {
+    public void setRightHand(EconomyArtifact aItem) {
         rightHandSlot.setItem(aItem);
     }
 
-    public void setLeftHand(Artifact aItem) {
+    public void setLeftHand(EconomyArtifact aItem) {
         leftHandSlot.setItem(aItem);
     }
 
-    public void setFeet(Artifact aItem) {
+    public void setFeet(EconomyArtifact aItem) {
         feetSlot.setItem(aItem);
     }
 
-    public ArrayList<Artifact> getEquipment() {
-        ArrayList<Artifact> items = new ArrayList<>();
+    public ArrayList<EconomyArtifact> getEquipment() {
+        ArrayList<EconomyArtifact> items = new ArrayList<>();
         items.add(headSlot.getItem());
         items.add(neckSlot.getItem());
         items.add(torsoSlot.getItem());

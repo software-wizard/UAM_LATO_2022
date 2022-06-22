@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import pl.psi.creatures.EconomyCreature;
 import pl.psi.creatures.EconomyNecropolisFactory;
+import pl.psi.creatures.EconomyWarMachineFactory;
 import pl.psi.hero.EconomyHero;
 import pl.psi.hero.HeroStatistics;
 
@@ -15,6 +16,7 @@ class EconomyEngineTest {
     private EconomyHero h1;
     private EconomyHero h2;
     private EconomyNecropolisFactory economyNecropolisFactory;
+    private EconomyWarMachineFactory economyWarMachineFactory;
     private int startGold;
 
     @BeforeEach
@@ -23,7 +25,8 @@ class EconomyEngineTest {
         h2 = new EconomyHero(EconomyHero.Fraction.NECROPOLIS, HeroStatistics.NECROMANCER);
         economyEngine = new EconomyEngine(h1, h2);
         economyNecropolisFactory = new EconomyNecropolisFactory();
-        startGold = h1.getGold();
+        economyWarMachineFactory = new EconomyWarMachineFactory();
+        startGold = h1.getGold().getPrice();
     }
 
     @Test
@@ -45,25 +48,12 @@ class EconomyEngineTest {
     @Test
     void shouldBuyCreatureToCorrectHero() {
         economyEngine.buy(ProductType.CREATURE, economyNecropolisFactory.create(false, 1, 1));
-        assertEquals(startGold - 60, h1.getGold());
-        assertEquals(startGold, h2.getGold());
+        assertEquals(startGold - 60, h1.getGold().getPrice());
+        assertEquals(startGold, h2.getGold().getPrice());
         economyEngine.pass();
         economyEngine.buy(ProductType.CREATURE, economyNecropolisFactory.create(false, 2, 1));
-        assertEquals(startGold - 60, h1.getGold());
-        assertEquals(startGold - 100, h2.getGold());
-    }
-
-    @Test
-    void shouldEndGameAfter2Rounds() {
-        assertEquals(1, economyEngine.getRoundNumber());
-        economyEngine.buy(ProductType.CREATURE, economyNecropolisFactory.create(false, 2, 1));
-        economyEngine.pass();
-        assertEquals(2, economyEngine.getRoundNumber());
-        economyEngine.buy(ProductType.CREATURE, economyNecropolisFactory.create(false, 2, 1));
-        economyEngine.pass();
-        assertEquals(2, economyEngine.getRoundNumber());
-        assertTrue(economyEngine.isEnd());
-
+        assertEquals(startGold - 60, h1.getGold().getPrice());
+        assertEquals(startGold - 100, h2.getGold().getPrice());
     }
 
     @Test
@@ -78,8 +68,16 @@ class EconomyEngineTest {
         assertThrows(IllegalStateException.class, () -> economyEngine.pass());
         economyEngine.buy(ProductType.CREATURE, creature);
         economyEngine.pass();
-        // end of the game
-        assertTrue(economyEngine.isEnd());
+
+    }
+
+    @Test
+    void acvtiveHeroCannotPassIfHeDidntBuyCreatureButBuyMachine() {
+        assertThrows(IllegalStateException.class, () -> economyEngine.pass());
+        economyEngine.buy(ProductType.CREATURE, economyWarMachineFactory.create(2));
+        assertThrows(IllegalStateException.class, () -> economyEngine.pass());
+        economyEngine.buy(ProductType.CREATURE, economyNecropolisFactory.create(false,1,1));
+        assertDoesNotThrow(() -> economyEngine.pass());
 
     }
 
