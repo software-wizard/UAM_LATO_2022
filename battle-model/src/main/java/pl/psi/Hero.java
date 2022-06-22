@@ -3,11 +3,9 @@ package pl.psi;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import pl.psi.hero.Artifact;
 import pl.psi.creatures.Creature;
 
 import lombok.Getter;
-import pl.psi.hero.Equipment;
 import pl.psi.hero.HeroStatisticsIf;
 
 /**

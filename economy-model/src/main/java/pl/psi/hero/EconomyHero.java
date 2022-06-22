@@ -1,7 +1,6 @@
 package pl.psi.hero;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import lombok.Getter;
@@ -12,7 +11,7 @@ public class EconomyHero
 {
 
     private final Fraction fraction;
-    private final List< EconomyCreature > creatureList;
+    private final List< EconomyCreature > creatures;
     private int gold;
     private final Equipment equipment;
     private final Backpack backpack;
@@ -22,7 +21,7 @@ public class EconomyHero
     {
         fraction = aFraction;
         gold = aGold;
-        creatureList = new ArrayList<>();
+        creatures = new ArrayList<>();
         equipment = new Equipment();
         backpack = equipment.getBackpack();
         heroStats = aStats;
@@ -30,11 +29,11 @@ public class EconomyHero
 
     void addCreature( final EconomyCreature aCreature )
     {
-        if( creatureList.size() >= 7 )
+        if( creatures.size() >= 7 )
         {
             throw new IllegalStateException( "Hero has not empty slot for creature" );
         }
-        creatureList.add( aCreature );
+        creatures.add( aCreature );
     }
 
 
