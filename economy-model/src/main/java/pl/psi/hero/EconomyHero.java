@@ -56,7 +56,7 @@ public class EconomyHero implements ArtifactEffectApplicable {
         this.gold = gold;
         this.heroNumber = heroNumber;
         this.warMachines = warMachines;
-        this.equipment = new Equipment();
+        this.equipment = equipment;
         backpack = equipment.getBackpack();
         heroStats = aClass;
     }

@@ -14,10 +14,12 @@ import pl.psi.artifacts.EconomyArtifact;
 import pl.psi.artifacts.model.ArtifactEffect;
 import pl.psi.artifacts.model.ArtifactIf;
 import pl.psi.artifacts.model.ArtifactTarget;
+import pl.psi.creatures.CastleCreatureFactory;
 import pl.psi.creatures.Creature;
 import pl.psi.creatures.EconomyCreature;
 import pl.psi.gui.MainBattleController;
 import pl.psi.gui.NecropolisFactory;
+import pl.psi.gui.StrongholdFactory;
 import pl.psi.hero.EconomyHero;
 import pl.psi.skills.EconomySkill;
 import pl.psi.spells.EconomySpell;
@@ -60,11 +62,26 @@ public class EcoBattleConverter {
             final List<EconomySkill> playerSkills = aPlayer.getSkillsList();
 
             final List<Creature> creatures = new ArrayList<>();
-            final NecropolisFactory factory = new NecropolisFactory();
-            aPlayer.getCreatureList()
-                    .forEach(ecoCreature -> creatures.add(factory.create(ecoCreature.isUpgraded(),
-                            ecoCreature.getTier(), ecoCreature.getAmount())));
+            switch (aPlayer.getFraction()) {
+                case NECROPOLIS:
+                    final NecropolisFactory necroFactory = new NecropolisFactory();
 
+                    aPlayer.getCreatureList()
+                            .forEach(ecoCreature -> creatures.add(necroFactory.create(ecoCreature.isUpgraded(),
+                                    ecoCreature.getTier(), ecoCreature.getAmount())));
+                    break;
+                case STRONGHOLD:
+                    final StrongholdFactory strongholdFactory = new StrongholdFactory();
+                    aPlayer.getCreatureList()
+                            .forEach(ecoCreature -> creatures.add(strongholdFactory.create(ecoCreature.isUpgraded(),
+                                    ecoCreature.getTier(), ecoCreature.getAmount())));
+
+                case CASTLE:
+                    final CastleCreatureFactory castleCreatureFactory = new CastleCreatureFactory();
+                    aPlayer.getCreatureList()
+                            .forEach(ecoCreature -> creatures.add(castleCreatureFactory.create(ecoCreature.getTier(),
+                                    ecoCreature.isUpgraded(), ecoCreature.getAmount())));
+            }
             convertSkills(playerSkills, creatures, aPlayer, aPlayer.getSpellList());
             final List<Spell<? extends SpellableIf>> spells = new ArrayList<>();
 
