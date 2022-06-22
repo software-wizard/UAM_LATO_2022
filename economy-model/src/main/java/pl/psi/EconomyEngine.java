@@ -57,7 +57,7 @@ public class EconomyEngine {
     }
 
     public EconomyHero getActiveHero() {
-        return new EconomyHero(activeHero.getFraction(), activeHero.getCreatureList(), activeHero.getArtifactList(), activeHero.getSkillsList(), activeHero.getSpellsList(),activeHero.getWarMachines(), activeHero.getGold(), activeHero.getHeroNumber(),activeHero.getHeroStats());
+        return new EconomyHero(activeHero.getFraction(), activeHero.getCreatureList(), activeHero.getEquipment(), activeHero.getSkillsList(), activeHero.getSpellsList(),activeHero.getWarMachines(), activeHero.getGold(), activeHero.getHeroNumber(),activeHero.getHeroStats());
     }
 
     public void pass() {
@@ -86,11 +86,11 @@ public class EconomyEngine {
     }
 
     public EconomyHero getPlayer1() {
-        return new EconomyHero(hero1.getFraction(), hero1.getCreatureList(), hero1.getArtifactList(), hero1.getSkillsList(), hero1.getSpellsList(),hero1.getWarMachines(), hero1.getGold(), hero1.getHeroNumber(),hero1.getHeroStats());
+        return new EconomyHero(hero1.getFraction(), hero1.getCreatureList(), hero1.getEquipment(), hero1.getSkillsList(), hero1.getSpellsList(),hero1.getWarMachines(), hero1.getGold(), hero1.getHeroNumber(),hero1.getHeroStats());
     }
 
     public EconomyHero getPlayer2() {
-        return new EconomyHero(hero2.getFraction(), hero2.getCreatureList(), hero2.getArtifactList(), hero2.getSkillsList(), hero2.getSpellsList(), hero2.getWarMachines(), hero2.getGold(), hero2.getHeroNumber(),hero2.getHeroStats());
+        return new EconomyHero(hero2.getFraction(), hero2.getCreatureList(), hero2.getEquipment(), hero2.getSkillsList(), hero2.getSpellsList(), hero2.getWarMachines(), hero2.getGold(), hero2.getHeroNumber(),hero2.getHeroStats());
     }
 
 }

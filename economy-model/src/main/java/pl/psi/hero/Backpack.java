@@ -7,17 +7,17 @@ import java.util.ArrayList;
 
 @Getter
 public class Backpack {
-    ArrayList<EconomyArtifact> items;
+    ArrayList<EconomyArtifact> artifacts;
 
     public Backpack() {
-        items = new ArrayList<>();
+        artifacts = new ArrayList<>();
     }
 
-    public void addItem(EconomyArtifact aItem) {
-        items.add(aItem);
+    public void addArtifact(EconomyArtifact aArtifact){
+        artifacts.add(aArtifact);
     }
 
     int size() {
-        return items.size();
+        return artifacts.size();
     }
 }

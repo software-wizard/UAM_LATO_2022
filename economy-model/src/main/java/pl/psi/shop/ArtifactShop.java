@@ -9,7 +9,7 @@ public class ArtifactShop extends AbstractShop<EconomyArtifact> {
     public void addToHero(EconomyArtifact artifact, EconomyHero hero) {
         if (hero.canAddArtifact(artifact.getPlacement())) {
             hero.substractGold(artifact.getGoldCost().getPrice());
-            hero.addArtifact(artifact);
+            hero.equipArtifact(artifact);
         } else {
             throw new IllegalStateException("hero cannot buy 2 artifacts of the same type");
         }

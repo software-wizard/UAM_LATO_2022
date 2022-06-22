@@ -20,7 +20,6 @@ public class EconomyHero implements ArtifactEffectApplicable {
     private static int heroCounter = 0;
     private final Fraction fraction;
     private final List<EconomyCreature> creatureList;
-    private final List<EconomyArtifact> artifactList;
     private final List<EconomySkill> skillsList;
     private final List<EconomySpell> spellsList;
     private final List<EconomyCreature> warMachines;
@@ -40,27 +39,25 @@ public class EconomyHero implements ArtifactEffectApplicable {
         heroNumber = heroCounter;
         fraction = aFraction;
         creatureList = new ArrayList<>();
-        artifactList = new ArrayList<>();
         skillsList = new ArrayList<>();
         spellsList = new ArrayList<>();
         warMachines = new ArrayList<>();
         equipment = new Equipment();
-        backpack = new Backpack();
+        backpack = equipment.getBackpack();
         heroStats = aClass;
     }
 
     // konstruktor samokopiujący
-    public EconomyHero(Fraction fraction, List<EconomyCreature> creatureList, List<EconomyArtifact> artifactList, List<EconomySkill> skillsList, List<EconomySpell> spellsList, List<EconomyCreature> warMachines ,Money gold, int heroNumber, HeroStatisticsIf aClass) {
+    public EconomyHero(Fraction fraction, List<EconomyCreature> creatureList, Equipment equipment, List<EconomySkill> skillsList, List<EconomySpell> spellsList, List<EconomyCreature> warMachines ,Money gold, int heroNumber, HeroStatisticsIf aClass) {
         this.fraction = fraction;
         this.creatureList = creatureList;
-        this.artifactList = artifactList;
         this.skillsList = skillsList;
         this.spellsList = spellsList;
         this.gold = gold;
         this.heroNumber = heroNumber;
         this.warMachines = warMachines;
-        equipment = new Equipment();
-        backpack = new Backpack();
+        this.equipment = new Equipment();
+        backpack = equipment.getBackpack();
         heroStats = aClass;
     }
 
@@ -88,8 +85,8 @@ public class EconomyHero implements ArtifactEffectApplicable {
 
     }
 
-    public void addArtifact(EconomyArtifact artifact) {
-        this.artifactList.add(artifact);
+    public void equipArtifact(EconomyArtifact artifact) {
+        this.equipment.equipArtifact(artifact);
     }
 
     public boolean canAddCreature(EconomyCreature economyCreature) {
@@ -122,15 +119,15 @@ public class EconomyHero implements ArtifactEffectApplicable {
     }
 
     public boolean canAddArtifact(ArtifactPlacement placement) {
-        for (EconomyArtifact a : this.artifactList) {
+        for (EconomyArtifact a : this.equipment.getArtifacts()) {
             if (a.getPlacement().equals(placement))
                 return false;
         }
         return true;
     }
 
-    public List<EconomyArtifact> getArtifactList() {
-        return List.copyOf(artifactList);
+    public List<EconomyArtifact> getArtifacts() {
+        return this.equipment.getArtifacts();
     }
 
     public List<EconomySkill> getSkillsList() {
@@ -150,35 +147,7 @@ public class EconomyHero implements ArtifactEffectApplicable {
     }
 
     public void addItem(final EconomyArtifact aItem) {
-        backpack.addItem(aItem);
-    }
-
-    public void equipHead(EconomyArtifact aItem) {
-        equipment.setHead(aItem);
-    }
-
-    public void equipNeck(EconomyArtifact aItem) {
-        equipment.setNeck(aItem);
-    }
-
-    public void equipTorso(EconomyArtifact aItem) {
-        equipment.setTorso(aItem);
-    }
-
-    public void equipShoulders(EconomyArtifact aItem) {
-        equipment.setShoulders(aItem);
-    }
-
-    public void equipRightHand(EconomyArtifact aItem) {
-        equipment.setRightHand(aItem);
-    }
-
-    public void equipLeftHand(EconomyArtifact aItem) {
-        equipment.setLeftHand(aItem);
-    }
-
-    public void equipFeet(EconomyArtifact aItem) {
-        equipment.setFeet(aItem);
+        backpack.addArtifact(aItem);
     }
 
     public Fraction getFraction() {

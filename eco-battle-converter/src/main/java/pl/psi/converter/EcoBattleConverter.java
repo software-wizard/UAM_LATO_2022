@@ -88,7 +88,7 @@ public class EcoBattleConverter {
         {
             final Multimap<ArtifactTarget, ArtifactIf> artifacts = ArrayListMultimap.create();
             final ArtifactFactory factory = new ArtifactFactory();
-            final List<EconomyArtifact> economyArtifacts = aPlayer.getArtifactList();
+            final List<EconomyArtifact> economyArtifacts = aPlayer.getArtifacts();
 
             for (final EconomyArtifact economyArtifact : economyArtifacts) {
                 final ArtifactTarget target = economyArtifact.getNameHolder().getHolderTarget();

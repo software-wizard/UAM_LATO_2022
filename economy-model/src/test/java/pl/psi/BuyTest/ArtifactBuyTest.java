@@ -34,7 +34,7 @@ public class ArtifactBuyTest {
     void shouldHeroBuyArtefact() {
         economyEngine.buy(ProductType.ARTIFACT,
             artifactFactory.create(CreatureArtifactNamesHolder.RING_OF_LIFE));
-        assertEquals(1, hero1.getArtifactList().size());
+        assertEquals(1, hero1.getArtifacts().size());
         assertEquals(startGold - 10, hero1.getGold().getPrice());
     }
 
@@ -44,9 +44,9 @@ public class ArtifactBuyTest {
             artifactFactory.create(CreatureArtifactNamesHolder.SURCOAT_OF_COUNTERPOISE));
         economyEngine.buy(ProductType.ARTIFACT,
             artifactFactory.create(SkillArtifactNamesHolder.SHIELD_OF_THE_DWARVEN_LORDS));
-        assertEquals(2, hero1.getArtifactList().size());
-        assertEquals(ArtifactPlacement.SHOULDERS, hero1.getArtifactList().get(0).getPlacement());
-        assertEquals(ArtifactPlacement.LEFT_HAND, hero1.getArtifactList().get(1).getPlacement());
+        assertEquals(2, hero1.getArtifacts().size());
+        assertEquals(ArtifactPlacement.SHOULDERS, hero1.getArtifacts().get(0).getPlacement());
+        assertEquals(ArtifactPlacement.LEFT_HAND, hero1.getArtifacts().get(1).getPlacement());
         assertEquals(startGold - 15, hero1.getGold().getPrice());
     }
 
