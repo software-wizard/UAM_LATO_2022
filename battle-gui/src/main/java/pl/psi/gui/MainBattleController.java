@@ -198,9 +198,6 @@ public class MainBattleController implements PropertyChangeListener {
                 final int y1 = y;
                 final MapTile mapTile = new MapTile("");
 
-                AtomicBoolean test = new AtomicBoolean();
-                test.set(true);
-
                 if (gameEngine.canMove(new Point(x1, y1)) && !gameEngine.isHeroCastingSpell()) {
                     mapTile.setBackground(Color.DARKGREY);
                     List<Point> path = gameEngine.getPath(new Point(x1, y1));
