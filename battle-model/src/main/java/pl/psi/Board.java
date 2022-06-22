@@ -3,6 +3,7 @@ package pl.psi;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import pl.psi.creatures.Creature;
+import pl.psi.specialfields.Field;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +15,12 @@ import java.util.Optional;
 public class Board {
     private static final int MAX_WITDH = 14;
     private final BiMap<Point, Creature> map = HashBiMap.create();
+    private final BiMap<Point, Field> fieldsMap = HashBiMap.create();
 
-    public Board(final List<Creature> aCreatures1, final List<Creature> aCreatures2) {
+    public Board(final List<Creature> aCreatures1, final List<Creature> aCreatures2, final List<Field> aFields) {
         addCreatures(aCreatures1, 0);
         addCreatures(aCreatures2, MAX_WITDH);
+        addFields(aFields);
     }
 
     public boolean canCreatureAttackAnyone(Creature aCreature) {
@@ -50,8 +53,18 @@ public class Board {
         }
     }
 
+    private void addFields(final List<Field> aFields) {
+        for (int i = 0; i < aFields.size(); i++) {
+            fieldsMap.put(new Point(i, i), aFields.get(i));
+        }
+    }
+
     Optional<Creature> getCreature(final Point aPoint) {
         return Optional.ofNullable(map.get(aPoint));
+    }
+
+    Optional<Field> getField(final Point aPoint) {
+        return Optional.ofNullable(fieldsMap.get(aPoint));
     }
 
     Optional<Point> getPoint(final Creature aCreature) {

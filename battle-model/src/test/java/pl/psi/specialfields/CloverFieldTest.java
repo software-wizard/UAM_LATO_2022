@@ -29,7 +29,7 @@ public class CloverFieldTest {
         List<Creature> creatures = List.of(creature1, creature2, creature3, creature4);
 
         // when
-        cloverField.buffCreatures(creatures);
+        cloverField.handleEffect(creatures);
 
         // then
         assertThat(creature1.getLuck()).isEqualTo(4);
@@ -57,7 +57,7 @@ public class CloverFieldTest {
         List<Creature> creatures = List.of(creature1, creature2, creature3, creature4);
 
         // when
-        cloverField.buffCreatures(creatures);
+        cloverField.handleEffect(creatures);
 
         // then
         assertThat(creature1.getLuck()).isEqualTo(2);
@@ -75,7 +75,7 @@ public class CloverFieldTest {
         ).luck(2).build();
 
         // when
-        cloverField.buffCreature(creature1);
+        cloverField.handleEffect(List.of(creature1));
 
         // then
         assertThat(creature1.getLuck()).isEqualTo(4);
@@ -90,7 +90,7 @@ public class CloverFieldTest {
         ).luck(2).alignment(Alignment.EVIL).build();
 
         // when
-        cloverField.buffCreature(creature1);
+        cloverField.handleEffect(List.of(creature1));
 
         // then
         assertThat(creature1.getLuck()).isEqualTo(2);
@@ -105,7 +105,7 @@ public class CloverFieldTest {
         ).luck(2).alignment(Alignment.GOOD).build();
 
         // when
-        cloverField.buffCreature(creature1);
+        cloverField.handleEffect(List.of(creature1));
 
         // then
         assertThat(creature1.getLuck()).isEqualTo(2);
