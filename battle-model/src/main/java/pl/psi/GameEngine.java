@@ -194,6 +194,8 @@ public class GameEngine {
         FirstAidTent firstAidTent = (FirstAidTent) turnQueue.getCurrentCreature();
         board.getCreature(aPoint)
                 .ifPresent(firstAidTent::healCreature);
+        pass();
+        observerSupport.firePropertyChange(CREATURE_MOVED, null, null);
     }
 
     public String getAttackInformation() {
@@ -303,7 +305,6 @@ public class GameEngine {
 
         return currentCreature instanceof FirstAidTent
                 && board.getCreature(aPoint)
-                .filter(creature -> creature.getHeroNumber() == currentCreature.getHeroNumber())
                 .isPresent();
     }
 

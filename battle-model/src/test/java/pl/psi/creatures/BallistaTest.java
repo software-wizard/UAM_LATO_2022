@@ -1,23 +1,22 @@
 package pl.psi.creatures;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.*;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
+import com.google.common.collect.Range;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import pl.psi.TurnQueue;
 
-import com.google.common.collect.Range;
+import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
-@Disabled
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.*;
+
 public class BallistaTest {
 
     private static final int NOT_IMPORTANT = 100;
@@ -44,12 +43,13 @@ public class BallistaTest {
                 .build();
         defender.setHeroNumber(1);
 
-        final WarMachinesAbstract maszyna_ballista;
-        maszyna_ballista = new WarMachinesFactory().create(1, 1, new DefaultDamageCalculator(randomMock), 0);
-        maszyna_ballista.setHeroNumber(2);
-        final List<Creature> list = new ArrayList<Creature>();
+        final AbstractWarMachines ballista;
+        ballista = new WarMachinesFactory().create(1, 1, new DefaultDamageCalculator(randomMock), 0);
+        ballista.setHeroNumber(2);
+        List<Creature> list = new ArrayList<Creature>();
         list.add(defender);
-        maszyna_ballista.performAction(list);
+        PropertyChangeEvent evt = new PropertyChangeEvent(TurnQueue.class, TurnQueue.NEW_TURN,list, null );
+        ballista.propertyChange(evt);
         assertThat(list.get(0).getCurrentHp()).isEqualTo(84);
     }
 
@@ -66,7 +66,7 @@ public class BallistaTest {
                 .build();
         attacker.setHeroNumber(1);
 
-        final WarMachinesAbstract ballista;
+        final AbstractWarMachines ballista;
         ballista = new WarMachinesFactory().create(1, 1, new DefaultDamageCalculator(randomMock), 0);
         ballista.setHeroNumber(2);
         attacker.attack(ballista);
@@ -85,7 +85,7 @@ public class BallistaTest {
                 .build();
         final DefaultDamageCalculator calcMock = mock(DefaultDamageCalculator.class);
         when(calcMock.getArmor(attacker)).thenReturn(2.0);
-        final WarMachinesAbstract ballista;
+        final AbstractWarMachines ballista;
         ballista = new WarMachinesFactory().create(1, 1, calcMock, 0);
         attacker.attack(ballista);
         Mockito.verify(calcMock, times(0)).calculateDamage(attacker, ballista);

@@ -1,16 +1,15 @@
 package pl.psi.creatures;
 
-import static org.junit.jupiter.api.Assertions.*;
+import com.google.common.collect.Range;
+import org.junit.jupiter.api.Test;
+import pl.psi.TurnQueue;
 
+import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
-import com.google.common.collect.Range;
-
-@Disabled
 class FirstAidTentTest {
 
     private static final int NOT_IMPORTANT = 100;
@@ -19,7 +18,7 @@ class FirstAidTentTest {
 
     @Test
     void firstAidTentHeals() {
-        final List<Creature> creaturesList = new ArrayList();
+        List<Creature> creaturesList = new ArrayList();
         final Creature creature1 = new Creature.Builder().statistic(CreatureStats.builder()
                 .name("creature1")
                 .maxHp(100)
@@ -30,16 +29,17 @@ class FirstAidTentTest {
         creature1.setHeroNumber(1);
         creature1.setCurrentHp(30);
 
-        final WarMachinesAbstract firstAidTent;
+        final AbstractWarMachines firstAidTent;
         firstAidTent = new WarMachinesFactory().create(2, 1, null, 0);
         firstAidTent.setHeroNumber(1);
         //firstAidTent ma skilla na poziomie 0, więc może dodać od 1 do 25 punktów, stąd to minimum i maximum
-        final double creature1HPminimumvalue = creature1.getCurrentHp() + 1;
-        final double creature1HPmaximumvalue = creature1.getCurrentHp() + 25;
+        double creature1HPminimumvalue = creature1.getCurrentHp() + 1;
+        double creature1HPmaximumvalue = creature1.getCurrentHp() + 25;
 
         creaturesList.add(creature1);
-        firstAidTent.performAction(creaturesList);
-        final double creature1HPValueAfterHeal = creature1.getCurrentHp();
+        PropertyChangeEvent evt = new PropertyChangeEvent(TurnQueue.class, TurnQueue.NEW_TURN, null, creaturesList );
+        firstAidTent.propertyChange(evt);
+        double creature1HPValueAfterHeal = creature1.getCurrentHp();
         //Sprawdzamy czy po wyleczeniu HP creatury1 jest w zakresie
         assertTrue(creature1HPminimumvalue <= creature1HPValueAfterHeal && creature1HPValueAfterHeal <= creature1HPmaximumvalue);
 
@@ -47,7 +47,9 @@ class FirstAidTentTest {
 
     @Test
     void firstAidTentDoesNotHealCreaturesWithDifferentHeroNumber() {
-        final List<Creature> creaturesList = new ArrayList();
+
+        List<Creature> creaturesList = new ArrayList();
+        List<Creature> creaturesList1 = new ArrayList();
         final Creature creature1 = new Creature.Builder().statistic(CreatureStats.builder()
                 .name("creature1")
                 .maxHp(100)
@@ -78,20 +80,22 @@ class FirstAidTentTest {
         creature3.setHeroNumber(1);
         creature3.setCurrentHp(15);
 
-        final WarMachinesAbstract firstAidTent;
+        final AbstractWarMachines firstAidTent;
         firstAidTent = new WarMachinesFactory().create(2, 1, null, 0);
-        firstAidTent.setHeroNumber(1);
 
 
-        creaturesList.add(creature1);
-        creaturesList.add(creature2);
+        creaturesList1.add(creature1);
+        creaturesList1.add(creature2);
         creaturesList.add(creature3);
 
-        final double creature3CurrentHP = creature3.getCurrentHp();
-        final double creature2CurrentHP = creature2.getCurrentHp();
-        final double creature1CurrentHP = creature1.getCurrentHp();
+        double creature3CurrentHP = creature3.getCurrentHp();
+        double creature2CurrentHP = creature2.getCurrentHp();
+        double creature1CurrentHP = creature1.getCurrentHp();
 
-        firstAidTent.performAction(creaturesList);
+
+        PropertyChangeEvent evt = new PropertyChangeEvent(TurnQueue.class, TurnQueue.NEW_TURN,creaturesList1, creaturesList );
+        firstAidTent.propertyChange(evt);
+
 
         //Ponieważ creature1 i creature2 nie należą do tego samego herosa co firstAidTent to nie zostaną uleczone
         //creature3 zawsze zosanie uleczona poniewaz to jedyna creatura ktora nalezy do tego samego herosa co firstAidTent

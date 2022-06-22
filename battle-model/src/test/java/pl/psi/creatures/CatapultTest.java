@@ -1,18 +1,18 @@
 package pl.psi.creatures;
 
+import org.junit.jupiter.api.Test;
+import pl.psi.TurnQueue;
+
+import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-
-@Disabled
 public class CatapultTest {
 
     @Test
@@ -20,7 +20,7 @@ public class CatapultTest {
         final Random randomMock = mock(Random.class);
         when(randomMock.nextInt(anyInt())).thenReturn(5);
 
-        final WarMachinesAbstract catapult;
+        final AbstractWarMachines catapult;
         catapult = new WarMachinesFactory().create(3, 1, new DefaultDamageCalculator(randomMock), 0);
         catapult.setHeroNumber(2);
 
@@ -28,9 +28,10 @@ public class CatapultTest {
         Wall = new SpecialFieldsToAttackFactory().create(1, 1, new DefaultDamageCalculator(randomMock));
         Wall.setHeroNumber(1);
 
-        final List< Creature > list = new ArrayList< Creature >();
+        List<Creature> list = new ArrayList<Creature>();
         list.add(Wall);
-        catapult.performAction(list);
+        PropertyChangeEvent evt = new PropertyChangeEvent(TurnQueue.class, TurnQueue.NEW_TURN,list, null );
+        catapult.propertyChange(evt);
 
         assertThat(list.get(0).getCurrentHp()).isEqualTo(11);
     }
