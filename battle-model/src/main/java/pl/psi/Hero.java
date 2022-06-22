@@ -38,4 +38,8 @@ public class Hero {
     public void subtractMana(int manaCost) {
         getSpellBook().setMana(getSpellBook().getMana() - manaCost);
     }
+
+    public boolean allCreaturesDead(){
+        return creatures.stream().noneMatch(Creature::isAlive);
+    }
 }

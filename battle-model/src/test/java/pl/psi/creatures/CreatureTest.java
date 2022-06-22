@@ -1,18 +1,22 @@
 package pl.psi.creatures;
 
-import com.google.common.collect.Range;
-import org.junit.jupiter.api.Test;
-import pl.psi.TurnQueue;
-
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.List;
+
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+
+import pl.psi.TurnQueue;
+
+import com.google.common.collect.Range;
+
 /**
  * TODO: Describe this class (The first line - until the first dot - will interpret as the brief description).
  */
+@Disabled
 public class CreatureTest {
 
     private static final int NOT_IMPORTANT = 100;
@@ -734,8 +738,8 @@ public class CreatureTest {
 
     @Test
     void shouldThrowExceptionWhenTryingToSetMoraleValueLessThanPossible() {
-        var creature = new Creature.Builder().statistic(CreatureStats.builder().build()).build(); // current morale value = 1
-        var exception = assertThrows(IllegalArgumentException.class, () -> creature.setMorale(-4));
+        final var creature = new Creature.Builder().statistic(CreatureStats.builder().build()).build(); // current morale value = 1
+        final var exception = assertThrows(IllegalArgumentException.class, () -> creature.setMorale(-4));
 
         assertEquals("Morale must not be less than 3", exception.getMessage());
     }

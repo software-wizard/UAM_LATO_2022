@@ -1,20 +1,23 @@
 package pl.psi.creatures;
 
-import com.google.common.collect.Range;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
+import com.google.common.collect.Range;
+
+@Disabled
 public class BallistaTest {
 
     private static final int NOT_IMPORTANT = 100;
@@ -44,7 +47,7 @@ public class BallistaTest {
         final WarMachinesAbstract maszyna_ballista;
         maszyna_ballista = new WarMachinesFactory().create(1, 1, new DefaultDamageCalculator(randomMock), 0);
         maszyna_ballista.setHeroNumber(2);
-        List<Creature> list = new ArrayList<Creature>();
+        final List<Creature> list = new ArrayList<Creature>();
         list.add(defender);
         maszyna_ballista.performAction(list);
         assertThat(list.get(0).getCurrentHp()).isEqualTo(84);
