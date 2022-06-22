@@ -43,13 +43,13 @@ public class BallistaTest {
                 .build();
         defender.setHeroNumber(1);
 
-        final AbstractWarMachines maszyna_ballista;
-        maszyna_ballista = new WarMachinesFactory().create(1, 1, new DefaultDamageCalculator(randomMock), 0);
-        maszyna_ballista.setHeroNumber(2);
+        final AbstractWarMachines ballista;
+        ballista = new WarMachinesFactory().create(1, 1, new DefaultDamageCalculator(randomMock), 0);
+        ballista.setHeroNumber(2);
         List<Creature> list = new ArrayList<Creature>();
         list.add(defender);
         PropertyChangeEvent evt = new PropertyChangeEvent(TurnQueue.class, TurnQueue.NEW_TURN,list, null );
-        maszyna_ballista.propertyChange(evt);
+        ballista.propertyChange(evt);
         assertThat(list.get(0).getCurrentHp()).isEqualTo(84);
     }
 

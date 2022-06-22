@@ -21,7 +21,6 @@ public class Ballista extends AbstractWarMachines {
 
         super.propertyChange(evt);
         if (TurnQueue.NEW_TURN.equals(evt.getPropertyName())) {
-            System.out.println("jestem w property change balisty");
             List<Creature> creatureList = (List<Creature>) evt.getOldValue();
             List<Creature> creatures = new ArrayList<>(creatureList);
             Collections.shuffle(creatures);

@@ -32,7 +32,6 @@ public class CatapultTest {
         list.add(Wall);
         PropertyChangeEvent evt = new PropertyChangeEvent(TurnQueue.class, TurnQueue.NEW_TURN,list, null );
         catapult.propertyChange(evt);
-//        catapult.performAction(list);
 
         assertThat(list.get(0).getCurrentHp()).isEqualTo(11);
     }
