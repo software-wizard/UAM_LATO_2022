@@ -14,9 +14,7 @@ import pl.psi.artifacts.EconomyArtifact;
 import pl.psi.artifacts.model.ArtifactEffect;
 import pl.psi.artifacts.model.ArtifactIf;
 import pl.psi.artifacts.model.ArtifactTarget;
-import pl.psi.creatures.CastleCreatureFactory;
-import pl.psi.creatures.Creature;
-import pl.psi.creatures.EconomyCreature;
+import pl.psi.creatures.*;
 import pl.psi.gui.MainBattleController;
 import pl.psi.gui.NecropolisFactory;
 import pl.psi.gui.StrongholdFactory;
@@ -32,6 +30,7 @@ import pl.psi.spells.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 public class EcoBattleConverter {
@@ -84,6 +83,13 @@ public class EcoBattleConverter {
                                     ecoCreature.isUpgraded(), ecoCreature.getAmount())));
                     break;
             }
+
+            final List<EconomyCreature> warMachines = aPlayer.getWarMachines();
+        WarMachinesFactory warMachinesFactory = new WarMachinesFactory();
+        for (EconomyCreature warMachine: warMachines) {
+            creatures.add(warMachinesFactory.create(warMachine.getTier(), warMachine.getAmount(), new DefaultDamageCalculator(new Random()), 1));
+        }
+
             convertSkills(playerSkills, creatures, aPlayer, aPlayer.getSpellList());
             final List<Spell<? extends SpellableIf>> spells = new ArrayList<>();
 
