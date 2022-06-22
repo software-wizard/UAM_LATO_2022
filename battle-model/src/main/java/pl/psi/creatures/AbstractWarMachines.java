@@ -6,7 +6,6 @@ import java.util.List;
 
 @Getter
 public abstract class AbstractWarMachines extends AbstractCreature {
-    protected Creature decorated;
     protected int skillLevel;
     protected WarMachineActionType actionType;
     protected DamageCalculatorIf damageCalculator;
@@ -25,6 +24,16 @@ public abstract class AbstractWarMachines extends AbstractCreature {
     @Override
     public boolean isActive() {
         return skillLevel != 0;
+    }
+
+    @Override
+    public String getCreatureInformation() {
+        return "Name: " + getBasicStats().getName() + "\nMax health: " + (int) getStats().getMaxHp() + "\nCurrent health: " + (int) getCurrentHp()  ;
+    }
+
+    @Override
+    public boolean hasSpecial() {
+        return false;
     }
 
     public void upgradeSkillLevel( int aNewLevel) {

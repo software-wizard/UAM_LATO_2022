@@ -2,6 +2,7 @@ package pl.psi;
 
 import pl.psi.creatures.Creature;
 
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.*;
@@ -15,6 +16,7 @@ public class TurnQueue {
 
     public static final String END_OF_TURN = "END_OF_TURN";
     public static final String NEW_TURN = "NEW_TURN";
+    public static final String NEXT_CREATURE = "NEXT_CREATURE";
 
     private final Collection<Creature> creatures;
     private final LinkedList<Creature> creaturesQueue;
@@ -67,6 +69,8 @@ public class TurnQueue {
         return creatures.stream().filter(Creature::isRange).collect( Collectors.toList() );
     }
 
+    public Collection<Creature> getCreatures() {return creatures; }
+
     public void addDeadCreature( final Creature creature ){
         deadCreatures.add(creature);
     }
@@ -89,27 +93,32 @@ public class TurnQueue {
     }
 
     public void next() {
-        sortBySpeed();
-        if (creaturesQueue.isEmpty()) {
-            if(waitingCreaturesQueue.isEmpty()){
-                endOfTurn();
-                next();
-            }
-            else{
-                currentCreature = waitingCreaturesQueue.poll();
-            }
-        }
-        else{
-            currentCreature = creaturesQueue.poll();
+        List<Creature> collect = creatures.stream().filter(Creature::isAlive).collect(Collectors.toList());
+
+        if(collect.isEmpty()) {
+            return;
         }
 
-        if(!currentCreature.isAlive()){
+        sortBySpeed();
+        if (creaturesQueue.isEmpty()) {
+            if (waitingCreaturesQueue.isEmpty()) {
+                endOfTurn();
+                next();
+            } else {
+                currentCreature = waitingCreaturesQueue.poll();
+            }
+        } else {
+            currentCreature = creaturesQueue.poll();
+        }
+        observerSupport.firePropertyChange(NEXT_CREATURE, null, currentCreature);
+
+        if (!currentCreature.isAlive()) {
             next();
         }
 
-        newTurn();
 
         if(!currentCreature.isActive()) {
+            newTurn();
             next();
         }
     }
@@ -121,11 +130,13 @@ public class TurnQueue {
     }
 
     private void newTurn() {
+        PropertyChangeEvent evt;
         if (hero1Creatures.contains(currentCreature)) {
-            observerSupport.firePropertyChange(NEW_TURN,hero2Creatures,hero1Creatures);
+             evt = new PropertyChangeEvent(this,NEW_TURN,hero2Creatures,hero1Creatures);
         } else {
-            observerSupport.firePropertyChange(NEW_TURN, hero1Creatures, hero2Creatures);
+            evt = new PropertyChangeEvent(this,NEW_TURN,hero1Creatures,hero2Creatures);
         }
+        currentCreature.propertyChange(evt);
     }
 
     public int getRoundNumber(){

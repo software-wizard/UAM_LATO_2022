@@ -14,10 +14,14 @@ public class Ballista extends AbstractWarMachines {
         super(aDecorated, actionType, aSkillLevel);
     }
 
+    private double range = Integer.MAX_VALUE;
+
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
+
         super.propertyChange(evt);
         if (TurnQueue.NEW_TURN.equals(evt.getPropertyName())) {
+            System.out.println("jestem w property change balisty");
             List<Creature> creatureList = (List<Creature>) evt.getOldValue();
             List<Creature> creatures = new ArrayList<>(creatureList);
             Collections.shuffle(creatures);
@@ -34,7 +38,27 @@ public class Ballista extends AbstractWarMachines {
         applyDamage(aDefender, damage);
     }
 
-    protected void applyDamage(final Creature aDefender, final double aDamage) {
-        aDefender.setCurrentHp(aDefender.getCurrentHp() - aDamage);
+    @Override
+    public double getAttackRange(){
+        return range;
     }
+
+    @Override
+    public boolean isRange(){
+        return true;
+    }
+
+    @Override
+    public void attack(final Creature aDefender) {
+            attackRange(aDefender);
+    }
+
+    private void attackRange(final Creature aDefender) {
+        final int damage = getCalculator().calculateDamage(this, aDefender);
+        applyDamage(aDefender, damage);
+    }
+
+//    protected void applyDamage(final Creature aDefender, final double aDamage) {
+//        aDefender.setCurrentHp(aDefender.getCurrentHp() - aDamage);
+//    }
 }

@@ -421,6 +421,10 @@ public class Creature implements PropertyChangeListener, Comparable<Creature>, S
     public void addShots(int i) {
     }
 
+    public boolean isActive() {
+        return true;
+    }
+
     public boolean canCastSpell() {
         return false;
     }

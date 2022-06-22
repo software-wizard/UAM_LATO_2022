@@ -12,12 +12,12 @@ public class WarMachinesFactory implements WarMachinesIf<AbstractWarMachines> {
 
         switch (aTier) {
             case 1:
-                return new Ballista(
+                return new Ballista(new ShooterCreatureDecorator(
                         new Creature.
                                 Builder().statistic(WarMachinesStatistic.BALLISTA)
                                 .amount(1)
                                 .calculator(aCalculator)
-                                .build(),
+                                .build(), 20),
                         WarMachineActionType.ATTACK_CREATURE,aSkillLevel
                 );
             case 2:

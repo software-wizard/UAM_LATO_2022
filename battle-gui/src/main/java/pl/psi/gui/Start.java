@@ -6,11 +6,14 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import pl.psi.Hero;
 import pl.psi.SpellsBook;
+import pl.psi.creatures.DefaultDamageCalculator;
+import pl.psi.creatures.WarMachinesFactory;
 import pl.psi.hero.HeroStatistics;
 import pl.psi.spells.SpellFactory;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Random;
 
 import static pl.psi.spells.SpellNames.*;
 import static pl.psi.spells.SpellRang.BASIC;
@@ -46,6 +49,7 @@ public class Start extends Application {
     private Hero createP1() {
         Hero ret =
                 new Hero(List.of(
+                        new WarMachinesFactory().create(1, 1, new DefaultDamageCalculator(new Random()), 1),
                         new NecropolisFactory().create(false, 1, 5),
                         new NecropolisFactory().create(true, 2, 5),
                         new NecropolisFactory().create(false, 3, 5)
@@ -90,6 +94,8 @@ public class Start extends Application {
         Hero ret = new Hero(List.of(
                 new StrongholdFactory().create(true, 1, 100),
                 new StrongholdFactory().create(true, 2, 3),
+                new WarMachinesFactory().create(4, 1, new DefaultDamageCalculator(new Random()), 1),
+                new WarMachinesFactory().create(2, 1, new DefaultDamageCalculator(new Random()), 1),
                 new StrongholdFactory().create(false, 3, 25)
         ), HeroStatistics.KNIGHT,
                 SpellsBook.builder().spells(List.of(

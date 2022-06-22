@@ -24,4 +24,9 @@ public class AmmoCart extends AbstractWarMachines {
         }
     }
 
+    @Override
+    public boolean isActive() {
+        return false;
+    }
+
 }
