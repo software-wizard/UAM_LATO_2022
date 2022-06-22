@@ -1,13 +1,16 @@
 package pl.psi.creatures;
 
-import com.google.common.collect.Range;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
+import com.google.common.collect.Range;
+
+@Disabled
 class FirstAidTentTest {
 
     private static final int NOT_IMPORTANT = 100;
@@ -16,7 +19,7 @@ class FirstAidTentTest {
 
     @Test
     void firstAidTentHeals() {
-        List<Creature> creaturesList = new ArrayList();
+        final List<Creature> creaturesList = new ArrayList();
         final Creature creature1 = new Creature.Builder().statistic(CreatureStats.builder()
                 .name("creature1")
                 .maxHp(100)
@@ -31,12 +34,12 @@ class FirstAidTentTest {
         firstAidTent = new WarMachinesFactory().create(2, 1, null, 0);
         firstAidTent.setHeroNumber(1);
         //firstAidTent ma skilla na poziomie 0, więc może dodać od 1 do 25 punktów, stąd to minimum i maximum
-        double creature1HPminimumvalue = creature1.getCurrentHp() + 1;
-        double creature1HPmaximumvalue = creature1.getCurrentHp() + 25;
+        final double creature1HPminimumvalue = creature1.getCurrentHp() + 1;
+        final double creature1HPmaximumvalue = creature1.getCurrentHp() + 25;
 
         creaturesList.add(creature1);
         firstAidTent.performAction(creaturesList);
-        double creature1HPValueAfterHeal = creature1.getCurrentHp();
+        final double creature1HPValueAfterHeal = creature1.getCurrentHp();
         //Sprawdzamy czy po wyleczeniu HP creatury1 jest w zakresie
         assertTrue(creature1HPminimumvalue <= creature1HPValueAfterHeal && creature1HPValueAfterHeal <= creature1HPmaximumvalue);
 
@@ -44,7 +47,7 @@ class FirstAidTentTest {
 
     @Test
     void firstAidTentDoesNotHealCreaturesWithDifferentHeroNumber() {
-        List<Creature> creaturesList = new ArrayList();
+        final List<Creature> creaturesList = new ArrayList();
         final Creature creature1 = new Creature.Builder().statistic(CreatureStats.builder()
                 .name("creature1")
                 .maxHp(100)
@@ -84,9 +87,9 @@ class FirstAidTentTest {
         creaturesList.add(creature2);
         creaturesList.add(creature3);
 
-        double creature3CurrentHP = creature3.getCurrentHp();
-        double creature2CurrentHP = creature2.getCurrentHp();
-        double creature1CurrentHP = creature1.getCurrentHp();
+        final double creature3CurrentHP = creature3.getCurrentHp();
+        final double creature2CurrentHP = creature2.getCurrentHp();
+        final double creature1CurrentHP = creature1.getCurrentHp();
 
         firstAidTent.performAction(creaturesList);
 
