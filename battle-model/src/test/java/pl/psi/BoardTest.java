@@ -3,7 +3,7 @@ package pl.psi;
 import org.junit.jupiter.api.Test;
 import pl.psi.creatures.Creature;
 import pl.psi.creatures.CreatureStats;
-import pl.psi.specialfields.Field;
+import pl.psi.specialfields.FieldPointPair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,7 @@ class BoardTest {
                 .build();
         final List<Creature> c1 = List.of(creature);
         final List<Creature> c2 = List.of();
-        final List<Field> f = List.of();
+        final List<FieldPointPair> f = List.of();
         final Board board = new Board(c1, c2, f);
 
         board.move(creature, new Point(3, 3));
@@ -37,7 +37,7 @@ class BoardTest {
                 .build();
         final List<Creature> c1 = List.of(creature);
         final List<Creature> c2 = List.of();
-        final List<Field> f1 = List.of();
+        final List<FieldPointPair> f1 = List.of();
         final Board board = new Board(c1, c2, f1);
 
         assertThat( board.getCreaturePosition( creature ) ).isEqualTo( new Point(0,1) );
@@ -51,7 +51,7 @@ class BoardTest {
                 .build();
         final List<Creature> c1 = List.of(creature);
         final List<Creature> c2 = List.of();
-        final List<Field> f1 = List.of();
+        final List<FieldPointPair> f1 = List.of();
         final Board board = new Board(c1, c2, f1);
 
         List<Point> pointList = board.getAdjacentPositions( new Point( 1,1 ) );
@@ -70,7 +70,7 @@ class BoardTest {
     void pathFinderTest(){
         final List<Creature> c1 = List.of();
         final List<Creature> c2 = List.of();
-        final List<Field> f1 = List.of();
+        final List<FieldPointPair> f1 = List.of();
         final Board board = new Board(c1, c2, f1);
 
         final Point startPoint = new Point(1,2);

@@ -2,7 +2,6 @@ package pl.psi.specialfields;
 
 import lombok.ToString;
 import pl.psi.creatures.Creature;
-import pl.psi.creatures.CreatureStats;
 
 import java.util.List;
 

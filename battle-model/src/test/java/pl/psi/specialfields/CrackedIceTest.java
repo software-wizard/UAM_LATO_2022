@@ -1,6 +1,5 @@
 package pl.psi.specialfields;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import pl.psi.creatures.Alignment;
 import pl.psi.creatures.Creature;
@@ -10,7 +9,6 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Disabled
 public class CrackedIceTest {
     @Test
     void shouldReduceDefenseOfAllTroopsBy5() {
