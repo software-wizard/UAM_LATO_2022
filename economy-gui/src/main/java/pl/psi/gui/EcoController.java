@@ -201,7 +201,6 @@ public class EcoController implements PropertyChangeListener {
     }
 
     void refreshGuiHeroBoughtCreature() {
-
         currentGoldLabel.setText(String.valueOf(economyEngine.getActiveHero().getGold()));
         shopsBox.getChildren().clear();
 

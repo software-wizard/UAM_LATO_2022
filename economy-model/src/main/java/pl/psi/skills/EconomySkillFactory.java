@@ -15,9 +15,19 @@ public class EconomySkillFactory {
                     case RESISTANCE:
                         return new EconomySkill(aSkillType, 100, 0.05);
                     case LUCK:
+                    case LEADERSHIP:
                         return new EconomySkill(aSkillType, 100, 1);
                     case FIRST_AID:
                         return new EconomySkill(aSkillType, 100, 50);
+                    case ARTILLERY:
+                        return new EconomySkill(aSkillType, 250, 1);
+                    case BALLISTICS:
+                        return new EconomySkill(aSkillType, 200, 1);
+                    case AIR_MAGIC:
+                    case FIRE_MAGIC:
+                    case EARTH_MAGIC:
+                    case WATER_MAGIC:
+                        return new EconomySkill( aSkillType, 120, 1 );
                     default:
                         throw new IllegalArgumentException("Invalid skill type");
                 }
@@ -32,9 +42,19 @@ public class EconomySkillFactory {
                     case RESISTANCE:
                         return new EconomySkill(aSkillType, 200, 0.1);
                     case LUCK:
+                    case LEADERSHIP:
                         return new EconomySkill(aSkillType, 200, 2);
                     case FIRST_AID:
                         return new EconomySkill(aSkillType, 200, 75);
+                    case ARTILLERY:
+                        return new EconomySkill(aSkillType, 350, 2);
+                    case BALLISTICS:
+                        return new EconomySkill(aSkillType, 300, 2);
+                    case AIR_MAGIC:
+                    case FIRE_MAGIC:
+                    case EARTH_MAGIC:
+                    case WATER_MAGIC:
+                        return new EconomySkill( aSkillType, 120, 2 );
                     default:
                         throw new IllegalArgumentException("Invalid skill type");
                 }
@@ -49,9 +69,19 @@ public class EconomySkillFactory {
                     case RESISTANCE:
                         return new EconomySkill(aSkillType, 300, 0.2);
                     case LUCK:
+                    case LEADERSHIP:
                         return new EconomySkill(aSkillType, 300, 3);
                     case FIRST_AID:
                         return new EconomySkill(aSkillType, 300, 100);
+                    case ARTILLERY:
+                        return new EconomySkill(aSkillType, 450, 3);
+                    case BALLISTICS:
+                        return new EconomySkill(aSkillType, 400, 3);
+                    case AIR_MAGIC:
+                    case FIRE_MAGIC:
+                    case EARTH_MAGIC:
+                    case WATER_MAGIC:
+                        return new EconomySkill( aSkillType, 120, 3 );
                     default:
                         throw new IllegalArgumentException("Invalid skill type");
                 }

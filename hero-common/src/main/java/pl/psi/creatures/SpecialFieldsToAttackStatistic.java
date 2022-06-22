@@ -26,7 +26,12 @@ public enum SpecialFieldsToAttackStatistic implements CreatureStatisticIf {
 
     @Override
     public CreatureStatistic.CreatureGroup getGroup() {
-        return null;
+        return CreatureStatistic.CreatureGroup.OTHER;
+    }
+  
+    @Override
+    public boolean isGoodAligned() {
+        return CreatureStatisticIf.super.isGoodAligned();
     }
 
     @Override

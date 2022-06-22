@@ -1,6 +1,7 @@
 package pl.psi.gui;
 
 import pl.psi.creatures.*;
+import pl.psi.spells.SpellNames;
 import pl.psi.spells.SpellRang;
 
 public class StrongholdFactory {
@@ -66,7 +67,7 @@ public class StrongholdFactory {
                             .amount(aAmount)
                             .build();
 
-                    return new CanCastSpellCreatureDecorator(creature,"Bloodlust",3,6, SpellRang.ADVANCED);
+                    return new CanCastSpellCreatureDecorator(creature, SpellNames.BLOODLUST,3,6, SpellRang.ADVANCED);
                 case 5:
                     Creature thunderbird = new Creature.Builder().statistic(CreatureStatistic.THUNDERBIRD)
                             .amount(aAmount)

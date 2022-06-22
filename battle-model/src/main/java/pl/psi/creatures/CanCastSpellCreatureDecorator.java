@@ -1,16 +1,17 @@
 package pl.psi.creatures;
 
+import pl.psi.spells.SpellNames;
 import pl.psi.spells.SpellRang;
 
 public class CanCastSpellCreatureDecorator extends AbstractCreature{
 
     private Creature decorated;
-    private final String spellName;
+    private final SpellNames spellName;
     private int castCounter;
     private final int spellPower;
     private final SpellRang spellRang;
 
-    public CanCastSpellCreatureDecorator(Creature aDecorated, String aSpellName, int aCastCounter, int aSpellPower,
+    public CanCastSpellCreatureDecorator(Creature aDecorated, SpellNames aSpellName, int aCastCounter, int aSpellPower,
                                          SpellRang aSpellRang) {
         super(aDecorated);
         decorated = aDecorated;
@@ -36,7 +37,7 @@ public class CanCastSpellCreatureDecorator extends AbstractCreature{
     }
 
     @Override
-    public String getSpellName(){
+    public SpellNames getSpellName(){
         return spellName;
     }
 

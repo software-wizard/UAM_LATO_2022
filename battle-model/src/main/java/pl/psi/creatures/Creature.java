@@ -9,21 +9,25 @@ package pl.psi.creatures;
 import com.google.common.collect.Range;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import pl.psi.TurnQueue;
-import pl.psi.spells.Spell;
-import pl.psi.spells.SpellRang;
+import pl.psi.spells.*;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Random;
+import java.util.function.BiConsumer;
 
 /**
  * TODO: Describe this class (The first line - until the first dot - will interpret as the brief description).
  */
 @Getter
 @Setter
-public class Creature implements PropertyChangeListener, Comparable<Creature> {
+@ToString
+public class Creature implements PropertyChangeListener, Comparable<Creature>, SpellableIf {
     private CreatureStatisticIf basicStats;
     private CreatureStats externalStats = new CreatureStats.CreatureStatsBuilder().build();
     private CreatureStats buffedStats = new CreatureStats.CreatureStatsBuilder().build();
@@ -31,7 +35,7 @@ public class Creature implements PropertyChangeListener, Comparable<Creature> {
     private double currentHp;
     private boolean canCounterAttack = true;
     private DamageCalculatorIf calculator;
-    private int heroNumber; /** REMEMBER TO DELETE ANY USAGE OF THIS */
+    private int heroNumber;
     private double DEFENCE_MULTIPLIER = 0.2;
     private double spellDamageReduction = 1;
     private int morale = 1; // range = < -3;3 >
@@ -42,8 +46,10 @@ public class Creature implements PropertyChangeListener, Comparable<Creature> {
     private double lastHealAmount;
     private double lastAttackDamage;
     private double lastCounterAttackDamage;
+    private Queue<Spell> runningSpells;
 
     Creature() {
+        runningSpells = new LinkedList<>();
     }
 
     private Creature(final CreatureStatisticIf aStats, final DamageCalculatorIf aCalculator,
@@ -55,11 +61,13 @@ public class Creature implements PropertyChangeListener, Comparable<Creature> {
         calculator = aCalculator;
         alignment = aAlignment;
         luck = aLuck;
+        runningSpells = new LinkedList<>();
     }
+
 
     public void attack(final Creature aDefender) {
         if (isAlive()) {
-            final double damage = getCalculator().calculateDamage(this, aDefender);
+            double damage = getCalculator().calculateDamage(this, aDefender);
             applyDamage(aDefender, damage);
             if (canCounterAttack(aDefender)) {
                 aDefender.counterAttack(this);
@@ -68,15 +76,14 @@ public class Creature implements PropertyChangeListener, Comparable<Creature> {
     }
 
     protected void applyDamage(final Creature aDefender, final double aDamage) {
-        aDefender.setCurrentHp( ((aDefender.getAmount()-1) * aDefender.getMaxHp()) + aDefender.getCurrentHp() - aDamage );
-        if(aDefender.getCurrentHp() < 0){
+        aDefender.setCurrentHp(((aDefender.getAmount() - 1) * aDefender.getMaxHp()) + aDefender.getCurrentHp() - aDamage);
+        if (aDefender.getCurrentHp() < 0) {
             setLastAttackDamage(aDamage + aDefender.getCurrentHp());
-        }
-        else{
+        } else {
             setLastAttackDamage(aDamage);
         }
-        aDefender.setAmount( addUnits( aDefender ) );
-        aDefender.setCurrentHp( calculateCurrentHp( aDefender ) );
+        aDefender.setAmount(addUnits(aDefender));
+        aDefender.setCurrentHp(calculateCurrentHp(aDefender));
     }
 
     protected void counterAttack(final Creature aAttacker) {
@@ -88,27 +95,25 @@ public class Creature implements PropertyChangeListener, Comparable<Creature> {
     }
 
     protected void applyCounterAttackDamage(final Creature aDefender, final double aDamage) {
-        aDefender.setCurrentHp( ((aDefender.getAmount()-1) * aDefender.getMaxHp()) + aDefender.getCurrentHp() - aDamage );
-        if(aDefender.getCurrentHp() < 0){
+        aDefender.setCurrentHp(((aDefender.getAmount() - 1) * aDefender.getMaxHp()) + aDefender.getCurrentHp() - aDamage);
+        if (aDefender.getCurrentHp() < 0) {
             setLastCounterAttackDamage(aDamage + aDefender.getCurrentHp());
-        }
-        else{
+        } else {
             setLastCounterAttackDamage(aDamage);
         }
-        aDefender.setAmount( addUnits( aDefender ) );
-        aDefender.setCurrentHp( calculateCurrentHp( aDefender ) );
+        aDefender.setAmount(addUnits(aDefender));
+        aDefender.setCurrentHp(calculateCurrentHp(aDefender));
     }
 
-
-
-    public void castSpell(final Creature aDefender, Spell spell) {
-        if (isAlive())
-            spell.castSpell(aDefender);
-    }
-
-    public void castSpell(final List<Creature> aDefender, Spell spell) {
+    public void castSpell(final Creature aDefender, Spell spell, BiConsumer<String, PropertyChangeListener> consumer) {
         if (isAlive()) {
-            spell.castSpell(aDefender);
+            spell.castSpell(aDefender, consumer);
+        }
+    }
+
+    public void castSpell(final SpellCreatureList aDefender, Spell spell, BiConsumer<String, PropertyChangeListener> consumer) {
+        if (isAlive()) {
+            spell.castSpell(aDefender, consumer);
         }
     }
 
@@ -116,44 +121,38 @@ public class Creature implements PropertyChangeListener, Comparable<Creature> {
         externalStats.addStats(statIncrease);
     }
 
-
-    private int addUnits(final Creature aDefender ){
-        if( aDefender.getCurrentHp() > 0 ){
-            if( aDefender.getCurrentHp() > aDefender.getMaxHp() ){
-                if( aDefender.getCurrentHp() % aDefender.getMaxHp() == 0){
+    private int addUnits(final Creature aDefender) {
+        if (aDefender.getCurrentHp() > 0) {
+            if (aDefender.getCurrentHp() > aDefender.getMaxHp()) {
+                if (aDefender.getCurrentHp() % aDefender.getMaxHp() == 0) {
                     return (int) (aDefender.getCurrentHp() / aDefender.getMaxHp());
+                } else {
+                    return (int) (aDefender.getCurrentHp() / aDefender.getMaxHp()) + 1;
                 }
-                else{
-                    return  (int) (aDefender.getCurrentHp() / aDefender.getMaxHp()) + 1 ;
-                }
-            }
-            else{
+            } else {
                 return 1;
             }
-        }
-        else{
+        } else {
             return 0;
         }
     }
 
-    private double calculateCurrentHp( final Creature aDefender ){
-        if( aDefender.getAmount() == 0 ){
+    private double calculateCurrentHp(final Creature aDefender) {
+        if (aDefender.getAmount() == 0) {
             return 0;
-        }
-        else{
-            if( aDefender.getCurrentHp() % aDefender.getMaxHp() == 0){
+        } else {
+            if (aDefender.getCurrentHp() % aDefender.getMaxHp() == 0) {
                 return aDefender.getMaxHp();
-            }
-            else{  // ( a % b + b ) % b == a % b   just like with healing, modulo with negative numbers is crazy
+            } else {  // ( a % b + b ) % b == a % b   just like with healing, modulo with negative numbers is crazy
                 // a = (aDefender.getCurrentHp() - ( aDefender.getAmount() * aDefender.getMaxHp() ))
                 // b = aDefender.getMaxHp()
-                return (((aDefender.getCurrentHp() - ( aDefender.getAmount() * aDefender.getMaxHp())) % aDefender.getMaxHp()) + aDefender.getMaxHp()) % aDefender.getMaxHp();
+                return (((aDefender.getCurrentHp() - (aDefender.getAmount() * aDefender.getMaxHp())) % aDefender.getMaxHp()) + aDefender.getMaxHp()) % aDefender.getMaxHp();
             }
         }
     }
 
-    public void applySpellDamage(Creature aDefender, Integer damage) {
-        aDefender.setCurrentHp(aDefender.getCurrentHp() - damage); // ToDo: include magic resist
+    public void applySpellDamage(Creature aDefender, double damage) {
+        aDefender.applyDamage(aDefender, damage);
     }
 
     public void increaseLuckBy(int factor) {
@@ -184,20 +183,22 @@ public class Creature implements PropertyChangeListener, Comparable<Creature> {
 
     protected void heal(final double healAmount) {
         setCurrentHp((getCurrentHp() + healAmount));
+
         addUnits(calculateAmount());
         setCurrentHp(calculateCurrentHp());
         setLastHealAmount(healAmount);
     }
 
     private int calculateAmount() {
-        if (getCurrentHp() < getStats().getMaxHp()){
+        if (getCurrentHp() < getStats().getMaxHp()) {
             return 0;
-        }
-        else if (getCurrentHp() / getStats().getMaxHp() == 1) {
+        } else if (getCurrentHp() / getStats().getMaxHp() == 1) {
             return 1;
-        } else if (getCurrentHp() % getStats().getMaxHp() == 0) {
+        }
+        else if (getCurrentHp() % getStats().getMaxHp() == 0) {
             return (int) (getCurrentHp() / getStats().getMaxHp());
-        } else {
+        }
+        else {
             return (int) ((getCurrentHp() / getStats().getMaxHp()) + 1);
         }
     }
@@ -226,7 +227,8 @@ public class Creature implements PropertyChangeListener, Comparable<Creature> {
         morale = aMorale;
     }
 
-    public void setInMelee(final boolean value){}
+    public void setInMelee(final boolean value) {
+    }
 
     public void buff(final CreatureStatisticIf statsToAdd) {
         buffedStats.addStats(statsToAdd);
@@ -256,10 +258,10 @@ public class Creature implements PropertyChangeListener, Comparable<Creature> {
         return getStats().getArmor();
     }
 
-    public Integer[][] getSplashDamageRange(){
+    public Integer[][] getSplashDamageRange() {
         Integer[][] splashDamageArea = new Integer[3][3];
-        for(int i = 0; i<3;i++){
-            for(int j = 0; j<3;j++){
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
                 splashDamageArea[i][j] = 0;
             }
         }
@@ -268,72 +270,80 @@ public class Creature implements PropertyChangeListener, Comparable<Creature> {
     }
 
     public String getName() {
-        return basicStats.getName();
+        return getBasicStats().getName();
     }
 
     public double getMoveRange() {
         return getStats().getMoveRange();
     }
 
-    public int getSize(){
+    public int getSize() {
         return getBasicStats().getSize();
+    }
+
+    public CreatureStatistic.CreatureType getType(){
+        return getBasicStats().getType();
+    }
+
+    public CreatureStatistic.CreatureGroup getGroup(){
+        return getBasicStats().getGroup();
     }
 
     public boolean isGround(){
         return getBasicStats().isGround();
     }
 
-    public String getShotsAmount(){
+    public String getShotsAmount() {
         return "";
     }
 
-    public int getShots(){
+    public int getShots() {
         return 1;
     }
 
-    public boolean getCanCounterAttack(){
+    public boolean getCanCounterAttack() {
         return canCounterAttack;
     }
 
-    protected void setCanCounterAttack(boolean value) {
+    public void setCanCounterAttack(boolean value) {
         canCounterAttack = value;
     }
 
-    protected void setLastAttackDamage(double damage){
+    protected void setLastAttackDamage(double damage) {
         lastAttackDamage = damage;
     }
 
-    public double getLastAttackDamage(){
+    public double getLastAttackDamage() {
         return lastAttackDamage;
     }
 
-    protected void setLastCounterAttackDamage( final double damage ) {
+    protected void setLastCounterAttackDamage(final double damage) {
         lastCounterAttackDamage = damage;
     }
 
-    public void clearLastCounterAttackDamage(){
+    public void clearLastCounterAttackDamage() {
         setLastCounterAttackDamage(0);
     }
 
-    public double getLastCounterAttackDamage(){
+    public double getLastCounterAttackDamage() {
         return lastCounterAttackDamage;
     }
 
-    private String getSpecial(){
+    private String getSpecial() {
         String description = getBasicStats().getDescription();
         String[] special = description.split(";");
         return special[1];
     }
 
-    public String getCreatureInformation(){
-        return "Name: " + getBasicStats().getName() + "\nAttack: " + (int)getBasicStats().getAttack() + "(" + (int)getStats().getAttack() + ")" + "\nArmor: " + (int)getBasicStats().getArmor() + "(" + (int)getStats().getArmor() + ")" + "\nShots: " + getShotsAmount() + "\nDamage: " + getStats().getDamage().lowerEndpoint() + "-" + getStats().getDamage().upperEndpoint() + "\nMax health: " + (int)getStats().getMaxHp() + "\nCurrent health: " + (int)getCurrentHp() + "\nSpeed: " + (int)getStats().getMoveRange() + "(" + (int)getStats().getMoveRange() + ")\n" + getSpecial();
+    public String getCreatureInformation() {
+        return "Name: " + getBasicStats().getName() + "\nAttack: " + (int) getBasicStats().getAttack() + "(" + (int) getStats().getAttack() + ")" + "\nArmor: " + (int) getBasicStats().getArmor() + "(" + (int) getStats().getArmor() + ")" + "\nShots: " + getShotsAmount() + "\nDamage: " + getStats().getDamage().lowerEndpoint() + "-" + getStats().getDamage().upperEndpoint() + "\nMax health: " + (int) getStats().getMaxHp() + "\nCurrent health: " + (int) getCurrentHp() + "\nSpeed: " + (int) getStats().getMoveRange() + "(" + (int) getStats().getMoveRange() + ")\n" + getSpecial();
     }
 
-    protected void setLastHealAmount(final double healAmount){
+    protected void setLastHealAmount(final double healAmount) {
         lastHealAmount = healAmount;
     }
 
-    public double getLastHealAmount(){
+    public double getLastHealAmount() {
         return lastHealAmount;
     }
 
@@ -342,23 +352,20 @@ public class Creature implements PropertyChangeListener, Comparable<Creature> {
     }
 
     public void defend(final boolean value) {
-        if(value){
-            if(!isDefending()){
+        if (value) {
+            if (!isDefending()) {
                 defenceBonusArmor = getArmor() * 0.2;
                 isDefending = true;
 
                 buff(new CreatureStats.CreatureStatsBuilder().armor(defenceBonusArmor).build());
-            }
-            else{
+            } else {
                 throw new RuntimeException("Creature already defending.");
             }
-        }
-        else{
-            if(isDefending()){
+        } else {
+            if (isDefending()) {
                 isDefending = false;
                 buff(new CreatureStats.CreatureStatsBuilder().armor(-defenceBonusArmor).build());
-            }
-            else{
+            } else {
                 throw new RuntimeException("Creature is not defending.");
             }
         }
@@ -372,11 +379,11 @@ public class Creature implements PropertyChangeListener, Comparable<Creature> {
         return aDefender.getCanCounterAttack() && aDefender.isAlive();
     }
 
-    public boolean hasSpecial(){
+    public boolean hasSpecial() {
         return getSpecial().length() > 1;
     }
 
-    public boolean isRange(){
+    public boolean isRange() {
         return false;
     }
 
@@ -384,30 +391,19 @@ public class Creature implements PropertyChangeListener, Comparable<Creature> {
         currentHp = aCurrentHp;
     }
 
-    public void applyStatsWithSpells(CreatureStats aCreatureStats) {
-        setStatsWithSpells(CreatureStats.builder()
-                .attack((buffedStats == null) ? aCreatureStats.getAttack() : buffedStats.getAttack() + aCreatureStats.getAttack() )
-                .armor((buffedStats == null) ? aCreatureStats.getArmor() : buffedStats.getArmor() + aCreatureStats.getArmor() )
-                .moveRange((buffedStats == null) ? aCreatureStats.getMoveRange() : buffedStats.getMoveRange() + aCreatureStats.getMoveRange() )
-                .build());
-    }
-
-    private void setStatsWithSpells(CreatureStats aStatsWithSpells) {
-        buffedStats = aStatsWithSpells;
-    }
-
-    public int getSpellCastCounter(){
+    public int getSpellCastCounter() {
         return 0;
     }
 
-    public void reduceNumberOfSpellCasts(){
+    public void reduceNumberOfSpellCasts() {
     }
+
 
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
         if (TurnQueue.END_OF_TURN.equals(evt.getPropertyName())) {
             setCanCounterAttack(true);
-            if(isDefending()){
+            if (isDefending()) {
                 defend(false);
             }
         }
@@ -429,22 +425,41 @@ public class Creature implements PropertyChangeListener, Comparable<Creature> {
         return false;
     }
 
-    public String getSpellName(){
-        return "";
-    }
-
-    public SpellRang getSpellRang(){
+    public SpellNames getSpellName() {
         return null;
     }
 
-    public int getSpellPower(){
+    public SpellRang getSpellRang() {
+        return null;
+    }
+
+    public int getSpellPower() {
         return 0;
     }
 
-    public boolean isActive() {
-        return true;
+    public void addRunningSpell(Spell<? extends SpellableIf> spell) {
+        runningSpells.add(spell);
     }
 
+    public boolean isRunningSpellsSlotsFull() {
+        return getRunningSpells().size() <= 3;
+    }
+
+    public void buffMorale(int moraleIncrease) {
+        morale = morale + moraleIncrease;
+    }
+
+    public void buffLuck(int luckIncrease) {
+        luck = luck + luckIncrease;
+    }
+
+    public List<SpellNames> getImmuneSpellList() {
+        return null;
+    }
+
+    public List<SpellNames> getVulnerableSpellList() {
+        return null;
+    }
 
     public static class Builder {
         private int amount = 1;
