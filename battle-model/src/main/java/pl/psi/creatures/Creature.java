@@ -183,6 +183,7 @@ public class Creature implements PropertyChangeListener, Comparable<Creature>, S
 
     protected void heal(final double healAmount) {
         setCurrentHp((getCurrentHp() + healAmount));
+
         addUnits(calculateAmount());
         setCurrentHp(calculateCurrentHp());
         setLastHealAmount(healAmount);
@@ -193,9 +194,11 @@ public class Creature implements PropertyChangeListener, Comparable<Creature>, S
             return 0;
         } else if (getCurrentHp() / getStats().getMaxHp() == 1) {
             return 1;
-        } else if (getCurrentHp() % getStats().getMaxHp() == 0) {
+        }
+        else if (getCurrentHp() % getStats().getMaxHp() == 0) {
             return (int) (getCurrentHp() / getStats().getMaxHp());
-        } else {
+        }
+        else {
             return (int) ((getCurrentHp() / getStats().getMaxHp()) + 1);
         }
     }
@@ -278,7 +281,15 @@ public class Creature implements PropertyChangeListener, Comparable<Creature>, S
         return getBasicStats().getSize();
     }
 
-    public boolean isGround() {
+    public CreatureStatistic.CreatureType getType(){
+        return getBasicStats().getType();
+    }
+
+    public CreatureStatistic.CreatureGroup getGroup(){
+        return getBasicStats().getGroup();
+    }
+
+    public boolean isGround(){
         return getBasicStats().isGround();
     }
 

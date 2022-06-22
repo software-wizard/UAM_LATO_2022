@@ -27,11 +27,6 @@ public enum WarMachinesStatistic implements CreatureStatisticIf {
     private final int size;
 
     @Override
-    public CreatureStatistic.CreatureGroup getGroup() {
-        return null;
-    }
-
-    @Override
     public boolean isGoodAligned() {
         return CreatureStatisticIf.super.isGoodAligned();
     }
@@ -42,17 +37,22 @@ public enum WarMachinesStatistic implements CreatureStatisticIf {
     }
 
     @Override
+    public CreatureStatistic.CreatureGroup getGroup() {
+        return CreatureStatistic.CreatureGroup.OTHER;
+    }
+
+    @Override
     public String getCanAttackImagePath() {
-        return null;
+        return "";
     }
 
     @Override
     public String getCanBuffImagePath() {
-        return null;
+        return "";
     }
 
     @Override
     public String getCurrentImagePath() {
-        return null;
+        return "";
     }
 }

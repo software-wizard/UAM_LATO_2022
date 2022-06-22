@@ -52,7 +52,7 @@ class AmmoCartTest {
         firstAidTent.performAction(creaturesList);
 
         //then
-        assertEquals(shooterCreature.getMaxShots(), shooterCreature.getShotsAmount());
+        assertEquals(shooterCreature.getMaxShots(), shooterCreature.getShots());
     }
 
     @Test
