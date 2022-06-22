@@ -30,13 +30,12 @@ import pl.psi.spells.SpellableIf;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
-import java.util.List;
+import java.util.*;
 
 import static pl.psi.gui.SpellBattleController.SPELL_SELECTED;
 import static pl.psi.spells.SpellTypes.*;
 
 public class MainBattleController implements PropertyChangeListener {
-
     private final GameEngine gameEngine;
     @FXML
     private GridPane gridMap;
@@ -54,6 +53,8 @@ public class MainBattleController implements PropertyChangeListener {
     private Label roundNumber;
     @FXML
     private Label manaLabel;
+    @FXML
+    private Label defenseLabel;
 
     Spell<? extends SpellableIf> selectedSpell;
 
@@ -120,34 +121,9 @@ public class MainBattleController implements PropertyChangeListener {
         });
 
         gameEngine.addObserver(GameEngine.CREATURE_MOVED, (e) -> {
+            gameEngine.handleFieldEffect((Point) e.getNewValue());
             refreshGui();
         });
-
-    }
-
-    private void renderSpecialFields(MapTile mapTile, int x, int y) {
-        if (x == 2 && y == 0) {
-            Image img = new Image("/images/cracked_ice.png");
-            mapTile.setBackground(img);
-        }
-
-        if (x == 4 && y == 8) {
-            Image img = new Image("/images/evilFog.png");
-            mapTile.setBackground(img);
-        }
-
-        if (x == 5 && y == 5) {
-            Image img = new Image("/images/holyGround.png");
-            mapTile.setBackground(img);
-        }
-        if (x == 3 && y == 4) {
-            Image img = new Image("/images/fields_of_Glory.png");
-            mapTile.setBackground(img);
-        }
-        if (x == 4 && y == 6) {
-            Image img = new Image("/images/fiery_Fields.png");
-            mapTile.setBackground(img);
-        }
     }
 
     private static void showStage(final String information, final boolean hasSpecial) {
@@ -186,6 +162,7 @@ public class MainBattleController implements PropertyChangeListener {
             showStage("Game Over",false);
         }
         manaLabel.setText("Mana: " + gameEngine.getCurrentHero().getSpellBook().getMana());
+        defenseLabel.setText("Defense: " + gameEngine.getCurrentCreature().getDefense());
         for (int x = 0; x < 15; x++) {
             for (int y = 0; y < 10; y++) {
                 final int x1 = x;
@@ -206,7 +183,8 @@ public class MainBattleController implements PropertyChangeListener {
                         mapTile.setOnMouseExited(mouseEvent -> {
                             if (gameEngine.getCreature(new Point(x1, y1)).isEmpty()) {
                                 mapTile.setBackground(Color.DARKGREY);
-                                renderSpecialFields(mapTile, x1, y1);
+                                gameEngine.getField(new Point(x1, y1))
+                                    .ifPresent(f -> mapTile.setBackground(new Image(f.getImagePath())));
                             }
                         });
                     }
@@ -299,8 +277,6 @@ public class MainBattleController implements PropertyChangeListener {
                                 }
                             });
                 }
-
-                renderSpecialFields(mapTile, x1, y1);
 
                 if (gameEngine.getCreature(new Point(x1, y1)).isPresent()) {
                     mapTile.setOnMouseClicked(e -> {

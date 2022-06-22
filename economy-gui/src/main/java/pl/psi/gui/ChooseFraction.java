@@ -15,10 +15,8 @@ public class ChooseFraction extends Application {
     @Override
     public void start(final Stage aStage) throws Exception {
 
-
         final FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getClassLoader()
-                .getResource("fxml/fraction.fxml"));
+        loader.setLocation(getClass().getClassLoader().getResource("fxml/fraction.fxml"));
         loader.setController(new FractionController());
 
         final Scene scene = new Scene(loader.load());

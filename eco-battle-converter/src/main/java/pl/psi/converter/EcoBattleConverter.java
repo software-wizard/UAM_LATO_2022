@@ -1,12 +1,21 @@
 package pl.psi.converter;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import pl.psi.Hero;
 import pl.psi.SpellsBook;
-import pl.psi.artifacts.model.Artifact;
+import pl.psi.artifacts.ArtifactApplier;
+import pl.psi.artifacts.ArtifactEffectApplicable;
+import pl.psi.artifacts.ArtifactFactory;
+import pl.psi.artifacts.EconomyArtifact;
+import pl.psi.artifacts.model.ArtifactEffect;
+import pl.psi.artifacts.model.ArtifactIf;
+import pl.psi.artifacts.model.ArtifactTarget;
 import pl.psi.creatures.Creature;
+import pl.psi.creatures.EconomyCreature;
 import pl.psi.gui.MainBattleController;
 import pl.psi.gui.NecropolisFactory;
 import pl.psi.hero.EconomyHero;
@@ -16,11 +25,12 @@ import pl.psi.spells.Spell;
 import pl.psi.spells.SpellFactory;
 import pl.psi.spells.SpellNames;
 import pl.psi.spells.SpellableIf;
+import pl.psi.spells.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class EcoBattleConverter {
 
@@ -30,7 +40,7 @@ public class EcoBattleConverter {
             final FXMLLoader loader = new FXMLLoader();
             loader.setLocation(EcoBattleConverter.class.getClassLoader()
                     .getResource("fxml/main-battle.fxml"));
-            loader.setController(new MainBattleController(convert(aPlayer1), convert(aPlayer2)));
+            loader.setController(new MainBattleController(convert(aPlayer1, 1), convert(aPlayer2, 2)));
             scene = new Scene(loader.load());
             final Stage aStage = new Stage();
             aStage.setScene(scene);
@@ -42,54 +52,101 @@ public class EcoBattleConverter {
         }
     }
 
-    public static Hero convert(final EconomyHero aPlayer) {
-//         I think we should get already filtered Artifact from Equipment, but for now let's have it this way...
-        final List<Artifact> artifacts = Collections.emptyList(); // temporary empty list
+    public static Hero convert(final EconomyHero aPlayer, int id) {
 
-        final List<Artifact> creatureArtifacts = new ArrayList<>();
-        final List<Artifact> skillArtifacts = new ArrayList<>();
-        final List<Artifact> spellArtifacts = new ArrayList<>();
+        final Multimap<ArtifactTarget, ArtifactIf> artifacts = getConvertedArtifacts(aPlayer);
+        applyArtifactsToCreatures(aPlayer, artifacts);
+        applyArtifactsToHero(aPlayer, artifacts);
+            final List<EconomySkill> playerSkills = aPlayer.getSkillsList();
 
-        final List<EconomySkill> playerSkills = aPlayer.getSkills();
+            final List<Creature> creatures = new ArrayList<>();
+            final NecropolisFactory factory = new NecropolisFactory();
+            aPlayer.getCreatureList()
+                    .forEach(ecoCreature -> creatures.add(factory.create(ecoCreature.isUpgraded(),
+                            ecoCreature.getTier(), ecoCreature.getAmount())));
 
-        artifacts.forEach(artifact -> {
-            switch (artifact.getTarget()) {
-                case CREATURES:
-                    creatureArtifacts.add(artifact);
-                    break;
-                case SPELLS:
-                    spellArtifacts.add(artifact);
-                    break;
-                case SKILL:
-                    skillArtifacts.add(artifact);
-                    break;
+            convertSkills(playerSkills, creatures, aPlayer, aPlayer.getSpellList());
+            final List<Spell<? extends SpellableIf>> spells = new ArrayList<>();
+
+            final SpellFactorsModifiers spellFactorsModifiers = applyArtifactsToSpells(artifacts);
+
+            final SpellFactory spellFactory = new SpellFactory(spellFactorsModifiers);
+
+            aPlayer.getSpellList()
+                    .forEach(economySpell -> spells.add(spellFactory.create(SpellNames.valueOf(economySpell.getSpellStats().getName()), economySpell.getSpellRang(), aPlayer.getSpellPower())));
+
+            SpellsBook spellsBook = SpellsBook.builder().spells(spells).mana(aPlayer.getHeroStats().getSpellPoints()).build();
+
+            Hero aHero = new Hero(creatures, spellsBook);
+
+            aHero.getCreatures().forEach(creature -> creature.setHeroNumber(id));
+
+            return aHero;
+        }
+
+        private static Multimap<ArtifactTarget, ArtifactIf> getConvertedArtifacts ( final EconomyHero aPlayer )
+        {
+            final Multimap<ArtifactTarget, ArtifactIf> artifacts = ArrayListMultimap.create();
+            final ArtifactFactory factory = new ArtifactFactory();
+            final List<EconomyArtifact> economyArtifacts = aPlayer.getArtifactList();
+
+            for (final EconomyArtifact economyArtifact : economyArtifacts) {
+                final ArtifactTarget target = economyArtifact.getNameHolder().getHolderTarget();
+                artifacts.put(target, factory.createArtifact(economyArtifact.getNameHolder()));
             }
-        });
+            return artifacts;
+        }
 
-        final List<Creature> creatures = new ArrayList<>();
-        final NecropolisFactory factory = new NecropolisFactory();
-        aPlayer.getCreatures()
-                .forEach(ecoCreature -> creatures.add(factory.create(ecoCreature.isUpgraded(),
-                        ecoCreature.getTier(), ecoCreature.getAmount())));
+        private static void applyArtifactsToCreatures ( final EconomyHero aPlayer,
+        final Multimap<ArtifactTarget, ArtifactIf> aArtifacts )
+        {
+            List<ArtifactEffect<ArtifactEffectApplicable>> artifactEffects = aArtifacts.get(ArtifactTarget.CREATURES).stream()
+                    .flatMap(art -> art.getEffects().stream())
+                    .collect(Collectors.toList());
 
-        convertSkills(playerSkills, creatures, aPlayer, aPlayer.getSpellList());
-        final List<Spell<? extends SpellableIf>> spells = new ArrayList<>();
-        final SpellFactory spellFactory = new SpellFactory();
-        aPlayer.getSpellList()
-                .forEach(economySpell -> spells.add(spellFactory.create(SpellNames.valueOf(economySpell.getSpellStats().getName()), economySpell.getSpellRang(), aPlayer.getSpellPower())));
+            for (final EconomyCreature economyCreature : aPlayer.getCreatureList()) {
+                artifactEffects.forEach(economyCreature::applyArtifactEffect);
+            }
+        }
 
-        SpellsBook spellsBook = SpellsBook.builder().spells(spells).mana(aPlayer.getHeroStats().getSpellPoints()).build();
+        private static void applyArtifactsToHero (EconomyHero aPlayer,
+        final Multimap<ArtifactTarget, ArtifactIf> aArtifacts){
+            List<ArtifactEffect<ArtifactEffectApplicable>> artifactEffects = aArtifacts.get(ArtifactTarget.SKILL).stream()
+                    .flatMap(art -> art.getEffects().stream())
+                    .collect(Collectors.toList());
 
-        return new Hero(creatures, spellsBook);
+            artifactEffects.forEach(aPlayer::applyArtifactEffect);
+
+        }
+
+        private static SpellFactorsModifiers applyArtifactsToSpells (
+        final Multimap<ArtifactTarget, ArtifactIf> aArtifacts){
+            List<ArtifactEffect<ArtifactEffectApplicable>> artifactEffects = aArtifacts.get(ArtifactTarget.SPELLS).stream()
+                    .flatMap(art -> art.getEffects().stream())
+                    .collect(Collectors.toList());
+            ArtifactApplier artifactApplier = new ArtifactApplier();
+
+            SpellFactorsModifiers spellFactorsModifiers = SpellFactorsModifiers.builder()
+                    .airDamageModifier(1)
+                    .earthDamageModifier(1)
+                    .fireDamageModifier(1)
+                    .waterDamageModifier(1)
+                    .addedDuration(0).build();
+
+            for (final ArtifactEffect<ArtifactEffectApplicable> artifactEffect : artifactEffects) {
+                spellFactorsModifiers = artifactApplier.calculateSpellFactorsModifiers(artifactEffect, spellFactorsModifiers);
+            }
+
+            return spellFactorsModifiers;
+        }
+
+        private static void convertSkills (List < EconomySkill > aSkills, List < Creature > aCreatures,
+                EconomyHero aHero, List < EconomySpell > aSpells ){
+            aSkills.forEach(aSkill -> {
+                aSkill.apply(aCreatures);
+                aSkill.apply(aHero);
+                aSkill.applyForSpells(aSpells);
+            });
+        }
+
     }
-
-    private static void convertSkills( List<EconomySkill> aSkills, List<Creature> aCreatures,
-                                       EconomyHero aHero, List<EconomySpell> aSpells ) {
-        aSkills.forEach(aSkill -> {
-            aSkill.apply(aCreatures);
-            aSkill.apply(aHero);
-            aSkill.applyForSpells(aSpells);
-        });
-    }
-
-}

@@ -15,7 +15,6 @@ import java.util.Objects;
 public class ArtifactEffect<T extends ArtifactEffectApplicable> {
 
     private final BigDecimal effectValue;
-
     private final ArtifactApplyingMode effectApplyingMode;
 
     private final ArtifactApplicableProperty applierTarget;
@@ -45,6 +44,8 @@ public class ArtifactEffect<T extends ArtifactEffectApplicable> {
 
         return result.setScale(0, RoundingMode.FLOOR).intValueExact();
     }
+
+
 
     @Override
     public boolean equals(final Object o) {

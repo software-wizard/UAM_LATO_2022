@@ -11,7 +11,7 @@ public class CreatureShop extends AbstractShop<EconomyCreature> {
             hero.substractGold(economyCreature.getGoldCost().getPrice() * economyCreature.getAmount());
             hero.addCreature(economyCreature);
         } else {
-            throw new IllegalStateException("hero cannot consume more creature");
+            throw new IllegalStateException("hero cannot consume more creatures");
         }
     }
 

@@ -3,6 +3,8 @@ package pl.psi;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import pl.psi.creatures.Creature;
+import pl.psi.specialfields.Field;
+import pl.psi.specialfields.FieldPointPair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +16,12 @@ import java.util.Optional;
 public class Board {
     private static final int MAX_WITDH = 14;
     private final BiMap<Point, Creature> map = HashBiMap.create();
+    private final BiMap<Point, Field> fieldsMap = HashBiMap.create();
 
-    public Board(final List<Creature> aCreatures1, final List<Creature> aCreatures2) {
+    public Board(final List<Creature> aCreatures1, final List<Creature> aCreatures2, final List<FieldPointPair> aFieldPointPairs) {
         addCreatures(aCreatures1, 0);
         addCreatures(aCreatures2, MAX_WITDH);
+        addFieldPointPairs(aFieldPointPairs);
     }
 
     public boolean canCreatureAttackAnyone(Creature aCreature) {
@@ -50,8 +54,18 @@ public class Board {
         }
     }
 
+    private void addFieldPointPairs(final List<FieldPointPair> aFieldPointPairs) {
+        for (FieldPointPair aFieldPointPair : aFieldPointPairs) {
+            fieldsMap.put(aFieldPointPair.getPoint(), aFieldPointPair.getField());
+        }
+    }
+
     Optional<Creature> getCreature(final Point aPoint) {
         return Optional.ofNullable(map.get(aPoint));
+    }
+
+    Optional<Field> getField(final Point aPoint) {
+        return Optional.ofNullable(fieldsMap.get(aPoint));
     }
 
     Optional<Point> getPoint(final Creature aCreature) {

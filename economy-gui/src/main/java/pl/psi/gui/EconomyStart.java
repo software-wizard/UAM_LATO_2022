@@ -11,7 +11,7 @@ import pl.psi.hero.HeroStatistics;
 
 public class EconomyStart extends Application {
 
-    public void startApp(EconomyHero.Fraction player1, EconomyHero.Fraction player2) throws Exception {
+    public void startApp(final EconomyHero.Fraction player1,final EconomyHero.Fraction player2) throws Exception {
         final Stage aStage = new Stage();
         final FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getClassLoader()
@@ -32,7 +32,7 @@ public class EconomyStart extends Application {
     }
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
 
     }
 }

@@ -11,12 +11,6 @@
     -fx-pref-width: 150;
 }
 
-/*.combo-box{*/
-/*    -fx-background-color: #6f0404;*/
-/*    -fx-text-fill: BLACK;*/
-/*    -fx-border-color: #dcab00;*/
-/*}*/
-
 
 .combo-box .cell{
     -fx-background-color: #6f0404;
@@ -33,6 +27,24 @@
     -fx-max-height: 48;
     -fx-max-width: 53;
     -fx-font: bold 6pt "Arial";
+}
+
+.BoxSkills{
+    -fx-min-height: 82;
+    -fx-min-width: 120;
+    -fx-max-height: 82;
+    -fx-max-width: 120;
+    -fx-font: bold 6pt "Arial";
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+}
+
+.BoxSpells{
+    -fx-min-height: 82;
+    -fx-min-width: 100;
+    -fx-max-height: 82;
+    -fx-max-width: 100;
+    -fx-font: bold 5pt "Arial";
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
 }
 
 .DefaultFraction{
@@ -69,28 +81,28 @@
     -fx-font: bold 10pt "Arial";
 }
 
-/*.creatureButton {*/
-/*    -fx-max-width: infinity;*/
-/*    -fx-hgrow-policy:always;*/
-/*}*/
-
 
 .label {
     -fx-font: bold 15pt "Arial";
     -fx-padding: 5px
 }
 
+.labelShop{
+    -fx-font: 9pt "Arial";
+    -fx-pref-height: 50;
+}
+
 .centerHBoxLeft {
     -fx-border-color: black;
-    /*-fx-background-image: url("HERO.png");*/
     -fx-border-width: 1;
     -fx-pref-width: 600;
 }
 
 .centerHBoxRight {
-    -fx-border-color: black;
+    /*-fx-border-color: black;*/
     -fx-border-width: 1;
-    -fx-pref-width: 300;
+    -fx-min-width: 270;
+    -fx-max-width: 270;
     -fx-pref-height: 200;
 }
 

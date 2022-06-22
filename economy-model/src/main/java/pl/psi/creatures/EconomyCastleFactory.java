@@ -2,7 +2,7 @@ package pl.psi.creatures;
 
 import pl.psi.shop.Money;
 
-public class EconomyCastleFactory {
+public class EconomyCastleFactory implements FactoryInterface{
 
     private static final String EXCEPTION_MESSAGE = "We support tiers from 1 to 7";
 
@@ -19,6 +19,10 @@ public class EconomyCastleFactory {
                     return new EconomyCreature(CreatureStatistic.SWORDSMAN, aAmount, new Money(300));
                 case 5:
                     return new EconomyCreature(CreatureStatistic.MONK, aAmount, new Money(400));
+                case 6:
+                    return new EconomyCreature(CreatureStatistic.CAVALIER, aAmount, new Money(1000));
+                case 7:
+                    return new EconomyCreature(CreatureStatistic.ANGEL, aAmount, new Money(3000));
                 default:
                     throw new IllegalArgumentException(EXCEPTION_MESSAGE);
             }
@@ -34,6 +38,10 @@ public class EconomyCastleFactory {
                     return new EconomyCreature(CreatureStatistic.CRUSADER, aAmount, new Money(400));
                 case 5:
                     return new EconomyCreature(CreatureStatistic.ZEALOT, aAmount, new Money(450));
+                case 6:
+                    return new EconomyCreature(CreatureStatistic.CHAMPION, aAmount, new Money(1200));
+                case 7:
+                    return new EconomyCreature(CreatureStatistic.ARCHANGEL, aAmount, new Money(5000));
                 default:
                     throw new IllegalArgumentException(EXCEPTION_MESSAGE);
             }

@@ -12,4 +12,11 @@ public final class Money {
         return price;
     }
 
+    public boolean haveEnoghMoney(Money money){
+        if(this.getPrice() >= money.price)
+            return true;
+        return false;
+    }
+
+
 }

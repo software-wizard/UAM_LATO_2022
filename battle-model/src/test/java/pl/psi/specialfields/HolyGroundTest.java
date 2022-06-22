@@ -120,7 +120,7 @@ public class HolyGroundTest {
         );
 
         // when
-        holyGround.buffCreatures(creatures);
+        holyGround.handleEffect(creatures);
 
         // then
         assertEquals(2, goodAlignedCreature.getMorale());
@@ -139,8 +139,8 @@ public class HolyGroundTest {
                 .build();
 
         // when
-        var exceptionWhenGivenDataIsNull = assertThrows(IllegalArgumentException.class, () -> holyGround.buffCreatures(null));
-        var exceptionWhenGivenDataIsEmpty = assertThrows(IllegalArgumentException.class, () -> holyGround.buffCreatures(of()));
+        var exceptionWhenGivenDataIsNull = assertThrows(IllegalArgumentException.class, () -> holyGround.handleEffect(null));
+        var exceptionWhenGivenDataIsEmpty = assertThrows(IllegalArgumentException.class, () -> holyGround.handleEffect(of()));
 
         // then
         assertEquals("Creatures list must not be null", exceptionWhenGivenDataIsNull.getMessage());

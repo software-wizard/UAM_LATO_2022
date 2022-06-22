@@ -3,6 +3,7 @@ package pl.psi;
 import lombok.Getter;
 import pl.psi.creatures.Creature;
 import pl.psi.creatures.FirstAidTent;
+import pl.psi.specialfields.*;
 import pl.psi.spells.*;
 
 import java.beans.PropertyChangeListener;
@@ -23,6 +24,7 @@ import static pl.psi.spells.SpellRang.BASIC;
  */
 public class GameEngine {
 
+    private final List<FieldPointPair> fields = new FieldsFactory().createFields(DensityLevel.MEDIUM);
     public static final String CREATURE_MOVED = "CREATURE_MOVED";
     private final TurnQueue turnQueue;
     private final Board board;
@@ -43,7 +45,7 @@ public class GameEngine {
         hero2 = aHero2;
         hero2.setSide(HeroeSide.RIGHT);
         turnQueue = new TurnQueue(aHero1.getCreatures(), aHero2.getCreatures());
-        board = new Board(aHero1.getCreatures(), aHero2.getCreatures());
+        board = new Board(aHero1.getCreatures(), aHero2.getCreatures(), fields);
     }
 
     public boolean isGameEnded(){
@@ -76,6 +78,10 @@ public class GameEngine {
         observerSupport.firePropertyChange(CREATURE_MOVED, null, null);
     }
 
+    public void handleFieldEffect(final Point point) {
+        board.getField(point)
+                .ifPresent(f -> f.handleEffect(getCurrentHero().getCreatures()));
+    }
     public List<Point> getCurrentCreatureSplashDamagePointsList(final Point aPoint) {
         return board.getCreatureSplashDamagePointsList(getCurrentCreature(), aPoint);
     }
@@ -216,6 +222,10 @@ public class GameEngine {
 
     public Optional<Creature> getCreature(final Point aPoint) {
         return board.getCreature(aPoint);
+    }
+
+    public Optional<Field> getField(final Point aPoint) {
+        return board.getField(aPoint);
     }
 
     public Creature getCurrentCreature() {

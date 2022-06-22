@@ -30,26 +30,40 @@
                                 styleClass="button_aritfact"/>
                         <Button fx:id="SHOULDERS" translateX="85" translateY="15" prefWidth="53" prefHeight="48"
                                 styleClass="button_aritfact"/>
-                        <Button fx:id="RIGHT_HAND" translateX="79" translateY="-45" prefWidth="53" prefHeight="48"
+                        <Button fx:id="LEFT_HAND" translateX="79" translateY="-45" prefWidth="53" prefHeight="48"
                                 styleClass="button_aritfact"/>
-                        <Button fx:id="LEFT_HAND" translateX="-140" translateY="-158" prefWidth="53" prefHeight="48"
+                        <Button fx:id="RIGHT_HAND" translateX="-140" translateY="-158" prefWidth="53" prefHeight="48"
                                 styleClass="button_aritfact"/>
                         <Button fx:id="FEET" translateX="22" translateY="65" prefWidth="53" prefHeight="48"
                                 styleClass="button_aritfact"/>
+
+                        <Button fx:id="MISC" translateX="-117" translateY="10" prefWidth="53" prefHeight="48"
+                                styleClass="button_aritfact"/>
+                        <Button fx:id="FINGERS" translateX="-80" translateY="-158" prefWidth="53" prefHeight="48"
+                          styleClass="button_aritfact"/>
+
+                        <!--                        WarMachines Buttons-->
+                        <Button fx:id="BALLISTA" translateX="139" translateY="-104" prefWidth="53" prefHeight="43"
+                                styleClass="button_aritfact"/>
+                        <Button fx:id="AMMO_CART" translateX="139" translateY="-152" prefWidth="53" prefHeight="43"
+                                styleClass="button_aritfact"/>
+                        <Button fx:id="FIRST_AID_TENT" translateX="139" translateY="-200" prefWidth="53" prefHeight="43"
+                                styleClass="button_aritfact"/>
+
 
                     </StackPane>
 
                     <Label text="                                          Spells" styleClass="labelHero"/>
                     <ScrollPane fx:id="spellsScrollPane">
                         <content>
-                            <HBox prefHeight="100" styleClass="centerHBox"/>
+                            <HBox fx:id="spellsScrollPaneHBox"  prefHeight="100" styleClass="centerHBox"/>
                         </content>
                     </ScrollPane>
 
                     <Label text="                                          Skills" styleClass="labelHero"/>
                     <ScrollPane fx:id="skillsScrollPane">
                         <content>
-                            <HBox prefHeight="100" styleClass="centerHBox"/>
+                            <HBox fx:id="skillsScrollPaneHBox" prefHeight="100" styleClass="centerHBox"/>
                         </content>
                     </ScrollPane>
                 </VBox>

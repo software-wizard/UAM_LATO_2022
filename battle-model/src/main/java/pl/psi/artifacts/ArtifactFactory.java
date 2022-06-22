@@ -1,6 +1,7 @@
 package pl.psi.artifacts;
 
 import lombok.NonNull;
+import pl.psi.artifacts.holder.ArtifactNamesHolder;
 import pl.psi.artifacts.holder.CreatureArtifactNamesHolder;
 import pl.psi.artifacts.holder.SkillArtifactNamesHolder;
 import pl.psi.artifacts.holder.SpellArtifactNamesHolder;
@@ -17,7 +18,25 @@ import java.util.Set;
 public class ArtifactFactory {
     private static final String NO_ARTIFACT_IMPLEMENTATION_EXCEPTION_MESSAGE = "No implementation provided for artifact of that name.";
 
-    public ArtifactIf createArtifact(@NonNull CreatureArtifactNamesHolder aArtifactName) {
+    private static final String NO_HOLDER_IMPLEMENTATION_EXCEPTION_MESSAGE = "No implementation provided for artifacts of such holder.";
+
+    public ArtifactIf createArtifact( @NonNull ArtifactNamesHolder aArtifactName )
+    {
+        ArtifactTarget artifactTarget = aArtifactName.getHolderTarget();
+        switch ( artifactTarget )
+        {
+            case CREATURES:
+                return createArtifact( (CreatureArtifactNamesHolder) aArtifactName );
+            case SKILL:
+                return createArtifact( (SkillArtifactNamesHolder) aArtifactName );
+            case SPELLS:
+                return createArtifact( (SpellArtifactNamesHolder) aArtifactName );
+            default:
+                throw new UnsupportedOperationException( NO_HOLDER_IMPLEMENTATION_EXCEPTION_MESSAGE );
+        }
+    }
+
+    ArtifactIf createArtifact(@NonNull CreatureArtifactNamesHolder aArtifactName) {
         switch (aArtifactName) {
             case RING_OF_LIFE:
 
@@ -30,6 +49,18 @@ public class ArtifactFactory {
             case VIAL_OF_LIFEBLOOD:
 
                 return createVialOfLifebloodArtifact();
+
+            case GARNITURE_OF_INTERFERENCE:
+
+                return createGarnitureOfInterferenceArtifact();
+
+            case SURCOAT_OF_COUNTERPOISE:
+
+                return createsurCoatOfCounterpoiseArtifact();
+
+            case BOOTS_OF_POLARITY:
+
+                return createBootsOfPolarityArtifact();
 
             default:
 
@@ -124,6 +155,15 @@ public class ArtifactFactory {
 
                 return createOrbOfDrivingRain();
 
+            case CAPE_OF_CONJURING:
+                return createCapeOfConjuringArtifact();
+
+            case RING_OF_CONJURING:
+                return createRingOfConjuringArtifact();
+
+            case COLLAR_OF_CONJURING:
+                return createCollarOfConjuringArtifact();
+
             default:
                 throw new IllegalArgumentException(NO_ARTIFACT_IMPLEMENTATION_EXCEPTION_MESSAGE);
 
@@ -139,9 +179,7 @@ public class ArtifactFactory {
 
         return Artifact.builder()
                 .name("Ring of Life")
-                .description("Increases health of all your units by 1")
                 .placement(ArtifactPlacement.FINGERS)
-                .price(BigDecimal.valueOf(10))
                 .rank(ArtifactRank.MINOR)
                 .target(ArtifactTarget.CREATURES)
                 .effects(Set.of(ringOfLifeEffect))
@@ -152,14 +190,12 @@ public class ArtifactFactory {
         final ArtifactEffect<ArtifactEffectApplicable> rightOfVitalityEffect = ArtifactEffect.builder()
                 .effectValue(BigDecimal.valueOf(1))
                 .effectApplyingMode(ArtifactApplyingMode.ADD)
-                .applierTarget(CreatureArtifactApplicableProperty.HEALTH)
+                .applierTarget(CreatureArtifactApplicableProperty.ATTACK)
                 .build();
 
         return Artifact.builder()
                 .name("Ring of Vitality")
-                .description("Increases health of all your units by 1")
                 .placement(ArtifactPlacement.FINGERS)
-                .price(BigDecimal.valueOf(15))
                 .rank(ArtifactRank.TREASURE)
                 .target(ArtifactTarget.CREATURES)
                 .effects(Set.of(rightOfVitalityEffect))
@@ -175,12 +211,58 @@ public class ArtifactFactory {
 
         return Artifact.builder()
                 .name("Vial of Lifeblood")
-                .description("Increases health of all your units by 2")
                 .placement(ArtifactPlacement.MISC)
-                .price(BigDecimal.valueOf(30))
                 .rank(ArtifactRank.TREASURE)
                 .target(ArtifactTarget.CREATURES)
                 .effects(Set.of(vialOfLifebloodEffect))
+                .build();
+    }
+
+    private ArtifactIf createGarnitureOfInterferenceArtifact() {
+        final ArtifactEffect<ArtifactEffectApplicable> garnitureOfInterferenceEffect = ArtifactEffect.builder()
+                .effectValue(BigDecimal.valueOf(1.05))
+                .effectApplyingMode(ArtifactApplyingMode.MULTIPLY)
+                .applierTarget(CreatureArtifactApplicableProperty.DEFENCE)
+                .build();
+
+        return Artifact.builder()
+                .name("Garniture of Interference")
+                .placement(ArtifactPlacement.NECK)
+                .rank(ArtifactRank.MAJOR)
+                .target(ArtifactTarget.CREATURES)
+                .effects(Set.of(garnitureOfInterferenceEffect))
+                .build();
+    }
+
+    private ArtifactIf createsurCoatOfCounterpoiseArtifact() {
+        final ArtifactEffect<ArtifactEffectApplicable> coatOfCounterpoiseEffect = ArtifactEffect.builder()
+                .effectValue(BigDecimal.valueOf(1.1))
+                .effectApplyingMode(ArtifactApplyingMode.MULTIPLY)
+                .applierTarget(CreatureArtifactApplicableProperty.DEFENCE)
+                .build();
+
+        return Artifact.builder()
+                .name("Coat of Counterpoise")
+                .placement(ArtifactPlacement.SHOULDERS)
+                .rank(ArtifactRank.MAJOR)
+                .target(ArtifactTarget.CREATURES)
+                .effects(Set.of(coatOfCounterpoiseEffect))
+                .build();
+    }
+
+    private ArtifactIf createBootsOfPolarityArtifact() {
+        final ArtifactEffect<ArtifactEffectApplicable> bootsOfPolarityEffect = ArtifactEffect.builder()
+                .effectValue(BigDecimal.valueOf(1.15))
+                .effectApplyingMode(ArtifactApplyingMode.MULTIPLY)
+                .applierTarget(CreatureArtifactApplicableProperty.DEFENCE)
+                .build();
+
+        return Artifact.builder()
+                .name("Boots of Polarity")
+                .placement(ArtifactPlacement.FEET)
+                .rank(ArtifactRank.RELIC)
+                .target(ArtifactTarget.CREATURES)
+                .effects(Set.of(bootsOfPolarityEffect))
                 .build();
     }
 
@@ -193,9 +275,7 @@ public class ArtifactFactory {
 
         return Artifact.builder()
                 .name("Centaur's Ax")
-                .description("+2 attack skill")
                 .placement(ArtifactPlacement.RIGHT_HAND)
-                .price(BigDecimal.valueOf(5))
                 .rank(ArtifactRank.TREASURE)
                 .target(ArtifactTarget.SKILL)
                 .effects(Set.of(centaursAxEffect))
@@ -211,9 +291,7 @@ public class ArtifactFactory {
 
         return Artifact.builder()
                 .name("Blackshard of the Dead Knight")
-                .description("+3 attack skill")
                 .placement(ArtifactPlacement.RIGHT_HAND)
-                .price(BigDecimal.valueOf(7))
                 .rank(ArtifactRank.MINOR)
                 .target(ArtifactTarget.SKILL)
                 .effects(Set.of(blackshardOfTheDeadKnightEffect))
@@ -229,9 +307,7 @@ public class ArtifactFactory {
 
         return Artifact.builder()
                 .name("Greater Gnoll's Flail")
-                .description("+4 attack skill")
                 .placement(ArtifactPlacement.RIGHT_HAND)
-                .price(BigDecimal.valueOf(8))
                 .rank(ArtifactRank.MINOR)
                 .target(ArtifactTarget.SKILL)
                 .effects(Set.of(greaterGnollsFlailEffect))
@@ -247,9 +323,7 @@ public class ArtifactFactory {
 
         return Artifact.builder()
                 .name("Ogre's Club of Havoc")
-                .description("+5 attack skill")
                 .placement(ArtifactPlacement.RIGHT_HAND)
-                .price(BigDecimal.valueOf(10))
                 .rank(ArtifactRank.MAJOR)
                 .target(ArtifactTarget.SKILL)
                 .effects(Set.of(ogresClubOfHavocEffect))
@@ -265,9 +339,7 @@ public class ArtifactFactory {
 
         return Artifact.builder()
                 .name("Sword of Hellfire")
-                .description("+6 attack skill")
                 .placement(ArtifactPlacement.RIGHT_HAND)
-                .price(BigDecimal.valueOf(12))
                 .rank(ArtifactRank.MAJOR)
                 .target(ArtifactTarget.SKILL)
                 .effects(Set.of(swordOfHellfireEffect))
@@ -289,9 +361,7 @@ public class ArtifactFactory {
 
         return Artifact.builder()
                 .name("Titan's Gladius")
-                .description("+12 attack skill, -3 defence skill")
                 .placement(ArtifactPlacement.RIGHT_HAND)
-                .price(BigDecimal.valueOf(25))
                 .rank(ArtifactRank.RELIC)
                 .target(ArtifactTarget.SKILL)
                 .effects(Set.of(titansGladiusEffectAttack, titansGladiusEffectDefence))
@@ -307,9 +377,7 @@ public class ArtifactFactory {
 
         return Artifact.builder()
                 .name("Shield of the Dwarven Lords")
-                .description("+2 attack skill")
                 .placement(ArtifactPlacement.LEFT_HAND)
-                .price(BigDecimal.valueOf(5))
                 .rank(ArtifactRank.TREASURE)
                 .target(ArtifactTarget.SKILL)
                 .effects(Set.of(shieldOfTheDwarvenLordsEffect))
@@ -325,9 +393,7 @@ public class ArtifactFactory {
 
         return Artifact.builder()
                 .name("Targ of the Rampaging Ogre")
-                .description("+5 attack skill")
                 .placement(ArtifactPlacement.LEFT_HAND)
-                .price(BigDecimal.valueOf(10))
                 .rank(ArtifactRank.MAJOR)
                 .target(ArtifactTarget.SKILL)
                 .effects(Set.of(targOfTheRampagingOgreEffect))
@@ -349,9 +415,7 @@ public class ArtifactFactory {
 
         return Artifact.builder()
                 .name("Titan's Gladius")
-                .description("+12  defence, -3 attack skill")
                 .placement(ArtifactPlacement.LEFT_HAND)
-                .price(BigDecimal.valueOf(25))
                 .rank(ArtifactRank.RELIC)
                 .target(ArtifactTarget.SKILL)
                 .effects(Set.of(sentinelsShieldEffectDefence, sentinelsShieldEffectAttack))
@@ -367,9 +431,7 @@ public class ArtifactFactory {
 
         return Artifact.builder()
                 .name("Rib Cage")
-                .description("+2 spell power")
                 .placement(ArtifactPlacement.TORSO)
-                .price(BigDecimal.valueOf(5))
                 .rank(ArtifactRank.MINOR)
                 .target(ArtifactTarget.SKILL)
                 .effects(Set.of(ribCageEffect))
@@ -385,9 +447,7 @@ public class ArtifactFactory {
 
         return Artifact.builder()
                 .name("Tunic of the Cyclops King")
-                .description("+4 spell power")
                 .placement(ArtifactPlacement.TORSO)
-                .price(BigDecimal.valueOf(10))
                 .rank(ArtifactRank.MAJOR)
                 .target(ArtifactTarget.SKILL)
                 .effects(Set.of(tunicOfTheCyclopsKingEffect))
@@ -409,9 +469,7 @@ public class ArtifactFactory {
 
         return Artifact.builder()
                 .name("Titan's Cuiras")
-                .description("+10 spell power, -2 knowledge")
                 .placement(ArtifactPlacement.TORSO)
-                .price(BigDecimal.valueOf(25))
                 .rank(ArtifactRank.RELIC)
                 .target(ArtifactTarget.SKILL)
                 .effects(Set.of(titansCuirasEffectSpell, titansCuirasEffectKnowledge))
@@ -427,9 +485,7 @@ public class ArtifactFactory {
 
         return Artifact.builder()
                 .name("Skull Helmet")
-                .description("+2 knowledge")
                 .placement(ArtifactPlacement.HEAD)
-                .price(BigDecimal.valueOf(5))
                 .rank(ArtifactRank.TREASURE)
                 .target(ArtifactTarget.SKILL)
                 .effects(Set.of(skullHelmetEffect))
@@ -445,9 +501,7 @@ public class ArtifactFactory {
 
         return Artifact.builder()
                 .name("rown of the Supreme Magi")
-                .description("+4 knowledge")
                 .placement(ArtifactPlacement.HEAD)
-                .price(BigDecimal.valueOf(10))
                 .rank(ArtifactRank.MINOR)
                 .target(ArtifactTarget.SKILL)
                 .effects(Set.of(crownOfTheSupremeMagiEffect))
@@ -469,9 +523,7 @@ public class ArtifactFactory {
 
         return Artifact.builder()
                 .name("Thunder Helmet")
-                .description("+10 knowledge, -2 spell power")
                 .placement(ArtifactPlacement.TORSO)
-                .price(BigDecimal.valueOf(25))
                 .rank(ArtifactRank.RELIC)
                 .target(ArtifactTarget.SKILL)
                 .effects(Set.of(thunderHelmetEffectSpell, thunderHelmetEffectKnowledge))
@@ -487,9 +539,7 @@ public class ArtifactFactory {
 
         return Artifact.builder()
                 .name("Orb Of The Firmament")
-                .description("Hero's air spells do extra 50% damage")
                 .placement(ArtifactPlacement.MISC)
-                .price(BigDecimal.valueOf(20))
                 .rank(ArtifactRank.MAJOR)
                 .target(ArtifactTarget.SPELLS)
                 .effects(Set.of(orbOfTheFirmamentEffect))
@@ -505,9 +555,7 @@ public class ArtifactFactory {
 
         return Artifact.builder()
                 .name("Orb Of Silt")
-                .description("Hero's earth spells do extra 50% damage")
                 .placement(ArtifactPlacement.MISC)
-                .price(BigDecimal.valueOf(20))
                 .rank(ArtifactRank.MAJOR)
                 .target(ArtifactTarget.SPELLS)
                 .effects(Set.of(orbOfSiltEffect))
@@ -523,9 +571,7 @@ public class ArtifactFactory {
 
         return Artifact.builder()
                 .name("Orb Of Tempstuous Fire")
-                .description("Hero's fire spells do extra 50% damage")
                 .placement(ArtifactPlacement.MISC)
-                .price(BigDecimal.valueOf(20))
                 .rank(ArtifactRank.MAJOR)
                 .target(ArtifactTarget.SPELLS)
                 .effects(Set.of(orbOfTempstuousFireEffect))
@@ -541,12 +587,58 @@ public class ArtifactFactory {
 
         return Artifact.builder()
                 .name("Orb Of Driving Rain")
-                .description("Hero's water spells do extra 50% damage")
                 .placement(ArtifactPlacement.MISC)
-                .price(BigDecimal.valueOf(20))
                 .rank(ArtifactRank.MAJOR)
                 .target(ArtifactTarget.SPELLS)
                 .effects(Set.of(orbOfDrivingRainEffect))
+                .build();
+    }
+
+    private ArtifactIf createCollarOfConjuringArtifact() {
+        final ArtifactEffect<ArtifactEffectApplicable> collarOfConjuringEffect = ArtifactEffect.builder()
+                .effectValue(BigDecimal.valueOf(1))
+                .effectApplyingMode(ArtifactApplyingMode.ADD)
+                .applierTarget(SpellArtifactApplicableProperty.DURATION)
+                .build();
+
+        return Artifact.builder()
+                .name("Collar Of Conjuring")
+                .placement(ArtifactPlacement.NECK)
+                .rank(ArtifactRank.TREASURE)
+                .target(ArtifactTarget.SPELLS)
+                .effects(Set.of(collarOfConjuringEffect))
+                .build();
+    }
+
+    private ArtifactIf createRingOfConjuringArtifact() {
+        final ArtifactEffect<ArtifactEffectApplicable> ringOfConjuringEffect = ArtifactEffect.builder()
+                .effectValue(BigDecimal.valueOf(2))
+                .effectApplyingMode(ArtifactApplyingMode.ADD)
+                .applierTarget(SpellArtifactApplicableProperty.DURATION)
+                .build();
+
+        return Artifact.builder()
+                .name("Ring Of Conjuring")
+                .placement(ArtifactPlacement.FINGERS)
+                .rank(ArtifactRank.TREASURE)
+                .target(ArtifactTarget.SPELLS)
+                .effects(Set.of(ringOfConjuringEffect))
+                .build();
+    }
+
+    private ArtifactIf createCapeOfConjuringArtifact() {
+        final ArtifactEffect<ArtifactEffectApplicable> ringOfConjuringEffect = ArtifactEffect.builder()
+                .effectValue(BigDecimal.valueOf(3))
+                .effectApplyingMode(ArtifactApplyingMode.ADD)
+                .applierTarget(SpellArtifactApplicableProperty.DURATION)
+                .build();
+
+        return Artifact.builder()
+                .name("Ring Of Conjuring")
+                .placement(ArtifactPlacement.FINGERS)
+                .rank(ArtifactRank.TREASURE)
+                .target(ArtifactTarget.SPELLS)
+                .effects(Set.of(ringOfConjuringEffect))
                 .build();
     }
 }

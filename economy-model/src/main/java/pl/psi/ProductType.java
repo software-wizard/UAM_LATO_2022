@@ -3,6 +3,6 @@ package pl.psi;
 public enum ProductType {
     CREATURE,
     ARTIFACT,
-    SKILLS,
+    SKILL,
     SPELL
 }
